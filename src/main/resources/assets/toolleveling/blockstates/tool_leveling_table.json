@@ -1,0 +1,8 @@
+{
+	"variants" : {
+		"facing=north" : { "model" : "toolleveling:block/tool_leveling_table" },
+		"facing=south" : { "model" : "toolleveling:block/tool_leveling_table", "y" : 180 },
+		"facing=west" : { "model" : "toolleveling:block/tool_leveling_table", "y" : 270 },
+		"facing=east" : { "model" : "toolleveling:block/tool_leveling_table", "y" : 90 }
+	}
+}

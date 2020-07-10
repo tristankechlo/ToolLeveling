@@ -1,0 +1,11 @@
+{
+	"itemGroup.ToolLevelingTab" : "Tool Leveling",
+	
+	"item.toolleveling.ruby" : "Rubin",
+	
+	"block.toolleveling.tool_leveling_table" : "Werkzeug Upgrade Tisch",
+	
+	"screen.toolleveling.tool_leveling_table" : "Werkzeug Upgrade Tisch",
+	
+	"container.toolleveling.tool_leveling_table" : "Werkzeug Upgrade Tisch"
+}

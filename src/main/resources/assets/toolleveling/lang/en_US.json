@@ -1,0 +1,11 @@
+{
+	"itemGroup.ToolLevelingTab" : "Tool Leveling",
+	
+	"item.toolleveling.ruby" : "Ruby",
+	
+	"block.toolleveling.tool_leveling_table" : "Tool Leveling Table",
+	
+	"screen.toolleveling.tool_leveling_table" : "Tool Leveling Table",
+	
+	"container.toolleveling.tool_leveling_table" : "Tool Leveling Table"
+}
