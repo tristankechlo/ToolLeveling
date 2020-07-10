@@ -1,5 +1,7 @@
-package com.tristankechlo.toolleveling;
+package com.tristankechlo.toolleveling.client;
 
+import com.tristankechlo.toolleveling.ToolLeveling;
+import com.tristankechlo.toolleveling.client.gui.ToolLevelingTableScreen;
 import com.tristankechlo.toolleveling.init.ModContainers;
 
 import net.minecraft.client.gui.ScreenManager;

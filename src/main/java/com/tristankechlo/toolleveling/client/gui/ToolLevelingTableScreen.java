@@ -1,14 +1,18 @@
-package com.tristankechlo.toolleveling;
+package com.tristankechlo.toolleveling.client.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.container.ToolLevelingTableContainer;
 
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableContainer> {
 
     private ResourceLocation GUI = new ResourceLocation(ToolLeveling.MOD_ID, "textures/gui/tool_leveling_table.png");

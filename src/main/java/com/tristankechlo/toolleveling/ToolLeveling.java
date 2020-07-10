@@ -3,6 +3,7 @@ package com.tristankechlo.toolleveling;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.tristankechlo.toolleveling.client.ClientSetup;
 import com.tristankechlo.toolleveling.init.ModBlocks;
 import com.tristankechlo.toolleveling.init.ModContainers;
 import com.tristankechlo.toolleveling.init.ModItems;
