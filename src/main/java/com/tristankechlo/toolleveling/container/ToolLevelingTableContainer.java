@@ -13,20 +13,44 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IWorldPosCallable;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class ToolLevelingTableContainer extends Container {
 
-	public final ToolLevelingTableTileEntity tileEntity;
 	private final IWorldPosCallable canInteractWithCallable;
-    
-	public ToolLevelingTableContainer(final int windowId, final PlayerInventory playerInv, final IItemHandler inventory, final ToolLevelingTableTileEntity tileEntityIn) {
-	    super(ModContainers.TOOL_LEVELING_TABLE.get(), windowId);
-		this.tileEntity = tileEntityIn;
-		this.canInteractWithCallable = IWorldPosCallable.of(tileEntityIn.getWorld(), tileEntityIn.getPos());
 
-		this.addSlot(new SlotItemHandler(inventory, 0, 81, 36));
+	public ToolLevelingTableContainer(final int windowId, final PlayerInventory playerInv, final PacketBuffer data) {
+		this(windowId, playerInv, getTileEntity(playerInv, data));
+	}
+	
+	private static ToolLevelingTableTileEntity getTileEntity(final PlayerInventory playerInv, final PacketBuffer data) {
+		Objects.requireNonNull(playerInv, "playerInv cannot be null");
+		Objects.requireNonNull(data, "data cannot be null");
+		final TileEntity tileAtPos = playerInv.player.world.getTileEntity(data.readBlockPos());
+		if (tileAtPos instanceof ToolLevelingTableTileEntity) {
+			return (ToolLevelingTableTileEntity) tileAtPos;
+		}
+		throw new IllegalStateException("TileEntity is not correct " + tileAtPos);
+	}
+	
+	public ToolLevelingTableContainer(final int windowId, final PlayerInventory playerInv, final ToolLevelingTableTileEntity entity) {
+	    super(ModContainers.TOOL_LEVELING_TABLE.get(), windowId);
+		this.canInteractWithCallable = IWorldPosCallable.of(entity.getWorld(), entity.getPos());
+
+		this.addSlot(new SlotItemHandler(entity.getInventory(), 0, 81, 36) {
+			@Override
+			public boolean isItemValid(ItemStack stack) {
+				return stack.isEnchanted();
+			}
+			@Override
+			public int getSlotStackLimit() {
+				return 1;
+			}
+			@Override
+			public void onSlotChanged() {
+				entity.markDirty();
+			}
+		});
 		
 		// Main Inventory
 		int startX = 8;
@@ -43,20 +67,6 @@ public class ToolLevelingTableContainer extends Container {
 		for (int column = 0; column < 9; column++) {
 			this.addSlot(new Slot(playerInv, column, startX + (column * slotSizePlus2), 142));
 		}
-	}
-
-	public ToolLevelingTableContainer(final int windowId, final PlayerInventory playerInv, final PacketBuffer data) {
-		this(windowId, playerInv, getTileEntity(playerInv, data).getItemHandler(), getTileEntity(playerInv, data));
-	}
-
-	private static ToolLevelingTableTileEntity getTileEntity(final PlayerInventory playerInv, final PacketBuffer data) {
-		Objects.requireNonNull(playerInv, "playerInv cannot be null");
-		Objects.requireNonNull(data, "data cannot be null");
-		final TileEntity tileAtPos = playerInv.player.world.getTileEntity(data.readBlockPos());
-		if (tileAtPos instanceof ToolLevelingTableTileEntity) {
-			return (ToolLevelingTableTileEntity) tileAtPos;
-		}
-		throw new IllegalStateException("TileEntity is not correct " + tileAtPos);
 	}
 
 	@Override

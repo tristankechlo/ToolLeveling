@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 import com.tristankechlo.toolleveling.init.ModTileEntities;
 import com.tristankechlo.toolleveling.tileentity.ToolLevelingTableTileEntity;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
 import net.minecraft.block.SoundType;
@@ -15,6 +16,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer.Builder;
 import net.minecraft.tileentity.TileEntity;
@@ -33,6 +35,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.items.IItemHandler;
 
 public class ToolLevelingTableBlock extends Block {
 
@@ -88,17 +91,20 @@ public class ToolLevelingTableBlock extends Block {
 		return state.rotate(mirrorIn.toRotation(state.get(FACING)));
 	}
 	
+    public BlockRenderType getRenderType(BlockState state) {
+	   return BlockRenderType.MODEL;
+    }
+	
 	@Override
 	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
-		if (world.isRemote) {
-	         return ActionResultType.SUCCESS;
-	    } else {
-	    	TileEntity tileEntity = world.getTileEntity(pos);
-            if (tileEntity instanceof ToolLevelingTableTileEntity) {
-                NetworkHooks.openGui((ServerPlayerEntity) player, (ToolLevelingTableTileEntity)tileEntity, pos);
-            }
-            return ActionResultType.CONSUME;
-	    }
+		if (!world.isRemote) {
+			final TileEntity tile = world.getTileEntity(pos);
+			if (tile instanceof ToolLevelingTableTileEntity) {
+				NetworkHooks.openGui((ServerPlayerEntity) player, (ToolLevelingTableTileEntity) tile, pos);
+				return ActionResultType.CONSUME;
+			}
+		}
+		return ActionResultType.SUCCESS;
 	}
 	
 	@Override
@@ -116,15 +122,20 @@ public class ToolLevelingTableBlock extends Block {
 	public PushReaction getPushReaction(BlockState state) {
 		return PushReaction.DESTROY;
 	}
-
+	
 	@Override
-	public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-		if (state.getBlock() != newState.getBlock()) {
-			TileEntity tile = worldIn.getTileEntity(pos);
-			if (tile instanceof ToolLevelingTableTileEntity) {
-				InventoryHelper.dropItems(worldIn, pos, ((ToolLevelingTableTileEntity) tile).getItems());
-			}
-		}
+	public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving) {
+	      if (state.hasTileEntity() && (state.getBlock() != newState.getBlock() || !newState.hasTileEntity())) {
+	    	  TileEntity tile = world.getTileEntity(pos);
+	    	  if(tile instanceof ToolLevelingTableTileEntity) {
+	    		  IItemHandler inventory = ((ToolLevelingTableTileEntity)tile).getInventory();
+	    		  ItemStack stack = inventory.getStackInSlot(0);
+	    		  if(stack != ItemStack.EMPTY) {
+		    		  InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);
+	    		  }
+	    	  }
+		      world.removeTileEntity(pos);
+	      }
 	}
 
 }

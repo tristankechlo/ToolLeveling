@@ -7,5 +7,9 @@
 	
 	"screen.toolleveling.tool_leveling_table" : "Tool Leveling Table",
 	
-	"container.toolleveling.tool_leveling_table" : "Tool Leveling Table"
+	"container.toolleveling.tool_leveling_table" : "Tool Leveling Table",
+	
+	"commands.toolleveling.superenchant.failed.level" : "Minimum Level must be 1.",
+	"commands.toolleveling.superenchant.failed.not" : "This Item is not enchantet."
+	
 }

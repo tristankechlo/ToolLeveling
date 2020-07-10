@@ -33,6 +33,7 @@ public class ToolLeveling {
 		
         
         MinecraftForge.EVENT_BUS.register(this);
+        
 	}
         
 }
