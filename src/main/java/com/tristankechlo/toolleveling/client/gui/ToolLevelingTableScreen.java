@@ -30,7 +30,6 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
         this.func_230459_a_(matrixStack, mouseX, mouseY);
     }
 
-	@SuppressWarnings("deprecation")
 	@Override
 	protected void func_230450_a_(MatrixStack matrixstack, float p_230450_2_, int p_230450_3_, int p_230450_4_) {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
