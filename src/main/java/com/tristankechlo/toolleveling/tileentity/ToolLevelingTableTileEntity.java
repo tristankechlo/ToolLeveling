@@ -2,6 +2,7 @@ package com.tristankechlo.toolleveling.tileentity;
 
 import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.container.ToolLevelingTableContainer;
+import com.tristankechlo.toolleveling.init.ModItems;
 import com.tristankechlo.toolleveling.init.ModTileEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,7 +21,7 @@ import net.minecraftforge.items.ItemStackHandler;
 public class ToolLevelingTableTileEntity extends TileEntity implements INameable, IItemHandler, INamedContainerProvider {
 
 	private ITextComponent customname = new TranslationTextComponent("container."+ToolLeveling.MOD_ID+".tool_leveling_table");
-	private ItemStackHandler inventory = new ItemStackHandler(1) {
+	public ItemStackHandler inventory = new ItemStackHandler(2) {
 		protected void onContentsChanged(int slot) {
 			markDirty();
 		};
@@ -29,16 +30,16 @@ public class ToolLevelingTableTileEntity extends TileEntity implements INameable
 	public ToolLevelingTableTileEntity() {
 		super(ModTileEntities.TOOL_LEVELING_TABLE.get());
 	}
-
+	
     @Override
-    public void func_230337_a_(BlockState state, CompoundNBT tag) {
-        super.func_230337_a_(state, tag);
+    public void read(BlockState state, CompoundNBT tag) {
+        super.read(state, tag);
         if (tag.contains("CustomName", 8)) {
             this.customname = ITextComponent.Serializer.func_240643_a_(tag.getString("CustomName"));
         }
         if(tag.contains("inv")) {
         	CompoundNBT inv = tag.getCompound("inv");
-        	this.inventory.deserializeNBT(inv);
+        	this.inventory.deserializeNBT(inv);;
         	
         }
     }
@@ -72,25 +73,30 @@ public class ToolLevelingTableTileEntity extends TileEntity implements INameable
 
 	@Override
 	public int getSlots() {
-		return 1;
+		return 2;
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int slot) {
-		if(slot == 0) {
-			return inventory.getStackInSlot(0);
+		if(slot == 0 || slot == 1) {
+			return inventory.getStackInSlot(slot);
 		} else {
 			return ItemStack.EMPTY;
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
 		if(slot == 0 && stack.isEnchanted() && this.inventory.getStackInSlot(0) == ItemStack.EMPTY) {
-			final ItemStack accept = stack.split(1);
-			this.inventory.insertItem(0, accept, simulate);
+			final ItemStack accepted_stack = stack.split(1);
+			this.inventory.insertItem(0, accepted_stack, simulate);
 			return stack;
-		} else {
+		} else if (slot == 1 && (stack.getItem() == ModItems.RUBY.get()) && (this.inventory.getStackInSlot(1).getCount() < ModItems.RUBY.get().getMaxStackSize())) {
+			final ItemStack accepted_stack = stack.split(ModItems.RUBY.get().getMaxStackSize() - this.inventory.getStackInSlot(1).getCount());
+			this.inventory.insertItem(1, accepted_stack, simulate);
+			return stack;
+		}else {
 			return stack;
 		}
 	}
@@ -102,18 +108,32 @@ public class ToolLevelingTableTileEntity extends TileEntity implements INameable
 				ItemStack stack = this.inventory.extractItem(0, amount, simulate);
 				return stack;
 			}
+		}if(slot == 1 && !(this.inventory.getStackInSlot(1) == ItemStack.EMPTY)) {
+			if(this.inventory.getStackInSlot(1).getCount() >= amount) {
+				ItemStack stack = this.inventory.extractItem(0, amount, simulate);
+				return stack;
+			}
 		}
 		return ItemStack.EMPTY;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public int getSlotLimit(int slot) {
-		return 1;
+		if(slot == 0) {
+			return 1;
+		}
+		return ModItems.RUBY.get().getMaxStackSize();
 	}
 
 	@Override
 	public boolean isItemValid(int slot, ItemStack stack) {
-		return stack.isEnchanted();
+		if(slot == 0) {
+			return stack.isEnchanted();
+		} else if(slot == 1) {
+			return stack.getItem() == ModItems.RUBY.get();
+		}
+		return false;
 	}
 	
 	public IItemHandler getInventory() {
@@ -121,8 +141,8 @@ public class ToolLevelingTableTileEntity extends TileEntity implements INameable
 	}
 
 	@Override
-	public Container createMenu(int windowId, PlayerInventory playerInv, PlayerEntity playerEtity) {
+	public Container createMenu(int windowId, PlayerInventory playerInv, PlayerEntity playerEntity) {
 		return new ToolLevelingTableContainer(windowId, playerInv, this);
 	}
-    
+		
 }

@@ -48,7 +48,7 @@ public class ToolLevelingTableBlock extends Block {
 				.harvestLevel(2)
 				.harvestTool(ToolType.PICKAXE)
 				.notSolid()
-				.func_235861_h_()
+				.setRequiresTool()
 		);
 		this.setDefaultState(this.getDefaultState().with(FACING, Direction.NORTH));
 	}

@@ -15,22 +15,22 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-public class TestCommand {
+public class SuperEnchantCommand {
 	
-	private static ITextComponent LEVEL_TO_LOW = new TranslationTextComponent("commands."+ToolLeveling.MOD_ID+".superenchant.failed.level");
+	private static ITextComponent LEVEL_WRONG = new TranslationTextComponent("commands."+ToolLeveling.MOD_ID+".superenchant.failed.level");
 	private static ITextComponent NOT_ENCHANTET = new TranslationTextComponent("commands."+ToolLeveling.MOD_ID+".superenchant.failed.not");
 
 	public static void register(CommandDispatcher<CommandSource> dispatcher) {
-		dispatcher.register(Commands.literal("superenchant").requires((p_203630_0_) -> {
-			return p_203630_0_.hasPermissionLevel(3);
-		}).then(Commands.argument("level", IntegerArgumentType.integer(0)).executes((source) -> {
+		dispatcher.register(Commands.literal("superenchant").requires((player) -> {
+			return player.hasPermissionLevel(3);
+		}).then(Commands.argument("level", IntegerArgumentType.integer(0, 32767)).executes((source) -> {
 			return enchant(source.getSource(), IntegerArgumentType.getInteger(source, "level"));
 		})));
 	}
 	
 	private static int enchant(CommandSource source, int level) {
 		if(source.getEntity() instanceof ServerPlayerEntity) {
-			if(level >= 1) {
+			if(level >= 1 && level <= Short.MAX_VALUE) {
 				ServerPlayerEntity player = (ServerPlayerEntity) source.getEntity();
 				ItemStack stack = player.getHeldItemMainhand();
 				if(stack.isEnchanted()) {
@@ -46,7 +46,7 @@ public class TestCommand {
 					source.sendFeedback(NOT_ENCHANTET, true);
 				}
 			} else {
-				source.sendFeedback(LEVEL_TO_LOW, true);
+				source.sendFeedback(LEVEL_WRONG, true);
 			}
 		}
 		return 0;

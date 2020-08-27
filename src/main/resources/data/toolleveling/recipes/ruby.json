@@ -1,0 +1,20 @@
+{
+	"type" : "minecraft:crafting_shaped",
+	"pattern" : [
+		"xxx",
+		"xax",
+		"xxx"
+	],
+	"key" : {
+		"x" : {
+			"tag" : "forge:gems/diamond"
+		},
+		"a" : {
+			"tag" : "forge:dyes/red"
+		}
+	},
+	"result" : {
+		"item" : "toolleveling:ruby",
+		"count" : 1
+	}
+}
