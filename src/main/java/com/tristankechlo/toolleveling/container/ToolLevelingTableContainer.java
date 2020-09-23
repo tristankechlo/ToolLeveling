@@ -4,7 +4,6 @@ import java.util.Objects;
 
 import com.tristankechlo.toolleveling.init.ModBlocks;
 import com.tristankechlo.toolleveling.init.ModContainers;
-import com.tristankechlo.toolleveling.init.ModItems;
 import com.tristankechlo.toolleveling.tileentity.ToolLevelingTableTileEntity;
 
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,6 +11,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IWorldPosCallable;
@@ -62,13 +62,12 @@ public class ToolLevelingTableContainer extends Container {
 		this.addSlot(new SlotItemHandler(entity.getInventory(), 1, 15, 57) {
 			@Override
 			public boolean isItemValid(ItemStack stack) {
-				return stack.getItem() == ModItems.RUBY.get();
+				return stack.getItem() == Items.DIAMOND;
 			}
 			
-			@SuppressWarnings("deprecation")
 			@Override
 			public int getSlotStackLimit() {
-				return ModItems.RUBY.get().getMaxStackSize();
+				return 64;
 			}
 			
 			@Override
@@ -121,7 +120,7 @@ public class ToolLevelingTableContainer extends Container {
 	            if (!this.mergeItemStack(itemstack1, 2, 38, true)) {
 	               return ItemStack.EMPTY;
 	            }
-	         } else if (itemstack1.getItem() == ModItems.RUBY.get()) {
+	         } else if (itemstack1.getItem() == Items.DIAMOND) {
 	            if (!this.mergeItemStack(itemstack1, 1, 2, true)) {
 	               return ItemStack.EMPTY;
 	            }

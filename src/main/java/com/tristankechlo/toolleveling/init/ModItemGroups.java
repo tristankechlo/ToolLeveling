@@ -8,7 +8,7 @@ public class ModItemGroups {
     public static final ItemGroup General = new ItemGroup("ToolLevelingTab") {
 		@Override
 		public ItemStack createIcon() {
-			return new ItemStack(ModItems.RUBY.get());
+			return new ItemStack(ModBlocks.TOOL_LEVELING_TABLE_ITEM.get());
 		}
 	};
 }

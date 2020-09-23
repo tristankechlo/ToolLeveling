@@ -1,10 +1,7 @@
 package com.tristankechlo.toolleveling.init;
 
 import com.tristankechlo.toolleveling.ToolLeveling;
-import com.tristankechlo.toolleveling.items.RubyItem;
-
 import net.minecraft.item.Item;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -14,7 +11,7 @@ public class ModItems {
 
 		
 	//ITEMS
-	public static final RegistryObject<Item> RUBY = ITEMS.register("ruby", () -> new RubyItem());
+	//public static final RegistryObject<Item> RUBY = ITEMS.register("ruby", () -> new RubyItem());
 	
 	
 }

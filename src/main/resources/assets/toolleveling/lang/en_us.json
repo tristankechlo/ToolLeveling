@@ -10,7 +10,7 @@
 	"container.toolleveling.tool_leveling_table" : "Tool Leveling Table",
 	"container.toolleveling.tool_leveling_table.page" : "Page %s/%s",
 	
-	"commands.toolleveling.superenchant.failed.level" : "The level must be between 1 and 32767",
-	"commands.toolleveling.superenchant.failed.not" : "This Item is not enchantet."
+	"commands.toolleveling.superenchant.failed.level_wrong" : "The level must be between 1 and 32767",
+	"commands.toolleveling.superenchant.failed.not_enchanted" : "This Item is not enchantet."
 	
 }

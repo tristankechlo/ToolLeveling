@@ -2,15 +2,18 @@
 	"type" : "minecraft:crafting_shaped",
 	"pattern" : [
 		" # ",
-		" I ",
+		"DID",
 		"III"
 	],
 	"key" : {
 		"#" : {
-			"item" : "minecraft:book"
+			"item" : "minecraft:enchanted_book"
 		},
 		"I" : {
-			"item" : "minecraft:iron_block"
+			"tag" : "forge:storage_blocks/iron"
+		},
+		"D" : {
+			"tag" : "forge:gems/diamond"
 		}
 	},
 	"result" : {

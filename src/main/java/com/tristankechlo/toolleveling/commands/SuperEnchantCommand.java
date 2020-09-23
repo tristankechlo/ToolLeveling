@@ -17,8 +17,8 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 public class SuperEnchantCommand {
 	
-	private static ITextComponent LEVEL_WRONG = new TranslationTextComponent("commands."+ToolLeveling.MOD_ID+".superenchant.failed.level");
-	private static ITextComponent NOT_ENCHANTET = new TranslationTextComponent("commands."+ToolLeveling.MOD_ID+".superenchant.failed.not");
+	private static ITextComponent LEVEL_WRONG = new TranslationTextComponent("commands."+ToolLeveling.MOD_ID+".superenchant.failed.level_wrong");
+	private static ITextComponent NOT_ENCHANTET = new TranslationTextComponent("commands."+ToolLeveling.MOD_ID+".superenchant.failed.not_enchanted");
 
 	public static void register(CommandDispatcher<CommandSource> dispatcher) {
 		dispatcher.register(Commands.literal("superenchant").requires((player) -> {

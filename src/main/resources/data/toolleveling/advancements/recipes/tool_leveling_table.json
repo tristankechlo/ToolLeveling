@@ -1,0 +1,47 @@
+{
+	"parent" : "minecraft:recipes/root",
+	"rewards" : {
+		"recipes" : [
+			"toolleveling:tool_leveling_table"
+		]
+	},
+	"criteria" : {
+		"has_iron_block" : {
+			"trigger" : "minecraft:inventory_changed",
+			"conditions" : {
+				"items" : [
+					{
+						"item" : "minecraft:iron_block"
+					}
+				]
+			}
+		},
+		"has_enchanted_book" : {
+			"trigger" : "minecraft:inventory_changed",
+			"conditions" : {
+				"items" : [
+					{
+						"item" : "minecraft:enchanted_book"
+					}
+				]
+			}
+		},
+		"has_the_recipe" : {
+			"trigger" : "minecraft:recipe_unlocked",
+			"conditions" : {
+				"recipe" : "toolleveling:tool_leveling_table"
+			}
+		},
+		"enchanted_item" : {
+            "trigger": "minecraft:enchanted_item"
+		}
+	},
+	"requirements" : [
+		 [
+			"has_iron_block",
+			"has_enchanted_book",
+			"has_the_recipe",
+			"enchanted_item"
+		]
+	]
+}

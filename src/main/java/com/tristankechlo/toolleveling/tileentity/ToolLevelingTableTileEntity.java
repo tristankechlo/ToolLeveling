@@ -2,7 +2,6 @@ package com.tristankechlo.toolleveling.tileentity;
 
 import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.container.ToolLevelingTableContainer;
-import com.tristankechlo.toolleveling.init.ModItems;
 import com.tristankechlo.toolleveling.init.ModTileEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -10,6 +9,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.INameable;
@@ -92,8 +92,8 @@ public class ToolLevelingTableTileEntity extends TileEntity implements INameable
 			final ItemStack accepted_stack = stack.split(1);
 			this.inventory.insertItem(0, accepted_stack, simulate);
 			return stack;
-		} else if (slot == 1 && (stack.getItem() == ModItems.RUBY.get()) && (this.inventory.getStackInSlot(1).getCount() < ModItems.RUBY.get().getMaxStackSize())) {
-			final ItemStack accepted_stack = stack.split(ModItems.RUBY.get().getMaxStackSize() - this.inventory.getStackInSlot(1).getCount());
+		} else if (slot == 1 && (stack.getItem() == Items.DIAMOND) && (this.inventory.getStackInSlot(1).getCount() < Items.DIAMOND.getMaxStackSize())) {
+			final ItemStack accepted_stack = stack.split(Items.DIAMOND.getMaxStackSize() - this.inventory.getStackInSlot(1).getCount());
 			this.inventory.insertItem(1, accepted_stack, simulate);
 			return stack;
 		}else {
@@ -123,7 +123,7 @@ public class ToolLevelingTableTileEntity extends TileEntity implements INameable
 		if(slot == 0) {
 			return 1;
 		}
-		return ModItems.RUBY.get().getMaxStackSize();
+		return Items.DIAMOND.getMaxStackSize();
 	}
 
 	@Override
@@ -131,7 +131,7 @@ public class ToolLevelingTableTileEntity extends TileEntity implements INameable
 		if(slot == 0) {
 			return stack.isEnchanted();
 		} else if(slot == 1) {
-			return stack.getItem() == ModItems.RUBY.get();
+			return stack.getItem() == Items.DIAMOND;
 		}
 		return false;
 	}

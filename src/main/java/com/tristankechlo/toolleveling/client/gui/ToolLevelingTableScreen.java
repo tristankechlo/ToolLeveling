@@ -61,6 +61,7 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
     @Override
     protected void init() {
     	super.init();
+    	//create buttons
     	this.EnchantmentButton0 = new Button(this.guiLeft + 47, this.guiTop + 21, 120, 20, new StringTextComponent(""), (button) -> { handleButtonClick(0); });
     	this.EnchantmentButton1 = new Button(this.guiLeft + 47, this.guiTop + 45, 120, 20, new StringTextComponent(""), (button) -> { handleButtonClick(1); });
     	this.EnchantmentButton2 = new Button(this.guiLeft + 47, this.guiTop + 69, 120, 20, new StringTextComponent(""), (button) -> { handleButtonClick(2); });
@@ -76,6 +77,7 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
 		this.pageForward.visible = false;
 		this.pageBackward.visible = false;
 		
+		//add Buttons to screen
     	this.addButton(this.EnchantmentButton0);
     	this.addButton(this.EnchantmentButton1);
     	this.addButton(this.EnchantmentButton2);
@@ -88,7 +90,7 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
     public void tick() {
     	super.tick();
     	this.ticksSinceUpdate++;
-    	if(this.ticksSinceUpdate > 3) {
+    	if(this.ticksSinceUpdate % 2 == 0) {
     		this.ticksSinceUpdate = 0;
     		updateEnchantmentList();
     	}
@@ -100,6 +102,9 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
     	}
     }
     
+    /**
+     * get information about the current item in the table
+     */
     private void updateEnchantmentList() {
     	ItemStack stack = this.entity.getStackInSlot(0);
     	if(!stack.getItem().equals(Items.AIR)) {
@@ -161,8 +166,18 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
     		this.pageForward.visible = true;
     		this.pageBackward.visible = true;
     	}
+
+    	ItemStack stack = this.entity.getStackInSlot(1);
+    	if(stack.getItem().equals(Items.AIR) || stack.getCount() < 10) {
+    		disableAllButtons();
+    	} else {
+    		enableAllButtons();
+    	}
     }
     
+    /**
+     * handle button click for page forward
+     */
     private void pageForward() {
     	if(this.currentPage == this.maxPages) {
     		this.currentPage = 1;
@@ -171,7 +186,10 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
     	}
     	updateButtonData();
     }
-    
+
+    /**
+     * handle button click for page backwards
+     */
     private void pageBackward() {
     	if(this.currentPage == 1) {
     		this.currentPage = this.maxPages;
@@ -181,6 +199,10 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
     	updateButtonData();
     }
     
+    /**
+     * handle button click for enchant buttons
+     * @param id
+     */
     private void handleButtonClick(int id) {
 
     	//next level must be below 32767
@@ -201,6 +223,20 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
 		for (Widget button : this.buttons) {
 			button.visible = false;
 		}
+    }
+    
+    private void disableAllButtons() {
+    	this.EnchantmentButton0.active = false;
+    	this.EnchantmentButton1.active = false;
+    	this.EnchantmentButton2.active = false;
+    	this.EnchantmentButton3.active = false;
+    }
+    
+    private void enableAllButtons() {
+    	this.EnchantmentButton0.active = true;
+    	this.EnchantmentButton1.active = true;
+    	this.EnchantmentButton2.active = true;
+    	this.EnchantmentButton3.active = true;
     }
     
     private ITextComponent getButtonText(String tranlation, int currentlevel) {
