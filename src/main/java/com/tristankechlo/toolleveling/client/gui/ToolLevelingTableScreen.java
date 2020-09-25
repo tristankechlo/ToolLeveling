@@ -247,7 +247,7 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.func_230459_a_(matrixStack, mouseX, mouseY);
+        this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
         if(this.buttonData.size() > 4) {
         	//draw string for page overview
         	ITextComponent text = new TranslationTextComponent("container.toolleveling.tool_leveling_table.page", this.currentPage, this.maxPages);

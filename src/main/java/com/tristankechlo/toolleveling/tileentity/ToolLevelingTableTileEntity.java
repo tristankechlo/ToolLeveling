@@ -35,7 +35,7 @@ public class ToolLevelingTableTileEntity extends TileEntity implements INameable
     public void read(BlockState state, CompoundNBT tag) {
         super.read(state, tag);
         if (tag.contains("CustomName", 8)) {
-            this.customname = ITextComponent.Serializer.func_240643_a_(tag.getString("CustomName"));
+            this.customname = ITextComponent.Serializer.getComponentFromJson(tag.getString("CustomName"));
         }
         if(tag.contains("inv")) {
         	CompoundNBT inv = tag.getCompound("inv");
