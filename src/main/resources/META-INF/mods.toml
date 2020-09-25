@@ -1,29 +1,25 @@
-modLoader="javafml" #mandatory
-loaderVersion="[34,)" #mandatory 
-license="All rights reserved"
-#issueTrackerURL="http://my.issue.tracker/" #optional
+modLoader="javafml"
+loaderVersion="[34,)"
+license="CC BY-NC-ND 4.0"
 showAsResourcePack=false
 
-[[mods]] #mandatory
-modId="toolleveling" #mandatory
-version="1.16.3-1.0.0" #mandatory
-displayName="Tool Leveling" #mandatory
-#updateJSONURL="http://myurl.me/" #optional
-#displayURL="http://example.com/" #optional
-#logoFile="examplemod.png" #optional
-#credits="Thanks for this example mod goes to Java" #optional
-authors="Buecher_wurm" #optional
-# The description text for the mod (multi line!) (#mandatory)
+[[mods]]
+modId="toolleveling"
+version="1.16.3 - 1.0.0"
+displayName="Tool Leveling"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/tool-leveling-plus"
+#logoFile="examplemod.png"
+#credits="Thanks for this example mod goes to Java"
+authors="Buecher_wurm"
 description=''''''
 
-[[dependencies.toolleveling]] #optional
-    modId="forge" #mandatory
-    mandatory=true #mandatory
-    versionRange="[34,)" #mandatory
+[[dependencies.toolleveling]]
+    modId="forge"
+    mandatory=true
+    versionRange="[34,)"
     ordering="NONE"
     side="BOTH"
-	
-# Here's another dependency
+
 [[dependencies.toolleveling]]
     modId="minecraft"
     mandatory=true
