@@ -1,11 +1,11 @@
 modLoader="javafml"
-loaderVersion="[34,)"
+loaderVersion="[33,)"
 license="CC BY-NC-ND 4.0"
 showAsResourcePack=false
 
 [[mods]]
 modId="toolleveling"
-version="1.16.3 - 1.0.0"
+version="1.16.2 - 1.0.0"
 displayName="Tool Leveling"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/tool-leveling-plus"
 #logoFile="examplemod.png"
@@ -16,13 +16,13 @@ description=''''''
 [[dependencies.toolleveling]]
     modId="forge"
     mandatory=true
-    versionRange="[34,)"
+    versionRange="[33,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.toolleveling]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.3]"
+    versionRange="[1.16.2]"
     ordering="NONE"
     side="BOTH"
