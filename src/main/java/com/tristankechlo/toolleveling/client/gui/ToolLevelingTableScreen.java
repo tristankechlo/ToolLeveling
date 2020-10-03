@@ -7,6 +7,7 @@ import java.util.Map;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.tristankechlo.toolleveling.ToolLeveling;
+import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
 import com.tristankechlo.toolleveling.container.ToolLevelingTableContainer;
 import com.tristankechlo.toolleveling.network.ToolLevelingPacketHandler;
 import com.tristankechlo.toolleveling.network.packets.SyncToolLevelingEnchantment;
@@ -114,7 +115,8 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
 			Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
 			for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
 				//only list enchantments where a higher level is not useless
-				if(entry.getKey().getMaxLevel() > 1) {
+				List<? extends String> EnchantmentsBlacklist = ToolLevelingConfig.SERVER.EnchantmentsBlacklist.get();
+				if(!EnchantmentsBlacklist.contains(entry.getKey().getRegistryName().toString())) {
 					//although the level is defined as an integer, the actual maximum is a short
 					//a higher enchantment level than a short will result in a negative level
 					if(entry.getValue() < Short.MAX_VALUE) {
