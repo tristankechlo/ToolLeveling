@@ -129,9 +129,13 @@ public class ToolLevelingTableBlock extends Block {
 	    	  TileEntity tile = world.getTileEntity(pos);
 	    	  if(tile instanceof ToolLevelingTableTileEntity) {
 	    		  IItemHandler inventory = ((ToolLevelingTableTileEntity)tile).getInventory();
-	    		  ItemStack stack = inventory.getStackInSlot(0);
-	    		  if(stack != ItemStack.EMPTY) {
-		    		  InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);
+	    		  ItemStack item = inventory.getStackInSlot(0);
+	    		  if(item != ItemStack.EMPTY) {
+		    		  InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), item);
+	    		  }
+	    		  ItemStack cost = inventory.getStackInSlot(1);
+	    		  if(cost != ItemStack.EMPTY) {
+		    		  InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), cost);
 	    		  }
 	    	  }
 		      world.removeTileEntity(pos);
