@@ -18,6 +18,7 @@ import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -114,13 +115,16 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
     		
 			Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
 			for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
-				//only list enchantments where a higher level is not useless
+				//only list enchantments that are not on the blacklist
 				List<? extends String> EnchantmentsBlacklist = ToolLevelingConfig.SERVER.EnchantmentsBlacklist.get();
 				if(!EnchantmentsBlacklist.contains(entry.getKey().getRegistryName().toString())) {
 					//although the level is defined as an integer, the actual maximum is a short
 					//a higher enchantment level than a short will result in a negative level
 					if(entry.getValue() < Short.MAX_VALUE) {
-						this.buttonData.add(new ButtonData(entry.getKey().getRegistryName(), entry.getKey().getName(), entry.getValue()));
+						//check if the enchantment can still be leveled
+						if(canStillBeLeveled(entry.getKey(), entry.getValue()) || ToolLevelingConfig.SERVER.ignoreEnchantmentCaps.get()) {
+							this.buttonData.add(new ButtonData(entry.getKey().getRegistryName(), entry.getKey().getName(), entry.getValue()));
+						}
 					}
 				}
 			}
@@ -239,6 +243,22 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
     	this.EnchantmentButton1.active = true;
     	this.EnchantmentButton2.active = true;
     	this.EnchantmentButton3.active = true;
+    }
+    
+    private boolean canStillBeLeveled(Enchantment enchantment, int level) {
+    	if(enchantment.equals(Enchantments.LUCK_OF_THE_SEA)) {
+    		return level < 84;
+    	}
+    	if(enchantment.equals(Enchantments.THORNS)) {
+    		return level < 7;
+    	}
+    	if(enchantment.equals(Enchantments.QUICK_CHARGE)) {
+    		return level < 5;
+    	}
+    	if(enchantment.equals(Enchantments.LURE)) {
+    		return level < 5;
+    	}
+    	return true;
     }
     
     private ITextComponent getButtonText(String tranlation, int currentlevel) {
