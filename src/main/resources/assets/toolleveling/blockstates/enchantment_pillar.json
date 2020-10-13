@@ -1,0 +1,66 @@
+{
+	"variants" : {
+		"facing=east,half=lower,activated=false" : {
+			"model" : "toolleveling:block/enchantment_pillar_bottom"
+		},
+		"facing=south,half=lower,activated=false" : {
+			"model" : "toolleveling:block/enchantment_pillar_bottom",
+			"y" : 90
+		},
+		"facing=west,half=lower,activated=false" : {
+			"model" : "toolleveling:block/enchantment_pillar_bottom",
+			"y" : 180
+		},
+		"facing=north,half=lower,activated=false" : {
+			"model" : "toolleveling:block/enchantment_pillar_bottom",
+			"y" : 270
+		},
+		"facing=east,half=lower,activated=true" : {
+			"model" : "toolleveling:block/enchantment_pillar_bottom"
+		},
+		"facing=south,half=lower,activated=true" : {
+			"model" : "toolleveling:block/enchantment_pillar_bottom",
+			"y" : 90
+		},
+		"facing=west,half=lower,activated=true" : {
+			"model" : "toolleveling:block/enchantment_pillar_bottom",
+			"y" : 180
+		},
+		"facing=north,half=lower,activated=true" : {
+			"model" : "toolleveling:block/enchantment_pillar_bottom",
+			"y" : 270
+		},
+		
+		
+		"facing=east,half=upper,activated=false" : {
+			"model" : "toolleveling:block/enchantment_pillar_top"
+		},
+		"facing=south,half=upper,activated=false" : {
+			"model" : "toolleveling:block/enchantment_pillar_top",
+			"y" : 90
+		},
+		"facing=west,half=upper,activated=false" : {
+			"model" : "toolleveling:block/enchantment_pillar_top",
+			"y" : 180
+		},
+		"facing=north,half=upper,activated=false" : {
+			"model" : "toolleveling:block/enchantment_pillar_top",
+			"y" : 270
+		},
+		"facing=east,half=upper,activated=true" : {
+			"model" : "toolleveling:block/enchantment_pillar_top_active"
+		},
+		"facing=south,half=upper,activated=true" : {
+			"model" : "toolleveling:block/enchantment_pillar_top_active",
+			"y" : 90
+		},
+		"facing=west,half=upper,activated=true" : {
+			"model" : "toolleveling:block/enchantment_pillar_top_active",
+			"y" : 180
+		},
+		"facing=north,half=upper,activated=true" : {
+			"model" : "toolleveling:block/enchantment_pillar_top_active",
+			"y" : 270
+		}
+	}
+}

@@ -42,7 +42,7 @@ public class ToolLevelingTableBlock extends Block {
 	public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
 
 	public ToolLevelingTableBlock() {
-		super(Block.Properties.create(Material.ANVIL, MaterialColor.GRAY)
+		super(Block.Properties.create(Material.IRON, MaterialColor.GRAY)
 				.hardnessAndResistance(4.5f, 10.0f)
 				.sound(SoundType.METAL)
 				.harvestLevel(2)
@@ -65,7 +65,7 @@ public class ToolLevelingTableBlock extends Block {
 		
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		return Stream.of(Block.makeCuboidShape(1, 0, 1, 15, 11, 15)).reduce((v1, v2) -> {
+		return Stream.of(makeCuboidShape(2, 0, 2, 14, 3, 14), makeCuboidShape(3, 3, 3, 13, 6, 13), makeCuboidShape(4, 6, 4, 12, 11, 12), makeCuboidShape(3, 11, 3, 13, 14, 13)).reduce((v1, v2) -> {
 			return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);
 		}).get();
 	}
@@ -129,13 +129,9 @@ public class ToolLevelingTableBlock extends Block {
 	    	  TileEntity tile = world.getTileEntity(pos);
 	    	  if(tile instanceof ToolLevelingTableTileEntity) {
 	    		  IItemHandler inventory = ((ToolLevelingTableTileEntity)tile).getInventory();
-	    		  ItemStack item = inventory.getStackInSlot(0);
-	    		  if(item != ItemStack.EMPTY) {
-		    		  InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), item);
-	    		  }
-	    		  ItemStack cost = inventory.getStackInSlot(1);
-	    		  if(cost != ItemStack.EMPTY) {
-		    		  InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), cost);
+	    		  ItemStack stack = inventory.getStackInSlot(0);
+	    		  if(stack != ItemStack.EMPTY) {
+		    		  InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);
 	    		  }
 	    	  }
 		      world.removeTileEntity(pos);

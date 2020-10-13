@@ -64,9 +64,6 @@ public class SyncToolLevelingEnchantment {
 	        			enchantments.put(ench, msg.level);
 	        			EnchantmentHelper.setEnchantments(enchantments, stack);
 	        			table.inventory.setStackInSlot(0, stack);
-	        			ItemStack dias = table.inventory.getStackInSlot(1);
-	        			dias.setCount( Math.max(0, (dias.getCount() - 10) ));
-	        			table.inventory.setStackInSlot(1, dias);
 	        			table.markDirty();
 	        		}
 	        	}

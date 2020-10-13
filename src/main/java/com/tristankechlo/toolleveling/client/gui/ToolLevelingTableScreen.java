@@ -108,7 +108,7 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
      * get information about the current item in the table
      */
     private void updateEnchantmentList() {
-    	ItemStack stack = this.entity.getStackInSlot(0);
+    	ItemStack stack = this.entity.inventory.getStackInSlot(0);
     	if(!stack.getItem().equals(Items.AIR)) {
     		//reset previous data
     		this.buttonData.clear();
@@ -173,8 +173,8 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
     		this.pageBackward.visible = true;
     	}
 
-    	ItemStack stack = this.entity.getStackInSlot(1);
-    	if(stack.getItem().equals(Items.AIR) || stack.getCount() < 10) {
+    	ItemStack stack = this.entity.inventory.getStackInSlot(0);
+    	if(stack.getItem().equals(Items.AIR) || stack.getCount() < 0) {
     		disableAllButtons();
     	} else {
     		enableAllButtons();

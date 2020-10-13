@@ -10,13 +10,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.IArmorMaterial;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.TieredItem;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IWorldPosCallable;
@@ -64,35 +58,6 @@ public class ToolLevelingTableContainer extends Container {
 			}
 		});
 		
-		this.addSlot(new SlotItemHandler(entity.getInventory(), 1, 15, 57) {
-			@Override
-			public boolean isItemValid(ItemStack stack) {
-				Item targetItem = entity.getStackInSlot(0).getItem();
-				if(targetItem != Items.AIR) {
-					if(targetItem instanceof TieredItem) {
-						IItemTier item = ((TieredItem)targetItem).getTier();
-						return item.getRepairMaterial().test(stack);
-					} else if(targetItem instanceof ArmorItem) {
-						IArmorMaterial item = ((ArmorItem)targetItem).getArmorMaterial();
-						return item.getRepairMaterial().test(stack);
-					} else {
-						return stack.getItem() == Items.DIAMOND;
-					}
-				}
-				return false;
-			}
-			
-			@Override
-			public int getSlotStackLimit() {
-				return 64;
-			}
-			
-			@Override
-			public void onSlotChanged() {
-				entity.markDirty();
-			}
-		});
-		
 		// Main Inventory
 		int startX = 10;
 		int startY = 130;
@@ -130,15 +95,7 @@ public class ToolLevelingTableContainer extends Container {
 	         ItemStack itemstack1 = slot.getStack();
 	         itemstack = itemstack1.copy();
 	         if (index == 0) {
-	            if (!this.mergeItemStack(itemstack1, 2, 38, true)) {
-	               return ItemStack.EMPTY;
-	            }
-	         } else if (index == 1) {
-	            if (!this.mergeItemStack(itemstack1, 2, 38, true)) {
-	               return ItemStack.EMPTY;
-	            }
-	         } else if (this.getSlot(1).isItemValid(itemstack1)) {
-	            if (!this.mergeItemStack(itemstack1, 1, 2, true)) {
+	            if (!this.mergeItemStack(itemstack1, 2, 37, true)) {
 	               return ItemStack.EMPTY;
 	            }
 	         } else {

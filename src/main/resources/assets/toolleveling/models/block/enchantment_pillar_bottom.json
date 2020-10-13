@@ -1,0 +1,51 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"particle": "toolleveling:blocks/enchantment_pillar",
+		"texture": "toolleveling:blocks/enchantment_pillar"
+	},
+	"elements": [
+		{
+			"name": "bottom",
+			"from": [1, 0, 1],
+			"to": [15, 4, 15],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 2, 8]},
+			"faces": {
+				"north": {"uv": [1, 12, 15, 16], "texture": "#texture"},
+				"east": {"uv": [1, 12, 15, 16], "texture": "#texture"},
+				"south": {"uv": [1, 12, 15, 16], "texture": "#texture"},
+				"west": {"uv": [1, 12, 15, 16], "texture": "#texture"},
+				"up": {"uv": [1, 1, 15, 15], "texture": "#texture"},
+				"down": {"uv": [1, 1, 15, 15], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "middle",
+			"from": [3, 4, 3],
+			"to": [13, 8, 13],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 6, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 10, 4], "texture": "#texture"},
+				"east": {"uv": [0, 0, 10, 4], "texture": "#texture"},
+				"south": {"uv": [0, 0, 10, 4], "texture": "#texture"},
+				"west": {"uv": [0, 0, 10, 4], "texture": "#texture"},
+				"up": {"uv": [0, 0, 10, 10], "texture": "#texture"},
+				"down": {"uv": [0, 0, 10, 10], "texture": "#texture"}
+			}
+		},
+		{
+			"name": "top",
+			"from": [4, 8, 4],
+			"to": [12, 16, 12],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 8, 6], "texture": "#texture"},
+				"east": {"uv": [0, 0, 8, 6], "texture": "#texture"},
+				"south": {"uv": [0, 0, 8, 6], "texture": "#texture"},
+				"west": {"uv": [0, 0, 8, 6], "texture": "#texture"},
+				"up": {"uv": [0, 0, 8, 8], "texture": "#texture"},
+				"down": {"uv": [0, 0, 8, 8], "texture": "#texture"}
+			}
+		}
+	]
+}
