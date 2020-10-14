@@ -9,7 +9,7 @@ import com.tristankechlo.toolleveling.init.ModBlocks;
 import com.tristankechlo.toolleveling.init.ModContainers;
 import com.tristankechlo.toolleveling.init.ModItems;
 import com.tristankechlo.toolleveling.init.ModTileEntities;
-import com.tristankechlo.toolleveling.network.ToolLevelingPacketHandler;
+import com.tristankechlo.toolleveling.network.PacketHandler;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -30,7 +30,7 @@ public class ToolLeveling {
 		
 		final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		
-		ToolLevelingPacketHandler.registerPackets();
+		PacketHandler.registerPackets();
 
 		ModItems.ITEMS.register(modEventBus);
 		ModBlocks.BLOCKS.register(modEventBus);

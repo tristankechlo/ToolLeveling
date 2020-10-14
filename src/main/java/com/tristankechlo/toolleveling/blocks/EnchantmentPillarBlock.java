@@ -1,8 +1,7 @@
 package com.tristankechlo.toolleveling.blocks;
 
-import java.util.stream.Stream;
-
 import com.tristankechlo.toolleveling.tileentity.EnchantmentPillarTileEntity;
+
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
@@ -32,7 +31,6 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.IBooleanFunction;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
@@ -49,24 +47,14 @@ public class EnchantmentPillarBlock extends Block {
 	public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
 	public static final BooleanProperty ACTIVE = BooleanProperty.create("activated");
 
-	private static final VoxelShape LOWER_SHAPE = Stream.of(makeCuboidShape(1, 0, 1, 15, 4, 15),
-			makeCuboidShape(3, 4, 3, 13, 8, 13), makeCuboidShape(4, 8, 4, 12, 16, 12)).reduce((v1, v2) -> {
-				return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);
-			}).get();
-	public static final VoxelShape UPPER_SHAPE = Stream.of(makeCuboidShape(3, 0, 3, 13, 4, 13),
-			makeCuboidShape(7, 0.5, 1.5, 9, 8.5, 4.5), makeCuboidShape(11.5, 0.5, 7, 14.5, 8.5, 9),
-			makeCuboidShape(7, 0.5, 11.5, 9, 8.5, 14.5), makeCuboidShape(1.5, 0.5, 7, 4.5, 8.5, 9)).reduce((v1, v2) -> {
-				return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);
-			}).get();
-	public static final VoxelShape UPPER_SHAPE_ACTIVE = Stream
-			.of(makeCuboidShape(3, 0, 3, 13, 4, 13), makeCuboidShape(7, 0, 0, 9, 10, 3)).reduce((v1, v2) -> {
-				return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);
-			}).get();
+	private static final VoxelShape LOWER_SHAPE = VoxelShapes.or(makeCuboidShape(1, 0, 1, 15, 4, 15), makeCuboidShape(3, 4, 3, 13, 8, 13), makeCuboidShape(4, 8, 4, 12, 16, 12));
+	private static final VoxelShape UPPER_SHAPE = VoxelShapes.or(makeCuboidShape(3, 0, 3, 13, 4, 13), makeCuboidShape(7, 0.5, 1.5, 9, 8.5, 4.5), makeCuboidShape(11.5, 0.5, 7, 14.5, 8.5, 9), makeCuboidShape(7, 0.5, 11.5, 9, 8.5, 14.5), makeCuboidShape(1.5, 0.5, 7, 4.5, 8.5, 9));
+	private static final VoxelShape UPPER_SHAPE_ACTIVE = VoxelShapes.or(makeCuboidShape(3, 0, 3, 13, 4, 13), makeCuboidShape(7, 0, 0, 9, 10, 3));
 
 	
 	public EnchantmentPillarBlock() {
 		super(Block.Properties.create(Material.IRON, MaterialColor.GRAY)
-				.hardnessAndResistance(4.5f, 10.0f)
+				.hardnessAndResistance(4.5f, 1000.0f)
 				.sound(SoundType.METAL)
 				.harvestLevel(2)
 				.harvestTool(ToolType.PICKAXE)
@@ -88,23 +76,22 @@ public class EnchantmentPillarBlock extends Block {
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
 		if (state.get(HALF) == DoubleBlockHalf.UPPER) {
 			if (state.get(ACTIVE)) {
-				return VoxelShapes.combineAndSimplify(LOWER_SHAPE.withOffset(0, -1, 0), UPPER_SHAPE_ACTIVE,	IBooleanFunction.OR);
+				return VoxelShapes.or(LOWER_SHAPE.withOffset(0, -1, 0), UPPER_SHAPE_ACTIVE);
 			} else {
-				return VoxelShapes.combineAndSimplify(LOWER_SHAPE.withOffset(0, -1, 0), UPPER_SHAPE, IBooleanFunction.OR);
+				return VoxelShapes.or(LOWER_SHAPE.withOffset(0, -1, 0), UPPER_SHAPE);
 			}
 		} else {
 			if (state.get(ACTIVE)) {
-				return VoxelShapes.combineAndSimplify(LOWER_SHAPE, UPPER_SHAPE_ACTIVE.withOffset(0, 1, 0), IBooleanFunction.OR);
+				return VoxelShapes.or(LOWER_SHAPE, UPPER_SHAPE_ACTIVE.withOffset(0, 1, 0));
 			} else {
-				return VoxelShapes.combineAndSimplify(LOWER_SHAPE, UPPER_SHAPE.withOffset(0, 1, 0),	IBooleanFunction.OR);
+				return VoxelShapes.or(LOWER_SHAPE, UPPER_SHAPE.withOffset(0, 1, 0));
 			}
 		}
 	}
 
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player,
-			Hand handIn, BlockRayTraceResult hit) {
-		if (handIn == Hand.MAIN_HAND) {
+	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+		if (!world.isRemote && handIn == Hand.MAIN_HAND) {
 			if (state.get(HALF) == DoubleBlockHalf.LOWER) {
 				if (this.handleInventory(world, pos, player)) {
 					boolean active = state.get(ACTIVE);
@@ -122,21 +109,30 @@ public class EnchantmentPillarBlock extends Block {
 		return ActionResultType.func_233537_a_(world.isRemote);
 	}
 
+	/**
+	 * get or remove items from the pillar
+	 * @param world
+	 * @param pos
+	 * @param player
+	 * @return
+	 */
 	private boolean handleInventory(World world, BlockPos pos, PlayerEntity player) {
 		ItemStack stack = player.getHeldItemMainhand();
 		TileEntity entity = world.getTileEntity(pos);
 		if (entity instanceof EnchantmentPillarTileEntity) {
 			EnchantmentPillarTileEntity pillarEntity = (EnchantmentPillarTileEntity) entity;
-			ItemStackHandler inv = pillarEntity.inventory;
-			if (!stack.isEmpty() && inv.getStackInSlot(0).isEmpty() && inv.isItemValid(0, stack)) {
-				inv.setStackInSlot(0, new ItemStack(stack.getItem(), 1));
-				stack.shrink(1);
+			ItemStackHandler pillarInv = pillarEntity.inventory;
+			//add item to the pillar
+			if (!stack.isEmpty() && pillarInv.getStackInSlot(0).isEmpty() && pillarInv.isItemValid(0, stack)) {
+				pillarInv.setStackInSlot(0, stack.copy());
+				stack.setCount(0);;
 				pillarEntity.markDirty();
 				return true;
 
-			} else if (stack.isEmpty() && !inv.getStackInSlot(0).isEmpty()) {
-				player.inventory.addItemStackToInventory(inv.getStackInSlot(0));
-				inv.setStackInSlot(0, ItemStack.EMPTY);
+			//remove item from pillar
+			} else if (stack.isEmpty() && !pillarInv.getStackInSlot(0).isEmpty()) {
+				player.inventory.addItemStackToInventory(pillarInv.getStackInSlot(0));
+				pillarInv.setStackInSlot(0, ItemStack.EMPTY);
 				pillarEntity.markDirty();
 				return true;
 			} else {
@@ -148,7 +144,10 @@ public class EnchantmentPillarBlock extends Block {
 
 	@Override
 	public boolean hasTileEntity(BlockState state) {
-		return true;
+		if(state.get(HALF) == DoubleBlockHalf.LOWER) {
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -158,8 +157,7 @@ public class EnchantmentPillarBlock extends Block {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn,
-			BlockPos currentPos, BlockPos facingPos) {
+	public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn,	BlockPos currentPos, BlockPos facingPos) {
 		DoubleBlockHalf doubleblockhalf = stateIn.get(HALF);
 		if (facing.getAxis() != Direction.Axis.Y || doubleblockhalf == DoubleBlockHalf.LOWER != (facing == Direction.UP) || facingState.isIn(this) && facingState.get(HALF) != doubleblockhalf) {
 			return doubleblockhalf == DoubleBlockHalf.LOWER && facing == Direction.DOWN	&& !stateIn.isValidPosition(worldIn, currentPos) 
@@ -202,9 +200,9 @@ public class EnchantmentPillarBlock extends Block {
 	    	  TileEntity tile = world.getTileEntity(pos);
 	    	  if(tile instanceof EnchantmentPillarTileEntity) {
 	    		  ItemStackHandler inventory = ((EnchantmentPillarTileEntity)tile).inventory;
-	    		  ItemStack item = inventory.getStackInSlot(0);
-	    		  if(item != ItemStack.EMPTY) {
-		    		  InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), item);
+	    		  ItemStack stack = inventory.getStackInSlot(0);
+	    		  if(stack != ItemStack.EMPTY) {
+		    		  InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);
 	    		  }
 	    	  }
 		      world.removeTileEntity(pos);
@@ -233,7 +231,17 @@ public class EnchantmentPillarBlock extends Block {
 				world.playEvent(player, 2001, blockpos, Block.getStateId(blockstate));
 			}
 		}
-
+	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public float getPlayerRelativeBlockHardness(BlockState state, PlayerEntity player, IBlockReader worldIn, BlockPos pos) {
+		//block can't be mined when the upgrading started
+		boolean upgradeStarted = false;
+		if(upgradeStarted) {
+			return -1F;
+		}
+		return super.getPlayerRelativeBlockHardness(state, player, worldIn, pos);
 	}
 
 	@Override

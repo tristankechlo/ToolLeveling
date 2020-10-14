@@ -1,4 +1,4 @@
-package com.tristankechlo.toolleveling.client.gui;
+package com.tristankechlo.toolleveling.client.screen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
 import com.tristankechlo.toolleveling.container.ToolLevelingTableContainer;
-import com.tristankechlo.toolleveling.network.ToolLevelingPacketHandler;
+import com.tristankechlo.toolleveling.network.PacketHandler;
 import com.tristankechlo.toolleveling.network.packets.SyncToolLevelingEnchantment;
 import com.tristankechlo.toolleveling.tileentity.ToolLevelingTableTileEntity;
 
@@ -108,7 +108,7 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
      * get information about the current item in the table
      */
     private void updateEnchantmentList() {
-    	ItemStack stack = this.entity.inventory.getStackInSlot(0);
+    	ItemStack stack = this.entity.getStackToEnchant();
     	if(!stack.getItem().equals(Items.AIR)) {
     		//reset previous data
     		this.buttonData.clear();
@@ -140,7 +140,9 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
 		//check if 1st button is needed on current page
 		if(this.buttonData.size() >= 1 + ((this.currentPage - 1) * 3)) {
     		this.EnchantmentButton0.visible = true;
-    		this.EnchantmentButton0.setMessage(getButtonText(this.buttonData.get(0 + ((this.currentPage - 1) * 3)).NAME, this.buttonData.get(0 + ((this.currentPage - 1) * 3)).LEVEL));
+    		this.EnchantmentButton0.setMessage(getButtonText(this.buttonData.get(0 + ((this.currentPage - 1) * 3)).NAME, this.buttonData.get(0 + ((this.currentPage - 1) * 3)).NEXT_LEVEL));
+    		boolean active = (this.buttonData.get(0 + ((this.currentPage - 1) * 3)).UPGRADE_COST <= this.entity.getReachableItems());
+    		this.EnchantmentButton0.active = active;
 		} else {
     		this.EnchantmentButton0.visible = false;
 		}
@@ -148,7 +150,9 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
 		//check if 2nd button is needed on current page
 		if(this.buttonData.size() >= 2 + ((this.currentPage - 1) * 3)) {
     		this.EnchantmentButton1.visible = true;
-    		this.EnchantmentButton1.setMessage(getButtonText(this.buttonData.get(1 + ((this.currentPage - 1) * 3)).NAME, this.buttonData.get(1 + ((this.currentPage - 1) * 3)).LEVEL));
+    		this.EnchantmentButton1.setMessage(getButtonText(this.buttonData.get(1 + ((this.currentPage - 1) * 3)).NAME, this.buttonData.get(1 + ((this.currentPage - 1) * 3)).NEXT_LEVEL));
+    		boolean active = (this.buttonData.get(1 + ((this.currentPage - 1) * 3)).UPGRADE_COST <= this.entity.getReachableItems());
+    		this.EnchantmentButton1.active = active;
 		} else {
     		this.EnchantmentButton1.visible = false;			
 		}
@@ -156,7 +160,9 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
 		//check if 3rd button is needed on current page
 		if(this.buttonData.size() >= 3 + ((this.currentPage - 1) * 3)) {
     		this.EnchantmentButton2.visible = true;
-    		this.EnchantmentButton2.setMessage(getButtonText(this.buttonData.get(2 + ((this.currentPage - 1) * 3)).NAME, this.buttonData.get(2 + ((this.currentPage - 1) * 3)).LEVEL));
+    		this.EnchantmentButton2.setMessage(getButtonText(this.buttonData.get(2 + ((this.currentPage - 1) * 3)).NAME, this.buttonData.get(2 + ((this.currentPage - 1) * 3)).NEXT_LEVEL));
+    		boolean active = (this.buttonData.get(2 + ((this.currentPage - 1) * 3)).UPGRADE_COST <= this.entity.getReachableItems());
+    		this.EnchantmentButton2.active = active;
 		} else {
     		this.EnchantmentButton2.visible = false;
 		}
@@ -164,7 +170,9 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
 		//either show 4th button or page selection
     	if(this.buttonData.size() == 4) {
     		this.EnchantmentButton3.visible = true;
-    		this.EnchantmentButton3.setMessage(getButtonText(this.buttonData.get(3).NAME, this.buttonData.get(3).LEVEL));
+    		this.EnchantmentButton3.setMessage(getButtonText(this.buttonData.get(3).NAME, this.buttonData.get(3).NEXT_LEVEL));
+    		boolean active = (this.buttonData.get(3 + ((this.currentPage - 1) * 3)).UPGRADE_COST <= this.entity.getReachableItems());
+    		this.EnchantmentButton3.active = active;
     		this.pageForward.visible = false;
     		this.pageBackward.visible = false;
     	} else if(this.buttonData.size() > 4) {
@@ -172,13 +180,8 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
     		this.pageForward.visible = true;
     		this.pageBackward.visible = true;
     	}
-
-    	ItemStack stack = this.entity.inventory.getStackInSlot(0);
-    	if(stack.getItem().equals(Items.AIR) || stack.getCount() < 0) {
-    		disableAllButtons();
-    	} else {
-    		enableAllButtons();
-    	}
+    	
+    	//ToolLeveling.LOGGER.debug("cost " + this.buttonData.get(0 + ((this.currentPage - 1) * 3)).UPGRADE_COST);
     }
     
     /**
@@ -212,14 +215,14 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
     private void handleButtonClick(int id) {
 
     	//next level must be below 32767
-    	int nextLevel = this.buttonData.get(id + ((this.currentPage - 1) * 3)).LEVEL + 1;
+    	int nextLevel = this.buttonData.get(id + ((this.currentPage - 1) * 3)).NEXT_LEVEL;
     	if(nextLevel >= 1 && nextLevel <= Short.MAX_VALUE) {
 
         	//send new data to server
-    		ToolLevelingPacketHandler.INSTANCE.sendToServer(
+    		PacketHandler.INSTANCE.sendToServer(
     				new SyncToolLevelingEnchantment(this.pos,
     						this.buttonData.get(id + ((this.currentPage - 1) * 3)).ENCHANTMENT,
-    						this.buttonData.get(id + ((this.currentPage - 1) * 3)).LEVEL + 1
+    						this.buttonData.get(id + ((this.currentPage - 1) * 3)).NEXT_LEVEL
     				)
     		);
     	}
@@ -231,14 +234,16 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
 		}
     }
     
-    private void disableAllButtons() {
+    @SuppressWarnings("unused")
+	private void disableAllEnchantmentButtons() {
     	this.EnchantmentButton0.active = false;
     	this.EnchantmentButton1.active = false;
     	this.EnchantmentButton2.active = false;
     	this.EnchantmentButton3.active = false;
     }
     
-    private void enableAllButtons() {
+    @SuppressWarnings("unused")
+	private void enableAllEnchantmentButtons() {
     	this.EnchantmentButton0.active = true;
     	this.EnchantmentButton1.active = true;
     	this.EnchantmentButton2.active = true;
@@ -261,8 +266,8 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
     	return true;
     }
     
-    private ITextComponent getButtonText(String tranlation, int currentlevel) {
-    	return new StringTextComponent(new TranslationTextComponent(tranlation).getString() + " " + (currentlevel + 1));
+    private ITextComponent getButtonText(String tranlation, int nextlevel) {
+    	return new StringTextComponent(new TranslationTextComponent(tranlation).getString() + " " + nextlevel);
     }
     
     @Override
@@ -295,12 +300,14 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
 		
 		public ResourceLocation ENCHANTMENT;
 		public String NAME;
-		public int LEVEL;
+		public int NEXT_LEVEL;
+		public int UPGRADE_COST;
 		
 		public ButtonData (ResourceLocation enchantment, String name, int level) {
 			this.ENCHANTMENT = enchantment;
-			this.LEVEL = level;
+			this.NEXT_LEVEL = level + 1;
 			this.NAME = name;
+			this.UPGRADE_COST = (int)((10 + level) * Math.max(0.0D, ToolLevelingConfig.SERVER.upgradeCostMultiplier.get()));
 		}
 	}
 

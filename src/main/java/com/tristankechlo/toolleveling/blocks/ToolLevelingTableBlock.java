@@ -1,9 +1,7 @@
 package com.tristankechlo.toolleveling.blocks;
 
-import java.util.stream.Stream;
-
-import com.tristankechlo.toolleveling.init.ModTileEntities;
 import com.tristankechlo.toolleveling.tileentity.ToolLevelingTableTileEntity;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -27,7 +25,6 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.IBooleanFunction;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
@@ -35,15 +32,15 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.network.NetworkHooks;
-import net.minecraftforge.items.IItemHandler;
 
 public class ToolLevelingTableBlock extends Block {
 
 	public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
+	private static final VoxelShape SHAPE = VoxelShapes.or(makeCuboidShape(2, 0, 2, 14, 3, 14), makeCuboidShape(3, 3, 3, 13, 6, 13), makeCuboidShape(4, 6, 4, 12, 11, 12), makeCuboidShape(3, 11, 3, 13, 14, 13));
 
 	public ToolLevelingTableBlock() {
 		super(Block.Properties.create(Material.IRON, MaterialColor.GRAY)
-				.hardnessAndResistance(4.5f, 10.0f)
+				.hardnessAndResistance(4.5f, 1000.0f)
 				.sound(SoundType.METAL)
 				.harvestLevel(2)
 				.harvestTool(ToolType.PICKAXE)
@@ -65,9 +62,7 @@ public class ToolLevelingTableBlock extends Block {
 		
 	@Override
 	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
-		return Stream.of(makeCuboidShape(2, 0, 2, 14, 3, 14), makeCuboidShape(3, 3, 3, 13, 6, 13), makeCuboidShape(4, 6, 4, 12, 11, 12), makeCuboidShape(3, 11, 3, 13, 14, 13)).reduce((v1, v2) -> {
-			return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);
-		}).get();
+		return SHAPE; 
 	}
 				
 	@Override
@@ -95,8 +90,12 @@ public class ToolLevelingTableBlock extends Block {
 	   return BlockRenderType.MODEL;
     }
 	
+	@SuppressWarnings("unused")
 	@Override
 	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+		if(true == false) {
+			//don't open gui when upgrading has started
+		}
 		if (!world.isRemote) {
 			final TileEntity tile = world.getTileEntity(pos);
 			if (tile instanceof ToolLevelingTableTileEntity) {
@@ -114,7 +113,7 @@ public class ToolLevelingTableBlock extends Block {
 	
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-		return ModTileEntities.TOOL_LEVELING_TABLE.get().create();
+		return new ToolLevelingTableTileEntity();
 	}
 		
 	
@@ -128,14 +127,24 @@ public class ToolLevelingTableBlock extends Block {
 	      if (state.hasTileEntity() && (state.getBlock() != newState.getBlock() || !newState.hasTileEntity())) {
 	    	  TileEntity tile = world.getTileEntity(pos);
 	    	  if(tile instanceof ToolLevelingTableTileEntity) {
-	    		  IItemHandler inventory = ((ToolLevelingTableTileEntity)tile).getInventory();
-	    		  ItemStack stack = inventory.getStackInSlot(0);
+	    		  ItemStack stack = ((ToolLevelingTableTileEntity)tile).getStackToEnchant();
 	    		  if(stack != ItemStack.EMPTY) {
 		    		  InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);
 	    		  }
 	    	  }
 		      world.removeTileEntity(pos);
 	      }
+	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public float getPlayerRelativeBlockHardness(BlockState state, PlayerEntity player, IBlockReader worldIn, BlockPos pos) {
+		//block can't be mined when the upgrading staret
+		boolean upgradeStarted = false;
+		if(upgradeStarted) {
+			return -1F;
+		}
+		return super.getPlayerRelativeBlockHardness(state, player, worldIn, pos);
 	}
 
 }

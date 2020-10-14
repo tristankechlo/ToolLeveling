@@ -7,8 +7,6 @@ import net.minecraft.item.Item;
 public class RubyItem extends Item{
 
 	public RubyItem() {
-		super(
-			new Item.Properties().group(ModItemGroups.General).maxStackSize(16)
-		);
+		super(new Item.Properties().group(ModItemGroups.General).maxStackSize(16));
 	}
 }

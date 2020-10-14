@@ -43,7 +43,7 @@ public class ToolLevelingTableContainer extends Container {
 		this.entity = entity;
 		this.pos = entity.getPos();
 
-		this.addSlot(new SlotItemHandler(entity.getInventory(), 0, 15, 23) {
+		this.addSlot(new SlotItemHandler(entity.inventory, 0, 15, 23) {
 			@Override
 			public boolean isItemValid(ItemStack stack) {
 				return stack.isEnchanted();

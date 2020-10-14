@@ -1,16 +1,18 @@
 package com.tristankechlo.toolleveling.tileentity;
 
+import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
 import com.tristankechlo.toolleveling.init.ModTileEntities;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class EnchantmentPillarTileEntity extends TileEntity {
 
@@ -18,12 +20,7 @@ public class EnchantmentPillarTileEntity extends TileEntity {
 
 		@Override
 		public boolean isItemValid(int slot, ItemStack stack) {
-			return ((stack.getItem() == Items.ENCHANTED_BOOK) || (stack.getItem() == Items.DIAMOND));
-		};
-
-		@Override
-		protected int getStackLimit(int slot, ItemStack stack) {
-			return 8;
+			return (stack.getItem() == ForgeRegistries.ITEMS.getValue(new ResourceLocation(ToolLevelingConfig.SERVER.upgradeItem.get())));
 		};
 		
 		@Override
@@ -62,7 +59,6 @@ public class EnchantmentPillarTileEntity extends TileEntity {
 	public SUpdateTileEntityPacket getUpdatePacket() {
 		CompoundNBT nbt = new CompoundNBT();
 		this.write(nbt);
-
 		return new SUpdateTileEntityPacket(this.getPos(), 1, nbt);
 	}
 
