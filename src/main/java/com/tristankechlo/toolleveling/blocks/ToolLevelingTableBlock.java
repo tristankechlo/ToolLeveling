@@ -124,16 +124,23 @@ public class ToolLevelingTableBlock extends Block {
 	
 	@Override
 	public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving) {
-	      if (state.hasTileEntity() && (state.getBlock() != newState.getBlock() || !newState.hasTileEntity())) {
-	    	  TileEntity tile = world.getTileEntity(pos);
-	    	  if(tile instanceof ToolLevelingTableTileEntity) {
-	    		  ItemStack stack = ((ToolLevelingTableTileEntity)tile).getStackToEnchant();
-	    		  if(stack != ItemStack.EMPTY) {
-		    		  InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);
-	    		  }
-	    	  }
-		      world.removeTileEntity(pos);
-	      }
+		if (state.hasTileEntity() && (state.getBlock() != newState.getBlock() || !newState.hasTileEntity())) {
+			TileEntity tile = world.getTileEntity(pos);
+			if (tile instanceof ToolLevelingTableTileEntity) {
+				ToolLevelingTableTileEntity table = (ToolLevelingTableTileEntity) tile;
+				ItemStack enchantedItem = table.getStackToEnchant();
+				if (!enchantedItem.isEmpty()) {
+					InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), enchantedItem);
+				}
+				for (int i = 1; i < 5; i++) {
+					ItemStack paymentStack = table.inventory.getStackInSlot(i);
+					if(!paymentStack.isEmpty()) {
+						InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), paymentStack);
+					}
+				}
+			}
+			world.removeTileEntity(pos);
+		}
 	}
 	
 	@SuppressWarnings("deprecation")
