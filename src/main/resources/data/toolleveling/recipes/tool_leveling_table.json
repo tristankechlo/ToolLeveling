@@ -1,12 +1,12 @@
 {
 	"type" : "minecraft:crafting_shaped",
 	"pattern" : [
-		" # ",
+		" B ",
 		"DID",
 		"III"
 	],
 	"key" : {
-		"#" : {
+		"B" : {
 			"item" : "minecraft:enchanted_book"
 		},
 		"I" : {

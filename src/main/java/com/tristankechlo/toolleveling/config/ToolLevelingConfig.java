@@ -29,6 +29,7 @@ public class ToolLevelingConfig {
 
 		public final ConfigValue<String> upgradeItem;
 		public final ConfigValue<Double> upgradeCostMultiplier;
+		public final ConfigValue<Integer> minUpgradeCost;
 		public final ConfigValue<List<? extends String>> EnchantmentsBlacklist;
 		public final BooleanValue ignoreEnchantmentCaps;
 		
@@ -36,8 +37,9 @@ public class ToolLevelingConfig {
             builder.comment("general configuration settings")
                    .push("Server");
             
-            upgradeItem = builder.worldRestart().comment("").define("upgradeItem", Items.NETHERITE_INGOT.getRegistryName().toString(), item -> isValidItem(item));
-            upgradeCostMultiplier = builder.worldRestart().comment("").define("upgradeCostMultiplier", 1.0D);
+            upgradeItem = builder.worldRestart().comment("which item is used as the payment item for upgrading").define("UpgradeItem", Items.NETHERITE_INGOT.getRegistryName().toString(), item -> isValidItem(item));
+            upgradeCostMultiplier = builder.worldRestart().comment("multiplies the amount of required payment item").define("UpgradeCostMultiplier", 1.0D);
+            minUpgradeCost = builder.worldRestart().comment("set the min amount of required items").define("MinUpgradeCost", 10);
             
             EnchantmentsBlacklist = builder.worldRestart().comment("enchantments in this list can't be leveled in the tool leveling table").defineList("EnchantmentsBlacklist",
     				Arrays.asList(Enchantments.MENDING.getRegistryName().toString(),

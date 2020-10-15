@@ -5,13 +5,13 @@ showAsResourcePack=false
 
 [[mods]]
 modId="toolleveling"
-version="1.16.2 - 2.0.0"
+version="1.16.2 - 1.1.0"
 displayName="Tool Leveling"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/tool-leveling-plus"
 #logoFile="examplemod.png"
 #credits="Thanks for this example mod goes to Java"
 authors="Buecher_wurm"
-description=''''''
+description='''adds the possibility to upgrade your enchantments higher than the vanilla limit'''
 
 [[dependencies.toolleveling]]
     modId="forge"

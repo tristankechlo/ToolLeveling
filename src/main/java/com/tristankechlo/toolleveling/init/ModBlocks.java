@@ -1,7 +1,6 @@
 package com.tristankechlo.toolleveling.init;
 
 import com.tristankechlo.toolleveling.ToolLeveling;
-import com.tristankechlo.toolleveling.blocks.EnchantmentPillarBlock;
 import com.tristankechlo.toolleveling.blocks.ToolLevelingTableBlock;
 
 import net.minecraft.block.Block;
@@ -23,13 +22,11 @@ public class ModBlocks {
 	
 	//BLOCKS
 	public static final RegistryObject<Block> TOOL_LEVELING_TABLE = BLOCKS.register("tool_leveling_table", () -> new ToolLevelingTableBlock());
-	public static final RegistryObject<Block> ENCHANTMENT_PILLAR = BLOCKS.register("enchantment_pillar", () -> new EnchantmentPillarBlock());
 	
 	
 	
 	//BLOCK - ITEMS
 	public static final RegistryObject<Item> TOOL_LEVELING_TABLE_ITEM = ModItems.ITEMS.register("tool_leveling_table", () -> new BlockItem(TOOL_LEVELING_TABLE.get(), std_properties));
-	public static final RegistryObject<Item> ENCHANTMENT_PILLAR_ITEM = ModItems.ITEMS.register("enchantment_pillar", () -> new BlockItem(ENCHANTMENT_PILLAR.get(), std_properties));
 	 
 	
 }

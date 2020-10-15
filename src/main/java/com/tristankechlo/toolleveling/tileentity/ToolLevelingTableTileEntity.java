@@ -1,7 +1,6 @@
 package com.tristankechlo.toolleveling.tileentity;
 
 import com.tristankechlo.toolleveling.ToolLeveling;
-import com.tristankechlo.toolleveling.blocks.EnchantmentPillarBlock;
 import com.tristankechlo.toolleveling.container.ToolLevelingTableContainer;
 import com.tristankechlo.toolleveling.init.ModTileEntities;
 
@@ -16,7 +15,6 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.util.Constants;
@@ -25,15 +23,13 @@ import net.minecraftforge.items.ItemStackHandler;
 public class ToolLevelingTableTileEntity extends TileEntity implements INamedContainerProvider, ITickableTileEntity {
 
 	private ITextComponent customname = new TranslationTextComponent("container." + ToolLeveling.MOD_ID + ".tool_leveling_table");
-	public ItemStackHandler inventory = new ItemStackHandler(1){
+	public ItemStackHandler inventory = new ItemStackHandler(3){
 		@Override
 		protected void onContentsChanged(int slot){
 			markDirty();
 		};
 	};
 	private int tickCounter;
-	private int reachableItems;
-
 	public ToolLevelingTableTileEntity() {
 		super(ModTileEntities.TOOL_LEVELING_TABLE.get());
 	}
@@ -43,64 +39,7 @@ public class ToolLevelingTableTileEntity extends TileEntity implements INamedCon
 		tickCounter++;
 		if(tickCounter % 20 == 0) {
 			tickCounter = 0;
-			checkForNearbyPillars();
 		}
-	}
-
-	public void checkForNearbyPillars() {
-		reachableItems = 0;
-		BlockPos position = this.getPos();
-		Iterable<BlockPos> nearby = BlockPos.getAllInBoxMutable(position.getX()-4, position.getY(), position.getZ()-4, position.getX()+4, position.getY(), position.getZ()+4);
-		for(BlockPos pos : nearby) {
-			TileEntity entity = world.getTileEntity(pos);
-			if(entity != null && (entity instanceof EnchantmentPillarTileEntity)) {
-				EnchantmentPillarTileEntity pillar = (EnchantmentPillarTileEntity)entity;
-				ItemStack stack = pillar.inventory.getStackInSlot(0);
-				if(!stack.isEmpty()) {
-					reachableItems += stack.getCount();
-				}
-			}
-		}
-		//ToolLeveling.LOGGER.debug("found " + reachableItems);
-	}
-	
-	public int getReachableItems() {
-		return reachableItems;
-	}
-	
-	public boolean removeItemsFromNearbyPillars(int amount) {
-		BlockPos position = this.getPos();
-		Iterable<BlockPos> nearby = BlockPos.getAllInBoxMutable(position.getX()-4, position.getY(), position.getZ()-4, position.getX()+4, position.getY(), position.getZ()+4);
-		for(BlockPos pos : nearby) {
-			if(amount <= 0) {
-				break;
-			}
-			TileEntity entity = world.getTileEntity(pos);
-			if(entity != null && (entity instanceof EnchantmentPillarTileEntity)) {
-				EnchantmentPillarTileEntity pillar = (EnchantmentPillarTileEntity)entity;
-				ItemStack oldstack = pillar.inventory.getStackInSlot(0);
-				if(!oldstack.isEmpty()) {
-					
-					if(oldstack.getCount() >= amount) {
-						ItemStack newstack = oldstack.copy();
-						newstack.shrink(amount);
-						amount = 0;
-						pillar.inventory.setStackInSlot(0, newstack);
-						world.setBlockState(pos, world.getBlockState(pos).with(EnchantmentPillarBlock.ACTIVE, false));
-						world.setBlockState(pos.up(), world.getBlockState(pos.up()).with(EnchantmentPillarBlock.ACTIVE, false));
-					} else if(oldstack.getCount() < amount) {
-						amount -= oldstack.getCount();
-						pillar.inventory.setStackInSlot(0, ItemStack.EMPTY);
-						world.setBlockState(pos, world.getBlockState(pos).with(EnchantmentPillarBlock.ACTIVE, false));
-						world.setBlockState(pos.up(), world.getBlockState(pos.up()).with(EnchantmentPillarBlock.ACTIVE, false));
-					}
-				}
-			}
-		}
-		if(amount <= 0) {
-			return true;
-		}
-		return false;
 	}
 
 	@Override
@@ -125,6 +64,10 @@ public class ToolLevelingTableTileEntity extends TileEntity implements INamedCon
 
 	public ItemStack getStackToEnchant() {
 		return this.inventory.getStackInSlot(0);
+	}
+	
+	public int getPaymentAmount() {
+		return inventory.getStackInSlot(1).getCount() + inventory.getStackInSlot(2).getCount();
 	}
 
 	@Override

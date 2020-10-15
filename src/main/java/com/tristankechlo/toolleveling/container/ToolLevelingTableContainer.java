@@ -2,6 +2,7 @@ package com.tristankechlo.toolleveling.container;
 
 import java.util.Objects;
 
+import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
 import com.tristankechlo.toolleveling.init.ModBlocks;
 import com.tristankechlo.toolleveling.init.ModContainers;
 import com.tristankechlo.toolleveling.tileentity.ToolLevelingTableTileEntity;
@@ -10,15 +11,19 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IWorldPosCallable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.SlotItemHandler;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class ToolLevelingTableContainer extends Container {
 
+	private static final Item paymentItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(ToolLevelingConfig.SERVER.upgradeItem.get()));
 	private final IWorldPosCallable worldPos;
 	private ToolLevelingTableTileEntity entity;
 	private BlockPos pos;
@@ -57,6 +62,28 @@ public class ToolLevelingTableContainer extends Container {
 				entity.markDirty();
 			}
 		});
+
+		this.addSlot(new SlotItemHandler(entity.inventory, 1, 15, 41) {
+			@Override
+			public boolean isItemValid(ItemStack stack) {
+				return stack.getItem() == paymentItem;
+			}
+			@Override
+			public void onSlotChanged() {
+				entity.markDirty();
+			}
+		});
+
+		this.addSlot(new SlotItemHandler(entity.inventory, 2, 15, 59) {
+			@Override
+			public boolean isItemValid(ItemStack stack) {
+				return stack.getItem() == paymentItem;
+			}
+			@Override
+			public void onSlotChanged() {
+				entity.markDirty();
+			}
+		});
 		
 		// Main Inventory
 		int startX = 10;
@@ -89,40 +116,48 @@ public class ToolLevelingTableContainer extends Container {
 
 	@Override
 	public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
-	      ItemStack itemstack = ItemStack.EMPTY;
-	      Slot slot = this.inventorySlots.get(index);
-	      if (slot != null && slot.getHasStack()) {
-	         ItemStack itemstack1 = slot.getStack();
-	         itemstack = itemstack1.copy();
-	         if (index == 0) {
-	            if (!this.mergeItemStack(itemstack1, 2, 37, true)) {
-	               return ItemStack.EMPTY;
-	            }
-	         } else {
-	            if (this.inventorySlots.get(0).getHasStack() || !this.inventorySlots.get(0).isItemValid(itemstack1)) {
-	               return ItemStack.EMPTY;
-	            }
+		ItemStack itemstack = ItemStack.EMPTY;
+		Slot slot = this.inventorySlots.get(index);
+		if (slot != null && slot.getHasStack()) {
+			ItemStack itemstack1 = slot.getStack();
+			itemstack = itemstack1.copy();
+			if (index == 0) {
+				if (!this.mergeItemStack(itemstack1, 3, 39, true)) {
+					return ItemStack.EMPTY;
+				}
+			} else if (index == 1 || index == 2) {
+				if (!this.mergeItemStack(itemstack1, 3, 39, true)) {
+					return ItemStack.EMPTY;
+				}
+			} else if (itemstack1.getItem() == paymentItem) {
+				if (!this.mergeItemStack(itemstack1, 1, 3, true)) {
+					return ItemStack.EMPTY;
+				}
+			} else {
+				if (this.inventorySlots.get(0).getHasStack() || !this.inventorySlots.get(0).isItemValid(itemstack1)) {
+					return ItemStack.EMPTY;
+				}
 
-	            ItemStack itemstack2 = itemstack1.copy();
-	            itemstack2.setCount(1);
-	            itemstack1.shrink(1);
-	            this.inventorySlots.get(0).putStack(itemstack2);
-	         }
+				ItemStack itemstack2 = itemstack1.copy();
+				itemstack2.setCount(1);
+				itemstack1.shrink(1);
+				this.inventorySlots.get(0).putStack(itemstack2);
+			}
 
-	         if (itemstack1.isEmpty()) {
-	            slot.putStack(ItemStack.EMPTY);
-	         } else {
-	            slot.onSlotChanged();
-	         }
+			if (itemstack1.isEmpty()) {
+				slot.putStack(ItemStack.EMPTY);
+			} else {
+				slot.onSlotChanged();
+			}
 
-	         if (itemstack1.getCount() == itemstack.getCount()) {
-	            return ItemStack.EMPTY;
-	         }
+			if (itemstack1.getCount() == itemstack.getCount()) {
+				return ItemStack.EMPTY;
+			}
 
-	         slot.onTake(playerIn, itemstack1);
-	      }
+			slot.onTake(playerIn, itemstack1);
+		}
 
-	      return itemstack;
+		return itemstack;
 	}
 	
 	public BlockPos getEntityPos() {

@@ -1,8 +1,6 @@
 package com.tristankechlo.toolleveling.network;
 
 import com.tristankechlo.toolleveling.ToolLeveling;
-import com.tristankechlo.toolleveling.network.packets.CheckToolLevelingConditionsPacket;
-import com.tristankechlo.toolleveling.network.packets.StartToolLevelingUpgradePacket;
 import com.tristankechlo.toolleveling.network.packets.SyncToolLevelingEnchantment;
 
 import net.minecraft.util.ResourceLocation;
@@ -28,17 +26,5 @@ public class PacketHandler {
         		SyncToolLevelingEnchantment::encode, 
         		SyncToolLevelingEnchantment::decode, 
         		SyncToolLevelingEnchantment::handle);
-        
-        INSTANCE.registerMessage(id++, 
-        		CheckToolLevelingConditionsPacket.class, 
-        		CheckToolLevelingConditionsPacket::encode, 
-        		CheckToolLevelingConditionsPacket::decode, 
-        		CheckToolLevelingConditionsPacket::handle);
-        
-        INSTANCE.registerMessage(id++, 
-        		StartToolLevelingUpgradePacket.class, 
-        		StartToolLevelingUpgradePacket::encode, 
-        		StartToolLevelingUpgradePacket::decode, 
-        		StartToolLevelingUpgradePacket::handle);
 	}
 }

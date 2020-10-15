@@ -1,10 +1,7 @@
 {
 	"itemGroup.ToolLevelingTab" : "Tool Leveling",
 	
-	"item.toolleveling.ruby" : "Ruby",
-	
 	"block.toolleveling.tool_leveling_table" : "Tool Leveling Table",
-	"block.toolleveling.enchantment_pillar" : "Enchantment Pillar",
 	
 	"screen.toolleveling.tool_leveling_table" : "Tool Leveling Table",
 	

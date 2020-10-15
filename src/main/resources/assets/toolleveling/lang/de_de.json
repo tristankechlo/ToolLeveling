@@ -1,10 +1,7 @@
 {
 	"itemGroup.ToolLevelingTab" : "Tool Leveling",
 	
-	"item.toolleveling.ruby" : "Rubin",
-	
 	"block.toolleveling.tool_leveling_table" : "Werkzeug Upgrade Tisch",
-	"block.toolleveling.enchantment_pillar" : "Säule der Verzauberung",
 	
 	"screen.toolleveling.tool_leveling_table" : "Werkzeug Upgrade Tisch",
 	
