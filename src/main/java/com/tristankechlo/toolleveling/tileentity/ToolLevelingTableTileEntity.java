@@ -23,7 +23,7 @@ import net.minecraftforge.items.ItemStackHandler;
 public class ToolLevelingTableTileEntity extends TileEntity implements INamedContainerProvider, ITickableTileEntity {
 
 	private ITextComponent customname = new TranslationTextComponent("container." + ToolLeveling.MOD_ID + ".tool_leveling_table");
-	public ItemStackHandler inventory = new ItemStackHandler(3){
+	public ItemStackHandler inventory = new ItemStackHandler(5){
 		@Override
 		protected void onContentsChanged(int slot){
 			markDirty();
@@ -67,7 +67,11 @@ public class ToolLevelingTableTileEntity extends TileEntity implements INamedCon
 	}
 	
 	public int getPaymentAmount() {
-		return inventory.getStackInSlot(1).getCount() + inventory.getStackInSlot(2).getCount();
+		int count = 0;
+		for(int i = 1; i < 5; i++) {
+			count += this.inventory.getStackInSlot(i).getCount();
+		}
+		return count;
 	}
 
 	@Override

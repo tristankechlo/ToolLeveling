@@ -23,7 +23,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class ToolLevelingTableContainer extends Container {
 
-	private static final Item paymentItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(ToolLevelingConfig.SERVER.upgradeItem.get()));
+	public static final Item PAYMENT_ITEM = ForgeRegistries.ITEMS.getValue(new ResourceLocation(ToolLevelingConfig.SERVER.upgradeItem.get()));
 	private final IWorldPosCallable worldPos;
 	private ToolLevelingTableTileEntity entity;
 	private BlockPos pos;
@@ -48,7 +48,7 @@ public class ToolLevelingTableContainer extends Container {
 		this.entity = entity;
 		this.pos = entity.getPos();
 
-		this.addSlot(new SlotItemHandler(entity.inventory, 0, 15, 23) {
+		this.addSlot(new SlotItemHandler(entity.inventory, 0, 10, 18) {
 			@Override
 			public boolean isItemValid(ItemStack stack) {
 				return stack.isEnchanted();
@@ -62,33 +62,28 @@ public class ToolLevelingTableContainer extends Container {
 				entity.markDirty();
 			}
 		});
+		
 
-		this.addSlot(new SlotItemHandler(entity.inventory, 1, 15, 41) {
-			@Override
-			public boolean isItemValid(ItemStack stack) {
-				return stack.getItem() == paymentItem;
-			}
-			@Override
-			public void onSlotChanged() {
-				entity.markDirty();
-			}
-		});
+		// payment slots
+		int startX = 10;
+		int y = 46;
+		int slotSizePlus2 = 18;
+		for (int i = 1; i < 5; i++) {
 
-		this.addSlot(new SlotItemHandler(entity.inventory, 2, 15, 59) {
-			@Override
-			public boolean isItemValid(ItemStack stack) {
-				return stack.getItem() == paymentItem;
-			}
-			@Override
-			public void onSlotChanged() {
-				entity.markDirty();
-			}
-		});
+			this.addSlot(new SlotItemHandler(entity.inventory, i, startX, y+((i-1)*slotSizePlus2)) {
+				@Override
+				public boolean isItemValid(ItemStack stack) {
+					return stack.getItem() == PAYMENT_ITEM;
+				}
+				@Override
+				public void onSlotChanged() {
+					entity.markDirty();
+				}
+			});
+		}
 		
 		// Main Inventory
-		int startX = 10;
-		int startY = 130;
-		int slotSizePlus2 = 18;
+		int startY = 132;
 		for (int row = 0; row < 3; row++) {
 			for (int column = 0; column < 9; column++) {
 				this.addSlot(new Slot(playerInv, 9 + (row * 9) + column, startX + (column * slotSizePlus2),
@@ -98,7 +93,7 @@ public class ToolLevelingTableContainer extends Container {
 
 		// Hotbar
 		for (int column = 0; column < 9; column++) {
-			this.addSlot(new Slot(playerInv, column, startX + (column * slotSizePlus2), 188));
+			this.addSlot(new Slot(playerInv, column, startX + (column * slotSizePlus2), 190));
 		}
 	}
 	
@@ -122,15 +117,15 @@ public class ToolLevelingTableContainer extends Container {
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
 			if (index == 0) {
-				if (!this.mergeItemStack(itemstack1, 3, 39, true)) {
+				if (!this.mergeItemStack(itemstack1, 5, 41, true)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (index == 1 || index == 2) {
-				if (!this.mergeItemStack(itemstack1, 3, 39, true)) {
+			} else if (index >= 1 && index <= 4) {
+				if (!this.mergeItemStack(itemstack1, 5, 41, true)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (itemstack1.getItem() == paymentItem) {
-				if (!this.mergeItemStack(itemstack1, 1, 3, true)) {
+			} else if (itemstack1.getItem() == PAYMENT_ITEM) {
+				if (!this.mergeItemStack(itemstack1, 1, 5, false)) {
 					return ItemStack.EMPTY;
 				}
 			} else {
