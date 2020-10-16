@@ -2,6 +2,7 @@ package com.tristankechlo.toolleveling.container;
 
 import java.util.Objects;
 
+import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
 import com.tristankechlo.toolleveling.init.ModBlocks;
 import com.tristankechlo.toolleveling.init.ModContainers;
 import com.tristankechlo.toolleveling.tileentity.ToolLevelingTableTileEntity;
@@ -10,21 +11,19 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.IArmorMaterial;
-import net.minecraft.item.IItemTier;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.TieredItem;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IWorldPosCallable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.SlotItemHandler;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class ToolLevelingTableContainer extends Container {
 
+	public static final Item PAYMENT_ITEM = ForgeRegistries.ITEMS.getValue(new ResourceLocation(ToolLevelingConfig.SERVER.upgradeItem.get()));
 	private final IWorldPosCallable worldPos;
 	private ToolLevelingTableTileEntity entity;
 	private BlockPos pos;
@@ -49,7 +48,7 @@ public class ToolLevelingTableContainer extends Container {
 		this.entity = entity;
 		this.pos = entity.getPos();
 
-		this.addSlot(new SlotItemHandler(entity.getInventory(), 0, 15, 23) {
+		this.addSlot(new SlotItemHandler(entity.inventory, 0, 10, 18) {
 			@Override
 			public boolean isItemValid(ItemStack stack) {
 				return stack.isEnchanted();
@@ -64,39 +63,27 @@ public class ToolLevelingTableContainer extends Container {
 			}
 		});
 		
-		this.addSlot(new SlotItemHandler(entity.getInventory(), 1, 15, 57) {
-			@Override
-			public boolean isItemValid(ItemStack stack) {
-				Item targetItem = entity.getStackInSlot(0).getItem();
-				if(targetItem != Items.AIR) {
-					if(targetItem instanceof TieredItem) {
-						IItemTier item = ((TieredItem)targetItem).getTier();
-						return item.getRepairMaterial().test(stack);
-					} else if(targetItem instanceof ArmorItem) {
-						IArmorMaterial item = ((ArmorItem)targetItem).getArmorMaterial();
-						return item.getRepairMaterial().test(stack);
-					} else {
-						return stack.getItem() == Items.DIAMOND;
-					}
+
+		// payment slots
+		int startX = 10;
+		int y = 46;
+		int slotSizePlus2 = 18;
+		for (int i = 1; i < 5; i++) {
+
+			this.addSlot(new SlotItemHandler(entity.inventory, i, startX, y+((i-1)*slotSizePlus2)) {
+				@Override
+				public boolean isItemValid(ItemStack stack) {
+					return stack.getItem() == PAYMENT_ITEM;
 				}
-				return false;
-			}
-			
-			@Override
-			public int getSlotStackLimit() {
-				return 64;
-			}
-			
-			@Override
-			public void onSlotChanged() {
-				entity.markDirty();
-			}
-		});
+				@Override
+				public void onSlotChanged() {
+					entity.markDirty();
+				}
+			});
+		}
 		
 		// Main Inventory
-		int startX = 10;
-		int startY = 130;
-		int slotSizePlus2 = 18;
+		int startY = 132;
 		for (int row = 0; row < 3; row++) {
 			for (int column = 0; column < 9; column++) {
 				this.addSlot(new Slot(playerInv, 9 + (row * 9) + column, startX + (column * slotSizePlus2),
@@ -106,7 +93,7 @@ public class ToolLevelingTableContainer extends Container {
 
 		// Hotbar
 		for (int column = 0; column < 9; column++) {
-			this.addSlot(new Slot(playerInv, column, startX + (column * slotSizePlus2), 188));
+			this.addSlot(new Slot(playerInv, column, startX + (column * slotSizePlus2), 190));
 		}
 	}
 	
@@ -124,48 +111,48 @@ public class ToolLevelingTableContainer extends Container {
 
 	@Override
 	public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
-	      ItemStack itemstack = ItemStack.EMPTY;
-	      Slot slot = this.inventorySlots.get(index);
-	      if (slot != null && slot.getHasStack()) {
-	         ItemStack itemstack1 = slot.getStack();
-	         itemstack = itemstack1.copy();
-	         if (index == 0) {
-	            if (!this.mergeItemStack(itemstack1, 2, 38, true)) {
-	               return ItemStack.EMPTY;
-	            }
-	         } else if (index == 1) {
-	            if (!this.mergeItemStack(itemstack1, 2, 38, true)) {
-	               return ItemStack.EMPTY;
-	            }
-	         } else if (this.getSlot(1).isItemValid(itemstack1)) {
-	            if (!this.mergeItemStack(itemstack1, 1, 2, true)) {
-	               return ItemStack.EMPTY;
-	            }
-	         } else {
-	            if (this.inventorySlots.get(0).getHasStack() || !this.inventorySlots.get(0).isItemValid(itemstack1)) {
-	               return ItemStack.EMPTY;
-	            }
+		ItemStack itemstack = ItemStack.EMPTY;
+		Slot slot = this.inventorySlots.get(index);
+		if (slot != null && slot.getHasStack()) {
+			ItemStack itemstack1 = slot.getStack();
+			itemstack = itemstack1.copy();
+			if (index == 0) {
+				if (!this.mergeItemStack(itemstack1, 5, 41, true)) {
+					return ItemStack.EMPTY;
+				}
+			} else if (index >= 1 && index <= 4) {
+				if (!this.mergeItemStack(itemstack1, 5, 41, true)) {
+					return ItemStack.EMPTY;
+				}
+			} else if (itemstack1.getItem() == PAYMENT_ITEM) {
+				if (!this.mergeItemStack(itemstack1, 1, 5, false)) {
+					return ItemStack.EMPTY;
+				}
+			} else {
+				if (this.inventorySlots.get(0).getHasStack() || !this.inventorySlots.get(0).isItemValid(itemstack1)) {
+					return ItemStack.EMPTY;
+				}
 
-	            ItemStack itemstack2 = itemstack1.copy();
-	            itemstack2.setCount(1);
-	            itemstack1.shrink(1);
-	            this.inventorySlots.get(0).putStack(itemstack2);
-	         }
+				ItemStack itemstack2 = itemstack1.copy();
+				itemstack2.setCount(1);
+				itemstack1.shrink(1);
+				this.inventorySlots.get(0).putStack(itemstack2);
+			}
 
-	         if (itemstack1.isEmpty()) {
-	            slot.putStack(ItemStack.EMPTY);
-	         } else {
-	            slot.onSlotChanged();
-	         }
+			if (itemstack1.isEmpty()) {
+				slot.putStack(ItemStack.EMPTY);
+			} else {
+				slot.onSlotChanged();
+			}
 
-	         if (itemstack1.getCount() == itemstack.getCount()) {
-	            return ItemStack.EMPTY;
-	         }
+			if (itemstack1.getCount() == itemstack.getCount()) {
+				return ItemStack.EMPTY;
+			}
 
-	         slot.onTake(playerIn, itemstack1);
-	      }
+			slot.onTake(playerIn, itemstack1);
+		}
 
-	      return itemstack;
+		return itemstack;
 	}
 	
 	public BlockPos getEntityPos() {
