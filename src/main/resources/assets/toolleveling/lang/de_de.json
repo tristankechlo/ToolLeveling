@@ -10,7 +10,8 @@
 	"container.toolleveling.tool_leveling_table.current_level" : "Aktuelles Level: %s",
 	"container.toolleveling.tool_leveling_table.next_level" : "N\u00e4chstes Level: %s",
 	"container.toolleveling.tool_leveling_table.cost" : "Ben\u00f6tigte Items: %s",
-	"container.toolleveling.tool_leveling_table.payment_item" : "Bezahl Item:",
+	"container.toolleveling.tool_leveling_table.help0" : "<- Verzaubertes Item",
+	"container.toolleveling.tool_leveling_table.help1" : "<- %s",
 	
 	"commands.toolleveling.superenchant.failed.level_wrong" : "Die Zahl muss zwischen 1 und 32767 sein.",
 	"commands.toolleveling.superenchant.failed.not_enchanted" : "Das Item ist nicht verzaubert."

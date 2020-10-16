@@ -42,6 +42,8 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
     private byte ticksSinceUpdate = 0;
     private byte currentPage = 1;
     private byte maxPages = 1;
+    private boolean renderHelp = false;
+    private byte helpDelayCounter = 0;
     private Button EnchantmentButton0;
     private Button EnchantmentButton1;
     private Button EnchantmentButton2;
@@ -101,7 +103,18 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
     	if(this.buttonData.isEmpty()) {
     		this.currentPage = 1;
     		hideAllButtons();
+    		
+    		//show the help instructions after a small delay, to hide them when screen is opened and an item is already in the table
+    		//was visible a few ticks until it got hidden
+    		if(!this.renderHelp) {
+    			this.helpDelayCounter++;
+    			if(this.helpDelayCounter >= 15) {
+    	    		this.renderHelp = true;
+    	    		this.helpDelayCounter = 0;
+    			}
+    		}
     	} else {
+    		this.renderHelp = false;
     		updateButtonData();
     	}
     }
@@ -283,23 +296,33 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
         this.renderHoveredTooltip(matrixStack, mouseX, mouseY);
         
         this.renderPersonalTooltips(matrixStack, mouseX, mouseY);
-        
+
+    	//draw string for page overview
         if(this.buttonData.size() > 4) {
-        	//draw string for page overview
         	ITextComponent text = new TranslationTextComponent("container.toolleveling.tool_leveling_table.page", this.currentPage, this.maxPages);
             IReorderingProcessor ireorderingprocessor = text.func_241878_f();
             float left = this.guiLeft + 102;
             float top = this.guiTop + 99;
             this.font.drawString(matrixStack, text.getString(), (float)(left - this.font.func_243245_a(ireorderingprocessor) / 2), top, 0);	
         }
+        
+        //draw instructions how to use the table in buttonview, when slot is empty
+        if(this.buttonData.size() == 0 && this.renderHelp) {        	
 
-    	//draw string ?
-    	ITextComponent text = new StringTextComponent("?").mergeStyle(TextFormatting.BOLD);
-        float left = this.guiLeft + 168;
-        float top = this.guiTop + 6;
-        this.font.func_243248_b(matrixStack, text, left, top, 0);
+        	ITextComponent textline = new TranslationTextComponent("container.toolleveling.tool_leveling_table.help0");
+            float left1 = this.guiLeft + 38;
+            float top1 = this.guiTop + 23;
+            this.font.func_243248_b(matrixStack, textline, left1, top1, 0);
+
+        	for(int i = 0; i < 4; i++) {
+            	ITextComponent textlinehelp = new TranslationTextComponent("container.toolleveling.tool_leveling_table.help1", new TranslationTextComponent(ToolLevelingTableContainer.PAYMENT_ITEM.getTranslationKey()));
+                float l = this.guiLeft + 38;
+                float t = this.guiTop + (50 + (i * 18));
+                this.font.func_243248_b(matrixStack, textlinehelp, l, t, 0);
+        	}
+        }
     }
-
+    
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
@@ -317,14 +340,6 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
 	 */
 	private void renderPersonalTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
 
-		//tooltip payment item
-		if (this.isPointInRegion(166, 4, 10, 10, (double) mouseX, (double) mouseY)) {
-			List<ITextComponent> tooltip = Lists.newArrayList();
-			tooltip.add((new TranslationTextComponent("container.toolleveling.tool_leveling_table.payment_item")).mergeStyle(TextFormatting.AQUA));
-			tooltip.add((new TranslationTextComponent(ToolLevelingTableContainer.PAYMENT_ITEM.getTranslationKey())).mergeStyle(TextFormatting.DARK_GRAY));
-			this.func_243308_b(matrixStack, tooltip, mouseX, mouseY);
-		}
-		
 		//tooltip button1
 		if ((this.buttonData.size() >= 1 + ((this.currentPage - 1) * 3)) && this.isPointInRegion(37, 21, 130, 20, (double) mouseX, (double) mouseY)) {
 			List<ITextComponent> tooltip = Lists.newArrayList();
