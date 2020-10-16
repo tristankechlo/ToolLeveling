@@ -11,7 +11,6 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -31,7 +30,6 @@ public class ToolLevelingConfig {
 		public final ConfigValue<Double> upgradeCostMultiplier;
 		public final ConfigValue<Integer> minUpgradeCost;
 		public final ConfigValue<List<? extends String>> EnchantmentsBlacklist;
-		public final BooleanValue ignoreEnchantmentCaps;
 		
 		Server(ForgeConfigSpec.Builder builder){
             builder.comment("general configuration settings")
@@ -52,9 +50,7 @@ public class ToolLevelingConfig {
     						Enchantments.MULTISHOT.getRegistryName().toString(),
     						Enchantments.SILK_TOUCH.getRegistryName().toString()),
     				enchantment -> isValidEnchantment(enchantment));
-            
-            ignoreEnchantmentCaps = builder.worldRestart().comment("if set to true, some enchantments will break if leveled to high").define("IgnoreEnchantmentCaps", false);
-            
+                        
             builder.pop();
 		}
 	}

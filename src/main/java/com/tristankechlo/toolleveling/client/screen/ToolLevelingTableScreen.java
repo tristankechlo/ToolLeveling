@@ -132,20 +132,36 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
 			for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
 				
 				List<? extends String> EnchantmentsBlacklist = ToolLevelingConfig.SERVER.EnchantmentsBlacklist.get();
+				boolean leveled = true;
+				byte extra = 0;
 				
 				//only list enchantments that are not on the blacklist
-				if(!EnchantmentsBlacklist.contains(entry.getKey().getRegistryName().toString())) {
-					
-					//although the level is defined as an integer, the actual maximum is a short
-					//a higher enchantment level than a short will result in a negative level
-					if(entry.getValue() < Short.MAX_VALUE) {
-						
-						//check if the enchantment can still be leveled
-						if(canStillBeLeveled(entry.getKey(), entry.getValue()) || ToolLevelingConfig.SERVER.ignoreEnchantmentCaps.get()) {
-							this.buttonData.add(new ButtonData(entry.getKey().getRegistryName(), entry.getKey().getName(), entry.getValue()));
-						}
-					}
+				if(EnchantmentsBlacklist.contains(entry.getKey().getRegistryName().toString())) {
+					leveled = false;
+					extra = 1;
 				}
+				
+				//leveling these enchantments will do absolutely nothing
+				if(entry.getKey().getMaxLevel() == 1 && extra == 0) {
+					leveled = false;
+					extra = 2;
+				}
+				
+				//although the level is defined as an integer, the actual maximum is a short
+				//a higher enchantment level than a short will result in a negative level
+				if(entry.getValue() >= Short.MAX_VALUE && extra == 0) {
+					leveled = false;
+					extra = 3;
+				}
+				
+				//check if the enchantment can still be leveled
+				//some enchantments will break when leveled to high
+				if(canStillBeLeveled(entry.getKey(), entry.getValue()) == false && extra == 0) {
+					leveled = false;
+					extra = 4;
+				}
+				
+				this.buttonData.add(new ButtonData(entry.getKey().getRegistryName(), entry.getKey().getName(), entry.getValue(), leveled, extra));
 			}
     	} else {
     		this.buttonData.clear();
@@ -159,40 +175,38 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
     	//get the number of required pages
 		this.maxPages = (byte)Math.ceil(this.buttonData.size() / 3.0);
 		
-		//check if 1st button is needed on current page
-		if(this.buttonData.size() >= 1 + ((this.currentPage - 1) * 3)) {
-    		this.EnchantmentButton0.visible = true;
-    		this.EnchantmentButton0.setMessage(getButtonText(this.getButtonByIndex(0).NAME, this.getButtonByIndex(0).NEXT_LEVEL));
-    		boolean active = (this.getButtonByIndex(0).UPGRADE_COST <= this.entity.getPaymentAmount());
-    		this.EnchantmentButton0.active = active;
-		} else {
-    		this.EnchantmentButton0.visible = false;
-		}
-
-		//check if 2nd button is needed on current page
-		if(this.buttonData.size() >= 2 + ((this.currentPage - 1) * 3)) {
-    		this.EnchantmentButton1.visible = true;
-    		this.EnchantmentButton1.setMessage(getButtonText(this.getButtonByIndex(1).NAME, this.getButtonByIndex(1).NEXT_LEVEL));
-    		boolean active = (this.getButtonByIndex(1).UPGRADE_COST <= this.entity.getPaymentAmount());
-    		this.EnchantmentButton1.active = active;
-		} else {
-    		this.EnchantmentButton1.visible = false;			
-		}
-
-		//check if 3rd button is needed on current page
-		if(this.buttonData.size() >= 3 + ((this.currentPage - 1) * 3)) {
-    		this.EnchantmentButton2.visible = true;
-    		this.EnchantmentButton2.setMessage(getButtonText(this.getButtonByIndex(2).NAME, this.getButtonByIndex(2).NEXT_LEVEL));
-    		boolean active = (this.getButtonByIndex(2).UPGRADE_COST <= this.entity.getPaymentAmount());
-    		this.EnchantmentButton2.active = active;
-		} else {
-    		this.EnchantmentButton2.visible = false;
+		for(int n = 0; n < 3; n++) {
+			
+			Button button = null;
+			if(n == 0) {
+				button = this.EnchantmentButton0;
+			} else if(n == 1) {
+				button = this.EnchantmentButton1;
+			} else if (n == 2) {
+				button = this.EnchantmentButton2;
+			}
+			
+			//check if n-th button is needed on current page
+			if(this.buttonData.size() >= n + 1 + ((this.currentPage - 1) * 3)) {
+	    		button.visible = true;
+	    		button.setMessage(getButtonText(this.getButtonByIndex(n)));
+	    		boolean active = true;
+	    		if(this.getButtonByIndex(n).UPGRADE_COST > this.entity.getPaymentAmount()){
+	    			active = false;
+	    		}
+	    		if(!this.getButtonByIndex(n).CAN_BE_LEVELED || this.getButtonByIndex(n).EXTRA != (byte)0) {
+	    			active = false;
+	    		}
+	    		button.active = active;
+			} else {
+	    		button.visible = false;
+			}			
 		}
 		
 		//either show 4th button or page selection
     	if(this.buttonData.size() == 4) {
     		this.EnchantmentButton3.visible = true;
-    		this.EnchantmentButton3.setMessage(getButtonText(this.buttonData.get(3).NAME, this.buttonData.get(3).NEXT_LEVEL));
+    		this.EnchantmentButton3.setMessage(getButtonText(this.buttonData.get(3)));
     		boolean active = (this.getButtonByIndex(3).UPGRADE_COST <= this.entity.getPaymentAmount());
     		this.EnchantmentButton3.active = active;
     		this.pageForward.visible = false;
@@ -309,13 +323,13 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
         //draw instructions how to use the table in buttonview, when slot is empty
         if(this.buttonData.size() == 0 && this.renderHelp) {        	
 
-        	ITextComponent textline = new TranslationTextComponent("container.toolleveling.tool_leveling_table.help0");
+        	ITextComponent textline = new TranslationTextComponent("container.toolleveling.tool_leveling_table.help_slot0");
             float left1 = this.guiLeft + 38;
             float top1 = this.guiTop + 23;
             this.font.func_243248_b(matrixStack, textline, left1, top1, 0);
 
         	for(int i = 0; i < 4; i++) {
-            	ITextComponent textlinehelp = new TranslationTextComponent("container.toolleveling.tool_leveling_table.help1", new TranslationTextComponent(ToolLevelingTableContainer.PAYMENT_ITEM.getTranslationKey()));
+            	ITextComponent textlinehelp = new TranslationTextComponent("container.toolleveling.tool_leveling_table.help_other_slot", new TranslationTextComponent(ToolLevelingTableContainer.PAYMENT_ITEM.getTranslationKey()));
                 float l = this.guiLeft + 38;
                 float t = this.guiTop + (50 + (i * 18));
                 this.font.func_243248_b(matrixStack, textlinehelp, l, t, 0);
@@ -340,46 +354,25 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
 	 */
 	private void renderPersonalTooltips(MatrixStack matrixStack, int mouseX, int mouseY) {
 
-		//tooltip button1
-		if ((this.buttonData.size() >= 1 + ((this.currentPage - 1) * 3)) && this.isPointInRegion(37, 21, 130, 20, (double) mouseX, (double) mouseY)) {
-			List<ITextComponent> tooltip = Lists.newArrayList();
-			ButtonData buttondata = this.getButtonByIndex(0);
-			tooltip.add(this.getTooltipText(buttondata, 0).mergeStyle(TextFormatting.AQUA));
-			tooltip.add(this.getTooltipText(buttondata, 1).mergeStyle(TextFormatting.DARK_GRAY));
-			tooltip.add(this.getTooltipText(buttondata, 2).mergeStyle(TextFormatting.DARK_GRAY));
-			tooltip.add(this.getTooltipText(buttondata, 3).mergeStyle(TextFormatting.DARK_GRAY));
-			this.func_243308_b(matrixStack, tooltip, mouseX, mouseY);
-		}
-		//tooltip button2
-		if ((this.buttonData.size() >= 2 + ((this.currentPage - 1) * 3)) && this.isPointInRegion(37, 45, 130, 20, (double) mouseX, (double) mouseY)) {
-			List<ITextComponent> tooltip = Lists.newArrayList();
-			ButtonData buttondata = this.getButtonByIndex(1);
-			tooltip.add(this.getTooltipText(buttondata, 0).mergeStyle(TextFormatting.AQUA));
-			tooltip.add(this.getTooltipText(buttondata, 1).mergeStyle(TextFormatting.DARK_GRAY));
-			tooltip.add(this.getTooltipText(buttondata, 2).mergeStyle(TextFormatting.DARK_GRAY));
-			tooltip.add(this.getTooltipText(buttondata, 3).mergeStyle(TextFormatting.DARK_GRAY));
-			this.func_243308_b(matrixStack, tooltip, mouseX, mouseY);
-		}
-		//tooltip button3
-		if ((this.buttonData.size() >= 3 + ((this.currentPage - 1) * 3)) && this.isPointInRegion(37, 69, 130, 20, (double) mouseX, (double) mouseY)) {
-			List<ITextComponent> tooltip = Lists.newArrayList();
-			ButtonData buttondata = this.getButtonByIndex(2);
-			tooltip.add(this.getTooltipText(buttondata, 0).mergeStyle(TextFormatting.AQUA));
-			tooltip.add(this.getTooltipText(buttondata, 1).mergeStyle(TextFormatting.DARK_GRAY));
-			tooltip.add(this.getTooltipText(buttondata, 2).mergeStyle(TextFormatting.DARK_GRAY));
-			tooltip.add(this.getTooltipText(buttondata, 3).mergeStyle(TextFormatting.DARK_GRAY));
-			this.func_243308_b(matrixStack, tooltip, mouseX, mouseY);
+		//tooltip for button 0-2
+		for(int n = 0; n < 3; n++) {
+			if ((this.buttonData.size() >= n + 1 + ((this.currentPage - 1) * 3)) && this.isPointInRegion(37, 21 + (n * 24), 130, 20, (double) mouseX, (double) mouseY)) {
+				List<ITextComponent> tooltip = Lists.newArrayList();
+				ButtonData data = this.getButtonByIndex(n);
+				this.addToolTips(tooltip, data);
+				this.func_243308_b(matrixStack, tooltip, mouseX, mouseY);
+			}			
 		}
 		
 		if(this.buttonData.size() > 4) {
 
-    		//tooltip previous page button
+    		//tooltip previous page
     		if (this.isPointInRegion(37, 93, 20, 20, (double) mouseX, (double) mouseY)) {
     			ITextComponent tooltip = (new TranslationTextComponent("spectatorMenu.previous_page")).mergeStyle(TextFormatting.AQUA);
     			this.renderTooltip(matrixStack, tooltip, mouseX, mouseY);
     		}
 
-    		//tooltip next page button
+    		//tooltip next page
     		if (this.isPointInRegion(147, 93, 20, 20, (double) mouseX, (double) mouseY)) {
     			ITextComponent tooltip = (new TranslationTextComponent("spectatorMenu.next_page")).mergeStyle(TextFormatting.AQUA);
     			this.renderTooltip(matrixStack, tooltip, mouseX, mouseY);
@@ -389,30 +382,36 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
 			
         	//render tooltip button4
 			List<ITextComponent> tooltip = Lists.newArrayList();
-			ButtonData buttondata = this.getButtonByIndex(3);
-			tooltip.add(this.getTooltipText(buttondata, 0).mergeStyle(TextFormatting.AQUA));
-			tooltip.add(this.getTooltipText(buttondata, 1).mergeStyle(TextFormatting.DARK_GRAY));
-			tooltip.add(this.getTooltipText(buttondata, 2).mergeStyle(TextFormatting.DARK_GRAY));
-			tooltip.add(this.getTooltipText(buttondata, 3).mergeStyle(TextFormatting.DARK_GRAY));
+			ButtonData data = this.getButtonByIndex(3);
+			this.addToolTips(tooltip, data);
 			this.func_243308_b(matrixStack, tooltip, mouseX, mouseY);
 		}
 	}
     
-    private ITextComponent getButtonText(String translation, int nextlevel) {
-    	return new StringTextComponent(new TranslationTextComponent(translation).getString() + " " + nextlevel);
+    private ITextComponent getButtonText(ButtonData data) {
+    	TextFormatting format = TextFormatting.RESET;
+    	if(data.CAN_BE_LEVELED == false || data.EXTRA != (byte)0) {
+    		format = TextFormatting.DARK_RED;
+    	}
+    	return new TranslationTextComponent(data.NAME).mergeStyle(format);
     }
     
-	private TranslationTextComponent getTooltipText(ButtonData buttondata, int line) {
-    	switch (line) {
-		case 1:
-			return new TranslationTextComponent("container.toolleveling.tool_leveling_table.current_level", (buttondata.NEXT_LEVEL-1));
-		case 2:
-			return new TranslationTextComponent("container.toolleveling.tool_leveling_table.next_level", buttondata.NEXT_LEVEL);
-		case 3:
-			return new TranslationTextComponent("container.toolleveling.tool_leveling_table.cost", buttondata.UPGRADE_COST);
-		case 0:
-		default:
-			return new TranslationTextComponent(buttondata.NAME);
+    private void addToolTips(List<ITextComponent> tooltip, ButtonData data) {
+		tooltip.add(new TranslationTextComponent(data.NAME).mergeStyle(TextFormatting.AQUA));
+		if(data.CAN_BE_LEVELED && data.EXTRA == 0) {
+			tooltip.add(new TranslationTextComponent("container.toolleveling.tool_leveling_table.current_level", (data.NEXT_LEVEL-1)).mergeStyle(TextFormatting.DARK_GRAY));
+			tooltip.add(new TranslationTextComponent("container.toolleveling.tool_leveling_table.next_level", data.NEXT_LEVEL).mergeStyle(TextFormatting.DARK_GRAY));
+			tooltip.add(new TranslationTextComponent("container.toolleveling.tool_leveling_table.cost", data.UPGRADE_COST).mergeStyle(TextFormatting.DARK_GRAY));
+		} else {
+			if(data.EXTRA == 1) {
+				tooltip.add(new TranslationTextComponent("container.toolleveling.tool_leveling_table.error_blacklist").mergeStyle(TextFormatting.DARK_RED));
+			} else if(data.EXTRA == 2) {
+				tooltip.add(new TranslationTextComponent("container.toolleveling.tool_leveling_table.error_leveling_useless").mergeStyle(TextFormatting.DARK_RED));
+			} else if(data.EXTRA == 3) {
+				tooltip.add(new TranslationTextComponent("container.toolleveling.tool_leveling_table.error_level_at_max").mergeStyle(TextFormatting.DARK_RED));
+			} else if(data.EXTRA == 4) {
+				tooltip.add(new TranslationTextComponent("container.toolleveling.tool_leveling_table.error_item_will_break").mergeStyle(TextFormatting.DARK_RED));
+			}
 		}
     }
 	
@@ -423,11 +422,15 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
 		public String NAME;
 		public int NEXT_LEVEL;
 		public int UPGRADE_COST;
+		public boolean CAN_BE_LEVELED;
+		public byte EXTRA;
 		
-		public ButtonData (ResourceLocation enchantment, String name, int level) {
+		public ButtonData (ResourceLocation enchantment, String name, int level, boolean canBeLeveled, byte extra) {
 			this.ENCHANTMENT = enchantment;
 			this.NEXT_LEVEL = level + 1;
 			this.NAME = name;
+			this.CAN_BE_LEVELED = canBeLeveled;
+			this.EXTRA = extra;
 			double modifier = Math.max(0.0D, ToolLevelingConfig.SERVER.upgradeCostMultiplier.get());
 			int minCost = Math.max(0, ToolLevelingConfig.SERVER.minUpgradeCost.get());
 			this.UPGRADE_COST = (int) Math.max(minCost, ((4.5D * level) - 12) * modifier);

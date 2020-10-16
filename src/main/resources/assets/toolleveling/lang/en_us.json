@@ -10,10 +10,13 @@
 	"container.toolleveling.tool_leveling_table.current_level" : "Current Level: %s",
 	"container.toolleveling.tool_leveling_table.next_level" : "Next Level: %s",
 	"container.toolleveling.tool_leveling_table.cost" : "Required Items: %s",
-	"container.toolleveling.tool_leveling_table.help0" : "<- Enchanted Item",
-	"container.toolleveling.tool_leveling_table.help1" : "<- %s",
+	"container.toolleveling.tool_leveling_table.help_slot0" : "<- Enchanted Item",
+	"container.toolleveling.tool_leveling_table.help_other_slot" : "<- %s",
+	"container.toolleveling.tool_leveling_table.error_blacklist" : "This enchantment is disabled!",
+	"container.toolleveling.tool_leveling_table.error_leveling_useless" : "Leveling would have no effect!",
+	"container.toolleveling.tool_leveling_table.error_level_at_max" : "Maximum level reached!",
+	"container.toolleveling.tool_leveling_table.error_item_will_break" : "Item would be useless when leveled!",
 	
 	"commands.toolleveling.superenchant.failed.level_wrong" : "The level must be between 1 and 32767",
 	"commands.toolleveling.superenchant.failed.not_enchanted" : "This Item is not enchantet."
-	
 }
