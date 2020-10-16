@@ -10,7 +10,7 @@ how it works:
     - higher enchantment levels will required more items
     - payment item is default Netherite Ingot (can be changed in the config)
 4. click on the enchantment to upgrade
-4.1 some enchantments are disabled by default, like Mending
+    - some enchantments are disabled by default, like Mending
 
 ### GUI
 ![GUI](https://i.ibb.co/8P27vMD/GUI-NEW-2.png "Tool Leveling GUI")
