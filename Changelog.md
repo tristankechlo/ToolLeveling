@@ -1,6 +1,6 @@
 # Changelog
 
-### Vaersion 1.16.2 - 1.1.1
+### Version 1.16.2 - 1.1.1
  - support 1.16.4
  - fix not using payment slot 3 & 4
 
