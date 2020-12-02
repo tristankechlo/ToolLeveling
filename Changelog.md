@@ -1,5 +1,9 @@
 # Changelog
 
+### Vaersion 1.16.2 - 1.1.1
+ - support 1.16.4
+ - fix not using payment slot 3 & 4
+
 ### Version 1.16.2 - 1.1.0
  - finished design for the leveling table
  - higher enchantment level -> higher cost for upgrading

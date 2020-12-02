@@ -70,21 +70,21 @@ public class SyncToolLevelingEnchantment {
 							int cost = (int) Math.max(minCost, ((4.5D * (msg.level - 1)) - 12) * modifier);
 
 							if (enchantmentsMap.containsKey(targetEnchantment) && cost <= table.getPaymentAmount()) {
-								
-								for(int i = 1; i<=2; i++) {
+
+								for (int i = 1; i < 5; i++) {
 									ItemStack payment = table.inventory.getStackInSlot(i).copy();
-									if(!payment.isEmpty() && cost > 0) {
-										if(payment.getCount() < cost) {
+									if (!payment.isEmpty() && cost > 0) {
+										if (payment.getCount() < cost) {
 											cost -= payment.getCount();
 											table.inventory.setStackInSlot(i, ItemStack.EMPTY);
-										} else if(payment.getCount() >= cost) {
+										} else if (payment.getCount() >= cost) {
 											payment.shrink(cost);
 											cost = 0;
 											table.inventory.setStackInSlot(i, payment);
 										}
 									}
 								}
-								
+
 								enchantmentsMap.put(targetEnchantment, msg.level);
 								EnchantmentHelper.setEnchantments(enchantmentsMap, enchantedItem);
 								table.inventory.setStackInSlot(0, enchantedItem);
