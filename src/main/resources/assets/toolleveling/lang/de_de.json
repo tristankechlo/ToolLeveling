@@ -6,17 +6,21 @@
 	"screen.toolleveling.tool_leveling_table" : "Werkzeug Upgrade Tisch",
 	
 	"container.toolleveling.tool_leveling_table" : "Werkzeug Upgrade Tisch",
-	"container.toolleveling.tool_leveling_table.page" : "Seite %s/%s",
 	"container.toolleveling.tool_leveling_table.current_level" : "Aktuelles Level: %s",
 	"container.toolleveling.tool_leveling_table.next_level" : "N\u00e4chstes Level: %s",
-	"container.toolleveling.tool_leveling_table.cost" : "Ben\u00f6tigte Items: %s",
-	"container.toolleveling.tool_leveling_table.help_slot0" : "<- Verzaubertes Item",
-	"container.toolleveling.tool_leveling_table.help_other_slot" : "<- %s",
-	"container.toolleveling.tool_leveling_table.error_blacklist" : "Diese Verzauberung ist deaktiviert!",
-	"container.toolleveling.tool_leveling_table.error_leveling_useless" : "Ein Level-Up h\u00e4tte keinen Effekt!",
-	"container.toolleveling.tool_leveling_table.error_level_at_max" : "Maximal Level erreicht!",
-	"container.toolleveling.tool_leveling_table.error_item_will_break" : "Item w\u00fcrde nicht mehr funktionieren!",
+	"container.toolleveling.tool_leveling_table.cost" : "Upgrade Kosten: %s",
+	"container.toolleveling.tool_leveling_table.worth.inv" : "Wert: %s",
+	"container.toolleveling.tool_leveling_table.worth.bonus_points" : "Bonus: %s",
+	"container.toolleveling.tool_leveling_table.error.blacklisted" : "Diese Verzauberung ist deaktiviert!",
+	"container.toolleveling.tool_leveling_table.error.useless" : "Ein Level-Up hat keinen Effekt!",
+	"container.toolleveling.tool_leveling_table.error.maxlevel" : "Maximal Level erreicht!",
+	"container.toolleveling.tool_leveling_table.error.break" : "Item wird nicht mehr richtig funktionieren!",
+	"container.toolleveling.tool_leveling_table.error.capped" : "Eingestelltes maximum erreicht!",
 	
-	"commands.toolleveling.superenchant.failed.level_wrong" : "Die Zahl muss zwischen 1 und 32767 sein.",
-	"commands.toolleveling.superenchant.failed.not_enchanted" : "Das Item ist nicht verzaubert."
+	"commands.superenchant.failed.incompatible" : "%s kann damit nicht verzaubert werden, du kannst dies in der ToolLevelingConfig ändern (allowIncompatibleEnchantments)",
+	"commands.superenchant.failed.wrong" : "%s kann damit nicht verzaubert werden, du kannst dies in der ToolLevelingConfig ändern (allowWrongEnchantments)",
+  	"commands.toolleveling.config.path": "Konfiguration f\u00fcr ToolLeveling kann hier eingesehen werden: %s",
+  	"commands.toolleveling.config.reload": "Konfiguration f\u00fcr ToolLeveling wurde erfolgreich neu geladen.",
+  	"commands.toolleveling.config.noconfig": "Konfiguration f\u00fcr ToolLeveling konnte nicht gefunden werden.",
+  	"commands.toolleveling.config.reset": "Die Konfiguration %s wurde zur\u00fcck gesetzt."
 }

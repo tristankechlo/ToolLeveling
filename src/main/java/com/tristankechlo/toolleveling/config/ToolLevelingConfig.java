@@ -1,84 +1,127 @@
 package com.tristankechlo.toolleveling.config;
 
-import java.util.Arrays;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.apache.logging.log4j.Level;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
+import com.tristankechlo.toolleveling.config.misc.ConfigHelper;
+import com.tristankechlo.toolleveling.utils.Names;
 
-import com.tristankechlo.toolleveling.ToolLeveling;
-
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.registries.ForgeRegistries;
 
-@Mod.EventBusSubscriber
-public class ToolLevelingConfig {
-	
-    private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
-    public static final Server SERVER = new Server(BUILDER);
-    public static final ForgeConfigSpec spec = BUILDER.build();
-    
-	public static class Server {
+public final class ToolLevelingConfig {
 
-		public final ConfigValue<String> upgradeItem;
-		public final ConfigValue<Double> upgradeCostMultiplier;
-		public final ConfigValue<Integer> minUpgradeCost;
-		public final ConfigValue<List<? extends String>> EnchantmentsBlacklist;
-		
-		Server(ForgeConfigSpec.Builder builder){
-            builder.comment("general configuration settings")
-                   .push("Server");
-            
-            upgradeItem = builder.worldRestart().comment("which item is used as the payment item for upgrading").define("UpgradeItem", Items.NETHERITE_INGOT.getRegistryName().toString(), item -> isValidItem(item));
-            upgradeCostMultiplier = builder.worldRestart().comment("multiplies the amount of required payment item").define("UpgradeCostMultiplier", 1.0D);
-            minUpgradeCost = builder.worldRestart().comment("set the min amount of required items").define("MinUpgradeCost", 10);
-            
-            EnchantmentsBlacklist = builder.worldRestart().comment("enchantments in this list can't be leveled in the tool leveling table").defineList("EnchantmentsBlacklist",
-    				Arrays.asList(Enchantments.MENDING.getRegistryName().toString(),
-    						Enchantments.AQUA_AFFINITY.getRegistryName().toString(),
-    						Enchantments.CHANNELING.getRegistryName().toString(),
-    						Enchantments.BINDING_CURSE.getRegistryName().toString(),
-    						Enchantments.VANISHING_CURSE.getRegistryName().toString(),
-    						Enchantments.FLAME.getRegistryName().toString(),
-    						Enchantments.INFINITY.getRegistryName().toString(),
-    						Enchantments.MULTISHOT.getRegistryName().toString(),
-    						Enchantments.SILK_TOUCH.getRegistryName().toString()),
-    				enchantment -> isValidEnchantment(enchantment));
-                        
-            builder.pop();
+	public static double upgradeCostMultiplier;
+	public static int minUpgradeCost;
+	public static int defaultItemWorth;
+	public static boolean allowLevelingUselessEnchantments;
+	public static boolean allowLevelingBreakingEnchantments;
+	public static boolean allowWrongEnchantments;
+	public static boolean allowIncompatibleEnchantments;
+	public static List<Enchantment> enchantmentBlacklist;
+	public static Map<Enchantment, Integer> enchantmentCaps;
+	private static List<String> rawEnchantmentBlacklist;
+	private static Map<String, Integer> rawEnchantmentCaps;
+	private static final Type typeBlacklist = new TypeToken<List<String>>() {}.getType();
+	private static final Type typeCaps = new TypeToken<Map<String, Integer>>() {}.getType();
+	private static Gson GSON = new Gson();
+
+	private ToolLevelingConfig() {
+	}
+
+	public static void setToDefaultValues() {
+		upgradeCostMultiplier = 1.0D;
+		minUpgradeCost = 1000;
+		defaultItemWorth = 10;
+		allowLevelingUselessEnchantments = false;
+		allowLevelingBreakingEnchantments = false;
+		allowIncompatibleEnchantments = true;
+		allowWrongEnchantments = false;
+
+		rawEnchantmentBlacklist = new ArrayList<>();
+		rawEnchantmentCaps = new HashMap<>();
+
+		rawEnchantmentBlacklist.add(Enchantments.MENDING.getRegistryName().toString());
+		rawEnchantmentBlacklist.add(Enchantments.AQUA_AFFINITY.getRegistryName().toString());
+		rawEnchantmentBlacklist.add(Enchantments.CHANNELING.getRegistryName().toString());
+		rawEnchantmentBlacklist.add(Enchantments.BINDING_CURSE.getRegistryName().toString());
+		rawEnchantmentBlacklist.add(Enchantments.VANISHING_CURSE.getRegistryName().toString());
+		rawEnchantmentBlacklist.add(Enchantments.FLAME.getRegistryName().toString());
+		rawEnchantmentBlacklist.add(Enchantments.INFINITY.getRegistryName().toString());
+		rawEnchantmentBlacklist.add(Enchantments.MULTISHOT.getRegistryName().toString());
+		rawEnchantmentBlacklist.add(Enchantments.SILK_TOUCH.getRegistryName().toString());
+
+		rawEnchantmentCaps.put(Enchantments.FIRE_PROTECTION.getRegistryName().toString(), 100);
+
+	}
+
+	public static JsonObject serialize(JsonObject json) {
+		String url = "https://github.com/tristankechlo/Tool-Leveling/wiki/Config";
+		json.addProperty("_comment", "explanation to the config structure can be found here: " + url);
+		json.addProperty(Names.CONFIG.UPGRADE_COST_MULTIPLIER, upgradeCostMultiplier);
+		json.addProperty(Names.CONFIG.MIN_UPGRADE_COST, minUpgradeCost);
+		json.addProperty(Names.CONFIG.ALLOW_INCOMPATIBLE_ENCHANTMENTS, allowIncompatibleEnchantments);
+		json.addProperty(Names.CONFIG.ALLOW_WRONG_ENCHANTMENTS, allowWrongEnchantments);
+		json.addProperty(Names.CONFIG.DEFAULT_ITEM_WORTH, defaultItemWorth);
+		json.addProperty(Names.CONFIG.ALLOW_LEVELING_USELESS_ENCHANTMENTS, allowLevelingUselessEnchantments);
+		json.addProperty(Names.CONFIG.ALLOW_LEVELING_BREAKING_ENCHANTMENTS, allowLevelingBreakingEnchantments);
+
+		JsonElement blacklist = GSON.toJsonTree(rawEnchantmentBlacklist, typeBlacklist);
+		json.add(Names.CONFIG.ENCHANTMENT_BLACKLIST, blacklist);
+
+		JsonElement caps = GSON.toJsonTree(rawEnchantmentCaps, typeCaps);
+		json.add(Names.CONFIG.ENCHANTMENT_CAPS, caps);
+
+		return json;
+	}
+
+	public static void deserialize(JsonObject json) {
+		upgradeCostMultiplier = ConfigHelper.getInRange(json, Names.CONFIG.UPGRADE_COST_MULTIPLIER, 0.0D, 100.0D, 1.0D);
+		minUpgradeCost = ConfigHelper.getInRange(json, Names.CONFIG.MIN_UPGRADE_COST, 1, Short.MAX_VALUE, 10);
+		defaultItemWorth = ConfigHelper.getInRange(json, Names.CONFIG.DEFAULT_ITEM_WORTH, 1, Short.MAX_VALUE, 10);
+		allowIncompatibleEnchantments = ConfigHelper.getOrDefault(json, Names.CONFIG.ALLOW_INCOMPATIBLE_ENCHANTMENTS, true);
+		allowWrongEnchantments = ConfigHelper.getOrDefault(json, Names.CONFIG.ALLOW_WRONG_ENCHANTMENTS, false);
+		allowLevelingUselessEnchantments = ConfigHelper.getOrDefault(json, Names.CONFIG.ALLOW_LEVELING_USELESS_ENCHANTMENTS, false);
+		allowLevelingBreakingEnchantments = ConfigHelper.getOrDefault(json, Names.CONFIG.ALLOW_LEVELING_BREAKING_ENCHANTMENTS, false);
+
+		rawEnchantmentBlacklist = GSON.fromJson(json.get(Names.CONFIG.ENCHANTMENT_BLACKLIST), typeBlacklist);
+		createEnchantmentBlacklist();
+		rawEnchantmentCaps = GSON.fromJson(json.get(Names.CONFIG.ENCHANTMENT_CAPS), typeCaps);
+		createEnchantmentCaps();
+	}
+
+	private static void createEnchantmentBlacklist() {
+		enchantmentBlacklist = new ArrayList<>();
+		for (String element : rawEnchantmentBlacklist) {
+			ResourceLocation loc = new ResourceLocation(element);
+			if (ForgeRegistries.ENCHANTMENTS.containsKey(loc)) {
+				enchantmentBlacklist.add(ForgeRegistries.ENCHANTMENTS.getValue(loc));
+			}
 		}
 	}
 
-    @SubscribeEvent
-    public static void onLoad(final ModConfig.Loading configEvent) {
-        ToolLeveling.LOGGER.debug("Loaded config file {}", configEvent.getConfig().getFileName());
-    }
-
-    @SubscribeEvent
-    public static void onFileChange(final ModConfig.Reloading configEvent) {
-    	ToolLeveling.LOGGER.debug("Config just got changed on the file system!");
-    }
-
-	private static boolean isValidEnchantment(Object enchantment) {
-		if (ForgeRegistries.ENCHANTMENTS.containsKey(new ResourceLocation(String.valueOf(enchantment)))) {
-			return true;
+	private static void createEnchantmentCaps() {
+		enchantmentCaps = new HashMap<>();
+		for (Map.Entry<String, Integer> element : rawEnchantmentCaps.entrySet()) {
+			ResourceLocation loc = new ResourceLocation(element.getKey());
+			int level = element.getValue();
+			if (level < 1) {
+				continue;
+			}
+			if (ForgeRegistries.ENCHANTMENTS.containsKey(loc)) {
+				Enchantment ench = ForgeRegistries.ENCHANTMENTS.getValue(loc);
+				enchantmentCaps.put(ench, level);
+			}
 		}
-		ToolLeveling.LOGGER.log(Level.INFO,	"Removing unknown Enchantment[" + String.valueOf(enchantment) + "] from EnchantmentsBlacklist");
-		return false;
 	}
 
-	private static boolean isValidItem(Object item) {
-		if (ForgeRegistries.ITEMS.containsKey(new ResourceLocation(String.valueOf(item)))) {
-			return true;
-		}
-		ToolLeveling.LOGGER.log(Level.INFO,	"Resetting upgrade item, because " + String.valueOf(item) + " is not valid.");
-		return false;
-	}
-	
 }

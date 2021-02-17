@@ -23,8 +23,10 @@ public class ToolLevelingTableRenderer extends TileEntityRenderer<ToolLevelingTa
 	}
 
 	@Override
-	public void render(ToolLevelingTableTileEntity tileEntityIn, float partialTicks, MatrixStack matrixStackIn,	IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
-		ItemStack stack = tileEntityIn.inventory.getStackInSlot(0);
+	public void render(ToolLevelingTableTileEntity tileEntityIn, float partialTicks, MatrixStack matrixStackIn,
+			IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+
+		ItemStack stack = tileEntityIn.getStackToEnchant();
 		if (!stack.isEmpty()) {
 			matrixStackIn.push();
 			matrixStackIn.translate(0.5D, 0.89D, 0.5D);
@@ -35,9 +37,11 @@ public class ToolLevelingTableRenderer extends TileEntityRenderer<ToolLevelingTa
 
 		}
 	}
-	
-	private void renderItem(ItemStack stack, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn,	int combinedLightIn) {
-		Minecraft.getInstance().getItemRenderer().renderItem(stack, TransformType.FIXED, combinedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn);
+
+	private void renderItem(ItemStack stack, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn,
+			int combinedLightIn) {
+		Minecraft.getInstance().getItemRenderer().renderItem(stack, TransformType.FIXED, combinedLightIn,
+				OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn);
 	}
 
 }

@@ -1,55 +1,110 @@
 package com.tristankechlo.toolleveling.commands;
 
+import java.util.Collection;
 import java.util.Map;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
-import com.tristankechlo.toolleveling.ToolLeveling;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
 
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
+import net.minecraft.command.arguments.EnchantmentArgument;
+import net.minecraft.command.arguments.EntityArgument;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class SuperEnchantCommand {
-	
-	private static ITextComponent LEVEL_WRONG = new TranslationTextComponent("commands."+ToolLeveling.MOD_ID+".superenchant.failed.level_wrong");
-	private static ITextComponent NOT_ENCHANTET = new TranslationTextComponent("commands."+ToolLeveling.MOD_ID+".superenchant.failed.not_enchanted");
+
+	private static final DynamicCommandExceptionType NONLIVING_ENTITY_EXCEPTION = new DynamicCommandExceptionType(
+			(entityName) -> {
+				return new TranslationTextComponent("commands.enchant.failed.entity", entityName);
+			});
+	private static final DynamicCommandExceptionType INCOMPATIBLE_ENCHANTS_EXCEPTION = new DynamicCommandExceptionType(
+			(itemName) -> {
+				return new TranslationTextComponent("commands.superenchant.failed.incompatible", itemName);
+			});
+	private static final DynamicCommandExceptionType WRONG_ENCHANTS_EXCEPTION = new DynamicCommandExceptionType(
+			(itemName) -> {
+				return new TranslationTextComponent("commands.superenchant.failed.wrong", itemName);
+			});
+	private static final DynamicCommandExceptionType ITEMLESS_EXCEPTION = new DynamicCommandExceptionType(
+			(entityName) -> {
+				return new TranslationTextComponent("commands.enchant.failed.itemless", entityName);
+			});
+	private static final SimpleCommandExceptionType FAILED_EXCEPTION = new SimpleCommandExceptionType(
+			new TranslationTextComponent("commands.enchant.failed"));
 
 	public static void register(CommandDispatcher<CommandSource> dispatcher) {
 		dispatcher.register(Commands.literal("superenchant").requires((player) -> {
 			return player.hasPermissionLevel(3);
-		}).then(Commands.argument("level", IntegerArgumentType.integer(0, 32767)).executes((source) -> {
-			return enchant(source.getSource(), IntegerArgumentType.getInteger(source, "level"));
-		})));
+		}).then(Commands.argument("targets", EntityArgument.entities())
+				.then(Commands.argument("enchantment", EnchantmentArgument.enchantment()).executes((context) -> {
+					return enchant(context.getSource(), EntityArgument.getEntities(context, "targets"),
+							EnchantmentArgument.getEnchantment(context, "enchantment"), 1);
+				}).then(Commands.argument("level", IntegerArgumentType.integer(0, Short.MAX_VALUE))
+						.executes((context) -> {
+							return enchant(context.getSource(), EntityArgument.getEntities(context, "targets"),
+									EnchantmentArgument.getEnchantment(context, "enchantment"),
+									IntegerArgumentType.getInteger(context, "level"));
+						})))));
 	}
-	
-	private static int enchant(CommandSource source, int level) {
-		if(source.getEntity() instanceof ServerPlayerEntity) {
-			if(level >= 1 && level <= Short.MAX_VALUE) {
-				ServerPlayerEntity player = (ServerPlayerEntity) source.getEntity();
-				ItemStack stack = player.getHeldItemMainhand();
-				if(stack.isEnchanted()) {
-					Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
-					for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
-						//only update enchantments which can be higher than 1, to ignore enchantments like silk-touch
-						if(entry.getKey().getMaxLevel() > 1) {
-							enchantments.put(entry.getKey(), level);
+
+	private static int enchant(CommandSource source, Collection<? extends Entity> targets, Enchantment enchantmentIn, int level) throws CommandSyntaxException {
+		int i = 0;
+
+		for (Entity entity : targets) {
+			if (entity instanceof LivingEntity) {
+				LivingEntity livingentity = (LivingEntity) entity;
+				ItemStack stack = livingentity.getHeldItemMainhand();
+				if (!stack.isEmpty()) {
+					if (enchantmentIn.canApply(stack) || ToolLevelingConfig.allowWrongEnchantments) {
+						if (EnchantmentHelper.areAllCompatibleWith(EnchantmentHelper.getEnchantments(stack).keySet(), enchantmentIn)
+								|| ToolLevelingConfig.allowIncompatibleEnchantments) {
+
+							Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
+							if(enchantments.containsKey(enchantmentIn) && level == 0) {
+								enchantments.remove(enchantmentIn);
+							} else {
+								enchantments.put(enchantmentIn, level);
+							}
+							EnchantmentHelper.setEnchantments(enchantments, stack);
+							i++;
+
+						} else if (targets.size() == 1) {
+							throw INCOMPATIBLE_ENCHANTS_EXCEPTION.create(stack.getItem().getDisplayName(stack).getString());
 						}
-				    }
-					EnchantmentHelper.setEnchantments(enchantments, stack);
-				} else {
-					source.sendFeedback(NOT_ENCHANTET, true);
+					} else if (targets.size() == 1) {
+						throw WRONG_ENCHANTS_EXCEPTION.create(stack.getItem().getDisplayName(stack).getString());
+					}
+				} else if (targets.size() == 1) {
+					throw ITEMLESS_EXCEPTION.create(livingentity.getName().getString());
 				}
-			} else {
-				source.sendFeedback(LEVEL_WRONG, true);
+			} else if (targets.size() == 1) {
+				throw NONLIVING_ENTITY_EXCEPTION.create(entity.getName().getString());
 			}
 		}
-		return 0;
+
+		if (i == 0) {
+			throw FAILED_EXCEPTION.create();
+		} else {
+			if (targets.size() == 1) {
+				source.sendFeedback(new TranslationTextComponent("commands.enchant.success.single",
+						enchantmentIn.getDisplayName(level), targets.iterator().next().getDisplayName()), true);
+			} else {
+				source.sendFeedback(new TranslationTextComponent("commands.enchant.success.multiple",
+						enchantmentIn.getDisplayName(level), targets.size()), true);
+			}
+
+			return i;
+		}
 	}
 
 }

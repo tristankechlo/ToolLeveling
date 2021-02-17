@@ -6,17 +6,21 @@
 	"screen.toolleveling.tool_leveling_table" : "Tool Leveling Table",
 	
 	"container.toolleveling.tool_leveling_table" : "Tool Leveling Table",
-	"container.toolleveling.tool_leveling_table.page" : "Page %s/%s",
 	"container.toolleveling.tool_leveling_table.current_level" : "Current Level: %s",
 	"container.toolleveling.tool_leveling_table.next_level" : "Next Level: %s",
-	"container.toolleveling.tool_leveling_table.cost" : "Required Items: %s",
-	"container.toolleveling.tool_leveling_table.help_slot0" : "<- Enchanted Item",
-	"container.toolleveling.tool_leveling_table.help_other_slot" : "<- %s",
-	"container.toolleveling.tool_leveling_table.error_blacklist" : "This enchantment is disabled!",
-	"container.toolleveling.tool_leveling_table.error_leveling_useless" : "Leveling would have no effect!",
-	"container.toolleveling.tool_leveling_table.error_level_at_max" : "Maximum level reached!",
-	"container.toolleveling.tool_leveling_table.error_item_will_break" : "Item would be useless when leveled!",
+	"container.toolleveling.tool_leveling_table.cost" : "Upgrade Cost: %s",
+	"container.toolleveling.tool_leveling_table.worth.inv" : "Worth: %s",
+	"container.toolleveling.tool_leveling_table.worth.bonus_points" : "Bonus: %s",
+	"container.toolleveling.tool_leveling_table.error.blacklisted" : "This enchantment is disabled!",
+	"container.toolleveling.tool_leveling_table.error.useless" : "Leveling will have no effect!",
+	"container.toolleveling.tool_leveling_table.error.maxlevel" : "Maximum level reached!",
+	"container.toolleveling.tool_leveling_table.error.break" : "Enchantment will break when leveled!",
+	"container.toolleveling.tool_leveling_table.error.capped" : "Level is at set maximum!",
 	
-	"commands.toolleveling.superenchant.failed.level_wrong" : "The level must be between 1 and 32767",
-	"commands.toolleveling.superenchant.failed.not_enchanted" : "This Item is not enchantet."
+	"commands.superenchant.failed.incompatible" : "%s cannot support that enchantment, you can enable this in the ToolLevelingConfig (allowIncompatibleEnchantments)",
+	"commands.superenchant.failed.wrong" : "%s cannot support that enchantment, you can enable this in the ToolLevelingConfig (allowWrongEnchantments)",
+  	"commands.toolleveling.config.path": "Config for ToolLeveling can be found here: %s",
+  	"commands.toolleveling.config.reload": "Config for ToolLeveling was successfully reloaded.",
+  	"commands.toolleveling.config.noconfig": "Config for ToolLeveling could not be found.",
+  	"commands.toolleveling.config.reset": "Config %s has been set to default."
 }

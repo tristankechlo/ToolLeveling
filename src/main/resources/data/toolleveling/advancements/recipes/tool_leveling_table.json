@@ -33,7 +33,7 @@
 			}
 		},
 		"enchanted_item" : {
-            "trigger": "minecraft:enchanted_item"
+			"trigger" : "minecraft:enchanted_item"
 		}
 	},
 	"requirements" : [

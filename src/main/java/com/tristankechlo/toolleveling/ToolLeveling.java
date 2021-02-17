@@ -4,45 +4,51 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.tristankechlo.toolleveling.client.ClientSetup;
-import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
-import com.tristankechlo.toolleveling.init.ModBlocks;
-import com.tristankechlo.toolleveling.init.ModContainers;
-import com.tristankechlo.toolleveling.init.ModItems;
-import com.tristankechlo.toolleveling.init.ModTileEntities;
+import com.tristankechlo.toolleveling.config.misc.ConfigManager;
+import com.tristankechlo.toolleveling.init.ModRegistry;
 import com.tristankechlo.toolleveling.network.PacketHandler;
+import com.tristankechlo.toolleveling.utils.Names;
 
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-@Mod(ToolLeveling.MOD_ID)
+@Mod(Names.MOD_ID)
 public class ToolLeveling {
-	
+
 	public static final Logger LOGGER = LogManager.getLogger();
-	public static final String MOD_ID = "toolleveling";
-	
+
 	public ToolLeveling() {
-		
-    	ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ToolLevelingConfig.spec);
-		
+
 		final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-		
+
 		PacketHandler.registerPackets();
 
-		ModItems.ITEMS.register(modEventBus);
-		ModBlocks.BLOCKS.register(modEventBus);
-		ModTileEntities.TILE_ENTITIES.register(modEventBus);
-		ModContainers.CONTAINER_TYPES.register(modEventBus);
-		
+		ModRegistry.ITEMS.register(modEventBus);
+		ModRegistry.BLOCKS.register(modEventBus);
+		ModRegistry.TILE_ENTITIES.register(modEventBus);
+		ModRegistry.CONTAINER_TYPES.register(modEventBus);
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::init);
-		
-        
-        MinecraftForge.EVENT_BUS.register(this);
-        
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::init);
+
+		MinecraftForge.EVENT_BUS.register(this);
+
 	}
-        
+
+	private void commonSetup(final FMLCommonSetupEvent event) {
+		ConfigManager.setup();
+	}
+
+	@SubscribeEvent
+	public void onPlayerJoinEvent(final PlayerLoggedInEvent event) {
+		// send server-config to player
+		ConfigManager.syncAllConfigsToOneClient((ServerPlayerEntity) event.getPlayer());
+	}
+
 }

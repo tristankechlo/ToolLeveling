@@ -1,102 +1,88 @@
 package com.tristankechlo.toolleveling.container;
 
-import java.util.Objects;
-
-import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
-import com.tristankechlo.toolleveling.init.ModBlocks;
-import com.tristankechlo.toolleveling.init.ModContainers;
+import com.tristankechlo.toolleveling.container.slot.EquipmentSlot;
+import com.tristankechlo.toolleveling.container.slot.OffhandSlot;
+import com.tristankechlo.toolleveling.container.slot.PaymentSlot;
+import com.tristankechlo.toolleveling.container.slot.UpgradeSlot;
+import com.tristankechlo.toolleveling.init.ModRegistry;
 import com.tristankechlo.toolleveling.tileentity.ToolLevelingTableTileEntity;
+import com.tristankechlo.toolleveling.utils.ChestContents;
+import com.tristankechlo.toolleveling.utils.Utils;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IWorldPosCallable;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.items.SlotItemHandler;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class ToolLevelingTableContainer extends Container {
 
-	public static final Item PAYMENT_ITEM = ForgeRegistries.ITEMS.getValue(new ResourceLocation(ToolLevelingConfig.SERVER.upgradeItem.get()));
-	private final IWorldPosCallable worldPos;
-	private ToolLevelingTableTileEntity entity;
-	private BlockPos pos;
+	private ChestContents chestContents;
+	private ToolLevelingTableTileEntity table;
+	private static final EquipmentSlotType[] VALID_EQUIPMENT_SLOTS = new EquipmentSlotType[] { EquipmentSlotType.HEAD,
+			EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET };
+	private static final int[][] EQUIPMENT_SLOT_POINTS = new int[][] { { 197, 136 }, { 197, 154 }, { 215, 136 },
+			{ 215, 154 } };
 
-	public ToolLevelingTableContainer(final int windowId, final PlayerInventory playerInv, final PacketBuffer data) {
-		this(windowId, playerInv, getTileEntity(playerInv, data));
+	public static ToolLevelingTableContainer createForServerSide(int id, PlayerInventory playerInventory,
+			ChestContents chestContents, BlockPos pos) {
+		return new ToolLevelingTableContainer(id, playerInventory, chestContents, pos);
 	}
-	
-	private static ToolLevelingTableTileEntity getTileEntity(final PlayerInventory playerInv, final PacketBuffer data) {
-		Objects.requireNonNull(playerInv, "playerInv cannot be null");
-		Objects.requireNonNull(data, "data cannot be null");
-		final TileEntity tileAtPos = playerInv.player.world.getTileEntity(data.readBlockPos());
-		if (tileAtPos instanceof ToolLevelingTableTileEntity) {
-			return (ToolLevelingTableTileEntity) tileAtPos;
-		}
-		throw new IllegalStateException("TileEntity is not correct " + tileAtPos);
+
+	public static ToolLevelingTableContainer createForClientSide(int id, PlayerInventory playerInv,
+			PacketBuffer extraData) {
+		BlockPos pos = extraData.readBlockPos();
+		ChestContents chestContents = ChestContents
+				.createForClientSideContainer(ToolLevelingTableTileEntity.NUMBER_OF_SLOTS);
+		return new ToolLevelingTableContainer(id, playerInv, chestContents, pos);
 	}
-	
-	public ToolLevelingTableContainer(final int windowId, final PlayerInventory playerInv, final ToolLevelingTableTileEntity entity) {
-	    super(ModContainers.TOOL_LEVELING_TABLE.get(), windowId);
-		this.worldPos = IWorldPosCallable.of(entity.getWorld(), entity.getPos());
-		this.entity = entity;
-		this.pos = entity.getPos();
 
-		this.addSlot(new SlotItemHandler(entity.inventory, 0, 10, 18) {
-			@Override
-			public boolean isItemValid(ItemStack stack) {
-				return stack.isEnchanted();
-			}
-			@Override
-			public int getSlotStackLimit() {
-				return 1;
-			}
-			@Override
-			public void onSlotChanged() {
-				entity.markDirty();
-			}
-		});
-		
+	private ToolLevelingTableContainer(int id, PlayerInventory playerInv, ChestContents chestContents, BlockPos pos) {
+		super(ModRegistry.TLT_CONTAINER.get(), id);
+		this.chestContents = chestContents;
+		this.table = (ToolLevelingTableTileEntity) playerInv.player.world.getTileEntity(pos);
 
+		this.addSlot(new UpgradeSlot(this.chestContents, 0, 44, 22));
 		// payment slots
-		int startX = 10;
-		int y = 46;
+		int startX = 8;
+		int startY = 68;
 		int slotSizePlus2 = 18;
-		for (int i = 1; i < 5; i++) {
-
-			this.addSlot(new SlotItemHandler(entity.inventory, i, startX, y+((i-1)*slotSizePlus2)) {
-				@Override
-				public boolean isItemValid(ItemStack stack) {
-					return stack.getItem() == PAYMENT_ITEM;
-				}
-				@Override
-				public void onSlotChanged() {
-					entity.markDirty();
-				}
-			});
+		for (int row = 0; row < 3; row++) {
+			for (int column = 0; column < 5; column++) {
+				this.addSlot(new PaymentSlot(this.chestContents, 1 + (row * 5) + column,
+						startX + (column * slotSizePlus2), startY + (row * slotSizePlus2)));
+			}
 		}
-		
-		// Main Inventory
-		int startY = 132;
+		// main inventory
+		startY = 136;
+		startX = 17;
 		for (int row = 0; row < 3; row++) {
 			for (int column = 0; column < 9; column++) {
 				this.addSlot(new Slot(playerInv, 9 + (row * 9) + column, startX + (column * slotSizePlus2),
 						startY + (row * slotSizePlus2)));
 			}
 		}
-
-		// Hotbar
+		// hotbar
+		startY = 194;
 		for (int column = 0; column < 9; column++) {
-			this.addSlot(new Slot(playerInv, column, startX + (column * slotSizePlus2), 190));
+			this.addSlot(new Slot(playerInv, column, startX + (column * slotSizePlus2), startY));
 		}
+		// armor
+		for (int column = 0; column < 2; column++) {
+			for (int row = 0; row < 2; row++) {
+				int index = (column * 2) + row;
+				final EquipmentSlotType equipmentSlotType = VALID_EQUIPMENT_SLOTS[index];
+				final int[] p = EQUIPMENT_SLOT_POINTS[index];
+				this.addSlot(new EquipmentSlot(playerInv, p[0], p[1], equipmentSlotType, playerInv.player));
+			}
+		}
+		// offhand
+		this.addSlot(new OffhandSlot(playerInv, 206, 172));
 	}
-	
+
 	@Override
 	public void onContainerClosed(PlayerEntity playerIn) {
 		super.onContainerClosed(playerIn);
@@ -104,35 +90,29 @@ public class ToolLevelingTableContainer extends Container {
 
 	@Override
 	public boolean canInteractWith(PlayerEntity playerIn) {
-        return isWithinUsableDistance(this.worldPos, playerIn, ModBlocks.TOOL_LEVELING_TABLE.get());
-    }
-	
-	
+		return chestContents.isUsableByPlayer(playerIn);
+	}
 
 	@Override
 	public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
 		ItemStack itemstack = ItemStack.EMPTY;
 		Slot slot = this.inventorySlots.get(index);
+		int slotCount = ToolLevelingTableTileEntity.NUMBER_OF_SLOTS;
 		if (slot != null && slot.getHasStack()) {
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
-			if (index == 0) {
-				if (!this.mergeItemStack(itemstack1, 5, 41, true)) {
+			if (index >= 0 && index < slotCount) {
+				if (!this.mergeItemStack(itemstack1, slotCount, 36 + slotCount, true)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (index >= 1 && index <= 4) {
-				if (!this.mergeItemStack(itemstack1, 5, 41, true)) {
-					return ItemStack.EMPTY;
-				}
-			} else if (itemstack1.getItem() == PAYMENT_ITEM) {
-				if (!this.mergeItemStack(itemstack1, 1, 5, false)) {
+			} else if (this.inventorySlots.get(1).isItemValid(itemstack1)) {
+				if (!this.mergeItemStack(itemstack1, 1, slotCount, false)) {
 					return ItemStack.EMPTY;
 				}
 			} else {
 				if (this.inventorySlots.get(0).getHasStack() || !this.inventorySlots.get(0).isItemValid(itemstack1)) {
 					return ItemStack.EMPTY;
 				}
-
 				ItemStack itemstack2 = itemstack1.copy();
 				itemstack2.setCount(1);
 				itemstack1.shrink(1);
@@ -144,23 +124,29 @@ public class ToolLevelingTableContainer extends Container {
 			} else {
 				slot.onSlotChanged();
 			}
-
 			if (itemstack1.getCount() == itemstack.getCount()) {
 				return ItemStack.EMPTY;
 			}
-
 			slot.onTake(playerIn, itemstack1);
 		}
 
 		return itemstack;
 	}
-	
-	public BlockPos getEntityPos() {
-		return this.pos;
-	}
-	
-	public ToolLevelingTableTileEntity getEntity() {
-		return this.entity;
+
+	public int getContainerWorth() {
+		int worth = 0;
+		for (int i = 1; i < chestContents.getSizeInventory(); i++) {
+			ItemStack stack = chestContents.getStackInSlot(i);
+			worth += Utils.getStackWorth(stack);
+		}
+		return worth;
 	}
 
+	public BlockPos getPos() {
+		return table.getPos();
+	}
+
+	public int getBonusPoints() {
+		return table.bonusPoints;
+	}
 }
