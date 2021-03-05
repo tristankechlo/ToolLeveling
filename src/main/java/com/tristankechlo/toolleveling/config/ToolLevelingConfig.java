@@ -42,10 +42,10 @@ public final class ToolLevelingConfig {
 		upgradeCostMultiplier = 1.0D;
 		minUpgradeCost = 1000;
 		defaultItemWorth = 10;
-		allowLevelingUselessEnchantments = false;
-		allowLevelingBreakingEnchantments = false;
+		allowLevelingUselessEnchantments = true;
+		allowLevelingBreakingEnchantments = true;
 		allowIncompatibleEnchantments = true;
-		allowWrongEnchantments = false;
+		allowWrongEnchantments = true;
 
 		rawEnchantmentBlacklist = new ArrayList<>();
 		rawEnchantmentCaps = new HashMap<>();
