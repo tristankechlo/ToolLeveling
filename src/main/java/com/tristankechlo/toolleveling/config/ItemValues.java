@@ -99,7 +99,7 @@ public final class ItemValues {
 		for (Map.Entry<String, Integer> element : rawItemValues.entrySet()) {
 			ResourceLocation loc = new ResourceLocation(element.getKey());
 			int worth = element.getValue();
-			if (worth < 1) {
+			if (worth < 0) {
 				continue;
 			}
 			if (ForgeRegistries.ITEMS.containsKey(loc)) {
