@@ -1,5 +1,15 @@
 # Changelog
 
+### Version 1.16.5 - 1.2.1
+ - allow item values to be zero
+ - added new config-option : enchantmentWhitelist
+     - is by default empty
+     - if it contains enchantments, all enchantments not listed in here are blacklisted
+     - this option will deactivate the enchantmentBlacklist
+ - added new config-option : globalEnchantmentCap
+     - if set to a value higher than zero all enchantments are capped at this value
+     - this option will deactivate the list enchantmentCaps
+
 ### Version 1.16.5 - 1.2.0
  - **clear your toollevleing table before updating, or you will loose all items that are stored in it**
  - support for 1.16.5

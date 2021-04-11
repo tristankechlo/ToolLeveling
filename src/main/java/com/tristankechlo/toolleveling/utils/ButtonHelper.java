@@ -29,6 +29,7 @@ public class ButtonHelper {
 	}
 
 	public static ButtonEntry getButtonEntry(ToolLevelingTableScreen parent, Enchantment enchantment, int level) {
+		List<Enchantment> whitelist = ToolLevelingConfig.enchantmentWhitelist;
 		List<Enchantment> blacklist = ToolLevelingConfig.enchantmentBlacklist;
 		ButtonEntry buttonEntry = new ButtonEntry(parent, enchantment, level);
 
@@ -36,8 +37,12 @@ public class ButtonHelper {
 		if (enchantment.getMaxLevel() == 1) {
 			buttonEntry.status = ButtonStatus.USELESS;
 		}
+		// if whitelist is not empty, mark all enchantments as blacklisted if they are not on the whitelist
+		else if(!whitelist.isEmpty() && !whitelist.contains(enchantment)) {
+			buttonEntry.status = ButtonStatus.BLACKLISTED;
+		}
 		// only list enchantments that are not on the blacklist
-		else if (blacklist.contains(enchantment)) {
+		else if (whitelist.isEmpty() && blacklist.contains(enchantment)) {
 			buttonEntry.status = ButtonStatus.BLACKLISTED;
 		}
 		// although the level is defined as an integer, the actual maximum is a short

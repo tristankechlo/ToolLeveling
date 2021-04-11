@@ -27,8 +27,11 @@ public final class ToolLevelingConfig {
 	public static boolean allowLevelingBreakingEnchantments;
 	public static boolean allowWrongEnchantments;
 	public static boolean allowIncompatibleEnchantments;
+	public static int globalEnchantmentCap;
+	public static List<Enchantment> enchantmentWhitelist;
 	public static List<Enchantment> enchantmentBlacklist;
 	public static Map<Enchantment, Integer> enchantmentCaps;
+	private static List<String> rawEnchantmentWhitelist;
 	private static List<String> rawEnchantmentBlacklist;
 	private static Map<String, Integer> rawEnchantmentCaps;
 	private static final Type typeBlacklist = new TypeToken<List<String>>() {}.getType();
@@ -46,7 +49,9 @@ public final class ToolLevelingConfig {
 		allowLevelingBreakingEnchantments = true;
 		allowIncompatibleEnchantments = true;
 		allowWrongEnchantments = true;
+		globalEnchantmentCap = 0;
 
+		rawEnchantmentWhitelist = new ArrayList<>();
 		rawEnchantmentBlacklist = new ArrayList<>();
 		rawEnchantmentCaps = new HashMap<>();
 
@@ -74,6 +79,10 @@ public final class ToolLevelingConfig {
 		json.addProperty(Names.CONFIG.DEFAULT_ITEM_WORTH, defaultItemWorth);
 		json.addProperty(Names.CONFIG.ALLOW_LEVELING_USELESS_ENCHANTMENTS, allowLevelingUselessEnchantments);
 		json.addProperty(Names.CONFIG.ALLOW_LEVELING_BREAKING_ENCHANTMENTS, allowLevelingBreakingEnchantments);
+		json.addProperty(Names.CONFIG.GLOBAL_ENCHANTMENT_CAP, globalEnchantmentCap);
+
+		JsonElement whitelist = GSON.toJsonTree(rawEnchantmentWhitelist, typeBlacklist);
+		json.add(Names.CONFIG.ENCHANTMENT_WHITELIST, whitelist);
 
 		JsonElement blacklist = GSON.toJsonTree(rawEnchantmentBlacklist, typeBlacklist);
 		json.add(Names.CONFIG.ENCHANTMENT_BLACKLIST, blacklist);
@@ -92,11 +101,35 @@ public final class ToolLevelingConfig {
 		allowWrongEnchantments = ConfigHelper.getOrDefault(json, Names.CONFIG.ALLOW_WRONG_ENCHANTMENTS, false);
 		allowLevelingUselessEnchantments = ConfigHelper.getOrDefault(json, Names.CONFIG.ALLOW_LEVELING_USELESS_ENCHANTMENTS, false);
 		allowLevelingBreakingEnchantments = ConfigHelper.getOrDefault(json, Names.CONFIG.ALLOW_LEVELING_BREAKING_ENCHANTMENTS, false);
+		globalEnchantmentCap = ConfigHelper.getInRange(json, Names.CONFIG.GLOBAL_ENCHANTMENT_CAP, 0, Short.MAX_VALUE, 0);
+
+		rawEnchantmentWhitelist = GSON.fromJson(json.get(Names.CONFIG.ENCHANTMENT_WHITELIST), typeBlacklist);
+		if(rawEnchantmentWhitelist == null) {
+			rawEnchantmentWhitelist = new ArrayList<>();
+		}
+		createEnchantmentWhitelist();
 
 		rawEnchantmentBlacklist = GSON.fromJson(json.get(Names.CONFIG.ENCHANTMENT_BLACKLIST), typeBlacklist);
+		if(rawEnchantmentBlacklist == null) {
+			rawEnchantmentBlacklist = new ArrayList<>();
+		}
 		createEnchantmentBlacklist();
+
 		rawEnchantmentCaps = GSON.fromJson(json.get(Names.CONFIG.ENCHANTMENT_CAPS), typeCaps);
+		if (rawEnchantmentCaps == null) {
+			rawEnchantmentCaps = new HashMap<>();
+		}
 		createEnchantmentCaps();
+	}
+
+	private static void createEnchantmentWhitelist() {
+		enchantmentWhitelist = new ArrayList<>();
+		for (String element : rawEnchantmentWhitelist) {
+			ResourceLocation loc = new ResourceLocation(element);
+			if (ForgeRegistries.ENCHANTMENTS.containsKey(loc)) {
+				enchantmentWhitelist.add(ForgeRegistries.ENCHANTMENTS.getValue(loc));
+			}
+		}
 	}
 
 	private static void createEnchantmentBlacklist() {
