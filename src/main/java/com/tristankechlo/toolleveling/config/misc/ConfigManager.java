@@ -107,6 +107,7 @@ public final class ConfigManager {
 			writer.write(jsonString);
 			writer.close();
 		} catch (Exception e) {
+			ToolLeveling.LOGGER.debug("There was an error writing the config to file: " + config.getFileName());
 			e.printStackTrace();
 		}
 	}
@@ -118,6 +119,7 @@ public final class ConfigManager {
 			JsonElement jsonElement = parser.parse(new FileReader(file));
 			json = jsonElement.getAsJsonObject();
 		} catch (Exception e) {
+			ToolLeveling.LOGGER.debug("There was an error loading the config file: " + config.getFileName());
 			e.printStackTrace();
 		}
 		if (json != null) {
