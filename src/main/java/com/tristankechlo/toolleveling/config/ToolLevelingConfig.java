@@ -96,7 +96,7 @@ public final class ToolLevelingConfig {
 	public static void deserialize(JsonObject json) {
 		upgradeCostMultiplier = ConfigHelper.getInRange(json, Names.CONFIG.UPGRADE_COST_MULTIPLIER, 0.0D, 100.0D, 1.0D);
 		minUpgradeCost = ConfigHelper.getInRange(json, Names.CONFIG.MIN_UPGRADE_COST, 1, Short.MAX_VALUE, 10);
-		defaultItemWorth = ConfigHelper.getInRange(json, Names.CONFIG.DEFAULT_ITEM_WORTH, 1, Short.MAX_VALUE, 10);
+		defaultItemWorth = ConfigHelper.getInRange(json, Names.CONFIG.DEFAULT_ITEM_WORTH, 0, Short.MAX_VALUE, 10);
 		allowIncompatibleEnchantments = ConfigHelper.getOrDefault(json, Names.CONFIG.ALLOW_INCOMPATIBLE_ENCHANTMENTS, true);
 		allowWrongEnchantments = ConfigHelper.getOrDefault(json, Names.CONFIG.ALLOW_WRONG_ENCHANTMENTS, false);
 		allowLevelingUselessEnchantments = ConfigHelper.getOrDefault(json, Names.CONFIG.ALLOW_LEVELING_USELESS_ENCHANTMENTS, false);

@@ -1,5 +1,8 @@
 # Changelog
 
+### Version 1.16.5 - 1.2.2
+ - allow default item worth to be zero
+
 ### Version 1.16.5 - 1.2.1
  - allow item values to be zero
  - added new config-option : enchantmentWhitelist
