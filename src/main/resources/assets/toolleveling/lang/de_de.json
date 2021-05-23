@@ -15,7 +15,7 @@
 	"container.toolleveling.tool_leveling_table.error.useless" : "Ein Level-Up hat keinen Effekt!",
 	"container.toolleveling.tool_leveling_table.error.maxlevel" : "Maximal Level erreicht!",
 	"container.toolleveling.tool_leveling_table.error.break" : "Item wird nicht mehr richtig funktionieren!",
-	"container.toolleveling.tool_leveling_table.error.capped" : "Eingestelltes maximum erreicht!",
+	"container.toolleveling.tool_leveling_table.error.capped" : "Eingestelltes Maximal-Level erreicht!",
 	
 	"commands.superenchant.failed.incompatible" : "%s kann damit nicht verzaubert werden, du kannst dies in der ToolLevelingConfig ändern (allowIncompatibleEnchantments)",
 	"commands.superenchant.failed.wrong" : "%s kann damit nicht verzaubert werden, du kannst dies in der ToolLevelingConfig ändern (allowWrongEnchantments)",

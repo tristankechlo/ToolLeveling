@@ -1,5 +1,8 @@
 # Changelog
 
+### Version 1.16.5 - 1.2.3
+ - added translation ru_ru
+
 ### Version 1.16.5 - 1.2.2
  - allow default item worth to be zero
 
