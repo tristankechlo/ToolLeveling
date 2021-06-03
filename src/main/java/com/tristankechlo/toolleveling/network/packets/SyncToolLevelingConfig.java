@@ -41,7 +41,7 @@ public class SyncToolLevelingConfig {
 				ToolLeveling.LOGGER.log(Level.ERROR, "Config " + msg.identifier + " could not be loaded");
 				throw new RuntimeException("Config " + msg.identifier + " could not be loaded");
 			} else {
-				ToolLeveling.LOGGER.debug("Config " + msg.identifier + " recieved and loaded.");
+				ToolLeveling.LOGGER.log(Level.INFO, "Config " + msg.identifier + " recieved and loaded.");
 			}
 		});
 		context.get().setPacketHandled(true);

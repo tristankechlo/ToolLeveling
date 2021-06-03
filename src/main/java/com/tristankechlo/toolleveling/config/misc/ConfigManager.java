@@ -6,6 +6,8 @@ import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.logging.log4j.Level;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -25,11 +27,10 @@ import net.minecraftforge.fml.network.PacketDistributor;
 
 public final class ConfigManager {
 
-	private static Map<String, Config> CONFIGS = getConfigList();
+	private static final Map<String, Config> CONFIGS = getConfigList();
 	private static final File ConfigDir = FMLPaths.CONFIGDIR.get().resolve("toolleveling").toFile();
 
-	private ConfigManager() {
-	}
+	private ConfigManager() {}
 
 	public static void setup() {
 		if (!ConfigDir.exists()) {
@@ -42,10 +43,11 @@ public final class ConfigManager {
 			if (configFile.exists()) {
 				ConfigManager.loadConfigFromFile(config, configFile);
 				ConfigManager.writeConfigToFile(config, configFile);
-				ToolLeveling.LOGGER.debug("Saved the checked/corrected config: " + element.getKey());
+				ToolLeveling.LOGGER.log(Level.INFO, "Saved the checked/corrected config: " + element.getKey());
 			} else {
 				ConfigManager.writeConfigToFile(config, configFile);
-				ToolLeveling.LOGGER.debug("No config[" + element.getKey() + "] was found, created a new one.");
+				ToolLeveling.LOGGER.log(Level.INFO,
+						"No config[" + element.getKey() + "] was found, created a new one.");
 			}
 		}
 	}
@@ -60,10 +62,11 @@ public final class ConfigManager {
 			if (configFile.exists()) {
 				ConfigManager.loadConfigFromFile(config, configFile);
 				ConfigManager.writeConfigToFile(config, configFile);
-				ToolLeveling.LOGGER.debug("Saved the checked/corrected config: " + element.getKey());
+				ToolLeveling.LOGGER.log(Level.INFO, "Saved the checked/corrected config: " + element.getKey());
 			} else {
 				ConfigManager.writeConfigToFile(config, configFile);
-				ToolLeveling.LOGGER.debug("No config [" + element.getKey() + "] was found, created a new one.");
+				ToolLeveling.LOGGER.log(Level.INFO,
+						"No config [" + element.getKey() + "] was found, created a new one.");
 			}
 			syncOneConfigToAllClients(element.getKey(), config);
 		}
@@ -83,16 +86,16 @@ public final class ConfigManager {
 			ConfigDir.mkdirs();
 		}
 		Config config = CONFIGS.get(identifier);
-		if(config != null) {
+		if (config != null) {
 			resetOneConfig(identifier, config);
 		}
 	}
-	
+
 	private static void resetOneConfig(String identifier, Config config) {
 		config.setToDefault();
 		File configFile = new File(ConfigDir, config.getFileName());
 		ConfigManager.writeConfigToFile(config, configFile);
-		ToolLeveling.LOGGER.debug("Saved [" + identifier + "] as new config.");
+		ToolLeveling.LOGGER.log(Level.INFO, "Saved [" + identifier + "] as new config.");
 		syncOneConfigToAllClients(identifier, config);
 	}
 
@@ -107,7 +110,8 @@ public final class ConfigManager {
 			writer.write(jsonString);
 			writer.close();
 		} catch (Exception e) {
-			ToolLeveling.LOGGER.debug("There was an error writing the config to file: " + config.getFileName());
+			ToolLeveling.LOGGER.log(Level.INFO,
+					"There was an error writing the config to file: " + config.getFileName());
 			e.printStackTrace();
 		}
 	}
@@ -119,14 +123,15 @@ public final class ConfigManager {
 			JsonElement jsonElement = parser.parse(new FileReader(file));
 			json = jsonElement.getAsJsonObject();
 		} catch (Exception e) {
-			ToolLeveling.LOGGER.debug("There was an error loading the config file: " + config.getFileName());
+			ToolLeveling.LOGGER.log(Level.INFO, "There was an error loading the config file: " + config.getFileName());
 			e.printStackTrace();
 		}
 		if (json != null) {
 			config.deserialize(json);
-			ToolLeveling.LOGGER.debug("Config[" + config.getFileName() + "] was successfully loaded.");
+			ToolLeveling.LOGGER.log(Level.INFO, "Config[" + config.getFileName() + "] was successfully loaded.");
 		} else {
-			ToolLeveling.LOGGER.debug("Error loading config[" + config.getFileName() + "], config hasn't been loaded.");
+			ToolLeveling.LOGGER.log(Level.INFO,
+					"Error loading config[" + config.getFileName() + "], config hasn't been loaded.");
 		}
 	}
 

@@ -69,7 +69,7 @@ public class Utils {
 	}
 
 	public static boolean isEnchantmentAtCap(Enchantment enchantment, int level) {
-		if(ToolLevelingConfig.globalEnchantmentCap > 0) {
+		if (ToolLevelingConfig.globalEnchantmentCap > 0) {
 			return level >= ToolLevelingConfig.globalEnchantmentCap;
 		}
 		if (ToolLevelingConfig.enchantmentCaps.containsKey(enchantment)) {

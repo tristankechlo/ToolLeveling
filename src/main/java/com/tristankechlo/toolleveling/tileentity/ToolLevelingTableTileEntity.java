@@ -162,7 +162,7 @@ public class ToolLevelingTableTileEntity extends TileEntity implements INamedCon
 	public void handleUpdateTag(BlockState state, CompoundNBT tag) {
 		this.read(state, tag);
 	}
-	
+
 	@Override
 	public void markDirty() {
 		super.markDirty();

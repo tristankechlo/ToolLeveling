@@ -37,8 +37,9 @@ public class ButtonHelper {
 		if (enchantment.getMaxLevel() == 1) {
 			buttonEntry.status = ButtonStatus.USELESS;
 		}
-		// if whitelist is not empty, mark all enchantments as blacklisted if they are not on the whitelist
-		else if(!whitelist.isEmpty() && !whitelist.contains(enchantment)) {
+		// if whitelist is not empty, mark all enchantments as blacklisted if they are
+		// not on the whitelist
+		else if (!whitelist.isEmpty() && !whitelist.contains(enchantment)) {
 			buttonEntry.status = ButtonStatus.BLACKLISTED;
 		}
 		// only list enchantments that are not on the blacklist

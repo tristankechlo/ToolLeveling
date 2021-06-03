@@ -57,7 +57,8 @@ public class SuperEnchantCommand {
 						})))));
 	}
 
-	private static int enchant(CommandSource source, Collection<? extends Entity> targets, Enchantment enchantmentIn, int level) throws CommandSyntaxException {
+	private static int enchant(CommandSource source, Collection<? extends Entity> targets, Enchantment enchantmentIn,
+			int level) throws CommandSyntaxException {
 		int i = 0;
 
 		for (Entity entity : targets) {
@@ -66,11 +67,11 @@ public class SuperEnchantCommand {
 				ItemStack stack = livingentity.getHeldItemMainhand();
 				if (!stack.isEmpty()) {
 					if (enchantmentIn.canApply(stack) || ToolLevelingConfig.allowWrongEnchantments) {
-						if (EnchantmentHelper.areAllCompatibleWith(EnchantmentHelper.getEnchantments(stack).keySet(), enchantmentIn)
-								|| ToolLevelingConfig.allowIncompatibleEnchantments) {
+						if (EnchantmentHelper.areAllCompatibleWith(EnchantmentHelper.getEnchantments(stack).keySet(),
+								enchantmentIn) || ToolLevelingConfig.allowIncompatibleEnchantments) {
 
 							Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
-							if(enchantments.containsKey(enchantmentIn) && level == 0) {
+							if (enchantments.containsKey(enchantmentIn) && level == 0) {
 								enchantments.remove(enchantmentIn);
 							} else {
 								enchantments.put(enchantmentIn, level);
@@ -79,7 +80,8 @@ public class SuperEnchantCommand {
 							i++;
 
 						} else if (targets.size() == 1) {
-							throw INCOMPATIBLE_ENCHANTS_EXCEPTION.create(stack.getItem().getDisplayName(stack).getString());
+							throw INCOMPATIBLE_ENCHANTS_EXCEPTION
+									.create(stack.getItem().getDisplayName(stack).getString());
 						}
 					} else if (targets.size() == 1) {
 						throw WRONG_ENCHANTS_EXCEPTION.create(stack.getItem().getDisplayName(stack).getString());

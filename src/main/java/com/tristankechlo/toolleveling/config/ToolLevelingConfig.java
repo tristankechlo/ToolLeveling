@@ -38,8 +38,7 @@ public final class ToolLevelingConfig {
 	private static final Type typeCaps = new TypeToken<Map<String, Integer>>() {}.getType();
 	private static Gson GSON = new Gson();
 
-	private ToolLevelingConfig() {
-	}
+	private ToolLevelingConfig() {}
 
 	public static void setToDefaultValues() {
 		upgradeCostMultiplier = 1.0D;
@@ -67,6 +66,9 @@ public final class ToolLevelingConfig {
 
 		rawEnchantmentCaps.put(Enchantments.FIRE_PROTECTION.getRegistryName().toString(), 100);
 
+		createEnchantmentWhitelist();
+		createEnchantmentBlacklist();
+		createEnchantmentCaps();
 	}
 
 	public static JsonObject serialize(JsonObject json) {
@@ -97,20 +99,24 @@ public final class ToolLevelingConfig {
 		upgradeCostMultiplier = ConfigHelper.getInRange(json, Names.CONFIG.UPGRADE_COST_MULTIPLIER, 0.0D, 100.0D, 1.0D);
 		minUpgradeCost = ConfigHelper.getInRange(json, Names.CONFIG.MIN_UPGRADE_COST, 1, Short.MAX_VALUE, 10);
 		defaultItemWorth = ConfigHelper.getInRange(json, Names.CONFIG.DEFAULT_ITEM_WORTH, 0, Short.MAX_VALUE, 10);
-		allowIncompatibleEnchantments = ConfigHelper.getOrDefault(json, Names.CONFIG.ALLOW_INCOMPATIBLE_ENCHANTMENTS, true);
+		allowIncompatibleEnchantments = ConfigHelper.getOrDefault(json, Names.CONFIG.ALLOW_INCOMPATIBLE_ENCHANTMENTS,
+				true);
 		allowWrongEnchantments = ConfigHelper.getOrDefault(json, Names.CONFIG.ALLOW_WRONG_ENCHANTMENTS, false);
-		allowLevelingUselessEnchantments = ConfigHelper.getOrDefault(json, Names.CONFIG.ALLOW_LEVELING_USELESS_ENCHANTMENTS, false);
-		allowLevelingBreakingEnchantments = ConfigHelper.getOrDefault(json, Names.CONFIG.ALLOW_LEVELING_BREAKING_ENCHANTMENTS, false);
-		globalEnchantmentCap = ConfigHelper.getInRange(json, Names.CONFIG.GLOBAL_ENCHANTMENT_CAP, 0, Short.MAX_VALUE, 0);
+		allowLevelingUselessEnchantments = ConfigHelper.getOrDefault(json,
+				Names.CONFIG.ALLOW_LEVELING_USELESS_ENCHANTMENTS, false);
+		allowLevelingBreakingEnchantments = ConfigHelper.getOrDefault(json,
+				Names.CONFIG.ALLOW_LEVELING_BREAKING_ENCHANTMENTS, false);
+		globalEnchantmentCap = ConfigHelper.getInRange(json, Names.CONFIG.GLOBAL_ENCHANTMENT_CAP, 0, Short.MAX_VALUE,
+				0);
 
 		rawEnchantmentWhitelist = GSON.fromJson(json.get(Names.CONFIG.ENCHANTMENT_WHITELIST), typeBlacklist);
-		if(rawEnchantmentWhitelist == null) {
+		if (rawEnchantmentWhitelist == null) {
 			rawEnchantmentWhitelist = new ArrayList<>();
 		}
 		createEnchantmentWhitelist();
 
 		rawEnchantmentBlacklist = GSON.fromJson(json.get(Names.CONFIG.ENCHANTMENT_BLACKLIST), typeBlacklist);
-		if(rawEnchantmentBlacklist == null) {
+		if (rawEnchantmentBlacklist == null) {
 			rawEnchantmentBlacklist = new ArrayList<>();
 		}
 		createEnchantmentBlacklist();

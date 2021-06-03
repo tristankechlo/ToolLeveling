@@ -29,7 +29,6 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
 		this.xSize = 248;
 		this.ySize = 220;
 		// offset for player inv title
-//		this.playerInventoryTitleX -= 1;
 		this.playerInventoryTitleY += 52;
 		// offset container title
 		this.titleX -= 1;
@@ -75,7 +74,8 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
 
 	private void renderPointsSummary(MatrixStack stack) {
 		String start = "container.toolleveling.tool_leveling_table.worth.";
-		ITextComponent bonusPoints = new TranslationTextComponent(start + "bonus_points", this.container.getBonusPoints());
+		ITextComponent bonusPoints = new TranslationTextComponent(start + "bonus_points",
+				this.container.getBonusPoints());
 		ITextComponent invWorth = new TranslationTextComponent(start + "inv", this.container.getContainerWorth());
 		float left = this.guiLeft + 8;
 		this.font.func_243248_b(stack, bonusPoints, left, guiTop + 45, 4210752);

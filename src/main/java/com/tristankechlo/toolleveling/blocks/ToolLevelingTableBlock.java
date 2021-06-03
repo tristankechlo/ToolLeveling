@@ -33,13 +33,8 @@ public class ToolLevelingTableBlock extends ContainerBlock {
 			makeCuboidShape(3, 11, 3, 13, 14, 13));
 
 	public ToolLevelingTableBlock() {
-		super(Block.Properties.create(Material.IRON, MaterialColor.GRAY)
-				.hardnessAndResistance(4.5f, 1000.0f)
-				.sound(SoundType.METAL)
-				.harvestLevel(2)
-				.harvestTool(ToolType.PICKAXE)
-				.notSolid()
-				.setRequiresTool());
+		super(Block.Properties.create(Material.IRON, MaterialColor.GRAY).hardnessAndResistance(4.5f, 1000.0f)
+				.sound(SoundType.METAL).harvestLevel(2).harvestTool(ToolType.PICKAXE).notSolid().setRequiresTool());
 		this.setDefaultState(this.getDefaultState());
 	}
 

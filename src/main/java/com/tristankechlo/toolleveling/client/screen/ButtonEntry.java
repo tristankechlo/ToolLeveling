@@ -37,8 +37,8 @@ public class ButtonEntry extends ExtendedList.AbstractListEntry<ButtonEntry> {
 	}
 
 	@Override
-	public void render(MatrixStack mStack, int index, int top, int left, int entryWidth, int entryHeight,
-			int mouseX, int mouseY, boolean isMouseOver, float partialTicks) {
+	public void render(MatrixStack mStack, int index, int top, int left, int entryWidth, int entryHeight, int mouseX,
+			int mouseY, boolean isMouseOver, float partialTicks) {
 
 		this.button.x = left;
 		this.button.y = top;

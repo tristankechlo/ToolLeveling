@@ -18,10 +18,10 @@ public class ToolLevelingCommand {
 
 	public static void register(CommandDispatcher<CommandSource> dispatcher) {
 		LiteralArgumentBuilder<CommandSource> toollevelingCommand = Commands.literal("toolleveling")
-				.requires((source) -> source.hasPermissionLevel(3))
+				.requires(
+						(source) -> source.hasPermissionLevel(3))
 				.then(Commands.literal("config")
-						.then(Commands.literal("reload")
-								.executes(context -> configReload(context)))
+						.then(Commands.literal("reload").executes(context -> configReload(context)))
 						.then(Commands.literal("show")
 								.then(Commands.argument("identifier", EnumArgument.enumArgument(Identifier.class))
 										.executes(context -> configShow(context))))

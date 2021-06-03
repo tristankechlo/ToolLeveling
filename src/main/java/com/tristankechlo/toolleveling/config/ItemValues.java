@@ -20,8 +20,7 @@ public final class ItemValues {
 	private static final Type type = new TypeToken<Map<String, Integer>>() {}.getType();
 	private static Gson GSON = new Gson();
 
-	private ItemValues() {
-	}
+	private ItemValues() {}
 
 	public static void setToDefaultValues() {
 		rawItemValues = new HashMap<>();
@@ -83,6 +82,7 @@ public final class ItemValues {
 		// Decorative
 		addItem(Items.ENDER_CHEST, 140);
 		addItem(Items.BEACON, 2500);
+		createItemValues();
 	}
 
 	public static JsonObject serialize(JsonObject json) {

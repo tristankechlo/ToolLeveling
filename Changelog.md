@@ -1,5 +1,8 @@
 # Changelog
 
+### Version 1.16.5 1.2.4
+ - fix bug where configs were not synced properly to the client on the first server start
+
 ### Version 1.16.5 - 1.2.3
  - added translation ru_ru
 
