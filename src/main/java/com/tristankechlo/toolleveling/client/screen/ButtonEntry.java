@@ -17,7 +17,7 @@ public class ButtonEntry extends ExtendedList.AbstractListEntry<ButtonEntry> {
 	public Enchantment enchantment;
 	public String name;
 	public int currentLevel;
-	public int upgradeCost;
+	public long upgradeCost;
 	public ButtonStatus status;
 	private ToolLevelingTableScreen screen;
 
@@ -42,7 +42,7 @@ public class ButtonEntry extends ExtendedList.AbstractListEntry<ButtonEntry> {
 
 		this.button.x = left;
 		this.button.y = top;
-		int worth = this.screen.getContainer().getContainerWorth() + this.screen.getContainer().getBonusPoints();
+		long worth = this.screen.getContainer().getContainerWorth() + this.screen.getContainer().getBonusPoints();
 		this.button.active = (this.upgradeCost <= worth) && ButtonHelper.shouldButtonBeActive(this);
 		this.button.render(mStack, mouseX, mouseY, partialTicks);
 	}

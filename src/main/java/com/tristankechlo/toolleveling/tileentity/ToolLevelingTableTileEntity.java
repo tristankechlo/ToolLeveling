@@ -29,7 +29,7 @@ public class ToolLevelingTableTileEntity extends TileEntity implements INamedCon
 	private ITextComponent customname = new TranslationTextComponent("container." + Names.MOD_ID + ".tool_leveling_table");
 	public final ChestContents chestContents;
 	public static final int NUMBER_OF_SLOTS = 16;
-	public int bonusPoints = 0;
+	public long bonusPoints = 0;
 
 	public ToolLevelingTableTileEntity() {
 		super(ModRegistry.TLT_TILE_ENTITY.get());
@@ -50,14 +50,14 @@ public class ToolLevelingTableTileEntity extends TileEntity implements INamedCon
 		if (chestContents.getSizeInventory() != NUMBER_OF_SLOTS) {
 			throw new IllegalArgumentException("Corrupted NBT: Number of inventory slots did not match expected.");
 		}
-		this.bonusPoints = tag.getInt("BonusPoints");
+		this.bonusPoints = tag.getLong("BonusPoints");
 	}
 
 	@Override
 	public CompoundNBT write(CompoundNBT tag) {
 		super.write(tag);
 		tag.put("Inventory", chestContents.serializeNBT());
-		tag.putInt("BonusPoints", this.bonusPoints);
+		tag.putLong("BonusPoints", this.bonusPoints);
 		return tag;
 	}
 
@@ -76,8 +76,8 @@ public class ToolLevelingTableTileEntity extends TileEntity implements INamedCon
 		return worth;
 	}
 
-	public boolean decreaseInventoryWorth(int upgradeCost) {
-		int invWorth = this.getInventoryWorth() + this.bonusPoints;
+	public boolean decreaseInventoryWorth(long upgradeCost) {
+		long invWorth = this.getInventoryWorth() + this.bonusPoints;
 		if (upgradeCost > invWorth) {
 			return false;
 		}
@@ -95,27 +95,27 @@ public class ToolLevelingTableTileEntity extends TileEntity implements INamedCon
 				continue;
 			}
 //			ToolLeveling.LOGGER.debug(i);
-			int stackWorth = Utils.getStackWorth(stack);
+			long stackWorth = Utils.getStackWorth(stack);
 			if (stackWorth <= upgradeCost) {
 				upgradeCost -= stackWorth;
 				stack = ItemStack.EMPTY;
 			} else {
-				int itemWorth = Utils.getItemWorth(stack);
-				int stackAmount = stack.getCount();
+				long itemWorth = Utils.getItemWorth(stack);
+				int stackCount = stack.getCount();
 				for (int j = 0; j < stack.getCount(); j++) {
-					if (upgradeCost <= 0 || stackAmount == 0) {
+					if (upgradeCost <= 0 || stackCount == 0) {
 						break;
 					}
 					if (itemWorth > upgradeCost) {
-						stackAmount--;
+						stackCount--;
 						bonusPoints = Math.abs(upgradeCost - itemWorth);
 						upgradeCost = 0;
 					} else {
-						stackAmount--;
+						stackCount--;
 						upgradeCost -= itemWorth;
 					}
 				}
-				stack.setCount(stackAmount);
+				stack.setCount(stackCount);
 			}
 			this.chestContents.setInventorySlotContents(i, stack);
 		}

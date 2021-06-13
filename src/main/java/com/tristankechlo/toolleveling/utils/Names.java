@@ -5,7 +5,7 @@ public class Names {
 	public static final String MOD_ID = "toolleveling";
 	public static final String TABLE = "tool_leveling_table";
 
-	public static class CONFIG {
+	public static class Config {
 		public static final String UPGRADE_COST_MULTIPLIER = "upgradeCostMultiplier";
 		public static final String MIN_UPGRADE_COST = "minUpgradeCost";
 		public static final String ENCHANTMENT_BLACKLIST = "enchantmentBlacklist";

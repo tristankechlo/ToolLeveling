@@ -64,7 +64,7 @@ public class SetEnchantmentToolLevelingTable {
 				Map<Enchantment, Integer> enchantmentsMap = EnchantmentHelper.getEnchantments(enchantedItem);
 
 				if (enchantmentsMap.containsKey(msg.enchantment)) {
-					int upgradeCost = Utils.getEnchantmentUpgradeCost(msg.level);
+					long upgradeCost = Utils.getEnchantmentUpgradeCost(msg.level);
 					boolean result = table.decreaseInventoryWorth(upgradeCost);
 					if (result) {
 						enchantmentsMap.put(msg.enchantment, msg.level);

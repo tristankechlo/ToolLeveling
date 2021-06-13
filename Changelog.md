@@ -1,5 +1,9 @@
 # Changelog
 
+### Version 1.16.5 1.2.5
+ - the datatype for item values changed from integer to long
+ - the datatype for enchantment caps changed from integer to short, since the actual maximum enchantment level is a short
+
 ### Version 1.16.5 1.2.4
  - fix bug where configs were not synced properly to the client on the first server start
 

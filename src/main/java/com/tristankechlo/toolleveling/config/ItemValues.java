@@ -15,9 +15,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public final class ItemValues {
 
-	public static Map<Item, Integer> itemValues;
-	private static Map<String, Integer> rawItemValues;
-	private static final Type type = new TypeToken<Map<String, Integer>>() {}.getType();
+	public static Map<Item, Long> itemValues;
+	private static Map<String, Long> rawItemValues;
+	private static final Type type = new TypeToken<Map<String, Long>>() {}.getType();
 	private static Gson GSON = new Gson();
 
 	private ItemValues() {}
@@ -96,9 +96,9 @@ public final class ItemValues {
 
 	private static void createItemValues() {
 		itemValues = new HashMap<>();
-		for (Map.Entry<String, Integer> element : rawItemValues.entrySet()) {
+		for (Map.Entry<String, Long> element : rawItemValues.entrySet()) {
 			ResourceLocation loc = new ResourceLocation(element.getKey());
-			int worth = element.getValue();
+			long worth = element.getValue();
 			if (worth < 0) {
 				continue;
 			}
@@ -109,7 +109,7 @@ public final class ItemValues {
 		}
 	}
 
-	private static void addItem(Item item, int worth) {
+	private static void addItem(Item item, long worth) {
 		rawItemValues.put(item.getRegistryName().toString(), worth);
 	}
 

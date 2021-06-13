@@ -28,13 +28,13 @@ public class Utils {
 		return null;
 	}
 
-	public static int getEnchantmentUpgradeCost(int level) {
+	public static long getEnchantmentUpgradeCost(int level) {
 		double modifier = ToolLevelingConfig.upgradeCostMultiplier;
-		int minCost = ToolLevelingConfig.minUpgradeCost;
+		long minCost = ToolLevelingConfig.minUpgradeCost;
 		// formula: (0.0015x^4 + 300x) * modifier
 		// link to the graph
 		// https://www.desmos.com/calculator/e2mglowz80
-		return (int) Math.max(minCost, (Math.pow((0.0015 * level), 4) + (300 * level)) * modifier);
+		return (long) Math.max(minCost, (Math.pow((0.0015 * level), 4) + (300 * level)) * modifier);
 	}
 
 	public static Item getItemFromString(String name) {
@@ -45,23 +45,23 @@ public class Utils {
 		return null;
 	}
 
-	public static int getItemWorth(Item item) {
+	public static long getItemWorth(Item item) {
 		if (ItemValues.itemValues.containsKey(item)) {
 			return ItemValues.itemValues.get(item);
 		}
 		return ToolLevelingConfig.defaultItemWorth;
 	}
 
-	public static int getItemWorth(ItemStack stack) {
+	public static long getItemWorth(ItemStack stack) {
 		return Utils.getItemWorth(stack.getItem());
 	}
 
-	public static int getStackWorth(ItemStack stack) {
+	public static long getStackWorth(ItemStack stack) {
 		return stack.getCount() * Utils.getItemWorth(stack);
 	}
 
-	public static int getInventoryWorth(Inventory inv) {
-		int worth = 0;
+	public static long getInventoryWorth(Inventory inv) {
+		long worth = 0;
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			worth += Utils.getStackWorth(inv.getStackInSlot(i));
 		}

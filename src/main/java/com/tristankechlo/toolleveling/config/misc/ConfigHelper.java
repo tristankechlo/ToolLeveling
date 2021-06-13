@@ -4,7 +4,18 @@ import com.google.gson.JsonObject;
 
 public final class ConfigHelper {
 
-	private ConfigHelper() {
+	private ConfigHelper() {}
+
+	public static short getInRange(JsonObject json, String name, short min, short max, short defaultValue) {
+		try {
+			short checkMe = json.get(name).getAsShort();
+			if (checkMe >= min && checkMe <= max) {
+				return checkMe;
+			}
+		} catch (Exception e) {
+			return defaultValue;
+		}
+		return defaultValue;
 	}
 
 	public static int getInRange(JsonObject json, String name, int min, int max, int defaultValue) {

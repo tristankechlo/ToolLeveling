@@ -133,8 +133,8 @@ public class ToolLevelingTableContainer extends Container {
 		return itemstack;
 	}
 
-	public int getContainerWorth() {
-		int worth = 0;
+	public long getContainerWorth() {
+		long worth = 0;
 		for (int i = 1; i < chestContents.getSizeInventory(); i++) {
 			ItemStack stack = chestContents.getStackInSlot(i);
 			worth += Utils.getStackWorth(stack);
@@ -146,7 +146,7 @@ public class ToolLevelingTableContainer extends Container {
 		return table.getPos();
 	}
 
-	public int getBonusPoints() {
+	public long getBonusPoints() {
 		return table.bonusPoints;
 	}
 }
