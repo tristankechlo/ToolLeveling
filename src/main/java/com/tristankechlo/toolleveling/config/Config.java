@@ -1,11 +1,11 @@
-package com.tristankechlo.toolleveling.config.misc;
+package com.tristankechlo.toolleveling.config;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 import com.google.gson.JsonObject;
 
-public class Config {
+public final class Config {
 
 	private String fileName;
 	private Runnable reset;

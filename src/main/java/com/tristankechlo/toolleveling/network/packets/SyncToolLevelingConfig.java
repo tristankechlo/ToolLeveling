@@ -8,7 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.tristankechlo.toolleveling.ToolLeveling;
-import com.tristankechlo.toolleveling.config.misc.ConfigManager;
+import com.tristankechlo.toolleveling.config.ConfigManager;
 
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;

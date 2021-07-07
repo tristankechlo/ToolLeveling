@@ -18,9 +18,9 @@ public class ButtonHelper {
 		if (entry.status == ButtonStatus.NORMAL) {
 			return true;
 		} else if (entry.status == ButtonStatus.USELESS) {
-			return ToolLevelingConfig.allowLevelingUselessEnchantments;
+			return ToolLevelingConfig.allowLevelingUselessEnchantments.getValue();
 		} else if (entry.status == ButtonStatus.BREAK) {
-			return ToolLevelingConfig.allowLevelingBreakingEnchantments;
+			return ToolLevelingConfig.allowLevelingBreakingEnchantments.getValue();
 		} else if (entry.status == ButtonStatus.BLACKLISTED || entry.status == ButtonStatus.CAPPED
 				|| entry.status == ButtonStatus.MAXLEVEL) {
 			return false;
@@ -29,8 +29,8 @@ public class ButtonHelper {
 	}
 
 	public static ButtonEntry getButtonEntry(ToolLevelingTableScreen parent, Enchantment enchantment, int level) {
-		List<Enchantment> whitelist = ToolLevelingConfig.enchantmentWhitelist;
-		List<Enchantment> blacklist = ToolLevelingConfig.enchantmentBlacklist;
+		List<Enchantment> whitelist = ToolLevelingConfig.enchantmentWhitelist.getValue();
+		List<Enchantment> blacklist = ToolLevelingConfig.enchantmentBlacklist.getValue();
 		ButtonEntry buttonEntry = new ButtonEntry(parent, enchantment, level);
 
 		// leveling these enchantments will do absolutely nothing

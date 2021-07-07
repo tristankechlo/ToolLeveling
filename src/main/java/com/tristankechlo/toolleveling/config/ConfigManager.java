@@ -1,4 +1,4 @@
-package com.tristankechlo.toolleveling.config.misc;
+package com.tristankechlo.toolleveling.config;
 
 import java.io.File;
 import java.io.FileReader;
@@ -14,8 +14,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.tristankechlo.toolleveling.ToolLeveling;
-import com.tristankechlo.toolleveling.config.ItemValues;
-import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
 import com.tristankechlo.toolleveling.network.PacketHandler;
 import com.tristankechlo.toolleveling.network.packets.SyncToolLevelingConfig;
 import com.tristankechlo.toolleveling.utils.Names;

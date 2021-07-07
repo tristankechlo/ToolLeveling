@@ -66,9 +66,9 @@ public class SuperEnchantCommand {
 				LivingEntity livingentity = (LivingEntity) entity;
 				ItemStack stack = livingentity.getHeldItemMainhand();
 				if (!stack.isEmpty()) {
-					if (enchantmentIn.canApply(stack) || ToolLevelingConfig.allowWrongEnchantments) {
+					if (enchantmentIn.canApply(stack) || ToolLevelingConfig.allowWrongEnchantments.getValue()) {
 						if (EnchantmentHelper.areAllCompatibleWith(EnchantmentHelper.getEnchantments(stack).keySet(),
-								enchantmentIn) || ToolLevelingConfig.allowIncompatibleEnchantments) {
+								enchantmentIn) || ToolLevelingConfig.allowIncompatibleEnchantments.getValue()) {
 
 							Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
 							if (enchantments.containsKey(enchantmentIn) && level == 0) {

@@ -29,8 +29,8 @@ public class Utils {
 	}
 
 	public static long getEnchantmentUpgradeCost(int level) {
-		double modifier = ToolLevelingConfig.upgradeCostMultiplier;
-		long minCost = ToolLevelingConfig.minUpgradeCost;
+		double modifier = ToolLevelingConfig.upgradeCostMultiplier.getValue();
+		long minCost = ToolLevelingConfig.minUpgradeCost.getValue();
 		// formula: (0.0015x^4 + 300x) * modifier
 		// link to the graph
 		// https://www.desmos.com/calculator/e2mglowz80
@@ -49,7 +49,7 @@ public class Utils {
 		if (ItemValues.itemValues.containsKey(item)) {
 			return ItemValues.itemValues.get(item);
 		}
-		return ToolLevelingConfig.defaultItemWorth;
+		return ToolLevelingConfig.defaultItemWorth.getValue();
 	}
 
 	public static long getItemWorth(ItemStack stack) {
@@ -69,8 +69,15 @@ public class Utils {
 	}
 
 	public static boolean isEnchantmentAtCap(Enchantment enchantment, int level) {
-		if (ToolLevelingConfig.globalEnchantmentCap > 0) {
-			return level >= ToolLevelingConfig.globalEnchantmentCap;
+		short globalEnchantmentCap = ToolLevelingConfig.globalEnchantmentCap.getValue();
+		if (globalEnchantmentCap > 0) {
+			if (ToolLevelingConfig.enchantmentCaps.containsKey(enchantment)) {
+				short enchantmentCap = ToolLevelingConfig.enchantmentCaps.get(enchantment);
+				if (enchantmentCap < globalEnchantmentCap) {
+					return level >= enchantmentCap;
+				}
+			}
+			return level >= globalEnchantmentCap;
 		}
 		if (ToolLevelingConfig.enchantmentCaps.containsKey(enchantment)) {
 			return (level >= ToolLevelingConfig.enchantmentCaps.get(enchantment));

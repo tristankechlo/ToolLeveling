@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.tristankechlo.toolleveling.client.ClientSetup;
-import com.tristankechlo.toolleveling.config.misc.ConfigManager;
+import com.tristankechlo.toolleveling.config.ConfigManager;
 import com.tristankechlo.toolleveling.init.ModRegistry;
 import com.tristankechlo.toolleveling.network.PacketHandler;
 import com.tristankechlo.toolleveling.utils.Names;

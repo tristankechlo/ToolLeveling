@@ -3,7 +3,7 @@ package com.tristankechlo.toolleveling.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import com.tristankechlo.toolleveling.config.misc.ConfigManager;
+import com.tristankechlo.toolleveling.config.ConfigManager;
 import com.tristankechlo.toolleveling.utils.Names;
 
 import net.minecraft.command.CommandSource;
