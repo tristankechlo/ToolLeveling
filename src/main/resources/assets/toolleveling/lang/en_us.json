@@ -4,6 +4,7 @@
 	"block.toolleveling.tool_leveling_table" : "Tool Leveling Table",
 	
 	"screen.toolleveling.tool_leveling_table" : "Tool Leveling Table",
+	"screen.toolleveling.item_values" : "Item Values",
 	
 	"container.toolleveling.tool_leveling_table" : "Tool Leveling Table",
 	"container.toolleveling.tool_leveling_table.current_level" : "Current Level: %s",
