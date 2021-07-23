@@ -1,16 +1,21 @@
 # Changelog
 
-### Version 1.17.1 1.2.5
+### Version 1.17.1 - 1.2.6
+ - improve handling of items through hoppers
+     - insert only works into payment slots
+     - but hoppers can remove items from all slots, even the top slot
+
+### Version 1.17.1 - 1.2.5
  - port to 1.17.1
 
-### Version 1.16.5 1.2.5
+### Version 1.16.5 - 1.2.5
  - the datatype for item values changed from integer to long
  - the datatype for enchantment caps changed from integer to short, since the actual maximum enchantment level is a short
  - globalEnchantmentCap and enchantmentCaps can now be used together
      - if the enchantmentCap for one enchantment is lower than the globalEnchantmentCap, the enchantmentCap for this enchantment will be used
      - otherwise the globalEnchantmentCap will be used
 
-### Version 1.16.5 1.2.4
+### Version 1.16.5 - 1.2.4
  - fix bug where configs were not synced properly to the client on the first server start
 
 ### Version 1.16.5 - 1.2.3

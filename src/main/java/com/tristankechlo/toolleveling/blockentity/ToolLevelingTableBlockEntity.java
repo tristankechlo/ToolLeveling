@@ -1,11 +1,14 @@
 package com.tristankechlo.toolleveling.blockentity;
 
+import java.util.stream.IntStream;
+
 import com.tristankechlo.toolleveling.init.ModRegistry;
 import com.tristankechlo.toolleveling.menu.ToolLevelingTableMenu;
 import com.tristankechlo.toolleveling.utils.Names;
 import com.tristankechlo.toolleveling.utils.Utils;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
@@ -13,18 +16,21 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity {
+public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer {
 
 	private Component customname = new TranslatableComponent("container." + Names.MOD_ID + ".tool_leveling_table");
 	private NonNullList<ItemStack> items = NonNullList.withSize(NUMBER_OF_SLOTS, ItemStack.EMPTY);
 	public static final int NUMBER_OF_SLOTS = 16;
+	public static final int[] SLOTS = IntStream.range(1, NUMBER_OF_SLOTS).toArray();
 	public long bonusPoints = 0;
 
 	public ToolLevelingTableBlockEntity(BlockPos pos, BlockState state) {
@@ -42,6 +48,7 @@ public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity {
 	@Override
 	public void load(CompoundTag tag) {
 		super.load(tag);
+		this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
 		ContainerHelper.loadAllItems(tag, this.items);
 		this.bonusPoints = tag.getLong("BonusPoints");
 
@@ -56,6 +63,9 @@ public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity {
 	}
 
 	public ItemStack getStackToEnchant() {
+		if (this.items.get(0).is(Items.AIR)) {
+			return ItemStack.EMPTY;
+		}
 		return this.items.get(0);
 	}
 
@@ -139,11 +149,8 @@ public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity {
 
 	@Override
 	public ItemStack removeItem(int p_18942_, int p_18943_) {
-		ItemStack itemstack = ContainerHelper.removeItem(this.items, p_18942_, p_18943_);
-		if (!itemstack.isEmpty()) {
-			this.setChanged();
-		}
-		return itemstack;
+		this.setChanged();
+		return ContainerHelper.removeItem(this.items, p_18942_, p_18943_);
 	}
 
 	@Override
@@ -202,6 +209,7 @@ public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity {
 	@Override
 	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
 		CompoundTag tag = pkt.getTag();
+		this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
 		ContainerHelper.loadAllItems(tag, this.items);
 		this.bonusPoints = tag.getLong("BonusPoints");
 	}
@@ -217,8 +225,29 @@ public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity {
 	@Override
 	public void handleUpdateTag(CompoundTag tag) {
 		super.handleUpdateTag(tag);
+		this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
 		ContainerHelper.loadAllItems(tag, this.items);
 		this.bonusPoints = tag.getLong("BonusPoints");
+	}
+
+	@Override
+	public int[] getSlotsForFace(Direction side) {
+		return SLOTS;
+	}
+
+	@Override
+	public boolean canPlaceItemThroughFace(int index, ItemStack stack, Direction side) {
+		return (index == 0) ? false : this.canPlaceItem(index, stack);
+	}
+
+	@Override
+	public boolean canPlaceItem(int index, ItemStack stack) {
+		return index > 0 && !stack.isEnchanted() && !stack.isDamageableItem();
+	}
+
+	@Override
+	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction side) {
+		return this.canPlaceItemThroughFace(index, stack, side);
 	}
 
 }
