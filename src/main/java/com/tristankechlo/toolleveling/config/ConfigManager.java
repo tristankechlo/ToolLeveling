@@ -18,10 +18,10 @@ import com.tristankechlo.toolleveling.network.PacketHandler;
 import com.tristankechlo.toolleveling.network.packets.SyncToolLevelingConfig;
 import com.tristankechlo.toolleveling.utils.Names;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.fml.loading.FMLPaths;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.fmllegacy.network.NetworkDirection;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
 
 public final class ConfigManager {
 
@@ -133,13 +133,13 @@ public final class ConfigManager {
 		}
 	}
 
-	public static void syncAllConfigsToOneClient(ServerPlayerEntity player) {
+	public static void syncAllConfigsToOneClient(ServerPlayer player) {
 		for (Map.Entry<String, Config> element : CONFIGS.entrySet()) {
 			Config config = element.getValue();
 			String identifier = element.getKey();
 			JsonObject json = config.serialize(new JsonObject());
 			PacketHandler.INSTANCE.sendTo(new SyncToolLevelingConfig(identifier, json),
-					player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
+					player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
 		}
 	}
 

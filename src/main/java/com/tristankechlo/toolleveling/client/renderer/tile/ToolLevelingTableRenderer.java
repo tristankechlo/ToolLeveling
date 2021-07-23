@@ -1,47 +1,45 @@
 package com.tristankechlo.toolleveling.client.renderer.tile;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.tristankechlo.toolleveling.tileentity.ToolLevelingTableTileEntity;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
+import com.tristankechlo.toolleveling.blockentity.ToolLevelingTableBlockEntity;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class ToolLevelingTableRenderer extends TileEntityRenderer<ToolLevelingTableTileEntity> {
+public class ToolLevelingTableRenderer implements BlockEntityRenderer<ToolLevelingTableBlockEntity> {
 
-	public ToolLevelingTableRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
-		super(rendererDispatcherIn);
-	}
+	public ToolLevelingTableRenderer(BlockEntityRendererProvider.Context rendererDispatcherIn) {}
 
 	@Override
-	public void render(ToolLevelingTableTileEntity tileEntityIn, float partialTicks, MatrixStack matrixStackIn,
-			IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+	public void render(ToolLevelingTableBlockEntity tileEntityIn, float partialTicks, PoseStack matrixStackIn,
+			MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
 
 		ItemStack stack = tileEntityIn.getStackToEnchant();
 		if (!stack.isEmpty()) {
-			matrixStackIn.push();
+			matrixStackIn.pushPose();
 			matrixStackIn.translate(0.5D, 0.89D, 0.5D);
 			matrixStackIn.scale(0.5F, 0.5F, 0.5F);
-			matrixStackIn.rotate(new Quaternion(Vector3f.XN, 1.5707F, false));
-			renderItem(stack, partialTicks, matrixStackIn, bufferIn, combinedLightIn);
-			matrixStackIn.pop();
+			matrixStackIn.mulPose(new Quaternion(Vector3f.XN, 1.5707F, false));
+			renderItem(stack, partialTicks, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+			matrixStackIn.popPose();
 
 		}
 	}
 
-	private void renderItem(ItemStack stack, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn,
-			int combinedLightIn) {
-		Minecraft.getInstance().getItemRenderer().renderItem(stack, TransformType.FIXED, combinedLightIn,
-				OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn);
+	private void renderItem(ItemStack stack, float partialTicks, PoseStack pstack, MultiBufferSource bufferIn,
+			int combinedLightIn, int combinedOverlayIn) {
+		Minecraft.getInstance().getItemRenderer().renderStatic(stack, TransformType.FIXED, combinedLightIn,
+				combinedOverlayIn, pstack, bufferIn, OverlayTexture.NO_OVERLAY);
 	}
 
 }

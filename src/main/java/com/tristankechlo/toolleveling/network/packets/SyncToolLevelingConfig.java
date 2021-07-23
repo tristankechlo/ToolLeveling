@@ -10,8 +10,8 @@ import com.google.gson.JsonParser;
 import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.config.ConfigManager;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 public class SyncToolLevelingConfig {
 
@@ -23,14 +23,14 @@ public class SyncToolLevelingConfig {
 		this.json = json;
 	}
 
-	public static void encode(SyncToolLevelingConfig msg, PacketBuffer buffer) {
-		buffer.writeString(msg.identifier);
-		buffer.writeString(new Gson().toJson(msg.json));
+	public static void encode(SyncToolLevelingConfig msg, FriendlyByteBuf buffer) {
+		buffer.writeUtf(msg.identifier);
+		buffer.writeUtf(new Gson().toJson(msg.json));
 	}
 
-	public static SyncToolLevelingConfig decode(PacketBuffer buffer) {
-		String identifier = buffer.readString();
-		JsonObject json = new JsonParser().parse(buffer.readString()).getAsJsonObject();
+	public static SyncToolLevelingConfig decode(FriendlyByteBuf buffer) {
+		String identifier = buffer.readUtf();
+		JsonObject json = new JsonParser().parse(buffer.readUtf()).getAsJsonObject();
 		return new SyncToolLevelingConfig(identifier, json);
 	}
 

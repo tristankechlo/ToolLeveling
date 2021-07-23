@@ -9,7 +9,7 @@ import com.tristankechlo.toolleveling.init.ModRegistry;
 import com.tristankechlo.toolleveling.network.PacketHandler;
 import com.tristankechlo.toolleveling.utils.Names;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -48,7 +48,7 @@ public class ToolLeveling {
 	@SubscribeEvent
 	public void onPlayerJoinEvent(final PlayerLoggedInEvent event) {
 		// send server-config to player
-		ConfigManager.syncAllConfigsToOneClient((ServerPlayerEntity) event.getPlayer());
+		ConfigManager.syncAllConfigsToOneClient((ServerPlayer) event.getPlayer());
 	}
 
 }

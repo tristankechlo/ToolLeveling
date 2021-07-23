@@ -2,16 +2,16 @@ package com.tristankechlo.toolleveling.client.screen;
 
 import java.util.Map;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.tristankechlo.toolleveling.utils.ButtonHelper;
 
-import net.minecraft.client.gui.widget.list.ExtendedList;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.client.gui.components.ObjectSelectionList;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
-public class ButtonListWidget extends ExtendedList<ButtonEntry> {
+public class ButtonListWidget extends ObjectSelectionList<ButtonEntry> {
 
 	private ToolLevelingTableScreen screen;
 	private final int listWidth;
@@ -21,18 +21,23 @@ public class ButtonListWidget extends ExtendedList<ButtonEntry> {
 		this.screen = screen;
 		this.listWidth = listWidth;
 		// disable rendering of the dirt background
-		this.func_244605_b(false);
-		this.func_244606_c(false);
+//		this.func_244605_b(false);
+//		this.func_244606_c(false);
+		this.setRenderBackground(false);
+		this.setRenderTopAndBottom(false);
 		this.setRenderHeader(false, 0);
 	}
 
 	public void refreshList() {
 		this.clearEntries();
-		ItemStack stack = this.screen.getContainer().getSlot(0).getStack();
+		ItemStack stack = this.screen.getMenu().getSlot(0).getItem();
+		long worth = this.screen.getMenu().getContainerWorth() + this.screen.getMenu().getBonusPoints();
 		if (!stack.getItem().equals(Items.AIR)) {
 			Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
 			for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
-				this.addEntry(ButtonHelper.getButtonEntry(this.screen, entry.getKey(), entry.getValue()));
+				ButtonEntry buttonEntry = ButtonHelper.getButtonEntry(this.screen, entry.getKey(), entry.getValue());
+				buttonEntry.button.active = (buttonEntry.upgradeCost <= worth) && ButtonHelper.shouldButtonBeActive(buttonEntry);
+				this.addEntry(buttonEntry);
 			}
 		}
 	}
@@ -48,7 +53,7 @@ public class ButtonListWidget extends ExtendedList<ButtonEntry> {
 	}
 
 	@Override
-	protected void renderBackground(MatrixStack matrixStack) {
+	protected void renderBackground(PoseStack matrixStack) {
 		// background of the scroll view
 		this.fillGradient(matrixStack, x0 - 1, y0 - 1, x1, y1 + 2, -10066330, -10066330);
 	}

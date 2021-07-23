@@ -16,9 +16,9 @@ import com.tristankechlo.toolleveling.config.values.number.DoubleValue;
 import com.tristankechlo.toolleveling.config.values.number.LongValue;
 import com.tristankechlo.toolleveling.config.values.number.ShortValue;
 
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public final class ToolLevelingConfig {
@@ -137,8 +137,8 @@ public final class ToolLevelingConfig {
 		enchantments.add(Enchantments.CHANNELING);
 		enchantments.add(Enchantments.BINDING_CURSE);
 		enchantments.add(Enchantments.VANISHING_CURSE);
-		enchantments.add(Enchantments.FLAME);
-		enchantments.add(Enchantments.INFINITY);
+		enchantments.add(Enchantments.FLAMING_ARROWS);
+		enchantments.add(Enchantments.INFINITY_ARROWS);
 		enchantments.add(Enchantments.MULTISHOT);
 		enchantments.add(Enchantments.SILK_TOUCH);
 		return enchantments;

@@ -7,10 +7,10 @@ import com.tristankechlo.toolleveling.client.screen.ButtonEntry;
 import com.tristankechlo.toolleveling.client.screen.ToolLevelingTableScreen;
 import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
 
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.enchantment.Enchantment;
 
 public class ButtonHelper {
 
@@ -65,36 +65,36 @@ public class ButtonHelper {
 		return buttonEntry;
 	}
 
-	public static ITextComponent getButtonText(ButtonEntry entry) {
-		return new TranslationTextComponent(entry.name).mergeStyle(getButtonTextFormatting(entry));
+	public static Component getButtonText(ButtonEntry entry) {
+		return new TranslatableComponent(entry.name).withStyle(getButtonTextFormatting(entry));
 	}
 
-	public static List<ITextComponent> getButtonToolTips(ButtonEntry data) {
-		List<ITextComponent> tooltip = new ArrayList<>();
-		tooltip.add(new TranslationTextComponent(data.name).mergeStyle(TextFormatting.AQUA));
+	public static List<Component> getButtonToolTips(ButtonEntry data) {
+		List<Component> tooltip = new ArrayList<>();
+		tooltip.add(new TranslatableComponent(data.name).withStyle(ChatFormatting.AQUA));
 		final String start = "container.toolleveling.tool_leveling_table";
 		if (ButtonHelper.shouldButtonBeActive(data)) {
-			tooltip.add(new TranslationTextComponent(start + ".current_level", data.currentLevel)
-					.mergeStyle(TextFormatting.DARK_GRAY));
-			tooltip.add(new TranslationTextComponent(start + ".next_level", (data.currentLevel + 1))
-					.mergeStyle(TextFormatting.DARK_GRAY));
-			tooltip.add(new TranslationTextComponent(start + ".cost", data.upgradeCost)
-					.mergeStyle(TextFormatting.DARK_GRAY));
+			tooltip.add(new TranslatableComponent(start + ".current_level", data.currentLevel)
+					.withStyle(ChatFormatting.DARK_GRAY));
+			tooltip.add(new TranslatableComponent(start + ".next_level", (data.currentLevel + 1))
+					.withStyle(ChatFormatting.DARK_GRAY));
+			tooltip.add(
+					new TranslatableComponent(start + ".cost", data.upgradeCost).withStyle(ChatFormatting.DARK_GRAY));
 		}
 		if (data.status != ButtonStatus.NORMAL) {
-			tooltip.add(new TranslationTextComponent(start + ".error." + data.status.toString().toLowerCase())
-					.mergeStyle(ButtonHelper.getButtonTextFormatting(data)));
+			tooltip.add(new TranslatableComponent(start + ".error." + data.status.toString().toLowerCase())
+					.withStyle(ButtonHelper.getButtonTextFormatting(data)));
 		}
 		return tooltip;
 	}
 
-	public static TextFormatting getButtonTextFormatting(ButtonEntry entry) {
-		TextFormatting format = TextFormatting.RESET;
+	public static ChatFormatting getButtonTextFormatting(ButtonEntry entry) {
+		ChatFormatting format = ChatFormatting.RESET;
 		if (entry.status != ButtonStatus.NORMAL) {
-			format = TextFormatting.DARK_RED;
+			format = ChatFormatting.DARK_RED;
 		}
 		if (entry.status == ButtonStatus.USELESS) {
-			format = TextFormatting.YELLOW;
+			format = ChatFormatting.YELLOW;
 		}
 		return format;
 	}

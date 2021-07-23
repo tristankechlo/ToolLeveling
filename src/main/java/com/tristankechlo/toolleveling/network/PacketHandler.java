@@ -4,9 +4,9 @@ import com.tristankechlo.toolleveling.network.packets.SetEnchantmentToolLeveling
 import com.tristankechlo.toolleveling.network.packets.SyncToolLevelingConfig;
 import com.tristankechlo.toolleveling.utils.Names;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.fmllegacy.network.NetworkRegistry;
+import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
 
 public class PacketHandler {
 

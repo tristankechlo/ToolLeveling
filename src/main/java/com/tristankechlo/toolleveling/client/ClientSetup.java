@@ -5,9 +5,9 @@ import com.tristankechlo.toolleveling.client.screen.ToolLevelingTableScreen;
 import com.tristankechlo.toolleveling.init.ModRegistry;
 import com.tristankechlo.toolleveling.utils.Names;
 
-import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -15,7 +15,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 public class ClientSetup {
 
 	public static void init(final FMLClientSetupEvent event) {
-		ScreenManager.registerFactory(ModRegistry.TLT_CONTAINER.get(), ToolLevelingTableScreen::new);
-		ClientRegistry.bindTileEntityRenderer(ModRegistry.TLT_TILE_ENTITY.get(), ToolLevelingTableRenderer::new);
+		MenuScreens.register(ModRegistry.TLT_CONTAINER.get(), ToolLevelingTableScreen::new);
+		BlockEntityRenderers.register(ModRegistry.TLT_TILE_ENTITY.get(), ToolLevelingTableRenderer::new);
 	}
 }

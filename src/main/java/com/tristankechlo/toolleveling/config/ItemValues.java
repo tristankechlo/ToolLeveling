@@ -8,9 +8,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public final class ItemValues {
@@ -41,7 +41,7 @@ public final class ItemValues {
 		addItem(Items.NETHERITE_INGOT, 200);
 		addItem(Items.NETHERITE_SCRAP, 50);
 		addItem(Items.ANCIENT_DEBRIS, 50);
-		addItem(Items.NETHERITE_BRICKS, 1800);
+		addItem(Items.NETHERITE_BLOCK, 1800);
 		addItem(Items.LAPIS_LAZULI, 8);
 		addItem(Items.LAPIS_ORE, 120);
 		addItem(Items.LAPIS_BLOCK, 70);
