@@ -10,7 +10,10 @@ import com.tristankechlo.toolleveling.utils.Utils;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.list.ExtendedList;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class ButtonEntry extends ExtendedList.AbstractListEntry<ButtonEntry> {
 
 	public Button button;

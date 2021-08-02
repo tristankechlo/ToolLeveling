@@ -5,6 +5,7 @@
 	
 	"screen.toolleveling.tool_leveling_table" : "Tool Leveling Table",
 	"screen.toolleveling.item_values" : "Item Values",
+	"screen.toolleveling.item_value_worth" : "Item-Worth: %s",
 	
 	"container.toolleveling.tool_leveling_table" : "Tool Leveling Table",
 	"container.toolleveling.tool_leveling_table.current_level" : "Current Level: %s",
