@@ -20,7 +20,7 @@ public class OpenScreenPacket {
 
 	public static void handle(OpenScreenPacket msg, Supplier<NetworkEvent.Context> context) {
 		context.get().enqueueWork(() -> {
-			Minecraft.getInstance().displayGuiScreen(new ItemValueScreen());
+			Minecraft.getInstance().setScreen(new ItemValueScreen());
 		});
 		context.get().setPacketHandled(true);
 	}

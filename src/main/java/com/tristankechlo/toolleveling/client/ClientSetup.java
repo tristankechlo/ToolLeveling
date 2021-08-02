@@ -15,7 +15,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 public class ClientSetup {
 
 	public static void init(final FMLClientSetupEvent event) {
-		ScreenManager.registerFactory(ModRegistry.TLT_CONTAINER.get(), ToolLevelingTableScreen::new);
+		ScreenManager.register(ModRegistry.TLT_CONTAINER.get(), ToolLevelingTableScreen::new);
 		ClientRegistry.bindTileEntityRenderer(ModRegistry.TLT_TILE_ENTITY.get(), ToolLevelingTableRenderer::new);
 	}
 }

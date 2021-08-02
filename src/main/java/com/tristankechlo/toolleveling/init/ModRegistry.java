@@ -24,7 +24,7 @@ public class ModRegistry {
 	public static final DeferredRegister<ContainerType<?>> CONTAINER_TYPES = DeferredRegister.create(ForgeRegistries.CONTAINERS, Names.MOD_ID);
 	public static final DeferredRegister<TileEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, Names.MOD_ID);
 
-	private static final Properties std_properties = new Item.Properties().group(ItemGroup.DECORATIONS).maxStackSize(64);
+	private static final Properties std_properties = new Item.Properties().tab(ItemGroup.TAB_DECORATIONS).stacksTo(64);
 
 	public static final RegistryObject<Block> TLT_BLOCK = BLOCKS.register(Names.TABLE, () -> new ToolLevelingTableBlock());
 
@@ -34,5 +34,5 @@ public class ModRegistry {
 			.register(Names.TABLE, () -> IForgeContainerType.create(ToolLevelingTableContainer::createForClientSide));
 
 	public static final RegistryObject<TileEntityType<ToolLevelingTableTileEntity>> TLT_TILE_ENTITY = TILE_ENTITIES
-			.register(Names.TABLE,() -> TileEntityType.Builder.create(ToolLevelingTableTileEntity::new, TLT_BLOCK.get()).build(null));
+			.register(Names.TABLE,() -> TileEntityType.Builder.of(ToolLevelingTableTileEntity::new, TLT_BLOCK.get()).build(null));
 }

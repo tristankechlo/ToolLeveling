@@ -33,42 +33,42 @@ public class ToolLevelingTableTileEntity extends TileEntity implements INamedCon
 
 	public ToolLevelingTableTileEntity() {
 		super(ModRegistry.TLT_TILE_ENTITY.get());
-		chestContents = ChestContents.createForTileEntity(NUMBER_OF_SLOTS, this::canPlayerAccess, this::markDirty);
+		chestContents = ChestContents.createForTileEntity(NUMBER_OF_SLOTS, this::canPlayerAccess, this::setChanged);
 	}
 
 	public boolean canPlayerAccess(PlayerEntity player) {
-		if (this.world.getTileEntity(this.pos) != this) {
+		if (this.level.getBlockEntity(this.worldPosition) != this) {
 			return false;
 		}
-		return player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) < (8.0 * 8.0);
+		return player.distanceToSqr(worldPosition.getX() + 0.5D, worldPosition.getY() + 0.5D, worldPosition.getZ() + 0.5D) < (8.0 * 8.0);
 	}
 
 	@Override
-	public void read(BlockState state, CompoundNBT tag) {
-		super.read(state, tag);
+	public void load(BlockState state, CompoundNBT tag) {
+		super.load(state, tag);
 		chestContents.deserializeNBT(tag.getCompound("Inventory"));
-		if (chestContents.getSizeInventory() != NUMBER_OF_SLOTS) {
+		if (chestContents.getContainerSize() != NUMBER_OF_SLOTS) {
 			throw new IllegalArgumentException("Corrupted NBT: Number of inventory slots did not match expected.");
 		}
 		this.bonusPoints = tag.getLong("BonusPoints");
 	}
 
 	@Override
-	public CompoundNBT write(CompoundNBT tag) {
-		super.write(tag);
+	public CompoundNBT save(CompoundNBT tag) {
+		super.save(tag);
 		tag.put("Inventory", chestContents.serializeNBT());
 		tag.putLong("BonusPoints", this.bonusPoints);
 		return tag;
 	}
 
 	public ItemStack getStackToEnchant() {
-		return this.chestContents.getStackInSlot(0);
+		return this.chestContents.getItem(0);
 	}
 
 	public int getInventoryWorth() {
 		int worth = 0;
-		for (int i = 1; i < this.chestContents.getSizeInventory(); i++) {
-			ItemStack stack = this.chestContents.getStackInSlot(i);
+		for (int i = 1; i < this.chestContents.getContainerSize(); i++) {
+			ItemStack stack = this.chestContents.getItem(i);
 			if (!stack.isEmpty()) {
 				worth += Utils.getStackWorth(stack);
 			}
@@ -84,13 +84,13 @@ public class ToolLevelingTableTileEntity extends TileEntity implements INamedCon
 		// enough points stored as bonusPoints
 		if (upgradeCost <= bonusPoints) {
 			bonusPoints -= upgradeCost;
-			this.markDirty();
+			this.setChanged();
 			return true;
 		}
 		upgradeCost -= bonusPoints;
 		bonusPoints = 0;
-		for (int i = 1; i < this.chestContents.getSizeInventory(); i++) {
-			ItemStack stack = this.chestContents.getStackInSlot(i).copy();
+		for (int i = 1; i < this.chestContents.getContainerSize(); i++) {
+			ItemStack stack = this.chestContents.getItem(i).copy();
 			if (stack.isEmpty() || upgradeCost <= 0) {
 				continue;
 			}
@@ -117,14 +117,14 @@ public class ToolLevelingTableTileEntity extends TileEntity implements INamedCon
 				}
 				stack.setCount(stackCount);
 			}
-			this.chestContents.setInventorySlotContents(i, stack);
+			this.chestContents.setItem(i, stack);
 		}
-		this.markDirty();
+		this.setChanged();
 		return true;
 	}
 
 	public void dropAllContents(World world, BlockPos blockPos) {
-		InventoryHelper.dropInventoryItems(world, blockPos, chestContents);
+		InventoryHelper.dropContents(world, blockPos, chestContents);
 	}
 
 	@Override
@@ -135,38 +135,38 @@ public class ToolLevelingTableTileEntity extends TileEntity implements INamedCon
 	@Nullable
 	@Override
 	public Container createMenu(int windowID, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-		return ToolLevelingTableContainer.createForServerSide(windowID, playerInventory, chestContents, pos);
+		return ToolLevelingTableContainer.createForServerSide(windowID, playerInventory, chestContents, worldPosition);
 	}
 
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
 		CompoundNBT nbt = new CompoundNBT();
-		write(nbt);
-		return new SUpdateTileEntityPacket(this.getPos(), 42, nbt);
+		save(nbt);
+		return new SUpdateTileEntityPacket(this.getBlockPos(), 42, nbt);
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-		BlockState blockState = world.getBlockState(pos);
-		this.read(blockState, pkt.getNbtCompound());
+		BlockState blockState = level.getBlockState(worldPosition);
+		this.load(blockState, pkt.getTag());
 	}
 
 	@Override
 	public CompoundNBT getUpdateTag() {
 		CompoundNBT nbt = new CompoundNBT();
-		write(nbt);
+		save(nbt);
 		return nbt;
 	}
 
 	@Override
 	public void handleUpdateTag(BlockState state, CompoundNBT tag) {
-		this.read(state, tag);
+		this.load(state, tag);
 	}
 
 	@Override
-	public void markDirty() {
-		super.markDirty();
-		this.world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 3);
+	public void setChanged() {
+		super.setChanged();
+		this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
 	}
 
 }

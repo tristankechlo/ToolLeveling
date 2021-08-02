@@ -15,13 +15,13 @@ public final class ScreenCommand {
 
 	public static void register(CommandDispatcher<CommandSource> dispatcher) {
 		dispatcher.register(Commands.literal("screen").requires((player) -> {
-			return player.hasPermissionLevel(3);
+			return player.hasPermission(3);
 		}).executes((context) -> showScreen(context)));
 	}
 
 	private static int showScreen(CommandContext<CommandSource> context) throws CommandSyntaxException {
-		ServerPlayerEntity player = context.getSource().asPlayer();
-		PacketHandler.INSTANCE.sendTo(new OpenScreenPacket(), player.connection.getNetworkManager(),
+		ServerPlayerEntity player = context.getSource().getPlayerOrException();
+		PacketHandler.INSTANCE.sendTo(new OpenScreenPacket(), player.connection.getConnection(),
 				NetworkDirection.PLAY_TO_CLIENT);
 		return 1;
 	}

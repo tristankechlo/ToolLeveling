@@ -24,14 +24,14 @@ public class ButtonEntry extends ExtendedList.AbstractListEntry<ButtonEntry> {
 	public ButtonEntry(ToolLevelingTableScreen screen, Enchantment enchantment, int level) {
 		this.enchantment = enchantment;
 		this.currentLevel = level;
-		this.name = enchantment.getName();
+		this.name = enchantment.getDescriptionId();
 		this.status = ButtonStatus.NORMAL;
 		this.screen = screen;
 		this.upgradeCost = Utils.getEnchantmentUpgradeCost(level + 1);
 
 		this.button = new Button(0, 0, 121, 20, ButtonHelper.getButtonText(this), (b) -> {
 			// send new data to server
-			PacketHandler.INSTANCE.sendToServer(new SetEnchantmentToolLevelingTable(this.screen.getContainer().getPos(),
+			PacketHandler.INSTANCE.sendToServer(new SetEnchantmentToolLevelingTable(this.screen.getMenu().getPos(),
 					this.enchantment, this.currentLevel + 1));
 		});
 	}
@@ -42,7 +42,7 @@ public class ButtonEntry extends ExtendedList.AbstractListEntry<ButtonEntry> {
 
 		this.button.x = left;
 		this.button.y = top;
-		long worth = this.screen.getContainer().getContainerWorth() + this.screen.getContainer().getBonusPoints();
+		long worth = this.screen.getMenu().getContainerWorth() + this.screen.getMenu().getBonusPoints();
 		this.button.active = (this.upgradeCost <= worth) && ButtonHelper.shouldButtonBeActive(this);
 		this.button.render(mStack, mouseX, mouseY, partialTicks);
 	}

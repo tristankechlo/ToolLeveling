@@ -139,7 +139,7 @@ public final class ConfigManager {
 			String identifier = element.getKey();
 			JsonObject json = config.serialize(new JsonObject());
 			PacketHandler.INSTANCE.sendTo(new SyncToolLevelingConfig(identifier, json),
-					player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
+					player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
 		}
 	}
 

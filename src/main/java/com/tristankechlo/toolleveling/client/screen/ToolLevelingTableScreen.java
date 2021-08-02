@@ -26,19 +26,19 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
 	public ToolLevelingTableScreen(ToolLevelingTableContainer container, PlayerInventory inv, ITextComponent name) {
 		super(container, inv, name);
 		// texture size
-		this.xSize = 248;
-		this.ySize = 220;
+		this.imageWidth = 248;
+		this.imageHeight = 220;
 		// offset for player inv title
-		this.playerInventoryTitleY += 52;
+		this.inventoryLabelY += 52;
 		// offset container title
-		this.titleX -= 1;
+		this.titleLabelX -= 1;
 	}
 
 	@Override
 	protected void init() {
 		super.init();
-		this.buttonList = new ButtonListWidget(this, 136, this.guiTop + 23, this.guiTop + 118);
-		this.buttonList.setLeftPos(this.guiLeft + 105);
+		this.buttonList = new ButtonListWidget(this, 136, this.topPos + 23, this.topPos + 118);
+		this.buttonList.setLeftPos(this.leftPos + 105);
 		this.children.add(buttonList);
 
 	}
@@ -58,14 +58,14 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
 		this.renderBackground(matrixStack); // render translucent grey background
 		this.buttonList.render(matrixStack, mouseX, mouseY, partialTicks); // render button scroll view
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
-		this.renderHoveredTooltip(matrixStack, mouseX, mouseY); // render item toolltips
+		this.renderTooltip(matrixStack, mouseX, mouseY); // render item toolltips
 
 		// render button tooltips
-		for (int i = 0; i < this.buttonList.getEventListeners().size(); i++) {
-			ButtonEntry entry = this.buttonList.getEventListeners().get(i);
+		for (int i = 0; i < this.buttonList.children().size(); i++) {
+			ButtonEntry entry = this.buttonList.children().get(i);
 			if (entry.button.isHovered()) {
 				List<ITextComponent> tooltip = ButtonHelper.getButtonToolTips(entry);
-				this.func_243308_b(matrixStack, tooltip, mouseX, mouseY);
+				this.renderComponentTooltip(matrixStack, tooltip, mouseX, mouseY);
 			}
 		}
 
@@ -75,11 +75,11 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
 	private void renderPointsSummary(MatrixStack stack) {
 		String start = "container.toolleveling.tool_leveling_table.worth.";
 		ITextComponent bonusPoints = new TranslationTextComponent(start + "bonus_points",
-				this.container.getBonusPoints());
-		ITextComponent invWorth = new TranslationTextComponent(start + "inv", this.container.getContainerWorth());
-		float left = this.guiLeft + 8;
-		this.font.func_243248_b(stack, bonusPoints, left, guiTop + 45, 4210752);
-		this.font.func_243248_b(stack, invWorth, left, guiTop + 56, 4210752);
+				this.menu.getBonusPoints());
+		ITextComponent invWorth = new TranslationTextComponent(start + "inv", this.menu.getContainerWorth());
+		float left = this.leftPos + 8;
+		this.font.draw(stack, bonusPoints, left, topPos + 45, 4210752);
+		this.font.draw(stack, invWorth, left, topPos + 56, 4210752);
 	}
 
 	@Override
@@ -96,10 +96,10 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
 
 	@SuppressWarnings("deprecation")
 	@Override
-	protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mX, int mY) {
+	protected void renderBg(MatrixStack matrixStack, float partialTicks, int mX, int mY) {
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.minecraft.getTextureManager().bindTexture(GUI_TEXTURE);
-		blit(matrixStack, this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize, this.xSize, this.ySize);
+		this.minecraft.getTextureManager().bind(GUI_TEXTURE);
+		blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight, this.imageWidth, this.imageHeight);
 	}
 
 }

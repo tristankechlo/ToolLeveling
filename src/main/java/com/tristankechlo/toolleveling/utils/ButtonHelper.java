@@ -66,24 +66,24 @@ public class ButtonHelper {
 	}
 
 	public static ITextComponent getButtonText(ButtonEntry entry) {
-		return new TranslationTextComponent(entry.name).mergeStyle(getButtonTextFormatting(entry));
+		return new TranslationTextComponent(entry.name).withStyle(getButtonTextFormatting(entry));
 	}
 
 	public static List<ITextComponent> getButtonToolTips(ButtonEntry data) {
 		List<ITextComponent> tooltip = new ArrayList<>();
-		tooltip.add(new TranslationTextComponent(data.name).mergeStyle(TextFormatting.AQUA));
+		tooltip.add(new TranslationTextComponent(data.name).withStyle(TextFormatting.AQUA));
 		final String start = "container.toolleveling.tool_leveling_table";
 		if (ButtonHelper.shouldButtonBeActive(data)) {
 			tooltip.add(new TranslationTextComponent(start + ".current_level", data.currentLevel)
-					.mergeStyle(TextFormatting.DARK_GRAY));
+					.withStyle(TextFormatting.DARK_GRAY));
 			tooltip.add(new TranslationTextComponent(start + ".next_level", (data.currentLevel + 1))
-					.mergeStyle(TextFormatting.DARK_GRAY));
+					.withStyle(TextFormatting.DARK_GRAY));
 			tooltip.add(new TranslationTextComponent(start + ".cost", data.upgradeCost)
-					.mergeStyle(TextFormatting.DARK_GRAY));
+					.withStyle(TextFormatting.DARK_GRAY));
 		}
 		if (data.status != ButtonStatus.NORMAL) {
 			tooltip.add(new TranslationTextComponent(start + ".error." + data.status.toString().toLowerCase())
-					.mergeStyle(ButtonHelper.getButtonTextFormatting(data)));
+					.withStyle(ButtonHelper.getButtonTextFormatting(data)));
 		}
 		return tooltip;
 	}

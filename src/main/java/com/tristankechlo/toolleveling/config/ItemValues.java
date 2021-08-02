@@ -41,7 +41,7 @@ public final class ItemValues {
 		addItem(Items.NETHERITE_INGOT, 200);
 		addItem(Items.NETHERITE_SCRAP, 50);
 		addItem(Items.ANCIENT_DEBRIS, 50);
-		addItem(Items.NETHERITE_BRICKS, 1800);
+		addItem(Items.NETHERITE_BLOCK, 1800);
 		addItem(Items.LAPIS_LAZULI, 8);
 		addItem(Items.LAPIS_ORE, 120);
 		addItem(Items.LAPIS_BLOCK, 70);

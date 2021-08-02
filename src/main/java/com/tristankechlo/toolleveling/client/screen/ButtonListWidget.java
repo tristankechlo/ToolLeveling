@@ -21,14 +21,14 @@ public class ButtonListWidget extends ExtendedList<ButtonEntry> {
 		this.screen = screen;
 		this.listWidth = listWidth;
 		// disable rendering of the dirt background
-		this.func_244605_b(false);
-		this.func_244606_c(false);
+		this.setRenderBackground(false);
+		this.setRenderTopAndBottom(false);
 		this.setRenderHeader(false, 0);
 	}
 
 	public void refreshList() {
 		this.clearEntries();
-		ItemStack stack = this.screen.getContainer().getSlot(0).getStack();
+		ItemStack stack = this.screen.getMenu().getSlot(0).getItem();
 		if (!stack.getItem().equals(Items.AIR)) {
 			Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
 			for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {

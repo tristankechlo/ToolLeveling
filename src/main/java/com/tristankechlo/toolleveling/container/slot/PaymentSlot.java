@@ -11,7 +11,7 @@ public class PaymentSlot extends Slot {
 	}
 
 	@Override
-	public boolean isItemValid(ItemStack stack) {
-		return !stack.isEnchantable() && !stack.isDamageable();
+	public boolean mayPlace(ItemStack stack) {
+		return !stack.isEnchantable() && !stack.isDamageableItem();
 	}
 }

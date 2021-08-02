@@ -24,13 +24,13 @@ public class SyncToolLevelingConfig {
 	}
 
 	public static void encode(SyncToolLevelingConfig msg, PacketBuffer buffer) {
-		buffer.writeString(msg.identifier);
-		buffer.writeString(new Gson().toJson(msg.json));
+		buffer.writeUtf(msg.identifier);
+		buffer.writeUtf(new Gson().toJson(msg.json));
 	}
 
 	public static SyncToolLevelingConfig decode(PacketBuffer buffer) {
-		String identifier = buffer.readString();
-		JsonObject json = new JsonParser().parse(buffer.readString()).getAsJsonObject();
+		String identifier = buffer.readUtf();
+		JsonObject json = new JsonParser().parse(buffer.readUtf()).getAsJsonObject();
 		return new SyncToolLevelingConfig(identifier, json);
 	}
 
