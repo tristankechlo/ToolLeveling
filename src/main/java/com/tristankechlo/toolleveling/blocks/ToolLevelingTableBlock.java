@@ -28,14 +28,14 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 public class ToolLevelingTableBlock extends ContainerBlock {
 
-	private static final VoxelShape SHAPE = VoxelShapes.or(makeCuboidShape(2, 0, 2, 14, 3, 14),
-			makeCuboidShape(3, 3, 3, 13, 6, 13), makeCuboidShape(4, 6, 4, 12, 11, 12),
-			makeCuboidShape(3, 11, 3, 13, 14, 13));
+	private static final VoxelShape SHAPE = VoxelShapes.or(box(2, 0, 2, 14, 3, 14),
+			box(3, 3, 3, 13, 6, 13), box(4, 6, 4, 12, 11, 12),
+			box(3, 11, 3, 13, 14, 13));
 
 	public ToolLevelingTableBlock() {
-		super(Block.Properties.create(Material.IRON, MaterialColor.GRAY).hardnessAndResistance(4.5f, 1000.0f)
-				.sound(SoundType.METAL).harvestLevel(2).harvestTool(ToolType.PICKAXE).notSolid().setRequiresTool());
-		this.setDefaultState(this.getDefaultState());
+		super(Block.Properties.of(Material.METAL, MaterialColor.COLOR_GRAY).strength(4.5f, 1000.0f)
+				.sound(SoundType.METAL).harvestLevel(2).harvestTool(ToolType.PICKAXE).noOcclusion().requiresCorrectToolForDrops());
+		this.registerDefaultState(this.defaultBlockState());
 	}
 
 	@Override
@@ -43,22 +43,22 @@ public class ToolLevelingTableBlock extends ContainerBlock {
 		return SHAPE;
 	}
 
-	public BlockRenderType getRenderType(BlockState state) {
+	public BlockRenderType getRenderShape(BlockState state) {
 		return BlockRenderType.MODEL;
 	}
 
 	@Override
-	public PushReaction getPushReaction(BlockState state) {
+	public PushReaction getPistonPushReaction(BlockState state) {
 		return PushReaction.IGNORE;
 	}
 
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player,
+	public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player,
 			Hand hand, BlockRayTraceResult hit) {
-		if (world.isRemote) {
+		if (world.isClientSide) {
 			return ActionResultType.SUCCESS;
 		}
-		INamedContainerProvider namedContainerProvider = this.getContainer(state, world, pos);
+		INamedContainerProvider namedContainerProvider = this.getMenuProvider(state, world, pos);
 		if (namedContainerProvider != null) {
 			if (!(player instanceof ServerPlayerEntity)) {
 				return ActionResultType.FAIL;
@@ -73,14 +73,14 @@ public class ToolLevelingTableBlock extends ContainerBlock {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving) {
+	public void onRemove(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving) {
 		if (state.getBlock() != newState.getBlock()) {
-			TileEntity tileentity = world.getTileEntity(pos);
+			TileEntity tileentity = world.getBlockEntity(pos);
 			if (tileentity instanceof ToolLevelingTableTileEntity) {
 				ToolLevelingTableTileEntity table = (ToolLevelingTableTileEntity) tileentity;
 				table.dropAllContents(world, pos);
 			}
-			super.onReplaced(state, world, pos, newState, isMoving);
+			super.onRemove(state, world, pos, newState, isMoving);
 		}
 	}
 
@@ -91,11 +91,11 @@ public class ToolLevelingTableBlock extends ContainerBlock {
 
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-		return createNewTileEntity(world);
+		return newBlockEntity(world);
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(IBlockReader worldIn) {
+	public TileEntity newBlockEntity(IBlockReader worldIn) {
 		return new ToolLevelingTableTileEntity();
 	}
 

@@ -17,8 +17,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class Utils {
 
 	public static final Map<Enchantment, Integer> BREAKING_ENCHANTMENTS = ImmutableMap.<Enchantment, Integer>builder()
-			.put(Enchantments.LUCK_OF_THE_SEA, 84).put(Enchantments.QUICK_CHARGE, 5).put(Enchantments.THORNS, 7)
-			.put(Enchantments.LURE, 5).build();
+			.put(Enchantments.FISHING_LUCK, 84).put(Enchantments.QUICK_CHARGE, 5).put(Enchantments.THORNS, 7)
+			.put(Enchantments.FISHING_SPEED, 5).build();
 
 	public static Enchantment getEnchantmentFromString(String name) {
 		ResourceLocation loc = new ResourceLocation(String.valueOf(name));
@@ -62,8 +62,8 @@ public class Utils {
 
 	public static long getInventoryWorth(Inventory inv) {
 		long worth = 0;
-		for (int i = 0; i < inv.getSizeInventory(); i++) {
-			worth += Utils.getStackWorth(inv.getStackInSlot(i));
+		for (int i = 0; i < inv.getContainerSize(); i++) {
+			worth += Utils.getStackWorth(inv.getItem(i));
 		}
 		return worth;
 	}

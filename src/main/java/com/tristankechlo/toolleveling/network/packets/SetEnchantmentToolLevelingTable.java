@@ -51,12 +51,12 @@ public class SetEnchantmentToolLevelingTable {
 			if (player == null) {
 				return;
 			}
-			ServerWorld world = player.getServerWorld();
-			if (world == null || !world.isBlockLoaded(msg.pos)) {
+			ServerWorld world = player.getLevel();
+			if (world == null || !world.hasChunkAt(msg.pos)) {
 				return;
 			}
 //			ToolLeveling.LOGGER.debug(msg.pos);
-			TileEntity entity = world.getTileEntity(msg.pos);
+			TileEntity entity = world.getBlockEntity(msg.pos);
 			if (entity != null && (entity instanceof ToolLevelingTableTileEntity)) {
 
 				ToolLevelingTableTileEntity table = (ToolLevelingTableTileEntity) entity;
@@ -69,8 +69,8 @@ public class SetEnchantmentToolLevelingTable {
 					if (result) {
 						enchantmentsMap.put(msg.enchantment, msg.level);
 						EnchantmentHelper.setEnchantments(enchantmentsMap, enchantedItem);
-						table.chestContents.setInventorySlotContents(0, enchantedItem);
-						table.markDirty();
+						table.chestContents.setItem(0, enchantedItem);
+						table.setChanged();
 					}
 				}
 			}

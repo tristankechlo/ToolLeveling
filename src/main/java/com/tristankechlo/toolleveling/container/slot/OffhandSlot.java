@@ -17,8 +17,8 @@ public class OffhandSlot extends Slot {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public Pair<ResourceLocation, ResourceLocation> getBackground() {
-		return Pair.of(PlayerContainer.LOCATION_BLOCKS_TEXTURE, PlayerContainer.EMPTY_ARMOR_SLOT_SHIELD);
+	public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
+		return Pair.of(PlayerContainer.BLOCK_ATLAS, PlayerContainer.EMPTY_ARMOR_SLOT_SHIELD);
 	}
 
 }

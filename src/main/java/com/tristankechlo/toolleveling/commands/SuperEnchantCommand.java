@@ -44,7 +44,7 @@ public class SuperEnchantCommand {
 
 	public static void register(CommandDispatcher<CommandSource> dispatcher) {
 		dispatcher.register(Commands.literal("superenchant").requires((player) -> {
-			return player.hasPermissionLevel(3);
+			return player.hasPermission(3);
 		}).then(Commands.argument("targets", EntityArgument.entities())
 				.then(Commands.argument("enchantment", EnchantmentArgument.enchantment()).executes((context) -> {
 					return enchant(context.getSource(), EntityArgument.getEntities(context, "targets"),
@@ -64,10 +64,10 @@ public class SuperEnchantCommand {
 		for (Entity entity : targets) {
 			if (entity instanceof LivingEntity) {
 				LivingEntity livingentity = (LivingEntity) entity;
-				ItemStack stack = livingentity.getHeldItemMainhand();
+				ItemStack stack = livingentity.getMainHandItem();
 				if (!stack.isEmpty()) {
-					if (enchantmentIn.canApply(stack) || ToolLevelingConfig.allowWrongEnchantments.getValue()) {
-						if (EnchantmentHelper.areAllCompatibleWith(EnchantmentHelper.getEnchantments(stack).keySet(),
+					if (enchantmentIn.canEnchant(stack) || ToolLevelingConfig.allowWrongEnchantments.getValue()) {
+						if (EnchantmentHelper.isEnchantmentCompatible(EnchantmentHelper.getEnchantments(stack).keySet(),
 								enchantmentIn) || ToolLevelingConfig.allowIncompatibleEnchantments.getValue()) {
 
 							Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
@@ -81,10 +81,10 @@ public class SuperEnchantCommand {
 
 						} else if (targets.size() == 1) {
 							throw INCOMPATIBLE_ENCHANTS_EXCEPTION
-									.create(stack.getItem().getDisplayName(stack).getString());
+									.create(stack.getItem().getName(stack).getString());
 						}
 					} else if (targets.size() == 1) {
-						throw WRONG_ENCHANTS_EXCEPTION.create(stack.getItem().getDisplayName(stack).getString());
+						throw WRONG_ENCHANTS_EXCEPTION.create(stack.getItem().getName(stack).getString());
 					}
 				} else if (targets.size() == 1) {
 					throw ITEMLESS_EXCEPTION.create(livingentity.getName().getString());
@@ -98,11 +98,11 @@ public class SuperEnchantCommand {
 			throw FAILED_EXCEPTION.create();
 		} else {
 			if (targets.size() == 1) {
-				source.sendFeedback(new TranslationTextComponent("commands.enchant.success.single",
-						enchantmentIn.getDisplayName(level), targets.iterator().next().getDisplayName()), true);
+				source.sendSuccess(new TranslationTextComponent("commands.enchant.success.single",
+						enchantmentIn.getFullname(level), targets.iterator().next().getDisplayName()), true);
 			} else {
-				source.sendFeedback(new TranslationTextComponent("commands.enchant.success.multiple",
-						enchantmentIn.getDisplayName(level), targets.size()), true);
+				source.sendSuccess(new TranslationTextComponent("commands.enchant.success.multiple",
+						enchantmentIn.getFullname(level), targets.size()), true);
 			}
 
 			return i;

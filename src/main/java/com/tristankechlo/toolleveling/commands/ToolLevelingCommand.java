@@ -19,7 +19,7 @@ public class ToolLevelingCommand {
 	public static void register(CommandDispatcher<CommandSource> dispatcher) {
 		LiteralArgumentBuilder<CommandSource> toollevelingCommand = Commands.literal("toolleveling")
 				.requires(
-						(source) -> source.hasPermissionLevel(3))
+						(source) -> source.hasPermission(3))
 				.then(Commands.literal("config")
 						.then(Commands.literal("reload").executes(context -> configReload(context)))
 						.then(Commands.literal("show")
@@ -34,7 +34,7 @@ public class ToolLevelingCommand {
 	private static int configReload(CommandContext<CommandSource> context) {
 		CommandSource source = context.getSource();
 		ConfigManager.reloadAllConfigs();
-		source.sendFeedback(new TranslationTextComponent("commands.toolleveling.config.reload"), true);
+		source.sendSuccess(new TranslationTextComponent("commands.toolleveling.config.reload"), true);
 		return 1;
 	}
 
@@ -42,15 +42,15 @@ public class ToolLevelingCommand {
 		CommandSource source = context.getSource();
 		final Identifier identifier = context.getArgument("identifier", Identifier.class);
 		if (!ConfigManager.hasIdentifier(identifier.id)) {
-			source.sendFeedback(new TranslationTextComponent("commands.toolleveling.config.noconfig"), true);
+			source.sendSuccess(new TranslationTextComponent("commands.toolleveling.config.noconfig"), true);
 			return -1;
 		}
 		String name = ConfigManager.getConfigFileName(identifier.id);
 		String path = ConfigManager.getConfigPath(identifier.id);
-		source.sendFeedback(
+		source.sendSuccess(
 				new TranslationTextComponent("commands.toolleveling.config.path",
-						new StringTextComponent(name).mergeStyle(TextFormatting.UNDERLINE).modifyStyle(
-								(style) -> style.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, path)))),
+						new StringTextComponent(name).withStyle(TextFormatting.UNDERLINE).withStyle(
+								(style) -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, path)))),
 				true);
 		return 1;
 	}
@@ -59,11 +59,11 @@ public class ToolLevelingCommand {
 		CommandSource source = context.getSource();
 		final Identifier identifier = context.getArgument("identifier", Identifier.class);
 		if (!ConfigManager.hasIdentifier(identifier.id)) {
-			source.sendFeedback(new TranslationTextComponent("commands.toolleveling.config.noconfig"), true);
+			source.sendSuccess(new TranslationTextComponent("commands.toolleveling.config.noconfig"), true);
 			return -1;
 		}
 		ConfigManager.resetOneConfig(identifier.id);
-		source.sendFeedback(new TranslationTextComponent("commands.toolleveling.config.reset", identifier.id), true);
+		source.sendSuccess(new TranslationTextComponent("commands.toolleveling.config.reset", identifier.id), true);
 		return 1;
 	}
 

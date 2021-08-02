@@ -158,13 +158,13 @@ public class ChestContents implements IInventory {
 	// or ask the parent TileEntity.
 
 	@Override
-	public boolean isUsableByPlayer(PlayerEntity player) {
+	public boolean stillValid(PlayerEntity player) {
 		return canPlayerAccessInventoryLambda.test(player); // on the client, this does nothing. on the server, ask our
 															// parent TileEntity.
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int index, ItemStack stack) {
+	public boolean canPlaceItem(int index, ItemStack stack) {
 		return chestContents.isItemValid(index, stack);
 	}
 
@@ -181,17 +181,17 @@ public class ChestContents implements IInventory {
 	}
 
 	@Override
-	public void markDirty() {
+	public void setChanged() {
 		markDirtyNotificationLambda.invoke();
 	}
 
 	@Override
-	public void openInventory(PlayerEntity player) {
+	public void startOpen(PlayerEntity player) {
 		openInventoryNotificationLambda.invoke();
 	}
 
 	@Override
-	public void closeInventory(PlayerEntity player) {
+	public void stopOpen(PlayerEntity player) {
 		closeInventoryNotificationLambda.invoke();
 	}
 
@@ -199,7 +199,7 @@ public class ChestContents implements IInventory {
 	// manipulate the inventory contents ---
 
 	@Override
-	public int getSizeInventory() {
+	public int getContainerSize() {
 		return chestContents.getSlots();
 	}
 
@@ -213,28 +213,28 @@ public class ChestContents implements IInventory {
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int index) {
+	public ItemStack getItem(int index) {
 		return chestContents.getStackInSlot(index);
 	}
 
 	@Override
-	public ItemStack decrStackSize(int index, int count) {
+	public ItemStack removeItem(int index, int count) {
 		return chestContents.extractItem(index, count, false);
 	}
 
 	@Override
-	public ItemStack removeStackFromSlot(int index) {
+	public ItemStack removeItemNoUpdate(int index) {
 		int maxPossibleItemStackSize = chestContents.getSlotLimit(index);
 		return chestContents.extractItem(index, maxPossibleItemStackSize, false);
 	}
 
 	@Override
-	public void setInventorySlotContents(int index, ItemStack stack) {
+	public void setItem(int index, ItemStack stack) {
 		chestContents.setStackInSlot(index, stack);
 	}
 
 	@Override
-	public void clear() {
+	public void clearContent() {
 		for (int i = 0; i < chestContents.getSlots(); ++i) {
 			chestContents.setStackInSlot(i, ItemStack.EMPTY);
 		}

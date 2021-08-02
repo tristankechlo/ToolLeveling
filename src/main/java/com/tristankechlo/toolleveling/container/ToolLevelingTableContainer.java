@@ -43,7 +43,7 @@ public class ToolLevelingTableContainer extends Container {
 	private ToolLevelingTableContainer(int id, PlayerInventory playerInv, ChestContents chestContents, BlockPos pos) {
 		super(ModRegistry.TLT_CONTAINER.get(), id);
 		this.chestContents = chestContents;
-		this.table = (ToolLevelingTableTileEntity) playerInv.player.world.getTileEntity(pos);
+		this.table = (ToolLevelingTableTileEntity) playerInv.player.level.getBlockEntity(pos);
 
 		this.addSlot(new UpgradeSlot(this.chestContents, 0, 44, 22));
 		// payment slots
@@ -84,45 +84,45 @@ public class ToolLevelingTableContainer extends Container {
 	}
 
 	@Override
-	public void onContainerClosed(PlayerEntity playerIn) {
-		super.onContainerClosed(playerIn);
+	public void removed(PlayerEntity playerIn) {
+		super.removed(playerIn);
 	}
 
 	@Override
-	public boolean canInteractWith(PlayerEntity playerIn) {
-		return chestContents.isUsableByPlayer(playerIn);
+	public boolean stillValid(PlayerEntity playerIn) {
+		return chestContents.stillValid(playerIn);
 	}
 
 	@Override
-	public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+	public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
 		ItemStack itemstack = ItemStack.EMPTY;
-		Slot slot = this.inventorySlots.get(index);
+		Slot slot = this.slots.get(index);
 		int slotCount = ToolLevelingTableTileEntity.NUMBER_OF_SLOTS;
-		if (slot != null && slot.getHasStack()) {
-			ItemStack itemstack1 = slot.getStack();
+		if (slot != null && slot.hasItem()) {
+			ItemStack itemstack1 = slot.getItem();
 			itemstack = itemstack1.copy();
 			if (index >= 0 && index < slotCount) {
-				if (!this.mergeItemStack(itemstack1, slotCount, 36 + slotCount, true)) {
+				if (!this.moveItemStackTo(itemstack1, slotCount, 36 + slotCount, true)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (this.inventorySlots.get(1).isItemValid(itemstack1)) {
-				if (!this.mergeItemStack(itemstack1, 1, slotCount, false)) {
+			} else if (this.slots.get(1).mayPlace(itemstack1)) {
+				if (!this.moveItemStackTo(itemstack1, 1, slotCount, false)) {
 					return ItemStack.EMPTY;
 				}
 			} else {
-				if (this.inventorySlots.get(0).getHasStack() || !this.inventorySlots.get(0).isItemValid(itemstack1)) {
+				if (this.slots.get(0).hasItem() || !this.slots.get(0).mayPlace(itemstack1)) {
 					return ItemStack.EMPTY;
 				}
 				ItemStack itemstack2 = itemstack1.copy();
 				itemstack2.setCount(1);
 				itemstack1.shrink(1);
-				this.inventorySlots.get(0).putStack(itemstack2);
+				this.slots.get(0).set(itemstack2);
 			}
 
 			if (itemstack1.isEmpty()) {
-				slot.putStack(ItemStack.EMPTY);
+				slot.set(ItemStack.EMPTY);
 			} else {
-				slot.onSlotChanged();
+				slot.setChanged();
 			}
 			if (itemstack1.getCount() == itemstack.getCount()) {
 				return ItemStack.EMPTY;
@@ -135,15 +135,15 @@ public class ToolLevelingTableContainer extends Container {
 
 	public long getContainerWorth() {
 		long worth = 0;
-		for (int i = 1; i < chestContents.getSizeInventory(); i++) {
-			ItemStack stack = chestContents.getStackInSlot(i);
+		for (int i = 1; i < chestContents.getContainerSize(); i++) {
+			ItemStack stack = chestContents.getItem(i);
 			worth += Utils.getStackWorth(stack);
 		}
 		return worth;
 	}
 
 	public BlockPos getPos() {
-		return table.getPos();
+		return table.getBlockPos();
 	}
 
 	public long getBonusPoints() {

@@ -28,19 +28,19 @@ public class ToolLevelingTableRenderer extends TileEntityRenderer<ToolLevelingTa
 
 		ItemStack stack = tileEntityIn.getStackToEnchant();
 		if (!stack.isEmpty()) {
-			matrixStackIn.push();
+			matrixStackIn.pushPose();
 			matrixStackIn.translate(0.5D, 0.89D, 0.5D);
 			matrixStackIn.scale(0.5F, 0.5F, 0.5F);
-			matrixStackIn.rotate(new Quaternion(Vector3f.XN, 1.5707F, false));
+			matrixStackIn.mulPose(new Quaternion(Vector3f.XN, 1.5707F, false));
 			renderItem(stack, partialTicks, matrixStackIn, bufferIn, combinedLightIn);
-			matrixStackIn.pop();
+			matrixStackIn.popPose();
 
 		}
 	}
 
 	private void renderItem(ItemStack stack, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn,
 			int combinedLightIn) {
-		Minecraft.getInstance().getItemRenderer().renderItem(stack, TransformType.FIXED, combinedLightIn,
+		Minecraft.getInstance().getItemRenderer().renderStatic(stack, TransformType.FIXED, combinedLightIn,
 				OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn);
 	}
 
