@@ -8,17 +8,17 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 
-public class OpenScreenPacket {
+public class OpenItemValueScreenPacket {
 
-	public OpenScreenPacket() {}
+	public OpenItemValueScreenPacket() {}
 
-	public static void encode(OpenScreenPacket msg, PacketBuffer buffer) {}
+	public static void encode(OpenItemValueScreenPacket msg, PacketBuffer buffer) {}
 
-	public static OpenScreenPacket decode(PacketBuffer buffer) {
-		return new OpenScreenPacket();
+	public static OpenItemValueScreenPacket decode(PacketBuffer buffer) {
+		return new OpenItemValueScreenPacket();
 	}
 
-	public static void handle(OpenScreenPacket msg, Supplier<NetworkEvent.Context> context) {
+	public static void handle(OpenItemValueScreenPacket msg, Supplier<NetworkEvent.Context> context) {
 		context.get().enqueueWork(() -> {
 			Minecraft.getInstance().setScreen(new ItemValueScreen());
 		});

@@ -6,6 +6,7 @@
 	"screen.toolleveling.tool_leveling_table" : "Werkzeug Upgrade Tisch",
 	"screen.toolleveling.item_values" : "Item Werte",
 	"screen.toolleveling.item_value_worth" : "Item-Wert: %s",
+	"screen.toolleveling.default_item_value_worth" : "Alle Items die nicht hier gelistet sind haben den Wert von %s",
 	
 	"container.toolleveling.tool_leveling_table" : "Werkzeug Upgrade Tisch",
 	"container.toolleveling.tool_leveling_table.current_level" : "Aktuelles Level: %s",

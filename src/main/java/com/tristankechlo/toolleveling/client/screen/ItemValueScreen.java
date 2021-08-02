@@ -1,7 +1,9 @@
 package com.tristankechlo.toolleveling.client.screen;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
 
+import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.text.ITextComponent;
@@ -12,10 +14,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class ItemValueScreen extends Screen {
 
-	private static final int SPACING = 40;
+	private static final int SPACING = 30;
 	private static final ITextComponent TITLE = new TranslationTextComponent("block.toolleveling.item_values");
 	private ItemValuesListWidget itemValues;
-	// searchbox
 
 	public ItemValueScreen() {
 		super(TITLE);
@@ -30,15 +31,14 @@ public class ItemValueScreen extends Screen {
 	}
 
 	@Override
-	public void tick() {
-		super.tick();
-	}
-
-	@Override
 	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		this.renderBackground(matrixStack); // render translucent grey background
 		this.itemValues.render(matrixStack, mouseX, mouseY, partialTicks); // render item list widget
 		super.render(matrixStack, mouseX, mouseY, partialTicks); // render buttons
+		AbstractGui.drawCenteredString(matrixStack, font,
+				new TranslationTextComponent("screen.toolleveling.default_item_value_worth",
+						ToolLevelingConfig.defaultItemWorth.getValue()),
+				width / 2, 5, 0xFFFFFF);
 	}
 
 	@Override
