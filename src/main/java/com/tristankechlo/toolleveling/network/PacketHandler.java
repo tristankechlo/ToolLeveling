@@ -1,5 +1,6 @@
 package com.tristankechlo.toolleveling.network;
 
+import com.tristankechlo.toolleveling.network.packets.OpenItemValueScreenPacket;
 import com.tristankechlo.toolleveling.network.packets.SetEnchantmentToolLevelingTable;
 import com.tristankechlo.toolleveling.network.packets.SyncToolLevelingConfig;
 import com.tristankechlo.toolleveling.utils.Names;
@@ -30,5 +31,11 @@ public class PacketHandler {
 				SyncToolLevelingConfig::encode,
 				SyncToolLevelingConfig::decode,
 				SyncToolLevelingConfig::handle);
+
+		INSTANCE.registerMessage(id++,
+				OpenItemValueScreenPacket.class,
+				OpenItemValueScreenPacket::encode,
+				OpenItemValueScreenPacket::decode,
+				OpenItemValueScreenPacket::handle);
 	}
 }

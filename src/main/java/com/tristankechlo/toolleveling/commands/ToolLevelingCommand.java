@@ -68,7 +68,8 @@ public class ToolLevelingCommand {
 	}
 
 	private static enum Identifier {
-		GENERAL(Names.MOD_ID + ":general"), ITEMVALUES(Names.MOD_ID + ":itemValues");
+		GENERAL(Names.MOD_ID + ":general"),
+		ITEMVALUES(Names.MOD_ID + ":itemValues");
 
 		public final String id;
 

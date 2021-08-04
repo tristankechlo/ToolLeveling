@@ -1,6 +1,6 @@
 buildscript {
     repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
+        maven { url = 'https://maven.minecraftforge.net' }
         jcenter()
         mavenCentral()
     }
@@ -15,9 +15,10 @@ version = "${mod_version}"
 group = 'com.tristankechlo.toolleveling'
 archivesBaseName = 'toolleveling'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(16)
 
+java.toolchain.languageVersion = JavaLanguageVersion.of(16)
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
+
 minecraft {
     mappings channel: 'official', version: project.mappings
     
@@ -50,7 +51,6 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-
             args '--mod', 'toolleveling', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {

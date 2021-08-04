@@ -13,7 +13,10 @@ import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class ButtonEntry extends ObjectSelectionList.Entry<ButtonEntry> {
 
 	public Button button;
@@ -48,6 +51,8 @@ public class ButtonEntry extends ObjectSelectionList.Entry<ButtonEntry> {
 		this.button.y = top;
 //		long worth = this.screen.getMenu().getContainerWorth() + this.screen.getMenu().getBonusPoints();
 //		this.button.active = (this.upgradeCost <= worth) && ButtonHelper.shouldButtonBeActive(this);
+		long worth = this.screen.getMenu().getContainerWorth() + this.screen.getMenu().getBonusPoints();
+		this.button.active = (this.upgradeCost <= worth) && ButtonHelper.shouldButtonBeActive(this);
 		this.button.render(mStack, mouseX, mouseY, partialTicks);
 	}
 

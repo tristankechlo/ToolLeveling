@@ -10,7 +10,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class ButtonListWidget extends ObjectSelectionList<ButtonEntry> {
 
 	private ToolLevelingTableScreen screen;
@@ -21,8 +24,6 @@ public class ButtonListWidget extends ObjectSelectionList<ButtonEntry> {
 		this.screen = screen;
 		this.listWidth = listWidth;
 		// disable rendering of the dirt background
-//		this.func_244605_b(false);
-//		this.func_244606_c(false);
 		this.setRenderBackground(false);
 		this.setRenderTopAndBottom(false);
 		this.setRenderHeader(false, 0);
@@ -36,7 +37,8 @@ public class ButtonListWidget extends ObjectSelectionList<ButtonEntry> {
 			Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
 			for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
 				ButtonEntry buttonEntry = ButtonHelper.getButtonEntry(this.screen, entry.getKey(), entry.getValue());
-				buttonEntry.button.active = (buttonEntry.upgradeCost <= worth) && ButtonHelper.shouldButtonBeActive(buttonEntry);
+				buttonEntry.button.active = (buttonEntry.upgradeCost <= worth)
+						&& ButtonHelper.shouldButtonBeActive(buttonEntry);
 				this.addEntry(buttonEntry);
 			}
 		}

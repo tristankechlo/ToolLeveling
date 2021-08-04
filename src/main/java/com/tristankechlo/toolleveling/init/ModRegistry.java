@@ -35,4 +35,5 @@ public class ModRegistry {
 
 	public static final RegistryObject<BlockEntityType<ToolLevelingTableBlockEntity>> TLT_TILE_ENTITY = TILE_ENTITIES
 			.register(Names.TABLE,() -> BlockEntityType.Builder.of(ToolLevelingTableBlockEntity::new, TLT_BLOCK.get()).build(null));
+
 }

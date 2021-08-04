@@ -100,6 +100,11 @@ public class ButtonHelper {
 	}
 
 	public static enum ButtonStatus {
-		NORMAL, BLACKLISTED, USELESS, MAXLEVEL, BREAK, CAPPED;
+		NORMAL,
+		BLACKLISTED,
+		USELESS,
+		MAXLEVEL,
+		BREAK,
+		CAPPED;
 	}
 }
