@@ -2,6 +2,7 @@ package com.tristankechlo.toolleveling.init;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.tristankechlo.toolleveling.commands.SuperEnchantCommand;
+import com.tristankechlo.toolleveling.commands.OpenItemValueScreenCommand;
 import com.tristankechlo.toolleveling.commands.ToolLevelingCommand;
 import com.tristankechlo.toolleveling.utils.Names;
 
@@ -19,6 +20,7 @@ public class ModCommands {
 		final CommandDispatcher<CommandSource> dispatcher = event.getDispatcher();
 		SuperEnchantCommand.register(dispatcher);
 		ToolLevelingCommand.register(dispatcher);
+		OpenItemValueScreenCommand.register(dispatcher);
 	}
 
 }
