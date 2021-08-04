@@ -1,5 +1,8 @@
 # Changelog
 
+### Version 1.17.1 - 1.2.7
+ - add `/openitemvalues` command to show the worth of the items added by the config
+
 ### Version 1.17.1 - 1.2.6
  - improve handling of items through hoppers
      - insert only works into payment slots

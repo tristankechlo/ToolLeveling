@@ -24,7 +24,6 @@ public class ToolLeveling {
 	public static final Logger LOGGER = LogManager.getLogger();
 
 	public ToolLeveling() {
-
 		final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
 		PacketHandler.registerPackets();
@@ -38,7 +37,6 @@ public class ToolLeveling {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::init);
 
 		MinecraftForge.EVENT_BUS.register(this);
-
 	}
 
 	private void commonSetup(final FMLCommonSetupEvent event) {

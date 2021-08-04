@@ -5,16 +5,16 @@ import java.util.function.Supplier;
 import com.tristankechlo.toolleveling.client.screen.ItemValueScreen;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 public class OpenItemValueScreenPacket {
 
 	public OpenItemValueScreenPacket() {}
 
-	public static void encode(OpenItemValueScreenPacket msg, PacketBuffer buffer) {}
+	public static void encode(OpenItemValueScreenPacket msg, FriendlyByteBuf buffer) {}
 
-	public static OpenItemValueScreenPacket decode(PacketBuffer buffer) {
+	public static OpenItemValueScreenPacket decode(FriendlyByteBuf buffer) {
 		return new OpenItemValueScreenPacket();
 	}
 

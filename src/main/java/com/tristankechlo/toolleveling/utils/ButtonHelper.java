@@ -3,8 +3,8 @@ package com.tristankechlo.toolleveling.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tristankechlo.toolleveling.client.screen.ButtonEntry;
 import com.tristankechlo.toolleveling.client.screen.ToolLevelingTableScreen;
+import com.tristankechlo.toolleveling.client.screen.widgets.ButtonEntry;
 import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
 
 import net.minecraft.ChatFormatting;

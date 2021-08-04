@@ -1,13 +1,13 @@
 package com.tristankechlo.toolleveling.client.screen;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.tristankechlo.toolleveling.client.screen.widgets.ItemValuesListWidget;
 import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
 
-import net.minecraft.client.gui.AbstractGui;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -15,7 +15,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class ItemValueScreen extends Screen {
 
 	private static final int SPACING = 30;
-	private static final ITextComponent TITLE = new TranslationTextComponent("block.toolleveling.item_values");
+	private static final Component TITLE = new TranslatableComponent("block.toolleveling.item_values");
 	private ItemValuesListWidget itemValues;
 
 	public ItemValueScreen() {
@@ -31,14 +31,12 @@ public class ItemValueScreen extends Screen {
 	}
 
 	@Override
-	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+	public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		this.renderBackground(matrixStack); // render translucent grey background
 		this.itemValues.render(matrixStack, mouseX, mouseY, partialTicks); // render item list widget
 		super.render(matrixStack, mouseX, mouseY, partialTicks); // render buttons
-		AbstractGui.drawCenteredString(matrixStack, font,
-				new TranslationTextComponent("screen.toolleveling.default_item_value_worth",
-						ToolLevelingConfig.defaultItemWorth.getValue()),
-				width / 2, 5, 0xFFFFFF);
+		drawCenteredString(matrixStack, font, new TranslatableComponent("screen.toolleveling.default_item_value_worth",
+				ToolLevelingConfig.defaultItemWorth.getValue()), width / 2, 5, 0xFFFFFF);
 	}
 
 	@Override
@@ -53,7 +51,7 @@ public class ItemValueScreen extends Screen {
 		return super.mouseScrolled(mouseX, mouseY, delta);
 	}
 
-	public FontRenderer getFontRenderer() {
+	public Font getFontRenderer() {
 		return this.font;
 	}
 

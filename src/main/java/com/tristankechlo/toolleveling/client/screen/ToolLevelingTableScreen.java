@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.tristankechlo.toolleveling.client.screen.widgets.ButtonEntry;
+import com.tristankechlo.toolleveling.client.screen.widgets.ButtonListWidget;
 import com.tristankechlo.toolleveling.menu.ToolLevelingTableMenu;
 import com.tristankechlo.toolleveling.utils.ButtonHelper;
 import com.tristankechlo.toolleveling.utils.Names;

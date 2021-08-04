@@ -1,20 +1,21 @@
-package com.tristankechlo.toolleveling.client.screen;
+package com.tristankechlo.toolleveling.client.screen.widgets;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.tristankechlo.toolleveling.client.screen.ItemValueScreen;
 import com.tristankechlo.toolleveling.config.ItemValues;
 
-import net.minecraft.client.gui.widget.list.ExtendedList;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.client.gui.components.ObjectSelectionList;
+import net.minecraft.core.NonNullList;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class ItemValuesListWidget extends ExtendedList<ItemValueEntry> {
+public class ItemValuesListWidget extends ObjectSelectionList<ItemValueEntry> {
 
 	public static final int ROW_HEIGHT = 26;
 	public static final int ROW_SIZE = 7;

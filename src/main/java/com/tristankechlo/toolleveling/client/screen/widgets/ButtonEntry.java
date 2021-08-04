@@ -1,6 +1,7 @@
-package com.tristankechlo.toolleveling.client.screen;
+package com.tristankechlo.toolleveling.client.screen.widgets;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.tristankechlo.toolleveling.client.screen.ToolLevelingTableScreen;
 import com.tristankechlo.toolleveling.network.PacketHandler;
 import com.tristankechlo.toolleveling.network.packets.SetEnchantmentToolLevelingTable;
 import com.tristankechlo.toolleveling.utils.ButtonHelper;
