@@ -26,13 +26,16 @@ public class ModRegistry {
 
 	private static final Properties std_properties = new Item.Properties().tab(ItemGroup.TAB_DECORATIONS).stacksTo(64);
 
-	public static final RegistryObject<Block> TLT_BLOCK = BLOCKS.register(Names.TABLE, () -> new ToolLevelingTableBlock());
+	public static final RegistryObject<Block> TLT_BLOCK = BLOCKS.register(Names.TABLE,
+			() -> new ToolLevelingTableBlock());
 
-	public static final RegistryObject<Item> TLT_ITEM = ITEMS.register(Names.TABLE, () -> new BlockItem(TLT_BLOCK.get(), std_properties));
+	public static final RegistryObject<Item> TLT_ITEM = ITEMS.register(Names.TABLE,
+			() -> new BlockItem(TLT_BLOCK.get(), std_properties));
 
 	public static final RegistryObject<ContainerType<ToolLevelingTableContainer>> TLT_CONTAINER = CONTAINER_TYPES
 			.register(Names.TABLE, () -> IForgeContainerType.create(ToolLevelingTableContainer::createForClientSide));
 
 	public static final RegistryObject<TileEntityType<ToolLevelingTableTileEntity>> TLT_TILE_ENTITY = TILE_ENTITIES
-			.register(Names.TABLE,() -> TileEntityType.Builder.of(ToolLevelingTableTileEntity::new, TLT_BLOCK.get()).build(null));
+			.register(Names.TABLE,
+					() -> TileEntityType.Builder.of(ToolLevelingTableTileEntity::new, TLT_BLOCK.get()).build(null));
 }

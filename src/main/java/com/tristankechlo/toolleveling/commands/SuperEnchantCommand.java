@@ -80,8 +80,7 @@ public class SuperEnchantCommand {
 							i++;
 
 						} else if (targets.size() == 1) {
-							throw INCOMPATIBLE_ENCHANTS_EXCEPTION
-									.create(stack.getItem().getName(stack).getString());
+							throw INCOMPATIBLE_ENCHANTS_EXCEPTION.create(stack.getItem().getName(stack).getString());
 						}
 					} else if (targets.size() == 1) {
 						throw WRONG_ENCHANTS_EXCEPTION.create(stack.getItem().getName(stack).getString());

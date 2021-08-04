@@ -1,6 +1,7 @@
 package com.tristankechlo.toolleveling.client.screen;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.tristankechlo.toolleveling.client.screen.widgets.ItemValuesListWidget;
 import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
 
 import net.minecraft.client.gui.AbstractGui;

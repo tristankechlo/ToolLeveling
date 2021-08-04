@@ -1,9 +1,10 @@
-package com.tristankechlo.toolleveling.client.screen;
+package com.tristankechlo.toolleveling.client.screen.widgets;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.tristankechlo.toolleveling.client.screen.ItemValueScreen;
 import com.tristankechlo.toolleveling.config.ItemValues;
 
 import net.minecraft.client.gui.widget.list.ExtendedList;

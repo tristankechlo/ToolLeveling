@@ -1,8 +1,9 @@
-package com.tristankechlo.toolleveling.client.screen;
+package com.tristankechlo.toolleveling.client.screen.widgets;
 
 import java.util.Map;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.tristankechlo.toolleveling.client.screen.ToolLevelingTableScreen;
 import com.tristankechlo.toolleveling.utils.ButtonHelper;
 
 import net.minecraft.client.gui.widget.list.ExtendedList;
@@ -16,7 +17,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class ButtonListWidget extends ExtendedList<ButtonEntry> {
 
-	private ToolLevelingTableScreen screen;
+	private final ToolLevelingTableScreen screen;
 	private final int listWidth;
 
 	public ButtonListWidget(ToolLevelingTableScreen screen, int listWidth, int top, int bottom) {

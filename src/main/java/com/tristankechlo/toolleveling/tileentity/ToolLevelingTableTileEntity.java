@@ -26,7 +26,8 @@ import net.minecraft.world.World;
 
 public class ToolLevelingTableTileEntity extends TileEntity implements INamedContainerProvider {
 
-	private ITextComponent customname = new TranslationTextComponent("container." + Names.MOD_ID + ".tool_leveling_table");
+	private ITextComponent customname = new TranslationTextComponent(
+			"container." + Names.MOD_ID + ".tool_leveling_table");
 	public final ChestContents chestContents;
 	public static final int NUMBER_OF_SLOTS = 16;
 	public long bonusPoints = 0;
@@ -40,7 +41,8 @@ public class ToolLevelingTableTileEntity extends TileEntity implements INamedCon
 		if (this.level.getBlockEntity(this.worldPosition) != this) {
 			return false;
 		}
-		return player.distanceToSqr(worldPosition.getX() + 0.5D, worldPosition.getY() + 0.5D, worldPosition.getZ() + 0.5D) < (8.0 * 8.0);
+		return player.distanceToSqr(worldPosition.getX() + 0.5D, worldPosition.getY() + 0.5D,
+				worldPosition.getZ() + 0.5D) < (8.0 * 8.0);
 	}
 
 	@Override

@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.tristankechlo.toolleveling.client.screen.widgets.ButtonEntry;
+import com.tristankechlo.toolleveling.client.screen.widgets.ButtonListWidget;
 import com.tristankechlo.toolleveling.container.ToolLevelingTableContainer;
 import com.tristankechlo.toolleveling.utils.ButtonHelper;
 import com.tristankechlo.toolleveling.utils.Names;
@@ -19,7 +21,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableContainer> {
 
-	private static final ResourceLocation GUI_TEXTURE = new ResourceLocation(Names.MOD_ID, "textures/gui/tool_leveling_table.png");
+	private static final ResourceLocation GUI_TEXTURE = new ResourceLocation(Names.MOD_ID,
+			"textures/gui/tool_leveling_table.png");
 	protected ButtonListWidget buttonList;
 	private byte ticksSinceUpdate = 0;
 
@@ -74,8 +77,7 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
 
 	private void renderPointsSummary(MatrixStack stack) {
 		String start = "container.toolleveling.tool_leveling_table.worth.";
-		ITextComponent bonusPoints = new TranslationTextComponent(start + "bonus_points",
-				this.menu.getBonusPoints());
+		ITextComponent bonusPoints = new TranslationTextComponent(start + "bonus_points", this.menu.getBonusPoints());
 		ITextComponent invWorth = new TranslationTextComponent(start + "inv", this.menu.getContainerWorth());
 		float left = this.leftPos + 8;
 		this.font.draw(stack, bonusPoints, left, topPos + 45, 4210752);
@@ -99,7 +101,8 @@ public class ToolLevelingTableScreen extends ContainerScreen<ToolLevelingTableCo
 	protected void renderBg(MatrixStack matrixStack, float partialTicks, int mX, int mY) {
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.minecraft.getTextureManager().bind(GUI_TEXTURE);
-		blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight, this.imageWidth, this.imageHeight);
+		blit(matrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight, this.imageWidth,
+				this.imageHeight);
 	}
 
 }

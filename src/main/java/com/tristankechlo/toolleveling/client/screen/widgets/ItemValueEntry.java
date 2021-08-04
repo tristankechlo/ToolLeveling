@@ -1,8 +1,9 @@
-package com.tristankechlo.toolleveling.client.screen;
+package com.tristankechlo.toolleveling.client.screen.widgets;
 
 import java.util.List;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.tristankechlo.toolleveling.client.screen.ItemValueScreen;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.list.ExtendedList;

@@ -28,13 +28,13 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 public class ToolLevelingTableBlock extends ContainerBlock {
 
-	private static final VoxelShape SHAPE = VoxelShapes.or(box(2, 0, 2, 14, 3, 14),
-			box(3, 3, 3, 13, 6, 13), box(4, 6, 4, 12, 11, 12),
-			box(3, 11, 3, 13, 14, 13));
+	private static final VoxelShape SHAPE = VoxelShapes.or(box(2, 0, 2, 14, 3, 14), box(3, 3, 3, 13, 6, 13),
+			box(4, 6, 4, 12, 11, 12), box(3, 11, 3, 13, 14, 13));
 
 	public ToolLevelingTableBlock() {
 		super(Block.Properties.of(Material.METAL, MaterialColor.COLOR_GRAY).strength(4.5f, 1000.0f)
-				.sound(SoundType.METAL).harvestLevel(2).harvestTool(ToolType.PICKAXE).noOcclusion().requiresCorrectToolForDrops());
+				.sound(SoundType.METAL).harvestLevel(2).harvestTool(ToolType.PICKAXE).noOcclusion()
+				.requiresCorrectToolForDrops());
 		this.registerDefaultState(this.defaultBlockState());
 	}
 
@@ -53,8 +53,8 @@ public class ToolLevelingTableBlock extends ContainerBlock {
 	}
 
 	@Override
-	public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player,
-			Hand hand, BlockRayTraceResult hit) {
+	public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand,
+			BlockRayTraceResult hit) {
 		if (world.isClientSide) {
 			return ActionResultType.SUCCESS;
 		}
