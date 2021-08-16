@@ -9,7 +9,7 @@ import com.tristankechlo.toolleveling.network.packets.OpenItemValueScreenPacket;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.fmllegacy.network.NetworkDirection;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
 
 public final class OpenItemValueScreenCommand {
 
@@ -21,8 +21,7 @@ public final class OpenItemValueScreenCommand {
 
 	private static int showScreen(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
 		ServerPlayer player = context.getSource().getPlayerOrException();
-		PacketHandler.INSTANCE.sendTo(new OpenItemValueScreenPacket(), player.connection.getConnection(),
-				NetworkDirection.PLAY_TO_CLIENT);
+		PacketHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new OpenItemValueScreenPacket());
 		return 1;
 	}
 
