@@ -1,7 +1,10 @@
 # Changelog
 
 ### Version 1.17.1 - 1.2.7
+ - needs forge version higher than 37.0.32
  - add `/openitemvalues` command to show the worth of the items added by the config
+ - add block to the minecraft tags to be mineable
+     - fixes the error for forge versions over 37.0.30
 
 ### Version 1.17.1 - 1.2.6
  - improve handling of items through hoppers

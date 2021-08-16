@@ -23,7 +23,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
 public class ToolLevelingTableBlock extends BaseEntityBlock {
@@ -33,8 +32,7 @@ public class ToolLevelingTableBlock extends BaseEntityBlock {
 
 	public ToolLevelingTableBlock() {
 		super(Block.Properties.of(Material.METAL, MaterialColor.COLOR_GRAY).strength(4.5f, 1000.0f)
-				.sound(SoundType.METAL).harvestLevel(2).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops()
-				.noOcclusion());
+				.sound(SoundType.METAL).requiresCorrectToolForDrops().noOcclusion());
 		this.registerDefaultState(this.defaultBlockState());
 	}
 
