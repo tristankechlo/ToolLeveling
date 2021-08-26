@@ -1,5 +1,10 @@
 # Changelog
 
+### Version 1.16.5 - 1.2.8
+ - fix formula for upgrade cost
+     - incorrect formula was `((0.0015x)^4 + 300x) * modifier`
+     - new formula is `((0.87 * x * x) + 300x) * modifier`
+
 ### Vercion 1.16.5 - 1.2.7
  - add `/openitemvalues` command to show the worth of the items added by the config
 

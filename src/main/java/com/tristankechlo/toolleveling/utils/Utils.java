@@ -31,10 +31,8 @@ public class Utils {
 	public static long getEnchantmentUpgradeCost(int level) {
 		double modifier = ToolLevelingConfig.upgradeCostMultiplier.getValue();
 		long minCost = ToolLevelingConfig.minUpgradeCost.getValue();
-		// formula: (0.0015x^4 + 300x) * modifier
-		// link to the graph
-		// https://www.desmos.com/calculator/e2mglowz80
-		return (long) Math.max(minCost, (Math.pow((0.0015 * level), 4) + (300 * level)) * modifier);
+		// formula: (0.87x^2 + 300x) * modifier
+		return (long) Math.max(minCost, ((0.87 * level * level) + (300 * level)) * modifier);
 	}
 
 	public static Item getItemFromString(String name) {
