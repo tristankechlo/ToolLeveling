@@ -1,5 +1,8 @@
 # Changelog
 
+### Version 1.17.1 - 1.2.9
+ - enchantments can now be leveled higher than 255 again
+
 ### Version 1.17.1 - 1.2.8
  - fix formula for upgrade cost
      - incorrect formula was `((0.0015x)^4 + 300x) * modifier`
