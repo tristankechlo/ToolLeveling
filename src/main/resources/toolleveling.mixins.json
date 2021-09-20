@@ -4,6 +4,7 @@
 	"compatibilityLevel" : "JAVA_16",
 	"refmap" : "toolleveling.refmap.json",
 	"mixins" : [
+		"MixinEnchantmentHelper"
 	],
 	"minVersion" : "0.8"
 }
