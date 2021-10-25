@@ -1,5 +1,10 @@
 # Changelog
 
+### Version 1.17.1 - 1.2.10
+ - the item worth can now be shown as a tooltip
+ 	- needs  advanced tooltips `F3 + H` activated
+ 	- press shift while hovering over an item
+
 ### Version 1.17.1 - 1.2.9
  - enchantments can now be leveled higher than 255 again
 

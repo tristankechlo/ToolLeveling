@@ -1,6 +1,8 @@
 {
 	"itemGroup.ToolLevelingTab" : "Tool Leveling",
 	
+	"tooltip.toolleveling.itemworth" : "ToolLeveling Item-Wert: %s",
+	
 	"block.toolleveling.tool_leveling_table" : "Werkzeug Upgrade Tisch",
 	
 	"screen.toolleveling.tool_leveling_table" : "Werkzeug Upgrade Tisch",
