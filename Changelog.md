@@ -1,5 +1,10 @@
 # Changelog
 
+### Version 1.16.5 - 1.2.10
+ - the item worth can now be shown as a tooltip
+ 	- needs  advanced tooltips `F3 + H` activated
+ 	- press shift while hovering over an item
+
 ### Version 1.16.5 - 1.2.8
  - fix formula for upgrade cost
      - incorrect formula was `((0.0015x)^4 + 300x) * modifier`

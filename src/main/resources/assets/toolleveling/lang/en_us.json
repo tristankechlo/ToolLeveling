@@ -1,5 +1,7 @@
 {
 	"itemGroup.ToolLevelingTab" : "Tool Leveling",
+
+	"tooltip.toolleveling.itemworth" : "ToolLeveling Item-Worth: %s",
 	
 	"block.toolleveling.tool_leveling_table" : "Tool Leveling Table",
 	
