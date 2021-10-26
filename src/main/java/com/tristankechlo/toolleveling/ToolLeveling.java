@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.tristankechlo.toolleveling.client.ClientSetup;
-import com.tristankechlo.toolleveling.client.TooltipEvents;
 import com.tristankechlo.toolleveling.config.ConfigManager;
 import com.tristankechlo.toolleveling.init.ModRegistry;
 import com.tristankechlo.toolleveling.network.PacketHandler;
@@ -37,7 +36,6 @@ public class ToolLeveling {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::init);
 
-		MinecraftForge.EVENT_BUS.register(new TooltipEvents());
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 

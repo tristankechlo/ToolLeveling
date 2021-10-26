@@ -1,5 +1,8 @@
 # Changelog
 
+### Version 1.16.5 - 1.2.11
+ - fix serverside crashes
+
 ### Version 1.16.5 - 1.2.10
  - the item worth can now be shown as a tooltip
  	- needs  advanced tooltips `F3 + H` activated
