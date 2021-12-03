@@ -17,7 +17,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.RenderProperties;
-import net.minecraftforge.fmlclient.gui.GuiUtils;
 
 @OnlyIn(Dist.CLIENT)
 public class ItemValueEntry extends ObjectSelectionList.Entry<ItemValueEntry> {
@@ -53,12 +52,10 @@ public class ItemValueEntry extends ObjectSelectionList.Entry<ItemValueEntry> {
 	private void renderItemTooltip(PoseStack mStack, ItemStack iStack, int mouseX, int mouseY, long worth) {
 		Font font = RenderProperties.get(iStack).getFont(iStack);
 		font = (font == null) ? screen.getFontRenderer() : font;
-		GuiUtils.preItemToolTip(iStack);
 		List<Component> tooltips = screen.getTooltipFromItem(iStack);
 		tooltips.add(new TranslatableComponent("screen.toolleveling.item_value_worth", worth)
 				.withStyle(ChatFormatting.DARK_GRAY));
-		screen.renderComponentToolTip(mStack, tooltips, mouseX, mouseY, font);
-		GuiUtils.postItemToolTip();
+		screen.renderComponentTooltip(mStack, tooltips, mouseX, mouseY);
 	}
 
 	private boolean isMouseOverItem(int left, int top, int mouseX, int mouseY) {

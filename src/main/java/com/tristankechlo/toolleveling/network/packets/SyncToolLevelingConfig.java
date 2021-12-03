@@ -9,7 +9,7 @@ import com.google.gson.JsonParser;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 
 public class SyncToolLevelingConfig {
 
@@ -28,7 +28,7 @@ public class SyncToolLevelingConfig {
 
 	public static SyncToolLevelingConfig decode(FriendlyByteBuf buffer) {
 		String identifier = buffer.readUtf();
-		JsonObject json = new JsonParser().parse(buffer.readUtf()).getAsJsonObject();
+		JsonObject json = JsonParser.parseString(buffer.readUtf()).getAsJsonObject();
 		return new SyncToolLevelingConfig(identifier, json);
 	}
 

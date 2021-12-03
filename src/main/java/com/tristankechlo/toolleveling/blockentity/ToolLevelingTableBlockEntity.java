@@ -55,6 +55,13 @@ public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity imple
 	}
 
 	@Override
+	protected void saveAdditional(CompoundTag tag) {
+		super.saveAdditional(tag);
+		ContainerHelper.saveAllItems(tag, this.items);
+		tag.putLong("BonusPoints", this.bonusPoints);
+	}
+
+	@Override
 	public CompoundTag save(CompoundTag tag) {
 		super.save(tag);
 		ContainerHelper.saveAllItems(tag, this.items);
@@ -203,7 +210,7 @@ public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity imple
 		CompoundTag tag = new CompoundTag();
 		ContainerHelper.saveAllItems(tag, this.items);
 		tag.putLong("BonusPoints", this.bonusPoints);
-		return new ClientboundBlockEntityDataPacket(getBlockPos(), -1, tag);
+		return ClientboundBlockEntityDataPacket.create(this);
 	}
 
 	@Override

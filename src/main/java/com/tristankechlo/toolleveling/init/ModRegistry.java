@@ -12,10 +12,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Item.Properties;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.common.extensions.IForgeContainerType;
-import net.minecraftforge.fmllegacy.RegistryObject;
+import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 public class ModRegistry {
 
@@ -31,9 +31,9 @@ public class ModRegistry {
 	public static final RegistryObject<Item> TLT_ITEM = ITEMS.register(Names.TABLE, () -> new BlockItem(TLT_BLOCK.get(), std_properties));
 
 	public static final RegistryObject<MenuType<ToolLevelingTableMenu>> TLT_CONTAINER = CONTAINER_TYPES
-			.register(Names.TABLE, () -> IForgeContainerType.create(ToolLevelingTableMenu::new));
+			.register(Names.TABLE, () -> IForgeMenuType.create(ToolLevelingTableMenu::new));
 
 	public static final RegistryObject<BlockEntityType<ToolLevelingTableBlockEntity>> TLT_TILE_ENTITY = TILE_ENTITIES
-			.register(Names.TABLE,() -> BlockEntityType.Builder.of(ToolLevelingTableBlockEntity::new, TLT_BLOCK.get()).build(null));
+			.register(Names.TABLE, () -> BlockEntityType.Builder.of(ToolLevelingTableBlockEntity::new, TLT_BLOCK.get()).build(null));
 
 }

@@ -50,7 +50,7 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
 	@Override
 	public void containerTick() {
 		this.ticksSinceUpdate++;
-		if (this.ticksSinceUpdate % 2 == 0) {
+		if (this.ticksSinceUpdate % 5 == 0) {
 			this.ticksSinceUpdate = 0;
 			this.buttonList.refreshList();
 		}
@@ -66,7 +66,7 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
 		// render button tooltips
 		for (int i = 0; i < this.buttonList.children().size(); i++) {
 			ButtonEntry entry = this.buttonList.children().get(i);
-			if (entry.button.isHovered()) {
+			if (entry.button.isHoveredOrFocused()) {
 				List<Component> tooltip = ButtonHelper.getButtonToolTips(entry);
 				this.renderComponentTooltip(matrixStack, tooltip, mouseX, mouseY);
 			}

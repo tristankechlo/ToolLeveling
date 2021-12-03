@@ -14,7 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class SetEnchantmentToolLevelingTable {
@@ -50,12 +50,11 @@ public class SetEnchantmentToolLevelingTable {
 			if (player == null) {
 				return;
 			}
-			ServerLevel world = player.getLevel();
-			if (world == null || !world.isLoaded(msg.pos)) {
+			ServerLevel level = player.getLevel();
+			if (level == null || !level.isLoaded(msg.pos) || level.isClientSide) {
 				return;
 			}
-//			ToolLeveling.LOGGER.debug(msg.pos);
-			BlockEntity entity = world.getBlockEntity(msg.pos);
+			BlockEntity entity = level.getBlockEntity(msg.pos);
 			if (entity != null && (entity instanceof ToolLevelingTableBlockEntity)) {
 
 				ToolLevelingTableBlockEntity table = (ToolLevelingTableBlockEntity) entity;

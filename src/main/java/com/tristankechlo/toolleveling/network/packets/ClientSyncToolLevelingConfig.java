@@ -9,7 +9,7 @@ import com.tristankechlo.toolleveling.config.ConfigManager;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 
 public class ClientSyncToolLevelingConfig {
 

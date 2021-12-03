@@ -9,7 +9,7 @@ import com.tristankechlo.toolleveling.network.packets.OpenItemValueScreenPacket;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.fmllegacy.network.PacketDistributor;
+import net.minecraftforge.network.PacketDistributor;
 
 public final class OpenItemValueScreenCommand {
 

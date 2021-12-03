@@ -50,8 +50,6 @@ public class ButtonEntry extends ObjectSelectionList.Entry<ButtonEntry> {
 
 		this.button.x = left;
 		this.button.y = top;
-//		long worth = this.screen.getMenu().getContainerWorth() + this.screen.getMenu().getBonusPoints();
-//		this.button.active = (this.upgradeCost <= worth) && ButtonHelper.shouldButtonBeActive(this);
 		long worth = this.screen.getMenu().getContainerWorth() + this.screen.getMenu().getBonusPoints();
 		this.button.active = (this.upgradeCost <= worth) && ButtonHelper.shouldButtonBeActive(this);
 		this.button.render(mStack, mouseX, mouseY, partialTicks);

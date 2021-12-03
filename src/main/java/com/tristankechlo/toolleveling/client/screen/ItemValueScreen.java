@@ -36,7 +36,7 @@ public class ItemValueScreen extends Screen {
 		this.itemValues.render(matrixStack, mouseX, mouseY, partialTicks); // render item list widget
 		super.render(matrixStack, mouseX, mouseY, partialTicks); // render buttons
 		drawCenteredString(matrixStack, font, new TranslatableComponent("screen.toolleveling.default_item_value_worth",
-				ToolLevelingConfig.defaultItemWorth.getValue()), width / 2, 5, 0xFFFFFF);
+				ToolLevelingConfig.defaultItemWorth.getValue()), width / 2, 10, 0xFFFFFF);
 	}
 
 	@Override

@@ -20,8 +20,8 @@ import com.tristankechlo.toolleveling.utils.Names;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.fml.loading.FMLPaths;
-import net.minecraftforge.fmllegacy.network.NetworkDirection;
-import net.minecraftforge.fmllegacy.network.PacketDistributor;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.PacketDistributor;
 
 public final class ConfigManager {
 
@@ -117,8 +117,7 @@ public final class ConfigManager {
 	private static void loadConfigFromFile(Config config, File file) {
 		JsonObject json = null;
 		try {
-			JsonParser parser = new JsonParser();
-			JsonElement jsonElement = parser.parse(new FileReader(file));
+			JsonElement jsonElement = JsonParser.parseReader(new FileReader(file));
 			json = jsonElement.getAsJsonObject();
 		} catch (Exception e) {
 			ToolLeveling.LOGGER.log(Level.INFO, "There was an error loading the config file: " + config.getFileName());
