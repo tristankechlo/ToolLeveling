@@ -76,8 +76,8 @@ public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity imple
 		return this.items.get(0);
 	}
 
-	public int getInventoryWorth() {
-		int worth = 0;
+	public long getInventoryWorth() {
+		long worth = 0;
 		for (int i = 1; i < NUMBER_OF_SLOTS; i++) {
 			ItemStack stack = this.items.get(i);
 			if (!stack.isEmpty()) {
@@ -105,7 +105,6 @@ public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity imple
 			if (stack.isEmpty() || upgradeCost <= 0) {
 				continue;
 			}
-//			ToolLeveling.LOGGER.debug(i);
 			long stackWorth = Utils.getStackWorth(stack);
 			if (stackWorth <= upgradeCost) {
 				upgradeCost -= stackWorth;
