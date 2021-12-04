@@ -27,6 +27,7 @@ only one item is allowed as payment item (by default Netherite Ingot, but it is 
 #### Translations:
 | Language | up to modversion | Translator | since version |
 |:--------:|:----------------:|:-----------| :-----------: |
-| **en_us** | 1.2.11 | tristankechlo ([Github](https://github.com/tristankechlo)) | always |
-| **de_de** | 1.2.11 | tristankechlo ([Github](https://github.com/tristankechlo)) | always |
+| **en_us** | 1.2.12 | tristankechlo ([Github](https://github.com/tristankechlo)) | always |
+| **de_de** | 1.2.12 | tristankechlo ([Github](https://github.com/tristankechlo)) | always |
+| **ro_ro** | 1.2.12 | Potato man | 1.2.12 |
 | **ru_ru** | 1.2.3 | damnarsanis ([CurseForge](https://www.curseforge.com/members/damnarsanis/)) | 1.2.3 |
