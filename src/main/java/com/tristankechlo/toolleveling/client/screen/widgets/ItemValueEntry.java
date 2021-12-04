@@ -50,6 +50,7 @@ public class ItemValueEntry extends ObjectSelectionList.Entry<ItemValueEntry> {
 		}
 	}
 
+	@SuppressWarnings("removal")
 	private void renderItemTooltip(PoseStack mStack, ItemStack iStack, int mouseX, int mouseY, long worth) {
 		Font font = RenderProperties.get(iStack).getFont(iStack);
 		font = (font == null) ? screen.getFontRenderer() : font;
