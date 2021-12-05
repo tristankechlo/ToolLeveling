@@ -1,0 +1,31 @@
+{
+	"itemGroup.ToolLevelingTab" : "Nivelarea sculei",
+
+	"tooltip.toolleveling.itemworth" : "Nivelarea sculei Valoare de obiect: %s",
+
+	"block.toolleveling.tool_leveling_table" : "Masa de nivelare a sculelor",
+
+	"screen.toolleveling.tool_leveling_table" : "Masa de nivelare a sculelor",
+	"screen.toolleveling.item_values" : "Valorile itemuri",
+	"screen.toolleveling.item_value_worth" : "Valoare de obiect: %s",
+	"screen.toolleveling.default_item_value_worth" : "Toate itemuri care nu sunt enumerate in valoreaza %s",
+
+	"container.toolleveling.tool_leveling_table" : "Masa de nivelare a sculelor",
+	"container.toolleveling.tool_leveling_table.current_level" : "Nivelul actual: %s",
+	"container.toolleveling.tool_leveling_table.next_level" : "Nivelul urmator: %s",
+	"container.toolleveling.tool_leveling_table.cost" : "Cost de upgrade: %s",
+	"container.toolleveling.tool_leveling_table.worth.inv" : "In valuare de: %s",
+	"container.toolleveling.tool_leveling_table.worth.bonus_points" : "Prima: %s",
+	"container.toolleveling.tool_leveling_table.error.blacklisted" : "Acest enchantment este deactivat!",
+	"container.toolleveling.tool_leveling_table.error.useless" : "Nivelarea nu va avea niciun effect!",
+	"container.toolleveling.tool_leveling_table.error.maxlevel" : "Nivelul maxim atins!",
+	"container.toolleveling.tool_leveling_table.error.break" : "Enchantment se va rupe cand este nivelata!",
+	"container.toolleveling.tool_leveling_table.error.capped" : "Nivelul este la maximul setat!",
+
+	"commands.superenchant.failed.incompatible" : "%s Nu poate suporta acea Enchantment, puteti activa acest lucru in ToolLevelingConfig (allowIncompatibleEnchantments)",
+	"commands.superenchant.failed.wrong" : "%s Nu poate suporta acea Enchantment, puteti activa acest lucru in ToolLevelingConfig (allowWrongEnchantments)",
+  	"commands.toolleveling.config.path": "Configuratia pentru ToolLeveling poate fi gasita aici: %s",
+  	"commands.toolleveling.config.reload": "Configuratia pentru ToolLeveling a fost reincarcata cu succes.",
+  	"commands.toolleveling.config.noconfig": "Configuratia pentru ToolLeveling Nu a putut fi gasita.",
+  	"commands.toolleveling.config.reset": "Configuratia %s a fost setata la default."
+} 
