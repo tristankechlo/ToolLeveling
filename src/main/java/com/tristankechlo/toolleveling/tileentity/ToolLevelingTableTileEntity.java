@@ -67,8 +67,8 @@ public class ToolLevelingTableTileEntity extends TileEntity implements INamedCon
 		return this.chestContents.getItem(0);
 	}
 
-	public int getInventoryWorth() {
-		int worth = 0;
+	public long getInventoryWorth() {
+		long worth = 0;
 		for (int i = 1; i < this.chestContents.getContainerSize(); i++) {
 			ItemStack stack = this.chestContents.getItem(i);
 			if (!stack.isEmpty()) {
@@ -96,7 +96,6 @@ public class ToolLevelingTableTileEntity extends TileEntity implements INamedCon
 			if (stack.isEmpty() || upgradeCost <= 0) {
 				continue;
 			}
-//			ToolLeveling.LOGGER.debug(i);
 			long stackWorth = Utils.getStackWorth(stack);
 			if (stackWorth <= upgradeCost) {
 				upgradeCost -= stackWorth;

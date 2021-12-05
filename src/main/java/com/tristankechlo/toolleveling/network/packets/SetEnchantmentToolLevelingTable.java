@@ -3,6 +3,9 @@ package com.tristankechlo.toolleveling.network.packets;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import org.apache.logging.log4j.Level;
+
+import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.tileentity.ToolLevelingTableTileEntity;
 import com.tristankechlo.toolleveling.utils.Utils;
 
@@ -49,13 +52,14 @@ public class SetEnchantmentToolLevelingTable {
 
 			ServerPlayerEntity player = context.get().getSender();
 			if (player == null) {
+				ToolLeveling.LOGGER.log(Level.WARN, "Error while handling the request. Invalid sender.");
 				return;
 			}
 			ServerWorld world = player.getLevel();
 			if (world == null || !world.hasChunkAt(msg.pos)) {
+				ToolLeveling.LOGGER.log(Level.WARN, "Error while handling the request. Invalid level.");
 				return;
 			}
-//			ToolLeveling.LOGGER.debug(msg.pos);
 			TileEntity entity = world.getBlockEntity(msg.pos);
 			if (entity != null && (entity instanceof ToolLevelingTableTileEntity)) {
 
