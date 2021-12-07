@@ -4,9 +4,12 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.logging.log4j.Level;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.tristankechlo.toolleveling.ToolLeveling;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -28,15 +31,33 @@ public final class ItemValues {
 		// Ores
 		addItem(Items.COAL, 8);
 		addItem(Items.COAL_ORE, 30);
+		addItem(Items.DEEPSLATE_COAL_ORE, 30);
 		addItem(Items.COAL_BLOCK, 73);
+
+		addItem(Items.COPPER_ORE, 10);
+		addItem(Items.DEEPSLATE_COPPER_ORE, 10);
+		addItem(Items.RAW_COPPER, 11);
+		addItem(Items.COPPER_INGOT, 14);
+		addItem(Items.COPPER_BLOCK, 126);
+		addItem(Items.RAW_COPPER_BLOCK, 99);
+
+		addItem(Items.RAW_IRON, 13);
 		addItem(Items.IRON_INGOT, 15);
 		addItem(Items.IRON_ORE, 12);
+		addItem(Items.DEEPSLATE_IRON_ORE, 12);
+		addItem(Items.RAW_IRON_BLOCK, 117);
 		addItem(Items.IRON_BLOCK, 135);
+
 		addItem(Items.GOLD_INGOT, 40);
+		addItem(Items.RAW_GOLD, 35);
 		addItem(Items.GOLD_ORE, 30);
+		addItem(Items.DEEPSLATE_GOLD_ORE, 30);
+		addItem(Items.RAW_GOLD_BLOCK, 315);
 		addItem(Items.GOLD_BLOCK, 360);
+
 		addItem(Items.DIAMOND, 160);
 		addItem(Items.DIAMOND_ORE, 160);
+		addItem(Items.DEEPSLATE_DIAMOND_ORE, 160);
 		addItem(Items.DIAMOND_BLOCK, 1450);
 		addItem(Items.NETHERITE_INGOT, 200);
 		addItem(Items.NETHERITE_SCRAP, 50);
@@ -44,18 +65,25 @@ public final class ItemValues {
 		addItem(Items.NETHERITE_BLOCK, 1800);
 		addItem(Items.LAPIS_LAZULI, 8);
 		addItem(Items.LAPIS_ORE, 120);
+		addItem(Items.DEEPSLATE_LAPIS_ORE, 120);
 		addItem(Items.LAPIS_BLOCK, 70);
 		addItem(Items.EMERALD, 100);
 		addItem(Items.EMERALD_ORE, 800);
+		addItem(Items.DEEPSLATE_EMERALD_ORE, 800);
 		addItem(Items.EMERALD_BLOCK, 900);
 		addItem(Items.QUARTZ, 10);
 		addItem(Items.NETHER_QUARTZ_ORE, 40);
 		addItem(Items.QUARTZ_BLOCK, 40);
 		addItem(Items.REDSTONE, 4);
 		addItem(Items.REDSTONE_ORE, 60);
+		addItem(Items.DEEPSLATE_REDSTONE_ORE, 60);
 		addItem(Items.REDSTONE_BLOCK, 36);
 		addItem(Items.GLOWSTONE_DUST, 4);
 		addItem(Items.GLOWSTONE, 15);
+
+		// other
+		addItem(Items.AMETHYST_BLOCK, 11);
+		addItem(Items.AMETHYST_SHARD, 17);
 
 		// Food
 		addItem(Items.GOLDEN_APPLE, 400);
@@ -105,6 +133,8 @@ public final class ItemValues {
 			if (ForgeRegistries.ITEMS.containsKey(loc)) {
 				Item item = ForgeRegistries.ITEMS.getValue(loc);
 				itemValues.put(item, worth);
+			} else {
+				ToolLeveling.LOGGER.log(Level.WARN, "Ignoring invalid item with id: " + element.getKey());
 			}
 		}
 	}

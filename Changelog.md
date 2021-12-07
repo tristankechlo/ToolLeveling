@@ -3,6 +3,7 @@
 ### Version 1.18 - 1.2.12
  - fix overflow for large inventory worth
  - add romanian translation by **Potato man**
+ - add item values for new 1.18-items (delete old `item_values.json` to get a new config)
 
 ### Version 1.18 - 1.2.11
  - port to 1.18
