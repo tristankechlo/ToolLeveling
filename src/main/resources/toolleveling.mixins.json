@@ -1,10 +1,17 @@
 {
-	"required" : true,
-	"package" : "com.tristankechlo.toolleveling.mixin",
-	"compatibilityLevel" : "JAVA_16",
-	"refmap" : "toolleveling.refmap.json",
-	"mixins" : [
-		"MixinEnchantmentHelper"
+	"required": true,
+	"minVersion": "0.8",
+	"package": "com.tristankechlo.toolleveling.mixin",
+	"compatibilityLevel": "JAVA_16",
+	"mixins": [
+		"MixinEnchantmentHelper",
+		"MixinPlayerManager"
 	],
-	"minVersion" : "0.8"
+	"client": [
+	],
+	"server": [
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
 }

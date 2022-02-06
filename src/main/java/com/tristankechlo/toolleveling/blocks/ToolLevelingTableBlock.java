@@ -2,87 +2,88 @@ package com.tristankechlo.toolleveling.blocks;
 
 import com.tristankechlo.toolleveling.blockentity.ToolLevelingTableBlockEntity;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.Containers;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseEntityBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
-import net.minecraft.world.level.material.PushReaction;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.network.NetworkHooks;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.BlockWithEntity;
+import net.minecraft.block.Material;
+import net.minecraft.block.ShapeContext;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.piston.PistonBehavior;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.sound.BlockSoundGroup;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.DyeColor;
+import net.minecraft.util.Hand;
+import net.minecraft.util.ItemScatterer;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
+import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
 
-public class ToolLevelingTableBlock extends BaseEntityBlock {
+public class ToolLevelingTableBlock extends BlockWithEntity {
 
-	private static final VoxelShape SHAPE = Shapes.or(box(2, 0, 2, 14, 3, 14), box(3, 3, 3, 13, 6, 13),
-			box(4, 6, 4, 12, 11, 12), box(3, 11, 3, 13, 14, 13));
+	private static final VoxelShape SHAPE = VoxelShapes.union(Block.createCuboidShape(2, 0, 2, 14, 3, 14),
+			Block.createCuboidShape(3, 3, 3, 13, 6, 13), Block.createCuboidShape(4, 6, 4, 12, 11, 12),
+			Block.createCuboidShape(3, 11, 3, 13, 14, 13));
 
 	public ToolLevelingTableBlock() {
-		super(Block.Properties.of(Material.METAL, MaterialColor.COLOR_GRAY).strength(4.5f, 1000.0f)
-				.sound(SoundType.METAL).requiresCorrectToolForDrops().noOcclusion());
-		this.registerDefaultState(this.defaultBlockState());
+		super(FabricBlockSettings.of(Material.METAL).mapColor(DyeColor.GRAY).strength(4.5f, 1000.0f)
+				.sounds(BlockSoundGroup.METAL).requiresTool());
 	}
 
 	@Override
-	public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+	public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context) {
 		return SHAPE;
 	}
 
 	@Override
-	public RenderShape getRenderShape(BlockState state) {
-		return RenderShape.MODEL;
+	public BlockRenderType getRenderType(BlockState state) {
+		return BlockRenderType.MODEL;
 	}
 
 	@Override
-	public PushReaction getPistonPushReaction(BlockState state) {
-		return PushReaction.IGNORE;
+	public PistonBehavior getPistonBehavior(BlockState state) {
+		return PistonBehavior.IGNORE;
 	}
 
 	@Override
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
+	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand,
 			BlockHitResult hit) {
-		if (level.isClientSide) {
-			return InteractionResult.SUCCESS;
-		} else {
-			BlockEntity blockentity = level.getBlockEntity(pos);
-			if (blockentity instanceof ToolLevelingTableBlockEntity) {
-				NetworkHooks.openGui((ServerPlayer) player, (ToolLevelingTableBlockEntity) blockentity, buf -> {
-					buf.writeBlockPos(pos);
-				});
+		if (!world.isClient) {
+			NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
+			if (screenHandlerFactory != null) {
+				player.openHandledScreen(screenHandlerFactory);
 			}
-			return InteractionResult.CONSUME;
 		}
+		return ActionResult.SUCCESS;
 	}
 
+	@Override
 	@SuppressWarnings("deprecation")
-	@Override
-	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-		if (!state.is(newState.getBlock())) {
-			BlockEntity blockentity = level.getBlockEntity(pos);
-			if (blockentity instanceof ToolLevelingTableBlockEntity) {
-				Containers.dropContents(level, pos, (ToolLevelingTableBlockEntity) blockentity);
-				level.updateNeighbourForOutputSignal(pos, this);
+	public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+		if (state.getBlock() != newState.getBlock()) {
+			BlockEntity blockEntity = world.getBlockEntity(pos);
+			if (blockEntity instanceof ToolLevelingTableBlockEntity) {
+				ItemScatterer.spawn(world, pos, (ToolLevelingTableBlockEntity) blockEntity);
+				world.updateComparators(pos, this);
 			}
-			super.onRemove(state, level, pos, newState, isMoving);
+			super.onStateReplaced(state, world, pos, newState, moved);
 		}
 	}
 
 	@Override
-	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+	public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
 		return new ToolLevelingTableBlockEntity(pos, state);
+	}
+
+	@Override
+	public boolean hasComparatorOutput(BlockState state) {
+		return false;
 	}
 
 }

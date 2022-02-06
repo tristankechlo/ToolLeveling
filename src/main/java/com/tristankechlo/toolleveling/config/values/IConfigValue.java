@@ -9,7 +9,7 @@ public interface IConfigValue<T> {
 	void setToDefault();
 
 	T getValue();
-	
+
 	void serialize(JsonObject jsonObject);
 
 	void deserialize(JsonObject jsonObject);

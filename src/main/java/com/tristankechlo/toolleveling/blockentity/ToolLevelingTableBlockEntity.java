@@ -2,78 +2,153 @@ package com.tristankechlo.toolleveling.blockentity;
 
 import java.util.stream.IntStream;
 
-import com.tristankechlo.toolleveling.init.ModRegistry;
-import com.tristankechlo.toolleveling.menu.ToolLevelingTableMenu;
+import com.google.common.base.Preconditions;
+import com.tristankechlo.toolleveling.ToolLeveling;
+import com.tristankechlo.toolleveling.screenhandler.ToolLevelingTableScreenhandler;
 import com.tristankechlo.toolleveling.utils.Names;
 import com.tristankechlo.toolleveling.utils.Utils;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Connection;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.world.ContainerHelper;
-import net.minecraft.world.WorldlyContainer;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.Inventories;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.SidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.Packet;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
+import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 
-public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer {
+public class ToolLevelingTableBlockEntity extends BlockEntity
+		implements Inventory, SidedInventory, NamedScreenHandlerFactory, ExtendedScreenHandlerFactory {
 
-	private Component customname = new TranslatableComponent("container." + Names.MOD_ID + ".tool_leveling_table");
-	private NonNullList<ItemStack> items = NonNullList.withSize(NUMBER_OF_SLOTS, ItemStack.EMPTY);
+	private static final Text CUSTOMNAME = new TranslatableText("container." + Names.MOD_ID + ".tool_leveling_table");
+	private DefaultedList<ItemStack> items = DefaultedList.ofSize(NUMBER_OF_SLOTS, ItemStack.EMPTY);
 	public static final int NUMBER_OF_SLOTS = 16;
 	public static final int[] SLOTS = IntStream.range(1, NUMBER_OF_SLOTS).toArray();
 	public long bonusPoints = 0;
 
 	public ToolLevelingTableBlockEntity(BlockPos pos, BlockState state) {
-		super(ModRegistry.TLT_TILE_ENTITY.get(), pos, state);
+		super(ToolLeveling.TLT_BLOCK_ENTITY, pos, state);
 	}
 
-	public boolean canPlayerAccess(Player player) {
-		if (this.level.getBlockEntity(this.worldPosition) != this) {
+	@Override
+	protected void writeNbt(NbtCompound nbt) {
+		Inventories.writeNbt(nbt, items);
+		nbt.putLong("BonusPoints", this.bonusPoints);
+		super.writeNbt(nbt);
+	}
+
+	@Override
+	public void readNbt(NbtCompound nbt) {
+		super.readNbt(nbt);
+		this.items = DefaultedList.ofSize(NUMBER_OF_SLOTS, ItemStack.EMPTY);
+		Inventories.readNbt(nbt, this.items);
+		this.bonusPoints = nbt.getLong("BonusPoints");
+	}
+
+	@Override
+	public int[] getAvailableSlots(Direction side) {
+		return SLOTS;
+	}
+
+	@Override
+	public boolean canExtract(int slot, ItemStack stack, Direction dir) {
+		return false;
+	}
+
+	@Override
+	public boolean canInsert(int index, ItemStack stack, Direction arg2) {
+		return (index == 0) ? false : (!stack.hasEnchantments() && !stack.isDamageable());
+	}
+
+	@Override
+	public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+		return new ToolLevelingTableScreenhandler(syncId, playerInventory, this, pos);
+	}
+
+	@Override
+	public Text getDisplayName() {
+		return CUSTOMNAME;
+	}
+
+	@Override
+	public void clear() {
+		items.clear();
+	}
+
+	@Override
+	public boolean canPlayerUse(PlayerEntity player) {
+		if (this.world.getBlockEntity(this.pos) != this) {
 			return false;
 		}
-		return player.distanceToSqr(worldPosition.getX() + 0.5D, worldPosition.getY() + 0.5D,
-				worldPosition.getZ() + 0.5D) < (8.0 * 8.0);
+		if (player.squaredDistanceTo(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D) > 64.0D) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override
-	public void load(CompoundTag tag) {
-		super.load(tag);
-		this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-		ContainerHelper.loadAllItems(tag, this.items);
-		this.bonusPoints = tag.getLong("BonusPoints");
-
+	public ItemStack getStack(int slot) {
+		if (slot < 0 || slot >= items.size()) {
+			return ItemStack.EMPTY;
+		}
+		return this.items.get(slot);
 	}
 
 	@Override
-	protected void saveAdditional(CompoundTag tag) {
-		super.saveAdditional(tag);
-		ContainerHelper.saveAllItems(tag, this.items);
-		tag.putLong("BonusPoints", this.bonusPoints);
+	public boolean isEmpty() {
+		return this.items.stream().allMatch(ItemStack::isEmpty);
 	}
 
 	@Override
-	public CompoundTag save(CompoundTag tag) {
-		super.save(tag);
-		ContainerHelper.saveAllItems(tag, this.items);
-		tag.putLong("BonusPoints", this.bonusPoints);
-		return tag;
+	public ItemStack removeStack(int slot) {
+		ItemStack itemStack = this.items.get(slot);
+		if (itemStack.isEmpty()) {
+			return ItemStack.EMPTY;
+		}
+		this.items.set(slot, ItemStack.EMPTY);
+		return itemStack;
+	}
+
+	@Override
+	public ItemStack removeStack(int slot, int amount) {
+		ItemStack itemStack = Inventories.splitStack(items, slot, amount);
+		if (!itemStack.isEmpty()) {
+			this.markDirty();
+		}
+		return itemStack;
+	}
+
+	@Override
+	public void setStack(int slot, ItemStack stack) {
+		this.items.set(slot, stack);
+		if (!stack.isEmpty() && stack.getCount() > this.getMaxCountPerStack()) {
+			stack.setCount(this.getMaxCountPerStack());
+		}
+		this.markDirty();
+	}
+
+	@Override
+	public int size() {
+		return NUMBER_OF_SLOTS;
 	}
 
 	public ItemStack getStackToEnchant() {
-		if (this.items.get(0).is(Items.AIR)) {
-			return ItemStack.EMPTY;
-		}
-		return this.items.get(0);
+		return this.getStack(0);
 	}
 
 	public long getInventoryWorth() {
@@ -95,7 +170,7 @@ public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity imple
 		// enough points stored as bonusPoints
 		if (upgradeCost <= bonusPoints) {
 			bonusPoints -= upgradeCost;
-			this.setChanged();
+			this.markDirty();
 			return true;
 		}
 		upgradeCost -= bonusPoints;
@@ -129,131 +204,39 @@ public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity imple
 			}
 			this.items.set(i, stack);
 		}
-		this.setChanged();
+		this.markDirty();
 		return true;
 	}
 
 	@Override
-	public Component getName() {
-		return this.customname;
+	public Packet<ClientPlayPacketListener> toUpdatePacket() {
+		return BlockEntityUpdateS2CPacket.create(this);
 	}
 
 	@Override
-	public int getContainerSize() {
-		return NUMBER_OF_SLOTS;
+	public NbtCompound toInitialChunkDataNbt() {
+		var nbt = super.toInitialChunkDataNbt();
+		this.writeNbt(nbt);
+		return nbt;
 	}
 
-	@Override
-	public boolean isEmpty() {
-		return this.items.stream().allMatch(ItemStack::isEmpty);
-	}
-
-	@Override
-	public ItemStack getItem(int index) {
-		return this.items.get(index);
-	}
-
-	@Override
-	public ItemStack removeItem(int p_18942_, int p_18943_) {
-		this.setChanged();
-		return ContainerHelper.removeItem(this.items, p_18942_, p_18943_);
-	}
-
-	@Override
-	public ItemStack removeItemNoUpdate(int p_18951_) {
-		return ContainerHelper.takeItem(this.items, p_18951_);
-	}
-
-	@Override
-	public void setItem(int index, ItemStack stack) {
-		this.items.set(index, stack);
-		if (stack.getCount() > this.getMaxStackSize()) {
-			stack.setCount(this.getMaxStackSize());
+	public final void sync() {
+		Preconditions.checkNotNull(world);
+		if (world.isClient) {
+			throw new IllegalStateException("Cannot call sync() on the logical client!");
 		}
-		this.setChanged();
+		((ServerWorld) world).getChunkManager().markForUpdate(pos);
 	}
 
 	@Override
-	public boolean stillValid(Player player) {
-		if (this.level.getBlockEntity(this.worldPosition) != this) {
-			return false;
-		} else {
-			return !(player.distanceToSqr((double) this.worldPosition.getX() + 0.5D,
-					(double) this.worldPosition.getY() + 0.5D, (double) this.worldPosition.getZ() + 0.5D) > 64.0D);
-		}
+	public void markDirty() {
+		super.markDirty();
+		sync();
 	}
 
 	@Override
-	public void clearContent() {
-		this.items.clear();
-	}
-
-	@Override
-	protected Component getDefaultName() {
-		return this.customname;
-	}
-
-	@Override
-	public void setChanged() {
-		super.setChanged();
-		level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
-	}
-
-	@Override
-	protected AbstractContainerMenu createMenu(int windowID, Inventory playerinv) {
-		return new ToolLevelingTableMenu(windowID, playerinv, this, this.worldPosition);
-	}
-
-	@Override
-	public ClientboundBlockEntityDataPacket getUpdatePacket() {
-		CompoundTag tag = new CompoundTag();
-		ContainerHelper.saveAllItems(tag, this.items);
-		tag.putLong("BonusPoints", this.bonusPoints);
-		return ClientboundBlockEntityDataPacket.create(this);
-	}
-
-	@Override
-	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
-		CompoundTag tag = pkt.getTag();
-		this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-		ContainerHelper.loadAllItems(tag, this.items);
-		this.bonusPoints = tag.getLong("BonusPoints");
-	}
-
-	@Override
-	public CompoundTag getUpdateTag() {
-		CompoundTag tag = super.getUpdateTag();
-		ContainerHelper.saveAllItems(tag, this.items);
-		tag.putLong("BonusPoints", this.bonusPoints);
-		return tag;
-	}
-
-	@Override
-	public void handleUpdateTag(CompoundTag tag) {
-		super.handleUpdateTag(tag);
-		this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-		ContainerHelper.loadAllItems(tag, this.items);
-		this.bonusPoints = tag.getLong("BonusPoints");
-	}
-
-	@Override
-	public int[] getSlotsForFace(Direction side) {
-		return SLOTS;
-	}
-
-	@Override
-	public boolean canPlaceItemThroughFace(int index, ItemStack stack, Direction side) {
-		return (index == 0) ? false : this.canPlaceItem(index, stack);
-	}
-
-	@Override
-	public boolean canPlaceItem(int index, ItemStack stack) {
-		return index > 0 && !stack.isEnchanted() && !stack.isDamageableItem();
-	}
-
-	@Override
-	public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction side) {
-		return this.canPlaceItemThroughFace(index, stack, side);
+	public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf) {
+		buf.writeBlockPos(pos);
 	}
 
 }

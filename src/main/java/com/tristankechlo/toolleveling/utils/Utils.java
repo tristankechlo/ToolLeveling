@@ -6,23 +6,23 @@ import com.google.common.collect.ImmutableMap;
 import com.tristankechlo.toolleveling.config.ItemValues;
 import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public class Utils {
 
 	public static final Map<Enchantment, Integer> BREAKING_ENCHANTMENTS = ImmutableMap.<Enchantment, Integer>builder()
-			.put(Enchantments.FISHING_LUCK, 84).put(Enchantments.QUICK_CHARGE, 5).put(Enchantments.THORNS, 7)
-			.put(Enchantments.FISHING_SPEED, 5).build();
+			.put(Enchantments.LUCK_OF_THE_SEA, 84).put(Enchantments.QUICK_CHARGE, 5).put(Enchantments.THORNS, 7)
+			.put(Enchantments.LURE, 5).build();
 
 	public static Enchantment getEnchantmentFromString(String name) {
-		ResourceLocation loc = new ResourceLocation(String.valueOf(name));
-		if (ForgeRegistries.ENCHANTMENTS.containsKey(loc)) {
-			return ForgeRegistries.ENCHANTMENTS.getValue(loc);
+		Identifier loc = new Identifier(String.valueOf(name));
+		if (Registry.ENCHANTMENT.containsId(loc)) {
+			return Registry.ENCHANTMENT.get(loc);
 		}
 		return null;
 	}
@@ -35,9 +35,9 @@ public class Utils {
 	}
 
 	public static Item getItemFromString(String name) {
-		ResourceLocation loc = new ResourceLocation(String.valueOf(name));
-		if (ForgeRegistries.ITEMS.containsKey(loc)) {
-			return ForgeRegistries.ITEMS.getValue(loc);
+		Identifier loc = new Identifier(String.valueOf(name));
+		if (Registry.ITEM.containsId(loc)) {
+			return Registry.ITEM.get(loc);
 		}
 		return null;
 	}

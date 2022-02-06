@@ -6,27 +6,24 @@ import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.logging.log4j.Level;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.tristankechlo.toolleveling.ToolLeveling;
-import com.tristankechlo.toolleveling.network.PacketHandler;
-import com.tristankechlo.toolleveling.network.packets.SyncToolLevelingConfig;
+import com.tristankechlo.toolleveling.network.ServerNetworkHandler;
 import com.tristankechlo.toolleveling.utils.Names;
 
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.fml.loading.FMLPaths;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.PacketDistributor;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
 
 public final class ConfigManager {
 
-	private static final Map<String, Config> CONFIGS = getConfigList();
-	private static final File ConfigDir = FMLPaths.CONFIGDIR.get().resolve("toolleveling").toFile();
+	private static final Map<String, ConfigHandler> CONFIGS = getConfigList();
+	private static final File ConfigDir = FabricLoader.getInstance().getConfigDir().resolve("toolleveling").toFile();
 
 	private ConfigManager() {}
 
@@ -34,70 +31,68 @@ public final class ConfigManager {
 		if (!ConfigDir.exists()) {
 			ConfigDir.mkdirs();
 		}
-		for (Map.Entry<String, Config> element : CONFIGS.entrySet()) {
-			Config config = element.getValue();
+		for (Map.Entry<String, ConfigHandler> element : CONFIGS.entrySet()) {
+			ConfigHandler config = element.getValue();
 			config.setToDefault();
 			File configFile = new File(ConfigDir, config.getFileName());
 			if (configFile.exists()) {
 				ConfigManager.loadConfigFromFile(config, configFile);
 				ConfigManager.writeConfigToFile(config, configFile);
-				ToolLeveling.LOGGER.log(Level.INFO, "Saved the checked/corrected config: " + element.getKey());
+				ToolLeveling.LOGGER.info("Saved the checked/corrected config: " + element.getKey());
 			} else {
 				ConfigManager.writeConfigToFile(config, configFile);
-				ToolLeveling.LOGGER.log(Level.INFO,
-						"No config[" + element.getKey() + "] was found, created a new one.");
+				ToolLeveling.LOGGER.warn("No config[" + element.getKey() + "] was found, created a new one.");
 			}
 		}
 	}
 
-	public static void reloadAllConfigs() {
+	public static void reloadAllConfigs(MinecraftServer server) {
 		if (!ConfigDir.exists()) {
 			ConfigDir.mkdirs();
 		}
-		for (Map.Entry<String, Config> element : CONFIGS.entrySet()) {
-			Config config = element.getValue();
+		for (Map.Entry<String, ConfigHandler> element : CONFIGS.entrySet()) {
+			ConfigHandler config = element.getValue();
 			File configFile = new File(ConfigDir, config.getFileName());
 			if (configFile.exists()) {
 				ConfigManager.loadConfigFromFile(config, configFile);
 				ConfigManager.writeConfigToFile(config, configFile);
-				ToolLeveling.LOGGER.log(Level.INFO, "Saved the checked/corrected config: " + element.getKey());
+				ToolLeveling.LOGGER.info("Saved the checked/corrected config: " + element.getKey());
 			} else {
 				ConfigManager.writeConfigToFile(config, configFile);
-				ToolLeveling.LOGGER.log(Level.INFO,
-						"No config [" + element.getKey() + "] was found, created a new one.");
+				ToolLeveling.LOGGER.warn("No config [" + element.getKey() + "] was found, created a new one.");
 			}
-			syncOneConfigToAllClients(element.getKey(), config);
+			syncOneConfigToAllClients(server, element.getKey(), config);
 		}
 	}
 
-	public static void resetAllConfigs() {
+	public static void resetAllConfigs(MinecraftServer server) {
 		if (!ConfigDir.exists()) {
 			ConfigDir.mkdirs();
 		}
-		for (Map.Entry<String, Config> element : CONFIGS.entrySet()) {
-			resetOneConfig(element.getKey(), element.getValue());
+		for (Map.Entry<String, ConfigHandler> element : CONFIGS.entrySet()) {
+			resetOneConfig(server, element.getKey(), element.getValue());
 		}
 	}
 
-	public static void resetOneConfig(String identifier) {
+	public static void resetOneConfig(MinecraftServer server, String identifier) {
 		if (!ConfigDir.exists()) {
 			ConfigDir.mkdirs();
 		}
-		Config config = CONFIGS.get(identifier);
+		ConfigHandler config = CONFIGS.get(identifier);
 		if (config != null) {
-			resetOneConfig(identifier, config);
+			resetOneConfig(server, identifier, config);
 		}
 	}
 
-	private static void resetOneConfig(String identifier, Config config) {
+	private static void resetOneConfig(MinecraftServer server, String identifier, ConfigHandler config) {
 		config.setToDefault();
 		File configFile = new File(ConfigDir, config.getFileName());
 		ConfigManager.writeConfigToFile(config, configFile);
-		ToolLeveling.LOGGER.log(Level.INFO, "Saved [" + identifier + "] as new config.");
-		syncOneConfigToAllClients(identifier, config);
+		ToolLeveling.LOGGER.info("Saved [" + identifier + "] as new config.");
+		syncOneConfigToAllClients(server, identifier, config);
 	}
 
-	private static void writeConfigToFile(Config config, File file) {
+	private static void writeConfigToFile(ConfigHandler config, File file) {
 		JsonObject jsonObject = new JsonObject();
 		jsonObject.addProperty("_commentSyntax", "to check if your config-file has the correct "
 				+ "syntax, test your configuration on this website: https://jsonlint.com/");
@@ -108,50 +103,49 @@ public final class ConfigManager {
 			writer.write(jsonString);
 			writer.close();
 		} catch (Exception e) {
-			ToolLeveling.LOGGER.log(Level.INFO,
-					"There was an error writing the config to file: " + config.getFileName());
+			ToolLeveling.LOGGER.error("There was an error writing the config to file: " + config.getFileName());
 			e.printStackTrace();
 		}
 	}
 
-	private static void loadConfigFromFile(Config config, File file) {
+	private static void loadConfigFromFile(ConfigHandler config, File file) {
 		JsonObject json = null;
 		try {
 			JsonElement jsonElement = JsonParser.parseReader(new FileReader(file));
 			json = jsonElement.getAsJsonObject();
 		} catch (Exception e) {
-			ToolLeveling.LOGGER.log(Level.INFO, "There was an error loading the config file: " + config.getFileName());
+			ToolLeveling.LOGGER.error("There was an error loading the config file: " + config.getFileName());
 			e.printStackTrace();
 		}
 		if (json != null) {
 			config.deserialize(json);
-			ToolLeveling.LOGGER.log(Level.INFO, "Config[" + config.getFileName() + "] was successfully loaded.");
+			ToolLeveling.LOGGER.info("Config[" + config.getFileName() + "] was successfully loaded.");
 		} else {
-			ToolLeveling.LOGGER.log(Level.INFO,
-					"Error loading config[" + config.getFileName() + "], config hasn't been loaded.");
+			ToolLeveling.LOGGER.error("Error loading config[" + config.getFileName() + "], config hasn't been loaded.");
 		}
 	}
 
-	public static void syncAllConfigsToOneClient(ServerPlayer player) {
-		for (Map.Entry<String, Config> element : CONFIGS.entrySet()) {
-			Config config = element.getValue();
+	public static void syncAllConfigsToOneClient(ServerPlayerEntity player) {
+		for (Map.Entry<String, ConfigHandler> element : CONFIGS.entrySet()) {
+			ConfigHandler config = element.getValue();
 			String identifier = element.getKey();
 			JsonObject json = config.serialize(new JsonObject());
-			PacketHandler.INSTANCE.sendTo(new SyncToolLevelingConfig(identifier, json),
-					player.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);
+			ServerNetworkHandler.sendSyncConfig(player, identifier, json);
 		}
 	}
 
-	public static void syncOneConfigToAllClients(String identifier, Config config) {
+	public static void syncOneConfigToAllClients(MinecraftServer server, String identifier, ConfigHandler config) {
 		JsonObject json = config.serialize(new JsonObject());
-		PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), new SyncToolLevelingConfig(identifier, json));
+		for (ServerPlayerEntity player : PlayerLookup.all(server)) {
+			ServerNetworkHandler.sendSyncConfig(player, identifier, json);
+		}
 	}
 
 	public static boolean deserializeConfig(String identifier, JsonObject json) {
 		if (!CONFIGS.containsKey(identifier)) {
 			return false;
 		}
-		Config config = CONFIGS.get(identifier);
+		ConfigHandler config = CONFIGS.get(identifier);
 		config.deserialize(json);
 		return true;
 	}
@@ -164,13 +158,13 @@ public final class ConfigManager {
 		return gson.create();
 	}
 
-	private static Map<String, Config> getConfigList() {
-		Map<String, Config> configs = new HashMap<>();
+	private static Map<String, ConfigHandler> getConfigList() {
+		Map<String, ConfigHandler> configs = new HashMap<>();
 
-		configs.put(Names.MOD_ID + ":general", new Config("toolleveling.json", ToolLevelingConfig::setToDefaultValues,
+		configs.put(Names.MOD_ID + ":general", new ConfigHandler("toolleveling.json", ToolLevelingConfig::setToDefaultValues,
 				ToolLevelingConfig::serialize, ToolLevelingConfig::deserialize));
 
-		configs.put(Names.MOD_ID + ":itemValues", new Config("item_values.json", ItemValues::setToDefaultValues,
+		configs.put(Names.MOD_ID + ":itemValues", new ConfigHandler("item_values.json", ItemValues::setToDefaultValues,
 				ItemValues::serialize, ItemValues::deserialize));
 
 		return configs;

@@ -1,79 +1,77 @@
 package com.tristankechlo.toolleveling.commands;
 
+import static net.minecraft.server.command.CommandManager.argument;
+import static net.minecraft.server.command.CommandManager.literal;
+
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.tristankechlo.toolleveling.config.ConfigManager;
 import com.tristankechlo.toolleveling.utils.Names;
 
-import net.minecraft.ChatFormatting;
-import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.ClickEvent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraftforge.server.command.EnumArgument;
+import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Formatting;
 
 public class ToolLevelingCommand {
 
-	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-		LiteralArgumentBuilder<CommandSourceStack> toollevelingCommand = Commands.literal("toolleveling")
-				.requires(
-						(source) -> source.hasPermission(3))
-				.then(Commands.literal("config")
-						.then(Commands.literal("reload").executes(context -> configReload(context)))
-						.then(Commands.literal("show")
-								.then(Commands.argument("identifier", EnumArgument.enumArgument(Identifier.class))
-										.executes(context -> configShow(context))))
-						.then(Commands.literal("reset")
-								.then(Commands.argument("identifier", EnumArgument.enumArgument(Identifier.class))
-										.executes(context -> configReset(context)))));
+	public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+		LiteralArgumentBuilder<ServerCommandSource> toollevelingCommand = literal("toolleveling")
+				.requires((source) -> source.hasPermissionLevel(3))
+				.then(literal("config").then(literal("reload").executes(ToolLevelingCommand::configReload))
+						.then(literal("show")
+								.then(argument("identifier", EnumArgument.enumArgument(ConfigIdentifier.class))
+										.executes(ToolLevelingCommand::configShow)))
+						.then(literal("reset")
+								.then(argument("identifier", EnumArgument.enumArgument(ConfigIdentifier.class))
+										.executes(ToolLevelingCommand::configReset))));
 		dispatcher.register(toollevelingCommand);
 	}
 
-	private static int configReload(CommandContext<CommandSourceStack> context) {
-		CommandSourceStack source = context.getSource();
-		ConfigManager.reloadAllConfigs();
-		source.sendSuccess(new TranslatableComponent("commands.toolleveling.config.reload"), true);
+	private static int configReload(CommandContext<ServerCommandSource> context) {
+		ServerCommandSource source = context.getSource();
+		ConfigManager.reloadAllConfigs(source.getServer());
+		source.sendFeedback(new TranslatableText("commands.toolleveling.config.reload"), true);
 		return 1;
 	}
 
-	private static int configShow(CommandContext<CommandSourceStack> context) {
-		CommandSourceStack source = context.getSource();
-		final Identifier identifier = context.getArgument("identifier", Identifier.class);
+	private static int configShow(CommandContext<ServerCommandSource> context) {
+		ServerCommandSource source = context.getSource();
+		final ConfigIdentifier identifier = context.getArgument("identifier", ConfigIdentifier.class);
 		if (!ConfigManager.hasIdentifier(identifier.id)) {
-			source.sendSuccess(new TranslatableComponent("commands.toolleveling.config.noconfig"), true);
+			source.sendFeedback(new TranslatableText("commands.toolleveling.config.noconfig"), true);
 			return -1;
 		}
 		String name = ConfigManager.getConfigFileName(identifier.id);
 		String path = ConfigManager.getConfigPath(identifier.id);
-		source.sendSuccess(
-				new TranslatableComponent("commands.toolleveling.config.path",
-						new TextComponent(name).withStyle(ChatFormatting.UNDERLINE).withStyle(
-								(style) -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, path)))),
-				true);
+		MutableText mutableText = (new LiteralText(name)).formatted(Formatting.UNDERLINE)
+				.styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, path)));
+		source.sendFeedback(new TranslatableText("commands.toolleveling.config.path", mutableText), true);
 		return 1;
 	}
 
-	private static int configReset(CommandContext<CommandSourceStack> context) {
-		CommandSourceStack source = context.getSource();
-		final Identifier identifier = context.getArgument("identifier", Identifier.class);
+	private static int configReset(CommandContext<ServerCommandSource> context) {
+		ServerCommandSource source = context.getSource();
+		final ConfigIdentifier identifier = context.getArgument("identifier", ConfigIdentifier.class);
 		if (!ConfigManager.hasIdentifier(identifier.id)) {
-			source.sendSuccess(new TranslatableComponent("commands.toolleveling.config.noconfig"), true);
+			source.sendFeedback(new TranslatableText("commands.toolleveling.config.noconfig"), true);
 			return -1;
 		}
-		ConfigManager.resetOneConfig(identifier.id);
-		source.sendSuccess(new TranslatableComponent("commands.toolleveling.config.reset", identifier.id), true);
+		ConfigManager.resetOneConfig(source.getServer(), identifier.id);
+		source.sendFeedback(new TranslatableText("commands.toolleveling.config.reset", identifier.id), true);
 		return 1;
 	}
 
-	private static enum Identifier {
+	public static enum ConfigIdentifier {
 		GENERAL(Names.MOD_ID + ":general"),
 		ITEMVALUES(Names.MOD_ID + ":itemValues");
 
 		public final String id;
 
-		private Identifier(String id) {
+		private ConfigIdentifier(String id) {
 			this.id = id;
 		}
 	}

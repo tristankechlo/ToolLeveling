@@ -27,5 +27,4 @@ public final class ShortValue extends NumberValue<Short> {
 		return jsonElement.getAsShort();
 	}
 
-
 }

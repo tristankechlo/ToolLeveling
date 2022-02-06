@@ -11,15 +11,15 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.tristankechlo.toolleveling.config.values.BooleanValue;
-import com.tristankechlo.toolleveling.config.values.ForgeRegistryConfig;
+import com.tristankechlo.toolleveling.config.values.RegistryConfig;
 import com.tristankechlo.toolleveling.config.values.number.DoubleValue;
 import com.tristankechlo.toolleveling.config.values.number.LongValue;
 import com.tristankechlo.toolleveling.config.values.number.ShortValue;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public final class ToolLevelingConfig {
 
@@ -31,8 +31,8 @@ public final class ToolLevelingConfig {
 	public static final BooleanValue allowWrongEnchantments;
 	public static final BooleanValue allowIncompatibleEnchantments;
 	public static final ShortValue globalEnchantmentCap;
-	public static final ForgeRegistryConfig<Enchantment> enchantmentWhitelist;
-	public static final ForgeRegistryConfig<Enchantment> enchantmentBlacklist;
+	public static final RegistryConfig<Enchantment> enchantmentWhitelist;
+	public static final RegistryConfig<Enchantment> enchantmentBlacklist;
 	public static Map<Enchantment, Short> enchantmentCaps;
 	private static Map<String, Short> rawEnchantmentCaps;
 	private static final Type typeCaps = new TypeToken<Map<String, Short>>() {}.getType();
@@ -48,9 +48,8 @@ public final class ToolLevelingConfig {
 		allowWrongEnchantments = new BooleanValue("allowWrongEnchantments", true);
 		allowIncompatibleEnchantments = new BooleanValue("allowIncompatibleEnchantments", true);
 		globalEnchantmentCap = new ShortValue("globalEnchantmentCap", (short) 0, (short) 0, Short.MAX_VALUE);
-		enchantmentWhitelist = new ForgeRegistryConfig<>("enchantmentWhitelist", ForgeRegistries.ENCHANTMENTS,
-				new ArrayList<>());
-		enchantmentBlacklist = new ForgeRegistryConfig<>("enchantmentBlacklist", ForgeRegistries.ENCHANTMENTS,
+		enchantmentWhitelist = new RegistryConfig<>("enchantmentWhitelist", Registry.ENCHANTMENT, new ArrayList<>());
+		enchantmentBlacklist = new RegistryConfig<>("enchantmentBlacklist", Registry.ENCHANTMENT,
 				getDefaultEnchantmentBlacklist());
 	}
 
@@ -70,7 +69,7 @@ public final class ToolLevelingConfig {
 		enchantmentBlacklist.setToDefault();
 
 		rawEnchantmentCaps = new HashMap<>();
-		rawEnchantmentCaps.put(Enchantments.FIRE_PROTECTION.getRegistryName().toString(), (short) 100);
+		rawEnchantmentCaps.put(Registry.ENCHANTMENT.getId(Enchantments.FIRE_PROTECTION).toString(), (short) 100);
 		createEnchantmentCaps();
 	}
 
@@ -118,13 +117,13 @@ public final class ToolLevelingConfig {
 	private static void createEnchantmentCaps() {
 		enchantmentCaps = new HashMap<>();
 		for (Map.Entry<String, Short> element : rawEnchantmentCaps.entrySet()) {
-			ResourceLocation loc = new ResourceLocation(element.getKey());
+			Identifier loc = new Identifier(element.getKey());
 			short level = element.getValue();
 			if (level < 1) {
 				continue;
 			}
-			if (ForgeRegistries.ENCHANTMENTS.containsKey(loc)) {
-				Enchantment ench = ForgeRegistries.ENCHANTMENTS.getValue(loc);
+			if (Registry.ENCHANTMENT.containsId(loc)) {
+				Enchantment ench = Registry.ENCHANTMENT.get(loc);
 				enchantmentCaps.put(ench, level);
 			}
 		}
@@ -137,8 +136,8 @@ public final class ToolLevelingConfig {
 		enchantments.add(Enchantments.CHANNELING);
 		enchantments.add(Enchantments.BINDING_CURSE);
 		enchantments.add(Enchantments.VANISHING_CURSE);
-		enchantments.add(Enchantments.FLAMING_ARROWS);
-		enchantments.add(Enchantments.INFINITY_ARROWS);
+		enchantments.add(Enchantments.FLAME);
+		enchantments.add(Enchantments.INFINITY);
 		enchantments.add(Enchantments.MULTISHOT);
 		enchantments.add(Enchantments.SILK_TOUCH);
 		return enchantments;

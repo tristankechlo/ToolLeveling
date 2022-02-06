@@ -10,10 +10,10 @@
 			"item" : "minecraft:enchanted_book"
 		},
 		"I" : {
-			"tag" : "forge:storage_blocks/iron"
+			"item" : "minecraft:iron_block"
 		},
 		"D" : {
-			"tag" : "forge:gems/diamond"
+			"item" : "minecraft:diamond"
 		}
 	},
 	"result" : {

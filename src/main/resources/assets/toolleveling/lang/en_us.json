@@ -27,5 +27,6 @@
   	"commands.toolleveling.config.path": "Config for ToolLeveling can be found here: %s",
   	"commands.toolleveling.config.reload": "Config for ToolLeveling was successfully reloaded.",
   	"commands.toolleveling.config.noconfig": "Config for ToolLeveling could not be found.",
-  	"commands.toolleveling.config.reset": "Config %s has been set to default."
+  	"commands.toolleveling.config.reset": "Config %s has been set to default.",
+  	"commands.arguments.enum.invalid": "The argument %s is not a valid option. Use one of these: %s"
 }

@@ -5,14 +5,14 @@ import java.util.function.Function;
 
 import com.google.gson.JsonObject;
 
-public final class Config {
+public final class ConfigHandler {
 
 	private String fileName;
 	private Runnable reset;
 	private Function<JsonObject, JsonObject> serializer;
 	private Consumer<JsonObject> deserializer;
 
-	public Config(String fileName, Runnable reset, Function<JsonObject, JsonObject> serializer,
+	public ConfigHandler(String fileName, Runnable reset, Function<JsonObject, JsonObject> serializer,
 			Consumer<JsonObject> deserializer) {
 		this.fileName = fileName;
 		this.reset = reset;

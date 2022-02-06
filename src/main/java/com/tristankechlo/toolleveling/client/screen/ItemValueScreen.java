@@ -1,21 +1,23 @@
 package com.tristankechlo.toolleveling.client.screen;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.tristankechlo.toolleveling.client.screen.widgets.ItemValuesListWidget;
 import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
 
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 
-@OnlyIn(Dist.CLIENT)
+@Environment(EnvType.CLIENT)
 public class ItemValueScreen extends Screen {
 
 	private static final int SPACING = 30;
-	private static final Component TITLE = new TranslatableComponent("block.toolleveling.item_values");
+	private static final Text TITLE = new TranslatableText("block.toolleveling.item_values");
+	private Text defaultValue;
 	private ItemValuesListWidget itemValues;
 
 	public ItemValueScreen() {
@@ -25,18 +27,19 @@ public class ItemValueScreen extends Screen {
 	@Override
 	protected void init() {
 		super.init();
+		defaultValue = new TranslatableText("screen.toolleveling.default_item_value_worth",
+				ToolLevelingConfig.defaultItemWorth.getValue());
 		this.itemValues = new ItemValuesListWidget(this, width - (2 * SPACING), SPACING, height - SPACING);
 		this.itemValues.setLeftPos(SPACING);
-		this.addWidget(itemValues);
+		this.addSelectableChild(itemValues);
 	}
 
 	@Override
-	public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		this.renderBackground(matrixStack); // render translucent grey background
 		this.itemValues.render(matrixStack, mouseX, mouseY, partialTicks); // render item list widget
 		super.render(matrixStack, mouseX, mouseY, partialTicks); // render buttons
-		drawCenteredString(matrixStack, font, new TranslatableComponent("screen.toolleveling.default_item_value_worth",
-				ToolLevelingConfig.defaultItemWorth.getValue()), width / 2, 10, 0xFFFFFF);
+		drawCenteredText(matrixStack, textRenderer, defaultValue, width / 2, 10, 0xFFFFFF);
 	}
 
 	@Override
@@ -51,8 +54,12 @@ public class ItemValueScreen extends Screen {
 		return super.mouseScrolled(mouseX, mouseY, delta);
 	}
 
-	public Font getFontRenderer() {
-		return this.font;
+	public TextRenderer getFontRenderer() {
+		return this.textRenderer;
+	}
+
+	public MinecraftClient getClient() {
+		return client;
 	}
 
 }

@@ -1,56 +1,59 @@
 package com.tristankechlo.toolleveling.client.screen.widgets;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.tristankechlo.toolleveling.client.screen.ToolLevelingTableScreen;
-import com.tristankechlo.toolleveling.network.PacketHandler;
-import com.tristankechlo.toolleveling.network.packets.SetEnchantmentToolLevelingTable;
+import java.util.List;
+
+import com.google.common.collect.ImmutableList;
+import com.tristankechlo.toolleveling.client.screen.ToolLevelingTableHandledScreen;
+import com.tristankechlo.toolleveling.network.ClientNetworkHandler;
 import com.tristankechlo.toolleveling.utils.ButtonHelper;
 import com.tristankechlo.toolleveling.utils.ButtonHelper.ButtonStatus;
-import com.tristankechlo.toolleveling.utils.Names;
 import com.tristankechlo.toolleveling.utils.Utils;
 
-import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.ObjectSelectionList;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.Element;
+import net.minecraft.client.gui.Selectable;
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.ClickableWidget;
+import net.minecraft.client.gui.widget.ElementListWidget;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.enchantment.Enchantment;
 
-@OnlyIn(Dist.CLIENT)
-public class ButtonEntry extends ObjectSelectionList.Entry<ButtonEntry> {
+@Environment(EnvType.CLIENT)
+public class ButtonEntry extends ElementListWidget.Entry<ButtonEntry> {
 
-	public Button button;
+	public ButtonWidget button;
 	public Enchantment enchantment;
 	public String name;
 	public int currentLevel;
 	public long upgradeCost;
 	public ButtonStatus status;
-	private ToolLevelingTableScreen screen;
-	private static Component NARRATION = null;;
+	private ToolLevelingTableHandledScreen screen;
+	private final List<ClickableWidget> list;
 
-	public ButtonEntry(ToolLevelingTableScreen screen, Enchantment enchantment, int level) {
+	public ButtonEntry(ToolLevelingTableHandledScreen screen, Enchantment enchantment, int level) {
 		this.enchantment = enchantment;
 		this.currentLevel = level;
-		this.name = enchantment.getDescriptionId();
+		this.name = enchantment.getTranslationKey();
 		this.status = ButtonStatus.NORMAL;
 		this.screen = screen;
 		this.upgradeCost = Utils.getEnchantmentUpgradeCost(level + 1);
 
-		this.button = new Button(0, 0, 121, 20, ButtonHelper.getButtonText(this), (b) -> {
-			// send new data to server
-			PacketHandler.INSTANCE.sendToServer(new SetEnchantmentToolLevelingTable(this.screen.getMenu().getPos(),
-					this.enchantment, this.currentLevel + 1));
+		this.button = new ButtonWidget(0, 0, 121, 20, ButtonHelper.getButtonText(this), b -> {
+			ClientNetworkHandler.sendSetEnchantmentLevel(this.screen.getScreenHandler().getPos(), this.enchantment,
+					this.currentLevel + 1);
 		});
+		this.list = ImmutableList.of(this.button);
 	}
 
 	@Override
-	public void render(PoseStack mStack, int index, int top, int left, int entryWidth, int entryHeight, int mouseX,
+	public void render(MatrixStack mStack, int index, int top, int left, int entryWidth, int entryHeight, int mouseX,
 			int mouseY, boolean isMouseOver, float partialTicks) {
 
 		this.button.x = left;
 		this.button.y = top;
-		long worth = this.screen.getMenu().getContainerWorth() + this.screen.getMenu().getBonusPoints();
+		long worth = this.screen.getScreenHandler().getContainerWorth()
+				+ this.screen.getScreenHandler().getBonusPoints();
 		this.button.active = (this.upgradeCost <= worth) && ButtonHelper.shouldButtonBeActive(this);
 		this.button.render(mStack, mouseX, mouseY, partialTicks);
 	}
@@ -66,10 +69,13 @@ public class ButtonEntry extends ObjectSelectionList.Entry<ButtonEntry> {
 	}
 
 	@Override
-	public Component getNarration() {
-		if (NARRATION == null) {
-			NARRATION = new TranslatableComponent("screen." + Names.MOD_ID + ".tool_leveling_table");
-		}
-		return NARRATION;
+	public List<? extends Element> children() {
+		return this.list;
 	}
+
+	@Override
+	public List<? extends Selectable> selectableChildren() {
+		return this.list;
+	}
+
 }

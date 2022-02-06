@@ -13,20 +13,19 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.tristankechlo.toolleveling.ToolLeveling;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
-public class ForgeRegistryConfig<T extends IForgeRegistryEntry<T>> extends AbstractConfigValue<ImmutableList<T>> {
+public class RegistryConfig<T> extends AbstractConfigValue<ImmutableList<T>> {
 
 	private final ImmutableList<T> defaultValues;
 	private ImmutableList<T> values;
 	private List<String> rawValues = new ArrayList<>();
 	private final Type type = new TypeToken<List<String>>() {}.getType();
 	private final Gson GSON = new Gson();
-	private final IForgeRegistry<T> registry;
+	private final Registry<T> registry;
 
-	public ForgeRegistryConfig(String identifier, IForgeRegistry<T> registry, List<T> defaultValues) {
+	public RegistryConfig(String identifier, Registry<T> registry, List<T> defaultValues) {
 		super(identifier);
 		if (registry == null) {
 			throw new NullPointerException("registry of the config value can't be null");
@@ -38,7 +37,7 @@ public class ForgeRegistryConfig<T extends IForgeRegistryEntry<T>> extends Abstr
 		this.defaultValues = ImmutableList.copyOf(defaultValues);
 
 		for (T arg : defaultValues) {
-			rawValues.add(arg.getRegistryName().toString());
+			rawValues.add(registry.getId(arg).toString());
 		}
 		values = ImmutableList.copyOf(defaultValues);
 	}
@@ -68,9 +67,9 @@ public class ForgeRegistryConfig<T extends IForgeRegistryEntry<T>> extends Abstr
 			}
 			List<T> tempValues = new ArrayList<>();
 			for (String element : rawValues) {
-				ResourceLocation loc = new ResourceLocation(element);
-				if (registry.containsKey(loc)) {
-					tempValues.add(registry.getValue(loc));
+				Identifier loc = new Identifier(element);
+				if (registry.containsId(loc)) {
+					tempValues.add(registry.get(loc));
 				}
 			}
 			values = ImmutableList.copyOf(tempValues);

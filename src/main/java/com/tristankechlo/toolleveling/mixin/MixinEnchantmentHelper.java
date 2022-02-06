@@ -5,16 +5,16 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.Mth;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.math.MathHelper;
 
 @Mixin(EnchantmentHelper.class)
 public class MixinEnchantmentHelper {
 
-	@Inject(at = @At("HEAD"), method = "getEnchantmentLevel", cancellable = true)
-	private static void getEnchantmentLevel(CompoundTag tag, CallbackInfoReturnable<Integer> callback) {
-		callback.setReturnValue(Mth.clamp(tag.getInt("lvl"), 0, Short.MAX_VALUE));
+	@Inject(at = @At("HEAD"), method = "getLevelFromNbt", cancellable = true)
+	private static void getLevelFromNbt(NbtCompound tag, CallbackInfoReturnable<Integer> callback) {
+		callback.setReturnValue(MathHelper.clamp(tag.getInt("lvl"), 0, Short.MAX_VALUE));
 	}
 
 }

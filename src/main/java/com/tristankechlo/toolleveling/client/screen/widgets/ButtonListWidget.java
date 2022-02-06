@@ -2,40 +2,41 @@ package com.tristankechlo.toolleveling.client.screen.widgets;
 
 import java.util.Map;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.tristankechlo.toolleveling.client.screen.ToolLevelingTableScreen;
+import com.tristankechlo.toolleveling.client.screen.ToolLevelingTableHandledScreen;
 import com.tristankechlo.toolleveling.utils.ButtonHelper;
 
-import net.minecraft.client.gui.components.ObjectSelectionList;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.widget.ElementListWidget;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 
-@OnlyIn(Dist.CLIENT)
-public class ButtonListWidget extends ObjectSelectionList<ButtonEntry> {
+@Environment(EnvType.CLIENT)
+public class ButtonListWidget extends ElementListWidget<ButtonEntry> {
 
-	private final ToolLevelingTableScreen screen;
+	private final ToolLevelingTableHandledScreen screen;
 	private final int listWidth;
 
-	public ButtonListWidget(ToolLevelingTableScreen screen, int listWidth, int top, int bottom) {
-		super(screen.getMinecraft(), listWidth, screen.height, top, bottom, 24);
+	public ButtonListWidget(ToolLevelingTableHandledScreen screen, int listWidth, int top, int bottom) {
+		super(screen.getClient(), listWidth, screen.height, top, bottom, 24);
 		this.screen = screen;
 		this.listWidth = listWidth;
 		// disable rendering of the dirt background
 		this.setRenderBackground(false);
-		this.setRenderTopAndBottom(false);
+		this.setRenderHorizontalShadows(false);
 		this.setRenderHeader(false, 0);
 	}
 
 	public void refreshList() {
 		this.clearEntries();
-		ItemStack stack = this.screen.getMenu().getSlot(0).getItem();
-		long worth = this.screen.getMenu().getContainerWorth() + this.screen.getMenu().getBonusPoints();
+		ItemStack stack = this.screen.getScreenHandler().getSlot(0).getStack();
+		long worth = this.screen.getScreenHandler().getContainerWorth()
+				+ this.screen.getScreenHandler().getBonusPoints();
 		if (!stack.getItem().equals(Items.AIR)) {
-			Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
+			Map<Enchantment, Integer> enchantments = EnchantmentHelper.get(stack);
 			for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
 				ButtonEntry buttonEntry = ButtonHelper.getButtonEntry(this.screen, entry.getKey(), entry.getValue());
 				buttonEntry.button.active = (buttonEntry.upgradeCost <= worth)
@@ -46,8 +47,8 @@ public class ButtonListWidget extends ObjectSelectionList<ButtonEntry> {
 	}
 
 	@Override
-	protected int getScrollbarPosition() {
-		return this.x1 - 10;
+	protected int getScrollbarPositionX() {
+		return this.right - 10;
 	}
 
 	@Override
@@ -56,8 +57,9 @@ public class ButtonListWidget extends ObjectSelectionList<ButtonEntry> {
 	}
 
 	@Override
-	protected void renderBackground(PoseStack matrixStack) {
+	protected void renderBackground(MatrixStack matrixStack) {
 		// background of the scroll view
-		this.fillGradient(matrixStack, x0 - 1, y0 - 1, x1, y1 + 2, -10066330, -10066330);
+		this.fillGradient(matrixStack, this.left - 1, this.top - 1, this.right, this.bottom + 2, -10066330, -10066330);
 	}
+
 }

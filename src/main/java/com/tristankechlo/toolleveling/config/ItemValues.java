@@ -11,10 +11,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.tristankechlo.toolleveling.ToolLeveling;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public final class ItemValues {
 
@@ -125,13 +125,13 @@ public final class ItemValues {
 	private static void createItemValues() {
 		itemValues = new HashMap<>();
 		for (Map.Entry<String, Long> element : rawItemValues.entrySet()) {
-			ResourceLocation loc = new ResourceLocation(element.getKey());
+			Identifier loc = new Identifier(element.getKey());
 			long worth = element.getValue();
 			if (worth < 0) {
 				continue;
 			}
-			if (ForgeRegistries.ITEMS.containsKey(loc)) {
-				Item item = ForgeRegistries.ITEMS.getValue(loc);
+			if (Registry.ITEM.containsId(loc)) {
+				Item item = Registry.ITEM.get(loc);
 				itemValues.put(item, worth);
 			} else {
 				ToolLeveling.LOGGER.log(Level.WARN, "Ignoring invalid item with id: " + element.getKey());
@@ -140,7 +140,7 @@ public final class ItemValues {
 	}
 
 	private static void addItem(Item item, long worth) {
-		rawItemValues.put(item.getRegistryName().toString(), worth);
+		rawItemValues.put(Registry.ITEM.getId(item).toString(), worth);
 	}
 
 }

@@ -3,14 +3,14 @@ package com.tristankechlo.toolleveling.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tristankechlo.toolleveling.client.screen.ToolLevelingTableScreen;
+import com.tristankechlo.toolleveling.client.screen.ToolLevelingTableHandledScreen;
 import com.tristankechlo.toolleveling.client.screen.widgets.ButtonEntry;
 import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
 
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Formatting;
 
 public class ButtonHelper {
 
@@ -28,7 +28,8 @@ public class ButtonHelper {
 		return false;
 	}
 
-	public static ButtonEntry getButtonEntry(ToolLevelingTableScreen parent, Enchantment enchantment, int level) {
+	public static ButtonEntry getButtonEntry(ToolLevelingTableHandledScreen parent, Enchantment enchantment,
+			int level) {
 		List<Enchantment> whitelist = ToolLevelingConfig.enchantmentWhitelist.getValue();
 		List<Enchantment> blacklist = ToolLevelingConfig.enchantmentBlacklist.getValue();
 		ButtonEntry buttonEntry = new ButtonEntry(parent, enchantment, level);
@@ -65,36 +66,35 @@ public class ButtonHelper {
 		return buttonEntry;
 	}
 
-	public static Component getButtonText(ButtonEntry entry) {
-		return new TranslatableComponent(entry.name).withStyle(getButtonTextFormatting(entry));
+	public static Text getButtonText(ButtonEntry entry) {
+		return new TranslatableText(entry.name).formatted(getButtonTextFormatting(entry));
 	}
 
-	public static List<Component> getButtonToolTips(ButtonEntry data) {
-		List<Component> tooltip = new ArrayList<>();
-		tooltip.add(new TranslatableComponent(data.name).withStyle(ChatFormatting.AQUA));
+	public static List<Text> getButtonToolTips(ButtonEntry data) {
+		List<Text> tooltip = new ArrayList<>();
+		tooltip.add(new TranslatableText(data.name).formatted(Formatting.AQUA));
 		final String start = "container.toolleveling.tool_leveling_table";
 		if (ButtonHelper.shouldButtonBeActive(data)) {
-			tooltip.add(new TranslatableComponent(start + ".current_level", data.currentLevel)
-					.withStyle(ChatFormatting.DARK_GRAY));
-			tooltip.add(new TranslatableComponent(start + ".next_level", (data.currentLevel + 1))
-					.withStyle(ChatFormatting.DARK_GRAY));
 			tooltip.add(
-					new TranslatableComponent(start + ".cost", data.upgradeCost).withStyle(ChatFormatting.DARK_GRAY));
+					new TranslatableText(start + ".current_level", data.currentLevel).formatted(Formatting.DARK_GRAY));
+			tooltip.add(new TranslatableText(start + ".next_level", (data.currentLevel + 1))
+					.formatted(Formatting.DARK_GRAY));
+			tooltip.add(new TranslatableText(start + ".cost", data.upgradeCost).formatted(Formatting.DARK_GRAY));
 		}
 		if (data.status != ButtonStatus.NORMAL) {
-			tooltip.add(new TranslatableComponent(start + ".error." + data.status.toString().toLowerCase())
-					.withStyle(ButtonHelper.getButtonTextFormatting(data)));
+			tooltip.add(new TranslatableText(start + ".error." + data.status.toString().toLowerCase())
+					.formatted(ButtonHelper.getButtonTextFormatting(data)));
 		}
 		return tooltip;
 	}
 
-	public static ChatFormatting getButtonTextFormatting(ButtonEntry entry) {
-		ChatFormatting format = ChatFormatting.RESET;
+	public static Formatting getButtonTextFormatting(ButtonEntry entry) {
+		Formatting format = Formatting.RESET;
 		if (entry.status != ButtonStatus.NORMAL) {
-			format = ChatFormatting.DARK_RED;
+			format = Formatting.DARK_RED;
 		}
 		if (entry.status == ButtonStatus.USELESS) {
-			format = ChatFormatting.YELLOW;
+			format = Formatting.YELLOW;
 		}
 		return format;
 	}
