@@ -25,7 +25,7 @@
 	"commands.superenchant.failed.incompatible" : "%s cannot support that enchantment, you can enable this in the ToolLevelingConfig (allowIncompatibleEnchantments)",
 	"commands.superenchant.failed.wrong" : "%s cannot support that enchantment, you can enable this in the ToolLevelingConfig (allowWrongEnchantments)",
   	"commands.toolleveling.config.path": "Config for ToolLeveling can be found here: %s",
-  	"commands.toolleveling.config.reload": "Config for ToolLeveling was successfully reloaded.",
+  	"commands.toolleveling.config.reload": "Configs for ToolLeveling were successfully reloaded.",
   	"commands.toolleveling.config.noconfig": "Config for ToolLeveling could not be found.",
   	"commands.toolleveling.config.reset": "Config %s has been set to default."
 }
