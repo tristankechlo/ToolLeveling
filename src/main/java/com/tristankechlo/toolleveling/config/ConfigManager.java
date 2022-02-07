@@ -6,8 +6,6 @@ import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.logging.log4j.Level;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -41,11 +39,10 @@ public final class ConfigManager {
 			if (configFile.exists()) {
 				ConfigManager.loadConfigFromFile(config, configFile);
 				ConfigManager.writeConfigToFile(config, configFile);
-				ToolLeveling.LOGGER.log(Level.INFO, "Saved the checked/corrected config: " + element.getKey());
+				ToolLeveling.LOGGER.info("Saved the checked/corrected config: " + element.getKey());
 			} else {
 				ConfigManager.writeConfigToFile(config, configFile);
-				ToolLeveling.LOGGER.log(Level.INFO,
-						"No config[" + element.getKey() + "] was found, created a new one.");
+				ToolLeveling.LOGGER.info("No config[" + element.getKey() + "] was found, created a new one.");
 			}
 		}
 	}
@@ -60,11 +57,10 @@ public final class ConfigManager {
 			if (configFile.exists()) {
 				ConfigManager.loadConfigFromFile(config, configFile);
 				ConfigManager.writeConfigToFile(config, configFile);
-				ToolLeveling.LOGGER.log(Level.INFO, "Saved the checked/corrected config: " + element.getKey());
+				ToolLeveling.LOGGER.info("Saved the checked/corrected config: " + element.getKey());
 			} else {
 				ConfigManager.writeConfigToFile(config, configFile);
-				ToolLeveling.LOGGER.log(Level.INFO,
-						"No config [" + element.getKey() + "] was found, created a new one.");
+				ToolLeveling.LOGGER.info("No config [" + element.getKey() + "] was found, created a new one.");
 			}
 			syncOneConfigToAllClients(element.getKey(), config);
 		}
@@ -93,7 +89,7 @@ public final class ConfigManager {
 		config.setToDefault();
 		File configFile = new File(ConfigDir, config.getFileName());
 		ConfigManager.writeConfigToFile(config, configFile);
-		ToolLeveling.LOGGER.log(Level.INFO, "Saved [" + identifier + "] as new config.");
+		ToolLeveling.LOGGER.info("Config [" + identifier + "] was set to default.");
 		syncOneConfigToAllClients(identifier, config);
 	}
 
@@ -108,8 +104,7 @@ public final class ConfigManager {
 			writer.write(jsonString);
 			writer.close();
 		} catch (Exception e) {
-			ToolLeveling.LOGGER.log(Level.INFO,
-					"There was an error writing the config to file: " + config.getFileName());
+			ToolLeveling.LOGGER.error("There was an error writing the config to file: " + config.getFileName());
 			e.printStackTrace();
 		}
 	}
@@ -120,15 +115,14 @@ public final class ConfigManager {
 			JsonElement jsonElement = JsonParser.parseReader(new FileReader(file));
 			json = jsonElement.getAsJsonObject();
 		} catch (Exception e) {
-			ToolLeveling.LOGGER.log(Level.INFO, "There was an error loading the config file: " + config.getFileName());
+			ToolLeveling.LOGGER.error("There was an error loading the config file: " + config.getFileName());
 			e.printStackTrace();
 		}
 		if (json != null) {
 			config.deserialize(json);
-			ToolLeveling.LOGGER.log(Level.INFO, "Config[" + config.getFileName() + "] was successfully loaded.");
+			ToolLeveling.LOGGER.info("Config[" + config.getFileName() + "] was successfully loaded.");
 		} else {
-			ToolLeveling.LOGGER.log(Level.INFO,
-					"Error loading config[" + config.getFileName() + "], config hasn't been loaded.");
+			ToolLeveling.LOGGER.error("Error loading config[" + config.getFileName() + "], config hasn't been loaded.");
 		}
 	}
 

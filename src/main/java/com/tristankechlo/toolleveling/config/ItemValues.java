@@ -4,8 +4,6 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.logging.log4j.Level;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -134,7 +132,7 @@ public final class ItemValues {
 				Item item = ForgeRegistries.ITEMS.getValue(loc);
 				itemValues.put(item, worth);
 			} else {
-				ToolLeveling.LOGGER.log(Level.WARN, "Ignoring invalid item with id: " + element.getKey());
+				ToolLeveling.LOGGER.warn("Ignoring invalid item with id: " + element.getKey());
 			}
 		}
 	}

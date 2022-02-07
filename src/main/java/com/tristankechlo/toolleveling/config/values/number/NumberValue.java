@@ -1,7 +1,5 @@
 package com.tristankechlo.toolleveling.config.values.number;
 
-import org.apache.logging.log4j.Level;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.tristankechlo.toolleveling.ToolLeveling;
@@ -57,7 +55,7 @@ public abstract class NumberValue<T extends Number> extends AbstractConfigValue<
 			JsonElement jsonElement = jsonObject.get(getIdentifier());
 			if (jsonElement == null) {
 				value = defaultValue;
-				ToolLeveling.LOGGER.log(Level.WARN,
+				ToolLeveling.LOGGER.warn(
 						"Error while loading the config value " + getIdentifier() + ", using defaultvalue instead");
 				return;
 			}
@@ -67,8 +65,8 @@ public abstract class NumberValue<T extends Number> extends AbstractConfigValue<
 				return;
 			}
 		} catch (Exception e) {
-			ToolLeveling.LOGGER.log(Level.WARN,
-					"Error while loading the config value " + getIdentifier() + ", using defaultvalue instead");
+			ToolLeveling.LOGGER
+					.warn("Error while loading the config value " + getIdentifier() + ", using defaultvalue instead");
 		}
 		value = defaultValue;
 	}
