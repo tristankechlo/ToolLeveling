@@ -61,14 +61,6 @@ public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity imple
 		tag.putLong("BonusPoints", this.bonusPoints);
 	}
 
-	@Override
-	public CompoundTag save(CompoundTag tag) {
-		super.save(tag);
-		ContainerHelper.saveAllItems(tag, this.items);
-		tag.putLong("BonusPoints", this.bonusPoints);
-		return tag;
-	}
-
 	public ItemStack getStackToEnchant() {
 		if (this.items.get(0).is(Items.AIR)) {
 			return ItemStack.EMPTY;

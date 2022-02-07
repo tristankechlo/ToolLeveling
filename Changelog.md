@@ -1,5 +1,9 @@
 # Changelog
 
+### Version 1.18.1 - 1.3.0
+ - support wildcards in enchantmentBlacklist and enchantmentWhitelist
+     - format example `minecraft:*`
+
 ### Version 1.18 - 1.2.12
  - fix overflow for large inventory worth
  - add romanian translation by **Potato man**
