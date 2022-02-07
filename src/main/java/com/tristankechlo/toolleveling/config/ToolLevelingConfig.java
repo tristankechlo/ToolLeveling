@@ -1,29 +1,24 @@
 package com.tristankechlo.toolleveling.config;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.tristankechlo.toolleveling.config.values.BooleanValue;
+import com.tristankechlo.toolleveling.config.values.EnchantmentCaps;
+import com.tristankechlo.toolleveling.config.values.EnchantmentModifier;
 import com.tristankechlo.toolleveling.config.values.ForgeRegistryConfig;
 import com.tristankechlo.toolleveling.config.values.number.DoubleValue;
 import com.tristankechlo.toolleveling.config.values.number.LongValue;
 import com.tristankechlo.toolleveling.config.values.number.ShortValue;
 
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public final class ToolLevelingConfig {
 
-	public static final DoubleValue upgradeCostMultiplier;
+	public static final DoubleValue globalUpgradeCostMultiplier;
 	public static final LongValue minUpgradeCost;
 	public static final LongValue defaultItemWorth;
 	public static final BooleanValue allowLevelingUselessEnchantments;
@@ -34,14 +29,11 @@ public final class ToolLevelingConfig {
 	public static final ShortValue globalEnchantmentCap;
 	public static final ForgeRegistryConfig<Enchantment> enchantmentWhitelist;
 	public static final ForgeRegistryConfig<Enchantment> enchantmentBlacklist;
-	public static Map<Enchantment, Short> enchantmentCaps;
-	private static Map<String, Short> rawEnchantmentCaps;
-	private static final Type typeCaps = new TypeToken<Map<String, Short>>() {}.getType();
-	public static final String ENCHANTMENT_CAPS_NAME = "enchantmentCaps";
-	private static Gson GSON = new Gson();
+	public static final EnchantmentCaps enchantmentCaps;
+	public static final EnchantmentModifier enchantmentUpgradeCostModifier;
 
 	static {
-		upgradeCostMultiplier = new DoubleValue("upgradeCostMultiplier", 1.0D, 0.0D, 100.0D);
+		globalUpgradeCostMultiplier = new DoubleValue("globalUpgradeCostMultiplier", 1.0D, 0.0D, 100.0D);
 		minUpgradeCost = new LongValue("minUpgradeCost", 1000, 1, Long.MAX_VALUE);
 		defaultItemWorth = new LongValue("defaultItemWorth", 10, 0, Long.MAX_VALUE);
 		allowLevelingUselessEnchantments = new BooleanValue("allowLevelingOfUselessEnchantments", true);
@@ -54,12 +46,14 @@ public final class ToolLevelingConfig {
 				new ArrayList<>());
 		enchantmentBlacklist = new ForgeRegistryConfig<>("enchantmentBlacklist", ForgeRegistries.ENCHANTMENTS,
 				getDefaultEnchantmentBlacklist());
+		enchantmentCaps = new EnchantmentCaps();
+		enchantmentUpgradeCostModifier = new EnchantmentModifier();
 	}
 
 	private ToolLevelingConfig() {}
 
 	public static void setToDefaultValues() {
-		upgradeCostMultiplier.setToDefault();
+		globalUpgradeCostMultiplier.setToDefault();
 		minUpgradeCost.setToDefault();
 		defaultItemWorth.setToDefault();
 		allowLevelingUselessEnchantments.setToDefault();
@@ -72,15 +66,14 @@ public final class ToolLevelingConfig {
 		enchantmentWhitelist.setToDefault();
 		enchantmentBlacklist.setToDefault();
 
-		rawEnchantmentCaps = new HashMap<>();
-		rawEnchantmentCaps.put(Enchantments.FIRE_PROTECTION.getRegistryName().toString(), (short) 100);
-		createEnchantmentCaps();
+		enchantmentCaps.setToDefault();
+		enchantmentUpgradeCostModifier.setToDefault();
 	}
 
 	public static JsonObject serialize(JsonObject json) {
 		String url = "https://github.com/tristankechlo/Tool-Leveling/wiki/";
 		json.addProperty("_comment", "explanation to the config structure can be found here: " + url);
-		upgradeCostMultiplier.serialize(json);
+		globalUpgradeCostMultiplier.serialize(json);
 		minUpgradeCost.serialize(json);
 		allowIncompatibleEnchantments.serialize(json);
 		allowWrongEnchantments.serialize(json);
@@ -93,14 +86,14 @@ public final class ToolLevelingConfig {
 		enchantmentWhitelist.serialize(json);
 		enchantmentBlacklist.serialize(json);
 
-		JsonElement caps = GSON.toJsonTree(rawEnchantmentCaps, typeCaps);
-		json.add(ENCHANTMENT_CAPS_NAME, caps);
+		enchantmentCaps.serialize(json);
+		enchantmentUpgradeCostModifier.serialize(json);
 
 		return json;
 	}
 
 	public static void deserialize(JsonObject json) {
-		upgradeCostMultiplier.deserialize(json);
+		globalUpgradeCostMultiplier.deserialize(json);
 		minUpgradeCost.deserialize(json);
 		defaultItemWorth.deserialize(json);
 		allowIncompatibleEnchantments.deserialize(json);
@@ -113,26 +106,8 @@ public final class ToolLevelingConfig {
 		enchantmentWhitelist.deserialize(json);
 		enchantmentBlacklist.deserialize(json);
 
-		rawEnchantmentCaps = GSON.fromJson(json.get(ENCHANTMENT_CAPS_NAME), typeCaps);
-		if (rawEnchantmentCaps == null) {
-			rawEnchantmentCaps = new HashMap<>();
-		}
-		createEnchantmentCaps();
-	}
-
-	private static void createEnchantmentCaps() {
-		enchantmentCaps = new HashMap<>();
-		for (Map.Entry<String, Short> element : rawEnchantmentCaps.entrySet()) {
-			ResourceLocation loc = new ResourceLocation(element.getKey());
-			short level = element.getValue();
-			if (level < 1) {
-				continue;
-			}
-			if (ForgeRegistries.ENCHANTMENTS.containsKey(loc)) {
-				Enchantment ench = ForgeRegistries.ENCHANTMENTS.getValue(loc);
-				enchantmentCaps.put(ench, level);
-			}
-		}
+		enchantmentCaps.deserialize(json);
+		enchantmentUpgradeCostModifier.deserialize(json);
 	}
 
 	private static List<Enchantment> getDefaultEnchantmentBlacklist() {

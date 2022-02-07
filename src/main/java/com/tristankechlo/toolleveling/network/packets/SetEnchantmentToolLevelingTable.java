@@ -65,9 +65,9 @@ public final class SetEnchantmentToolLevelingTable {
 				Map<Enchantment, Integer> enchantmentsMap = EnchantmentHelper.getEnchantments(enchantedItem);
 
 				if (enchantmentsMap.containsKey(msg.enchantment)) {
-					long upgradeCost = Utils.getEnchantmentUpgradeCost(msg.level);
+					long upgradeCost = Utils.getEnchantmentUpgradeCost(msg.enchantment, msg.level);
 					boolean upgradeSuccess = false;
-					if(Utils.freeCreativeUpgrades(player)) {
+					if (Utils.freeCreativeUpgrades(player)) {
 						upgradeSuccess = true;
 					} else {
 						upgradeSuccess = table.decreaseInventoryWorth(upgradeCost);

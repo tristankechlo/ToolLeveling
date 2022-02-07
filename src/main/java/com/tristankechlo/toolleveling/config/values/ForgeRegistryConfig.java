@@ -65,9 +65,19 @@ public class ForgeRegistryConfig<T extends IForgeRegistryEntry<T>> extends Abstr
 	@Override
 	public void deserialize(JsonObject jsonObject) {
 		try {
-			rawValues = GSON.fromJson(jsonObject.get(getIdentifier()), type);
+			JsonElement jsonElement = jsonObject.get(getIdentifier());
+			if (jsonElement == null) {
+				this.setToDefault();
+				ToolLeveling.LOGGER.warn(
+						"Error while loading the config value " + getIdentifier() + ", using defaultvalue instead");
+				return;
+			}
+			rawValues = GSON.fromJson(jsonElement, type);
 			if (rawValues == null) {
-				rawValues = new ArrayList<>();
+				this.setToDefault();
+				ToolLeveling.LOGGER.warn(
+						"Error while loading the config value " + getIdentifier() + ", using defaultvalue instead");
+				return;
 			}
 			List<T> tempValues = new ArrayList<>();
 			List<String> modids = new ArrayList<>();

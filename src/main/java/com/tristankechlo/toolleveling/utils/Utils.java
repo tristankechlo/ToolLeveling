@@ -28,11 +28,13 @@ public final class Utils {
 		return null;
 	}
 
-	public static long getEnchantmentUpgradeCost(int level) {
-		double modifier = ToolLevelingConfig.upgradeCostMultiplier.getValue();
+	public static long getEnchantmentUpgradeCost(Enchantment enchantment, int level) {
+		double globalModifier = ToolLevelingConfig.globalUpgradeCostMultiplier.getValue();
+		double specificModifier = ToolLevelingConfig.enchantmentUpgradeCostModifier.getMap().getOrDefault(enchantment,
+				1.0D);
 		long minCost = ToolLevelingConfig.minUpgradeCost.getValue();
-		// formula: (0.87x^2 + 300x) * modifier
-		return (long) Math.max(minCost, ((0.87 * level * level) + (300 * level)) * modifier);
+		// formula: (0.87x^2 + 300x) * specificModifier * globalModifier
+		return (long) Math.max(minCost, ((0.87 * level * level) + (300 * level)) * specificModifier * globalModifier);
 	}
 
 	public static Item getItemFromString(String name) {
@@ -61,16 +63,16 @@ public final class Utils {
 	public static boolean isEnchantmentAtCap(Enchantment enchantment, int level) {
 		short globalEnchantmentCap = ToolLevelingConfig.globalEnchantmentCap.getValue();
 		if (globalEnchantmentCap > 0) {
-			if (ToolLevelingConfig.enchantmentCaps.containsKey(enchantment)) {
-				short enchantmentCap = ToolLevelingConfig.enchantmentCaps.get(enchantment);
+			if (ToolLevelingConfig.enchantmentCaps.getMap().containsKey(enchantment)) {
+				short enchantmentCap = ToolLevelingConfig.enchantmentCaps.getMap().get(enchantment);
 				if (enchantmentCap < globalEnchantmentCap) {
 					return level >= enchantmentCap;
 				}
 			}
 			return level >= globalEnchantmentCap;
 		}
-		if (ToolLevelingConfig.enchantmentCaps.containsKey(enchantment)) {
-			return (level >= ToolLevelingConfig.enchantmentCaps.get(enchantment));
+		if (ToolLevelingConfig.enchantmentCaps.getMap().containsKey(enchantment)) {
+			return (level >= ToolLevelingConfig.enchantmentCaps.getMap().get(enchantment));
 		}
 		return false;
 	}

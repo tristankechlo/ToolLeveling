@@ -36,7 +36,7 @@ public class ButtonEntry extends ObjectSelectionList.Entry<ButtonEntry> {
 		this.name = enchantment.getDescriptionId();
 		this.status = ButtonStatus.NORMAL;
 		this.screen = screen;
-		this.upgradeCost = Utils.getEnchantmentUpgradeCost(level + 1);
+		this.upgradeCost = Utils.getEnchantmentUpgradeCost(enchantment, level + 1);
 
 		this.button = new Button(0, 0, 121, 20, ButtonHelper.getButtonText(this), (b) -> {
 			// send new data to server
