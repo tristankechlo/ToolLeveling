@@ -33,33 +33,33 @@ public final class ButtonHelper {
 		List<Enchantment> blacklist = ToolLevelingConfig.enchantmentBlacklist.getValue();
 		ButtonEntry buttonEntry = new ButtonEntry(parent, enchantment, level);
 
-		// leveling these enchantments will do absolutely nothing
-		if (enchantment.getMaxLevel() == 1) {
-			buttonEntry.status = ButtonStatus.USELESS;
-		}
 		// if whitelist is not empty, mark all enchantments as blacklisted if they are
 		// not on the whitelist
-		else if (!whitelist.isEmpty() && !whitelist.contains(enchantment)) {
+		if (!whitelist.isEmpty() && !whitelist.contains(enchantment)) {
 			buttonEntry.status = ButtonStatus.BLACKLISTED;
 		}
 		// only list enchantments that are not on the blacklist
 		else if (whitelist.isEmpty() && blacklist.contains(enchantment)) {
 			buttonEntry.status = ButtonStatus.BLACKLISTED;
 		}
+		// check if the enchantment is allowed to level up
+		// determinated by the config enchantmentCaps
+		else if (Utils.isEnchantmentAtCap(enchantment, level)) {
+			buttonEntry.status = ButtonStatus.CAPPED;
+		}
 		// although the level is defined as an integer, the actual maximum is a short
 		// a higher enchantment level than a short will result in a negative level
 		else if (level >= Short.MAX_VALUE) {
 			buttonEntry.status = ButtonStatus.MAXLEVEL;
 		}
+		// leveling these enchantments will do absolutely nothing
+		else if (enchantment.getMaxLevel() == 1) {
+			buttonEntry.status = ButtonStatus.USELESS;
+		}
 		// check if the enchantment can still be leveled
 		// some enchantments will break when leveled to high
 		else if (Utils.willEnchantmentBreak(enchantment, level)) {
 			buttonEntry.status = ButtonStatus.BREAK;
-		}
-		// check if the enchantment is allowed to level up
-		// determinated by the config enchantmentCaps
-		else if (Utils.isEnchantmentAtCap(enchantment, level)) {
-			buttonEntry.status = ButtonStatus.CAPPED;
 		}
 		buttonEntry.updateButtonText();
 		return buttonEntry;

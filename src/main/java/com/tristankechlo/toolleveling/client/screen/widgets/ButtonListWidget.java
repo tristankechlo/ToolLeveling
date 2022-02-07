@@ -33,13 +33,10 @@ public class ButtonListWidget extends ObjectSelectionList<ButtonEntry> {
 	public void refreshList() {
 		this.clearEntries();
 		ItemStack stack = this.screen.getMenu().getSlot(0).getItem();
-		long worth = this.screen.getMenu().getContainerWorth() + this.screen.getMenu().getBonusPoints();
 		if (!stack.getItem().equals(Items.AIR)) {
 			Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
 			for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
 				ButtonEntry buttonEntry = ButtonHelper.getButtonEntry(this.screen, entry.getKey(), entry.getValue());
-				buttonEntry.button.active = (buttonEntry.upgradeCost <= worth)
-						&& ButtonHelper.shouldButtonBeActive(buttonEntry);
 				this.addEntry(buttonEntry);
 			}
 		}
