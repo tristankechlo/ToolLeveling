@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class SetEnchantmentToolLevelingTable {
+public final class SetEnchantmentToolLevelingTable {
 
 	private final BlockPos pos;
 	private final Enchantment enchantment;

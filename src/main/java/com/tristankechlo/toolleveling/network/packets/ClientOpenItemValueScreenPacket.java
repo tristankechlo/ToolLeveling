@@ -9,7 +9,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
-public class ClientOpenItemValueScreenPacket {
+public final class ClientOpenItemValueScreenPacket {
 
 	public static void handle(OpenItemValueScreenPacket msg, Supplier<NetworkEvent.Context> context) {
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {

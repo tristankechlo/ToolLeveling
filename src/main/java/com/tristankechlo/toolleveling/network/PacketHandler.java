@@ -9,7 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 
-public class PacketHandler {
+public final class PacketHandler {
 
 	private static final String PROTOCOL_VERSION = "1";
 	public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
@@ -38,4 +38,5 @@ public class PacketHandler {
 				OpenItemValueScreenPacket::decode,
 				OpenItemValueScreenPacket::handle);
 	}
+
 }

@@ -14,7 +14,7 @@ public class UpgradeSlot extends Slot {
 	public boolean mayPlace(ItemStack stack) {
 		return stack.isEnchanted();
 	}
-	
+
 	@Override
 	public int getMaxStackSize() {
 		return 1;

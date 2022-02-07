@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 @Mod.EventBusSubscriber(modid = Names.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class ClientSetup {
+public final class ClientSetup {
 
 	public static void init(final FMLClientSetupEvent event) {
 		MenuScreens.register(ModRegistry.TLT_CONTAINER.get(), ToolLevelingTableScreen::new);

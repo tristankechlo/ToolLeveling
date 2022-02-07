@@ -19,7 +19,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @Mod(Names.MOD_ID)
-public class ToolLeveling {
+public final class ToolLeveling {
 
 	public static final Logger LOGGER = LogManager.getLogger();
 

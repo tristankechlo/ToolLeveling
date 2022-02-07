@@ -14,7 +14,7 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.server.command.EnumArgument;
 
-public class ToolLevelingCommand {
+public final class ToolLevelingCommand {
 
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 		LiteralArgumentBuilder<CommandSourceStack> toollevelingCommand = Commands.literal("toolleveling")

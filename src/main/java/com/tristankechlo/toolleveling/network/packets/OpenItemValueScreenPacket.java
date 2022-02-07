@@ -7,7 +7,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
-public class OpenItemValueScreenPacket {
+public final class OpenItemValueScreenPacket {
 
 	public OpenItemValueScreenPacket() {}
 

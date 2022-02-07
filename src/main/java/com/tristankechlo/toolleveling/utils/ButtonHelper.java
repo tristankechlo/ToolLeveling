@@ -12,7 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.enchantment.Enchantment;
 
-public class ButtonHelper {
+public final class ButtonHelper {
 
 	public static boolean shouldButtonBeActive(ButtonEntry entry) {
 		if (entry.status == ButtonStatus.NORMAL) {

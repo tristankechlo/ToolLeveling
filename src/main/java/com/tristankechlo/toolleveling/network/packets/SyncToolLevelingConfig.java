@@ -11,7 +11,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
-public class SyncToolLevelingConfig {
+public final class SyncToolLevelingConfig {
 
 	public final String identifier;
 	public final JsonObject json;

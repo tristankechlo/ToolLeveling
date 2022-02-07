@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 
 @Mod.EventBusSubscriber(modid = Names.MOD_ID, bus = Bus.FORGE)
-public class ModCommands {
+public final class ModCommands {
 
 	@SubscribeEvent
 	public static void register(final RegisterCommandsEvent event) {

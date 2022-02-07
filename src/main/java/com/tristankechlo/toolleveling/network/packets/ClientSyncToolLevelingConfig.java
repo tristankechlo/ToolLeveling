@@ -9,7 +9,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
-public class ClientSyncToolLevelingConfig {
+public final class ClientSyncToolLevelingConfig {
 
 	public static void handle(SyncToolLevelingConfig msg, Supplier<NetworkEvent.Context> context) {
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
