@@ -7,6 +7,7 @@ import com.tristankechlo.toolleveling.config.ItemValues;
 import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -80,4 +81,9 @@ public final class Utils {
 		}
 		return false;
 	}
+
+	public static boolean freeCreativeUpgrades(Player player) {
+		return ToolLevelingConfig.freeUpgradesForCreativePlayers.getValue() && player.isCreative();
+	}
+
 }

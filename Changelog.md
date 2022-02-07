@@ -2,9 +2,12 @@
 
 ### Version 1.18.1 - 1.3.0
  - support wildcards in enchantmentBlacklist and enchantmentWhitelist
-     - format example `minecraft:*`
+     - this will whitelist/blacklist all enchantments from the specified mod
+     - formatting example `examplemod:*`
+ - fix config not resetting properly
  - change when the buttons are clickable
- 	- disabled enchantments are now actually disabled, this was not the case for useless enchantmens like mending
+     - buttons for disabled enchantments are now actually disabled, this was not the case for useless enchantmens like mending
+ - new config option to change whether or not creative players can have free upgrades
 
 ### Version 1.18 - 1.2.12
  - fix overflow for large inventory worth

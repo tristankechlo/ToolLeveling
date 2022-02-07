@@ -8,6 +8,7 @@ import com.tristankechlo.toolleveling.client.screen.widgets.ButtonEntry;
 import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -69,11 +70,12 @@ public final class ButtonHelper {
 		return new TranslatableComponent(entry.name).withStyle(getButtonTextFormatting(entry));
 	}
 
+	@SuppressWarnings("resource")
 	public static List<Component> getButtonToolTips(ButtonEntry data) {
 		List<Component> tooltip = new ArrayList<>();
 		tooltip.add(new TranslatableComponent(data.name).withStyle(ChatFormatting.AQUA));
 		final String start = "container.toolleveling.tool_leveling_table";
-		if (ButtonHelper.shouldButtonBeActive(data)) {
+		if (ButtonHelper.shouldButtonBeActive(data) || Utils.freeCreativeUpgrades(Minecraft.getInstance().player)) {
 			tooltip.add(new TranslatableComponent(start + ".current_level", data.currentLevel)
 					.withStyle(ChatFormatting.DARK_GRAY));
 			tooltip.add(new TranslatableComponent(start + ".next_level", (data.currentLevel + 1))
@@ -81,15 +83,21 @@ public final class ButtonHelper {
 			tooltip.add(
 					new TranslatableComponent(start + ".cost", data.upgradeCost).withStyle(ChatFormatting.DARK_GRAY));
 		}
-		if (data.status != ButtonStatus.NORMAL) {
+		if (Utils.freeCreativeUpgrades(Minecraft.getInstance().player)) {
+			tooltip.add(new TranslatableComponent(start + ".free_creative").withStyle(ChatFormatting.GREEN));
+		} else if (data.status != ButtonStatus.NORMAL) {
 			tooltip.add(new TranslatableComponent(start + ".error." + data.status.toString().toLowerCase())
 					.withStyle(ButtonHelper.getButtonTextFormatting(data)));
 		}
 		return tooltip;
 	}
 
+	@SuppressWarnings("resource")
 	public static ChatFormatting getButtonTextFormatting(ButtonEntry entry) {
 		ChatFormatting format = ChatFormatting.RESET;
+		if (Utils.freeCreativeUpgrades(Minecraft.getInstance().player)) {
+			return ChatFormatting.RESET;
+		}
 		if (entry.status != ButtonStatus.NORMAL) {
 			format = ChatFormatting.DARK_RED;
 		}

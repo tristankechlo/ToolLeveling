@@ -9,6 +9,7 @@ import com.tristankechlo.toolleveling.utils.ButtonHelper.ButtonStatus;
 import com.tristankechlo.toolleveling.utils.Names;
 import com.tristankechlo.toolleveling.utils.Utils;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.network.chat.Component;
@@ -51,7 +52,8 @@ public class ButtonEntry extends ObjectSelectionList.Entry<ButtonEntry> {
 		this.button.x = left;
 		this.button.y = top;
 		long worth = this.screen.getMenu().getContainerWorth() + this.screen.getMenu().getBonusPoints();
-		this.button.active = (this.upgradeCost <= worth) && ButtonHelper.shouldButtonBeActive(this);
+		boolean normallyActive = (this.upgradeCost <= worth) && ButtonHelper.shouldButtonBeActive(this);
+		this.button.active = normallyActive || Utils.freeCreativeUpgrades(Minecraft.getInstance().player);
 		this.button.render(mStack, mouseX, mouseY, partialTicks);
 	}
 

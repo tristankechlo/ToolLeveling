@@ -30,6 +30,7 @@ public final class ToolLevelingConfig {
 	public static final BooleanValue allowLevelingBreakingEnchantments;
 	public static final BooleanValue allowWrongEnchantments;
 	public static final BooleanValue allowIncompatibleEnchantments;
+	public static final BooleanValue freeUpgradesForCreativePlayers;
 	public static final ShortValue globalEnchantmentCap;
 	public static final ForgeRegistryConfig<Enchantment> enchantmentWhitelist;
 	public static final ForgeRegistryConfig<Enchantment> enchantmentBlacklist;
@@ -47,6 +48,7 @@ public final class ToolLevelingConfig {
 		allowLevelingBreakingEnchantments = new BooleanValue("allowLevelingOfBreakingEnchanments", true);
 		allowWrongEnchantments = new BooleanValue("allowWrongEnchantments", true);
 		allowIncompatibleEnchantments = new BooleanValue("allowIncompatibleEnchantments", true);
+		freeUpgradesForCreativePlayers = new BooleanValue("freeUpgradesForCreativePlayers", true);
 		globalEnchantmentCap = new ShortValue("globalEnchantmentCap", (short) 0, (short) 0, Short.MAX_VALUE);
 		enchantmentWhitelist = new ForgeRegistryConfig<>("enchantmentWhitelist", ForgeRegistries.ENCHANTMENTS,
 				new ArrayList<>());
@@ -64,6 +66,7 @@ public final class ToolLevelingConfig {
 		allowLevelingBreakingEnchantments.setToDefault();
 		allowIncompatibleEnchantments.setToDefault();
 		allowWrongEnchantments.setToDefault();
+		freeUpgradesForCreativePlayers.setToDefault();
 		globalEnchantmentCap.setToDefault();
 
 		enchantmentWhitelist.setToDefault();
@@ -84,6 +87,7 @@ public final class ToolLevelingConfig {
 		defaultItemWorth.serialize(json);
 		allowLevelingUselessEnchantments.serialize(json);
 		allowLevelingBreakingEnchantments.serialize(json);
+		freeUpgradesForCreativePlayers.serialize(json);
 		globalEnchantmentCap.serialize(json);
 
 		enchantmentWhitelist.serialize(json);
@@ -103,6 +107,7 @@ public final class ToolLevelingConfig {
 		allowWrongEnchantments.deserialize(json);
 		allowLevelingUselessEnchantments.deserialize(json);
 		allowLevelingBreakingEnchantments.deserialize(json);
+		freeUpgradesForCreativePlayers.deserialize(json);
 		globalEnchantmentCap.deserialize(json);
 
 		enchantmentWhitelist.deserialize(json);
