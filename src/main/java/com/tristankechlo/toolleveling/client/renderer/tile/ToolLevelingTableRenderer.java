@@ -18,6 +18,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class ToolLevelingTableRenderer implements BlockEntityRenderer<ToolLevelingTableBlockEntity> {
 
+	private final Quaternion quaternion = new Quaternion(Vector3f.XN, 1.5707F, false);
+
 	public ToolLevelingTableRenderer(BlockEntityRendererProvider.Context rendererDispatcherIn) {}
 
 	@Override
@@ -29,7 +31,7 @@ public class ToolLevelingTableRenderer implements BlockEntityRenderer<ToolLeveli
 			matrixStackIn.pushPose();
 			matrixStackIn.translate(0.5D, 0.89D, 0.5D);
 			matrixStackIn.scale(0.5F, 0.5F, 0.5F);
-			matrixStackIn.mulPose(new Quaternion(Vector3f.XN, 1.5707F, false));
+			matrixStackIn.mulPose(quaternion);
 			renderItem(stack, partialTicks, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
 			matrixStackIn.popPose();
 
