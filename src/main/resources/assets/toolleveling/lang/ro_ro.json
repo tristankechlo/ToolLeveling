@@ -21,6 +21,7 @@
 	"container.toolleveling.tool_leveling_table.error.maxlevel" : "Nivelul maxim atins!",
 	"container.toolleveling.tool_leveling_table.error.break" : "Enchantment se va rupe cand este nivelata!",
 	"container.toolleveling.tool_leveling_table.error.capped" : "Nivelul este la maximul setat!",
+	"container.toolleveling.tool_leveling_table.free_creative": "Leveling e gratis, pentru ca tu esti in creative mode.",
 	
 	"commands.superenchant.failed.incompatible" : "%s Nu poate suporta acea Enchantment, puteti activa acest lucru in ToolLevelingConfig (allowIncompatibleEnchantments)",
 	"commands.superenchant.failed.wrong" : "%s Nu poate suporta acea Enchantment, puteti activa acest lucru in ToolLevelingConfig (allowWrongEnchantments)",

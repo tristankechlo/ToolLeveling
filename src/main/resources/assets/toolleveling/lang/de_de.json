@@ -21,6 +21,7 @@
 	"container.toolleveling.tool_leveling_table.error.maxlevel" : "Maximal Level erreicht!",
 	"container.toolleveling.tool_leveling_table.error.break" : "Item wird nicht mehr richtig funktionieren!",
 	"container.toolleveling.tool_leveling_table.error.capped" : "Eingestelltes Maximal-Level erreicht!",
+	"container.toolleveling.tool_leveling_table.free_creative": "Level-Ups sind kostenlos, da du im Kreativmodus bist.",
 	
 	"commands.superenchant.failed.incompatible" : "%s kann damit nicht verzaubert werden, du kannst dies in der ToolLevelingConfig \u00C4ndern (allowIncompatibleEnchantments)",
 	"commands.superenchant.failed.wrong" : "%s kann damit nicht verzaubert werden, du kannst dies in der ToolLevelingConfig \u00C4ndern (allowWrongEnchantments)",

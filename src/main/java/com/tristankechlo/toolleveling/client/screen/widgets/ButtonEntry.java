@@ -11,6 +11,7 @@ import com.tristankechlo.toolleveling.utils.Utils;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -54,7 +55,8 @@ public class ButtonEntry extends ElementListWidget.Entry<ButtonEntry> {
 		this.button.y = top;
 		long worth = this.screen.getScreenHandler().getContainerWorth()
 				+ this.screen.getScreenHandler().getBonusPoints();
-		this.button.active = (this.upgradeCost <= worth) && ButtonHelper.shouldButtonBeActive(this);
+		boolean normallyActive = (this.upgradeCost <= worth) && ButtonHelper.shouldButtonBeActive(this);
+				this.button.active = normallyActive || Utils.freeCreativeUpgrades(MinecraftClient.getInstance().player);
 		this.button.render(mStack, mouseX, mouseY, partialTicks);
 	}
 

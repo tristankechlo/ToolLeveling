@@ -56,8 +56,13 @@ public final class ServerNetworkHandler {
 
 				if (enchantmentsMap.containsKey(enchantment)) {
 					long upgradeCost = Utils.getEnchantmentUpgradeCost(level);
-					boolean result = table.decreaseInventoryWorth(upgradeCost);
-					if (result) {
+					boolean upgradeSuccess = false;
+					if(Utils.freeCreativeUpgrades(player)) {
+						upgradeSuccess = true;
+					} else {
+						upgradeSuccess = table.decreaseInventoryWorth(upgradeCost);
+					}
+					if (upgradeSuccess) {
 						enchantmentsMap.put(enchantment, level);
 						EnchantmentHelper.set(enchantmentsMap, enchantedItem);
 						table.setStack(0, enchantedItem);
