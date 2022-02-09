@@ -3,12 +3,12 @@
 ### now you can level your enchantments higher than the vanilla limit<br/>
 <br/>
 
-how it works:
+how the mod works:
  - craft the Tool Leveling Table
  - put an enchanted item in the first slot
  - put enough payment items in the slots below
  - higher enchantment levels will required more items / items with higher worth
- - click on the enchantment to upgrade
+ - click the enchantment you want to upgrade
 
 ## Recipe
 *any enchanted book will work*</br>

@@ -88,7 +88,7 @@ public final class ConfigManager {
 		config.setToDefault();
 		File configFile = new File(ConfigDir, config.getFileName());
 		ConfigManager.writeConfigToFile(config, configFile);
-		ToolLeveling.LOGGER.info("Saved [" + identifier + "] as new config.");
+		ToolLeveling.LOGGER.info("Config [" + identifier + "] was set to default.");
 		syncOneConfigToAllClients(server, identifier, config);
 	}
 

@@ -4,8 +4,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.logging.log4j.Level;
-
 import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -75,8 +73,8 @@ public class RegistryConfig<T> extends AbstractConfigValue<ImmutableList<T>> {
 			values = ImmutableList.copyOf(tempValues);
 		} catch (Exception e) {
 			values = ImmutableList.copyOf(defaultValues);
-			ToolLeveling.LOGGER.log(Level.WARN,
-					"Error while loading the config value " + getIdentifier() + ", using defaultvalue instead");
+			ToolLeveling.LOGGER
+					.warn("Error while loading the config value " + getIdentifier() + ", using defaultvalue instead");
 		}
 	}
 
