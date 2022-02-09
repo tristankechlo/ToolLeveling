@@ -18,6 +18,8 @@ import net.minecraft.util.math.Vec3f;
 @Environment(EnvType.CLIENT)
 public class ToolLevelingTableRenderer implements BlockEntityRenderer<ToolLevelingTableBlockEntity> {
 
+	private final Quaternion quaternion = new Quaternion(Vec3f.NEGATIVE_X, 1.5707F, false);
+
 	public ToolLevelingTableRenderer(BlockEntityRendererFactory.Context dispatcher) {}
 
 	@Override
@@ -28,7 +30,7 @@ public class ToolLevelingTableRenderer implements BlockEntityRenderer<ToolLeveli
 			matrices.push();
 			matrices.translate(0.5D, 0.89D, 0.5D);
 			matrices.scale(0.5F, 0.5F, 0.5F);
-			matrices.multiply(new Quaternion(Vec3f.NEGATIVE_X, 1.5707F, false));
+			matrices.multiply(quaternion);
 			renderItem(stack, tickDelta, matrices, vertexConsumers, light, overlay);
 			matrices.pop();
 		}
