@@ -33,12 +33,6 @@ multiple items are allowed as payment items, and there worth can be changed thro
    
  <img src="https://i.ibb.co/WNXP2LC/tool-leveling-table-screenshot.png" height="150">
 </details>
-<details>
- <summary>GUI before modversion 1.2.2</summary>
-   
- ![GUI](https://i.ibb.co/8P27vMD/GUI-NEW-2.png)  
- only one item is allowed as payment item (by default Netherite Ingot, but it is changeable through the config)
-</details>
 
 ---
 
