@@ -8,6 +8,10 @@
  - change when the buttons are clickable
      - buttons for disabled enchantments are now actually disabled, this was not the case for useless enchantmens like mending
  - new config option to change whether or not creative players can have free upgrades
+ - splitting `upgradeCostMultiplier` into `globalUpgradeCostMultiplier` and `enchantmentUpgradeCostModifier`
+     - globalUpgradeCostMultiplier can be used to modify all upgrade costs
+     - enchantmentUpgradeCostModifier can be used to modify the upgrade cost of a specific enchantment
+     - makes it possible now to make a single enchantment cheaper or more expensive than others
 
 ### Version 1.18 - 1.2.12
  - fix overflow for large inventory worth

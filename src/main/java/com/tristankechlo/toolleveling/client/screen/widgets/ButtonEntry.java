@@ -38,7 +38,7 @@ public class ButtonEntry extends ElementListWidget.Entry<ButtonEntry> {
 		this.name = enchantment.getTranslationKey();
 		this.status = ButtonStatus.NORMAL;
 		this.screen = screen;
-		this.upgradeCost = Utils.getEnchantmentUpgradeCost(level + 1);
+		this.upgradeCost = Utils.getEnchantmentUpgradeCost(enchantment, level + 1);
 
 		this.button = new ButtonWidget(0, 0, 121, 20, ButtonHelper.getButtonText(this), b -> {
 			ClientNetworkHandler.sendSetEnchantmentLevel(this.screen.getScreenHandler().getPos(), this.enchantment,
