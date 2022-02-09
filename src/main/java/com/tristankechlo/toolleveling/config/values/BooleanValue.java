@@ -30,7 +30,7 @@ public final class BooleanValue extends AbstractConfigValue<Boolean> {
 
 	@Override
 	public void serialize(JsonObject jsonObject) {
-		jsonObject.addProperty(getIdentifier(), value);
+		jsonObject.addProperty(getIdentifier(), getValue());
 	}
 
 	@Override

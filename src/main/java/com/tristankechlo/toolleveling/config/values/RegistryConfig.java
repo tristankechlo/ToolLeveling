@@ -3,6 +3,7 @@ package com.tristankechlo.toolleveling.config.values;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
@@ -11,6 +12,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.tristankechlo.toolleveling.ToolLeveling;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -52,7 +54,10 @@ public class RegistryConfig<T> extends AbstractConfigValue<ImmutableList<T>> {
 
 	@Override
 	public void serialize(JsonObject jsonObject) {
-		JsonElement jsonElement = GSON.toJsonTree(rawValues, type);
+		List<String> tempValues = getValue().stream().map((element) -> {
+			return registry.getId(element).toString();
+		}).collect(Collectors.toList());
+		JsonElement jsonElement = GSON.toJsonTree(tempValues, type);
 		jsonObject.add(getIdentifier(), jsonElement);
 	}
 
@@ -64,18 +69,46 @@ public class RegistryConfig<T> extends AbstractConfigValue<ImmutableList<T>> {
 				rawValues = new ArrayList<>();
 			}
 			List<T> tempValues = new ArrayList<>();
+			List<String> modids = new ArrayList<>();
 			for (String element : rawValues) {
 				Identifier loc = new Identifier(element);
 				if (registry.containsId(loc)) {
 					tempValues.add(registry.get(loc));
+				} else {
+					String modid = getModidFromWildcard(element);
+					if (modid != null) {
+						ToolLeveling.LOGGER
+								.info("Found wildcard for mod: '" + modid + "' in '" + getIdentifier() + "'");
+						modids.add(modid);
+					}
 				}
 			}
+			addAllWildcards(tempValues, modids, registry);
 			values = ImmutableList.copyOf(tempValues);
 		} catch (Exception e) {
 			values = ImmutableList.copyOf(defaultValues);
 			ToolLeveling.LOGGER
 					.warn("Error while loading the config value " + getIdentifier() + ", using defaultvalue instead");
 		}
+	}
+
+	private static <T> void addAllWildcards(List<T> tempValues, List<String> modids, final Registry<T> registry) {
+		if (modids.isEmpty()) {
+			return;
+		}
+		registry.stream().filter((element) -> {
+			return modids.contains(registry.getId(element).getNamespace());
+		}).forEach((element) -> tempValues.add(element));
+	}
+
+	private static String getModidFromWildcard(String element) {
+		if (element.contains(":")) {
+			String[] splitted = element.split(":");
+			if (splitted[1].equals("*") && FabricLoader.getInstance().isModLoaded(splitted[0])) {
+				return splitted[0];
+			}
+		}
+		return null;
 	}
 
 }

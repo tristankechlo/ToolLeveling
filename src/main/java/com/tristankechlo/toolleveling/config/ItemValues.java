@@ -3,6 +3,7 @@ package com.tristankechlo.toolleveling.config;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -112,7 +113,9 @@ public final class ItemValues {
 	}
 
 	public static JsonObject serialize(JsonObject json) {
-		return GSON.toJsonTree(rawItemValues, type).getAsJsonObject();
+		Map<String, Long> tempValues = itemValues.entrySet().stream()
+				.collect(Collectors.toMap((e) -> Registry.ITEM.getId(e.getKey()).toString(), (e) -> e.getValue()));
+		return GSON.toJsonTree(tempValues, type).getAsJsonObject();
 	}
 
 	public static void deserialize(JsonObject json) {
