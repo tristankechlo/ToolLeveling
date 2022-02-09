@@ -29,8 +29,8 @@ public class ToolLevelingTableRenderer implements BlockEntityRenderer<ToolLeveli
 		ItemStack stack = tileEntityIn.getStackToEnchant();
 		if (!stack.isEmpty()) {
 			matrixStackIn.pushPose();
-			matrixStackIn.translate(0.5D, 0.89D, 0.5D);
-			matrixStackIn.scale(0.5F, 0.5F, 0.5F);
+			matrixStackIn.translate(0.5D, 0.83D, 0.5D);
+			matrixStackIn.scale(0.6F, 0.6F, 0.6F);
 			matrixStackIn.mulPose(quaternion);
 			renderItem(stack, partialTicks, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
 			matrixStackIn.popPose();

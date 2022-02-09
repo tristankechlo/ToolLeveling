@@ -27,13 +27,12 @@ import net.minecraftforge.network.NetworkHooks;
 
 public class ToolLevelingTableBlock extends BaseEntityBlock {
 
-	private static final VoxelShape SHAPE = Shapes.or(box(2, 0, 2, 14, 3, 14), box(3, 3, 3, 13, 6, 13),
-			box(4, 6, 4, 12, 11, 12), box(3, 11, 3, 13, 14, 13));
+	private static final VoxelShape SHAPE = Shapes.or(box(1, 0, 1, 15, 1, 15), box(1.5, 1, 1.5, 14.5, 2, 14.5),
+			box(3, 2, 3, 13, 9, 13), box(1.5, 9, 1.5, 14.5, 13, 14.5));
 
 	public ToolLevelingTableBlock() {
 		super(Block.Properties.of(Material.METAL, MaterialColor.COLOR_GRAY).strength(4.5f, 1000.0f)
 				.sound(SoundType.METAL).requiresCorrectToolForDrops().noOcclusion());
-		this.registerDefaultState(this.defaultBlockState());
 	}
 
 	@Override
