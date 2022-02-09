@@ -16,7 +16,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 
-public class ToolLevelingCommand {
+public final class ToolLevelingCommand {
 
 	public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
 		LiteralArgumentBuilder<ServerCommandSource> toollevelingCommand = literal("toolleveling")

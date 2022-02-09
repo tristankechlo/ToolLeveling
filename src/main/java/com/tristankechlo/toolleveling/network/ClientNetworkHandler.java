@@ -23,8 +23,8 @@ import net.minecraft.util.registry.Registry;
 @Environment(EnvType.CLIENT)
 public final class ClientNetworkHandler {
 
-	public static void recieveOpenItemValues(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf,
-			PacketSender responseSender) {
+	public static void recieveOpenItemValues(MinecraftClient client, ClientPlayNetworkHandler handler,
+			PacketByteBuf buf, PacketSender responseSender) {
 		client.execute(() -> {
 			MinecraftClient.getInstance().setScreen(new ItemValueScreen());
 		});
@@ -35,7 +35,8 @@ public final class ClientNetworkHandler {
 		buf.writeBlockPos(pos);
 		Identifier identifier = Registry.ENCHANTMENT.getId(enchantment);
 		if (identifier == null) {
-			ToolLeveling.LOGGER.warn("Error while encoding the packet for " + NetworkChannels.SET_ENCHANTMENT_LEVEL.toString());
+			ToolLeveling.LOGGER
+					.warn("Error while encoding the packet for " + NetworkChannels.SET_ENCHANTMENT_LEVEL.toString());
 		}
 		buf.writeIdentifier(identifier);
 		buf.writeInt(level);

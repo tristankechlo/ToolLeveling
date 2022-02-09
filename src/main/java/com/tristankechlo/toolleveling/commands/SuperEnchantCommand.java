@@ -23,7 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.TranslatableText;
 
-public class SuperEnchantCommand {
+public final class SuperEnchantCommand {
 
 	private static final DynamicCommandExceptionType NONLIVING_ENTITY_EXCEPTION;
 	private static final DynamicCommandExceptionType INCOMPATIBLE_ENCHANTS_EXCEPTION;

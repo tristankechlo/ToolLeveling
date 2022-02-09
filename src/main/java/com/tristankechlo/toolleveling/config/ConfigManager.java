@@ -161,8 +161,9 @@ public final class ConfigManager {
 	private static Map<String, ConfigHandler> getConfigList() {
 		Map<String, ConfigHandler> configs = new HashMap<>();
 
-		configs.put(Names.MOD_ID + ":general", new ConfigHandler("toolleveling.json", ToolLevelingConfig::setToDefaultValues,
-				ToolLevelingConfig::serialize, ToolLevelingConfig::deserialize));
+		configs.put(Names.MOD_ID + ":general",
+				new ConfigHandler("toolleveling.json", ToolLevelingConfig::setToDefaultValues,
+						ToolLevelingConfig::serialize, ToolLevelingConfig::deserialize));
 
 		configs.put(Names.MOD_ID + ":itemValues", new ConfigHandler("item_values.json", ItemValues::setToDefaultValues,
 				ItemValues::serialize, ItemValues::deserialize));

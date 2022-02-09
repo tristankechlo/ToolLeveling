@@ -12,7 +12,7 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 
-public class ButtonHelper {
+public final class ButtonHelper {
 
 	public static boolean shouldButtonBeActive(ButtonEntry entry) {
 		if (entry.status == ButtonStatus.NORMAL) {

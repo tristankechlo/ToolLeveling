@@ -13,7 +13,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 
 @Environment(EnvType.CLIENT)
-public class ToolLevelingClient implements ClientModInitializer {
+public final class ToolLevelingClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {

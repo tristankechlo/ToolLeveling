@@ -24,7 +24,7 @@ import net.minecraft.text.TranslatableText;
  * copied from Forge <b>net.minecraftforge.server.command.EnumArgument</b><br>
  * and made some small changes to work with fabric
  */
-public class EnumArgument<T extends Enum<T>> implements ArgumentType<T> {
+public final class EnumArgument<T extends Enum<T>> implements ArgumentType<T> {
 
 	private static final Dynamic2CommandExceptionType INVALID_ENUM = new Dynamic2CommandExceptionType(
 			(found, constants) -> new TranslatableText("commands.arguments.enum.invalid", found, constants));

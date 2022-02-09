@@ -32,7 +32,7 @@ import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
-public class ToolLeveling implements ModInitializer {
+public final class ToolLeveling implements ModInitializer {
 
 	public static final Logger LOGGER = LogManager.getLogger();
 	public static final Identifier TOOLLEVELING_TABLE_ID = new Identifier(Names.MOD_ID, Names.TABLE);

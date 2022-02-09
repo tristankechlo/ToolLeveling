@@ -37,7 +37,7 @@ public final class ServerNetworkHandler {
 		final Enchantment enchantment = Registry.ENCHANTMENT.get(buf.readIdentifier());
 		final int level = buf.readInt();
 		server.execute(() -> {
-	
+
 			if (player == null) {
 				ToolLeveling.LOGGER.warn("Error while handling the request. Invalid sender.");
 				return;
@@ -46,14 +46,14 @@ public final class ServerNetworkHandler {
 			if (world == null || !world.isChunkLoaded(pos) || world.isClient) {
 				ToolLeveling.LOGGER.warn("Error while handling the request. Invalid level.");
 			}
-	
+
 			BlockEntity entity = world.getBlockEntity(pos);
 			if (entity != null && (entity instanceof ToolLevelingTableBlockEntity)) {
-	
+
 				ToolLevelingTableBlockEntity table = (ToolLevelingTableBlockEntity) entity;
 				ItemStack enchantedItem = table.getStackToEnchant().copy();
 				Map<Enchantment, Integer> enchantmentsMap = EnchantmentHelper.get(enchantedItem);
-	
+
 				if (enchantmentsMap.containsKey(enchantment)) {
 					long upgradeCost = Utils.getEnchantmentUpgradeCost(level);
 					boolean result = table.decreaseInventoryWorth(upgradeCost);
