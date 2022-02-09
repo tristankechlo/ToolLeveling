@@ -28,8 +28,8 @@ public class ToolLevelingTableRenderer implements BlockEntityRenderer<ToolLeveli
 		ItemStack stack = entity.getStackToEnchant();
 		if (!stack.isEmpty()) {
 			matrices.push();
-			matrices.translate(0.5D, 0.89D, 0.5D);
-			matrices.scale(0.5F, 0.5F, 0.5F);
+			matrices.translate(0.5D, 0.83D, 0.5D);
+			matrices.scale(0.6F, 0.6F, 0.6F);
 			matrices.multiply(quaternion);
 			renderItem(stack, tickDelta, matrices, vertexConsumers, light, overlay);
 			matrices.pop();

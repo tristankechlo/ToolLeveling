@@ -3,7 +3,6 @@ package com.tristankechlo.toolleveling.blocks;
 import com.tristankechlo.toolleveling.blockentity.ToolLevelingTableBlockEntity;
 
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
@@ -27,9 +26,9 @@ import net.minecraft.world.World;
 
 public class ToolLevelingTableBlock extends BlockWithEntity {
 
-	private static final VoxelShape SHAPE = VoxelShapes.union(Block.createCuboidShape(2, 0, 2, 14, 3, 14),
-			Block.createCuboidShape(3, 3, 3, 13, 6, 13), Block.createCuboidShape(4, 6, 4, 12, 11, 12),
-			Block.createCuboidShape(3, 11, 3, 13, 14, 13));
+	private static final VoxelShape SHAPE = VoxelShapes.union(createCuboidShape(1, 0, 1, 15, 1, 15),
+			createCuboidShape(1.5, 1, 1.5, 14.5, 2, 14.5), createCuboidShape(3, 2, 3, 13, 9, 13),
+			createCuboidShape(1.5, 9, 1.5, 14.5, 13, 14.5));
 
 	public ToolLevelingTableBlock() {
 		super(FabricBlockSettings.of(Material.METAL).mapColor(DyeColor.GRAY).strength(4.5f, 1000.0f)
