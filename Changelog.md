@@ -12,6 +12,7 @@
      - globalUpgradeCostMultiplier can be used to modify all upgrade costs
      - enchantmentUpgradeCostModifier can be used to modify the upgrade cost of a specific enchantment
      - makes it possible now to make a single enchantment cheaper or more expensive than others
+ - update blockmodel and recipe
 
 ### Version 1.18 - 1.2.12
  - fix overflow for large inventory worth

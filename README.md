@@ -10,21 +10,39 @@ how the mod works:
  - higher enchantment levels will required more items / items with higher worth
  - click the enchantment you want to upgrade
 
-## Recipe
-*any enchanted book will work*</br>
-![Recipe](https://i.ibb.co/fQxtBV2/Recipe-new.png "Recipe")
+## Design of the table
+<img src="https://i.ibb.co/gD56FHW/screenshot.png" height="150">
 
-## GUI since 1.2.2
+## Recipe
+![Recipe](https://i.ibb.co/NWdBRSQ/recipe-v1-3-0.png "Recipe")
+
+## GUI
 multiple items are allowed as payment items, and there worth can be changed through the configs</br>
 ![GUI](https://i.ibb.co/4FdbhBm/toolleveling-gui.png "Tool Leveling GUI")
 
-## GUI before 1.2.2
-only one item is allowed as payment item (by default Netherite Ingot, but it is changeable in the config)</br>
-![GUI](https://i.ibb.co/8P27vMD/GUI-NEW-2.png "Tool Leveling GUI")
+---
+### History
+<details>
+	<summary>recipe before modversion 1.3.0</summary>  
+   
+ ![recipe](https://i.ibb.co/fQxtBV2/Recipe-new.png)  
+ *any enchanted book will work
+</details>
+<details>
+ <summary>design of the table before modversion 1.3.0</summary>
+   
+ <img src="https://i.ibb.co/WNXP2LC/tool-leveling-table-screenshot.png" height="150">
+</details>
+<details>
+ <summary>GUI before modversion 1.2.2</summary>
+   
+ ![GUI](https://i.ibb.co/8P27vMD/GUI-NEW-2.png)  
+ only one item is allowed as payment item (by default Netherite Ingot, but it is changeable through the config)
+</details>
 
 ---
 
-#### Translations:
+### Translations:
 | Language | up to modversion | Translator | since version |
 |:--------:|:----------------:|:-----------| :-----------: |
 | **en_us** | 1.3.0 | tristankechlo ([Github](https://github.com/tristankechlo)) | always |
