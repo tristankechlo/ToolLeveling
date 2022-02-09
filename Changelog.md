@@ -3,6 +3,8 @@
 ### Version 1.18.1 - 1.3.0
  - support wildcards in enchantmentBlacklist and enchantmentWhitelist
      - format example `minecraft:*`
+ - change when the buttons are clickable
+ 	- disabled enchantments are now actually disabled, this was not the case for useless enchantmens like mending
 
 ### Version 1.18 - 1.2.12
  - fix overflow for large inventory worth

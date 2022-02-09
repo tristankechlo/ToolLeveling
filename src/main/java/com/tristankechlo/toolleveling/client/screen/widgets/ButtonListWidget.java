@@ -33,14 +33,10 @@ public class ButtonListWidget extends ElementListWidget<ButtonEntry> {
 	public void refreshList() {
 		this.clearEntries();
 		ItemStack stack = this.screen.getScreenHandler().getSlot(0).getStack();
-		long worth = this.screen.getScreenHandler().getContainerWorth()
-				+ this.screen.getScreenHandler().getBonusPoints();
 		if (!stack.getItem().equals(Items.AIR)) {
 			Map<Enchantment, Integer> enchantments = EnchantmentHelper.get(stack);
 			for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
 				ButtonEntry buttonEntry = ButtonHelper.getButtonEntry(this.screen, entry.getKey(), entry.getValue());
-				buttonEntry.button.active = (buttonEntry.upgradeCost <= worth)
-						&& ButtonHelper.shouldButtonBeActive(buttonEntry);
 				this.addEntry(buttonEntry);
 			}
 		}
