@@ -68,20 +68,24 @@ public class RegistryConfig<T> extends AbstractConfigValue<ImmutableList<T>> {
 			if (jsonElement == null) {
 				this.setToDefault();
 				ToolLeveling.LOGGER.warn(
-						"Error while loading the config value " + getIdentifier() + ", using defaultvalue instead");
+						"Error while loading the config value for " + getIdentifier() + ", using defaultvalues instead");
 				return;
 			}
 			rawValues = GSON.fromJson(jsonElement, type);
 			if (rawValues == null) {
 				this.setToDefault();
 				ToolLeveling.LOGGER.warn(
-						"Error while loading the config value " + getIdentifier() + ", using defaultvalue instead");
+						"Error while loading the config value for " + getIdentifier() + ", using defaultvalues instead");
 				return;
 			}
 			List<T> tempValues = new ArrayList<>();
 			List<String> modids = new ArrayList<>();
 			for (String element : rawValues) {
-				Identifier loc = new Identifier(element);
+				Identifier loc = Identifier.tryParse(element);
+				if (loc == null) {
+					ToolLeveling.LOGGER.warn("Ingnoring unknown value " + loc + " for " + getIdentifier());
+					continue;
+				}
 				if (registry.containsId(loc)) {
 					tempValues.add(registry.get(loc));
 				} else {

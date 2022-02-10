@@ -126,7 +126,11 @@ public final class ItemValues {
 	private static void createItemValues() {
 		itemValues = new HashMap<>();
 		for (Map.Entry<String, Long> element : rawItemValues.entrySet()) {
-			Identifier loc = new Identifier(element.getKey());
+			Identifier loc = Identifier.tryParse(element.getKey());
+			if (loc == null) {
+				ToolLeveling.LOGGER.warn("Ignoring unknown value " + loc + " for itemvalues");
+				continue;
+			}
 			long worth = element.getValue();
 			if (worth < 0) {
 				continue;

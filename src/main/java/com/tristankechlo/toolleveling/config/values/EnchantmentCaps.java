@@ -62,21 +62,21 @@ public final class EnchantmentCaps implements IConfigValue<Map<Enchantment, Shor
 		if (jsonElement == null) {
 			this.setToDefault();
 			ToolLeveling.LOGGER
-					.warn("Error while loading the config value " + getIdentifier() + ", using defaultvalue instead");
+					.warn("Error while loading the config value " + getIdentifier() + ", using defaultvalues instead");
 			return;
 		}
 		rawEnchantmentCaps = GSON.fromJson(jsonElement, TYPE);
 		if (rawEnchantmentCaps == null) {
 			this.setToDefault();
 			ToolLeveling.LOGGER
-					.warn("Error while loading the config value " + getIdentifier() + ", using defaultvalue instead");
+					.warn("Error while loading the config value " + getIdentifier() + ", using defaultvalues instead");
 			return;
 		}
 		enchantmentCaps = new HashMap<>();
 		for (Map.Entry<String, Short> element : rawEnchantmentCaps.entrySet()) {
 			Identifier loc = Identifier.tryParse(element.getKey());
 			if (loc == null) {
-				ToolLeveling.LOGGER.warn("Cannot parse enchantment " + loc + " for " + getIdentifier());
+				ToolLeveling.LOGGER.warn("Ignoring unknown enchantment " + loc + " from " + getIdentifier());
 				continue;
 			}
 			short level = element.getValue();

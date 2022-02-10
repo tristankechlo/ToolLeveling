@@ -21,7 +21,10 @@ public final class Utils {
 			.put(Enchantments.LURE, 5).build();
 
 	public static Enchantment getEnchantmentFromString(String name) {
-		Identifier loc = new Identifier(String.valueOf(name));
+		Identifier loc = Identifier.tryParse(String.valueOf(name));
+		if (loc == null) {
+			return null;
+		}
 		if (Registry.ENCHANTMENT.containsId(loc)) {
 			return Registry.ENCHANTMENT.get(loc);
 		}
@@ -38,7 +41,10 @@ public final class Utils {
 	}
 
 	public static Item getItemFromString(String name) {
-		Identifier loc = new Identifier(String.valueOf(name));
+		Identifier loc = Identifier.tryParse(String.valueOf(name));
+		if (loc == null) {
+			return null;
+		}
 		if (Registry.ITEM.containsId(loc)) {
 			return Registry.ITEM.get(loc);
 		}
