@@ -82,11 +82,7 @@ public class RegistryConfig<T> extends AbstractConfigValue<ImmutableList<T>> {
 			List<String> modids = new ArrayList<>();
 			for (String element : rawValues) {
 				Identifier loc = Identifier.tryParse(element);
-				if (loc == null) {
-					ToolLeveling.LOGGER.warn("Ingnoring unknown value " + loc + " for " + getIdentifier());
-					continue;
-				}
-				if (registry.containsId(loc)) {
+				if (loc != null && registry.containsId(loc)) {
 					tempValues.add(registry.get(loc));
 				} else {
 					String modid = getModidFromWildcard(element);
