@@ -1,5 +1,9 @@
 # Changelog
 
+### Version 1.19 - 1.3.1
+ - port to 1.19
+ - move the command to view the item values from `/openitemvalues` to `/toolleveling openitemvalues`
+
 ### Version 1.18.1 - 1.3.0
  - support wildcards in enchantmentBlacklist and enchantmentWhitelist
      - this will whitelist/blacklist all enchantments from the specified mod
