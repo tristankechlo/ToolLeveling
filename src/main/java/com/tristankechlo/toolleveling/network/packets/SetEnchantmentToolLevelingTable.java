@@ -32,7 +32,7 @@ public final class SetEnchantmentToolLevelingTable {
 
 	public static void encode(SetEnchantmentToolLevelingTable msg, FriendlyByteBuf buffer) {
 		buffer.writeBlockPos(msg.pos);
-		buffer.writeResourceLocation(msg.enchantment.getRegistryName());
+		buffer.writeResourceLocation(ForgeRegistries.ENCHANTMENTS.getKey(msg.enchantment));
 		buffer.writeInt(msg.level);
 	}
 

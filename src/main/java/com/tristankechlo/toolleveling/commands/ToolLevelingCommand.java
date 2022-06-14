@@ -10,8 +10,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.ClickEvent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.server.command.EnumArgument;
 
 public final class ToolLevelingCommand {
@@ -34,7 +33,7 @@ public final class ToolLevelingCommand {
 	private static int configReload(CommandContext<CommandSourceStack> context) {
 		CommandSourceStack source = context.getSource();
 		ConfigManager.reloadAllConfigs();
-		source.sendSuccess(new TranslatableComponent("commands.toolleveling.config.reload"), true);
+		source.sendSuccess(Component.translatable("commands.toolleveling.config.reload"), true);
 		return 1;
 	}
 
@@ -42,14 +41,14 @@ public final class ToolLevelingCommand {
 		CommandSourceStack source = context.getSource();
 		final Identifier identifier = context.getArgument("identifier", Identifier.class);
 		if (!ConfigManager.hasIdentifier(identifier.id)) {
-			source.sendSuccess(new TranslatableComponent("commands.toolleveling.config.noconfig"), true);
+			source.sendSuccess(Component.translatable("commands.toolleveling.config.noconfig"), true);
 			return -1;
 		}
 		String name = ConfigManager.getConfigFileName(identifier.id);
 		String path = ConfigManager.getConfigPath(identifier.id);
 		source.sendSuccess(
-				new TranslatableComponent("commands.toolleveling.config.path",
-						new TextComponent(name).withStyle(ChatFormatting.UNDERLINE).withStyle(
+				Component.translatable("commands.toolleveling.config.path",
+						Component.literal(name).withStyle(ChatFormatting.UNDERLINE).withStyle(
 								(style) -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, path)))),
 				true);
 		return 1;
@@ -59,11 +58,11 @@ public final class ToolLevelingCommand {
 		CommandSourceStack source = context.getSource();
 		final Identifier identifier = context.getArgument("identifier", Identifier.class);
 		if (!ConfigManager.hasIdentifier(identifier.id)) {
-			source.sendSuccess(new TranslatableComponent("commands.toolleveling.config.noconfig"), true);
+			source.sendSuccess(Component.translatable("commands.toolleveling.config.noconfig"), true);
 			return -1;
 		}
 		ConfigManager.resetOneConfig(identifier.id);
-		source.sendSuccess(new TranslatableComponent("commands.toolleveling.config.reset", identifier.id), true);
+		source.sendSuccess(Component.translatable("commands.toolleveling.config.reset", identifier.id), true);
 		return 1;
 	}
 

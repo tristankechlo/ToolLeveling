@@ -13,7 +13,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -70,7 +69,7 @@ public class ButtonEntry extends ObjectSelectionList.Entry<ButtonEntry> {
 	@Override
 	public Component getNarration() {
 		if (NARRATION == null) {
-			NARRATION = new TranslatableComponent("screen." + Names.MOD_ID + ".tool_leveling_table");
+			NARRATION = Component.translatable("screen." + Names.MOD_ID + ".tool_leveling_table");
 		}
 		return NARRATION;
 	}

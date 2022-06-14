@@ -11,7 +11,6 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -53,7 +52,7 @@ public class ItemValueEntry extends ObjectSelectionList.Entry<ItemValueEntry> {
 		Font font = RenderProperties.get(iStack).getFont(iStack);
 		font = (font == null) ? screen.getFontRenderer() : font;
 		List<Component> tooltips = screen.getTooltipFromItem(iStack);
-		tooltips.add(new TranslatableComponent("screen.toolleveling.item_value_worth", worth)
+		tooltips.add(Component.translatable("screen.toolleveling.item_value_worth", worth)
 				.withStyle(ChatFormatting.DARK_GRAY));
 		screen.renderComponentTooltip(mStack, tooltips, mouseX, mouseY);
 	}
@@ -65,7 +64,7 @@ public class ItemValueEntry extends ObjectSelectionList.Entry<ItemValueEntry> {
 	@Override
 	public Component getNarration() {
 		if (NARRATION == null) {
-			NARRATION = new TranslatableComponent("screen." + Names.MOD_ID + ".item_values");
+			NARRATION = Component.translatable("screen." + Names.MOD_ID + ".item_values");
 		}
 		return NARRATION;
 	}

@@ -113,8 +113,8 @@ public final class ItemValues {
 	}
 
 	public static JsonObject serialize(JsonObject json) {
-		Map<String, Long> tempValues = itemValues.entrySet().stream()
-				.collect(Collectors.toMap((e) -> e.getKey().getRegistryName().toString(), (e) -> e.getValue()));
+		Map<String, Long> tempValues = itemValues.entrySet().stream().collect(
+				Collectors.toMap((e) -> ForgeRegistries.ITEMS.getKey(e.getKey()).toString(), (e) -> e.getValue()));
 		return GSON.toJsonTree(tempValues, type).getAsJsonObject();
 	}
 
@@ -141,7 +141,8 @@ public final class ItemValues {
 	}
 
 	private static void addItem(Item item, long worth) {
-		rawItemValues.put(item.getRegistryName().toString(), worth);
+		ResourceLocation r = ForgeRegistries.ITEMS.getKey(item);
+		rawItemValues.put(r.toString(), worth);
 	}
 
 }

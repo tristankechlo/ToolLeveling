@@ -50,8 +50,8 @@ public final class EnchantmentModifier implements IConfigValue<Map<Enchantment, 
 
 	@Override
 	public void serialize(JsonObject jsonObject) {
-		Map<String, Double> tempUpgradeCosts = enchantmentModifier.entrySet().stream()
-				.collect(Collectors.toMap((e) -> e.getKey().getRegistryName().toString(), (e) -> e.getValue()));
+		Map<String, Double> tempUpgradeCosts = enchantmentModifier.entrySet().stream().collect(Collectors
+				.toMap((e) -> ForgeRegistries.ENCHANTMENTS.getKey(e.getKey()).toString(), (e) -> e.getValue()));
 		JsonElement modifier = GSON.toJsonTree(tempUpgradeCosts, TYPE);
 		jsonObject.add(getIdentifier(), modifier);
 	}

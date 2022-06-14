@@ -5,8 +5,7 @@ import com.tristankechlo.toolleveling.utils.Utils;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -22,9 +21,9 @@ public final class TooltipEvents {
 		if (event.getFlags().isAdvanced() && Screen.hasShiftDown()) {
 			final Item item = event.getItemStack().getItem();
 			final long worth = Utils.getItemWorth(item);
-			event.getToolTip().add(new TextComponent(""));
+			event.getToolTip().add(Component.literal(""));
 			event.getToolTip().add(
-					new TranslatableComponent("tooltip.toolleveling.itemworth", worth).withStyle(ChatFormatting.AQUA));
+					Component.translatable("tooltip.toolleveling.itemworth", worth).withStyle(ChatFormatting.AQUA));
 		}
 	}
 

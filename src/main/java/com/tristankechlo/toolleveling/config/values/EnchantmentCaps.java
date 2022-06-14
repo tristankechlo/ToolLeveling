@@ -50,8 +50,8 @@ public final class EnchantmentCaps implements IConfigValue<Map<Enchantment, Shor
 
 	@Override
 	public void serialize(JsonObject jsonObject) {
-		Map<String, Short> tempCaps = enchantmentCaps.entrySet().stream()
-				.collect(Collectors.toMap((e) -> e.getKey().getRegistryName().toString(), (e) -> e.getValue()));
+		Map<String, Short> tempCaps = enchantmentCaps.entrySet().stream().collect(Collectors
+				.toMap((e) -> ForgeRegistries.ENCHANTMENTS.getKey(e.getKey()).toString(), (e) -> e.getValue()));
 		JsonElement caps = GSON.toJsonTree(tempCaps, TYPE);
 		jsonObject.add(getIdentifier(), caps);
 	}

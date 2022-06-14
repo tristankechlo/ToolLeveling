@@ -10,7 +10,6 @@ import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 public final class ButtonHelper {
@@ -67,26 +66,25 @@ public final class ButtonHelper {
 	}
 
 	public static Component getButtonText(ButtonEntry entry) {
-		return new TranslatableComponent(entry.name).withStyle(getButtonTextFormatting(entry));
+		return Component.translatable(entry.name).withStyle(getButtonTextFormatting(entry));
 	}
 
 	@SuppressWarnings("resource")
 	public static List<Component> getButtonToolTips(ButtonEntry data) {
 		List<Component> tooltip = new ArrayList<>();
-		tooltip.add(new TranslatableComponent(data.name).withStyle(ChatFormatting.AQUA));
+		tooltip.add(Component.translatable(data.name).withStyle(ChatFormatting.AQUA));
 		final String start = "container.toolleveling.tool_leveling_table";
 		if (ButtonHelper.shouldButtonBeActive(data) || Utils.freeCreativeUpgrades(Minecraft.getInstance().player)) {
-			tooltip.add(new TranslatableComponent(start + ".current_level", data.currentLevel)
+			tooltip.add(Component.translatable(start + ".current_level", data.currentLevel)
 					.withStyle(ChatFormatting.DARK_GRAY));
-			tooltip.add(new TranslatableComponent(start + ".next_level", (data.currentLevel + 1))
+			tooltip.add(Component.translatable(start + ".next_level", (data.currentLevel + 1))
 					.withStyle(ChatFormatting.DARK_GRAY));
-			tooltip.add(
-					new TranslatableComponent(start + ".cost", data.upgradeCost).withStyle(ChatFormatting.DARK_GRAY));
+			tooltip.add(Component.translatable(start + ".cost", data.upgradeCost).withStyle(ChatFormatting.DARK_GRAY));
 		}
 		if (Utils.freeCreativeUpgrades(Minecraft.getInstance().player)) {
-			tooltip.add(new TranslatableComponent(start + ".free_creative").withStyle(ChatFormatting.GREEN));
+			tooltip.add(Component.translatable(start + ".free_creative").withStyle(ChatFormatting.GREEN));
 		} else if (data.status != ButtonStatus.NORMAL) {
-			tooltip.add(new TranslatableComponent(start + ".error." + data.status.toString().toLowerCase())
+			tooltip.add(Component.translatable(start + ".error." + data.status.toString().toLowerCase())
 					.withStyle(ButtonHelper.getButtonTextFormatting(data)));
 		}
 		return tooltip;

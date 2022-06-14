@@ -13,7 +13,6 @@ import com.tristankechlo.toolleveling.utils.Names;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.api.distmarker.Dist;
@@ -77,8 +76,8 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
 
 	private void renderPointsSummary(PoseStack stack) {
 		String start = "container.toolleveling.tool_leveling_table.worth.";
-		Component bonusPoints = new TranslatableComponent(start + "bonus_points", this.menu.getBonusPoints());
-		Component invWorth = new TranslatableComponent(start + "inv", this.menu.getContainerWorth());
+		Component bonusPoints = Component.translatable(start + "bonus_points", this.menu.getBonusPoints());
+		Component invWorth = Component.translatable(start + "inv", this.menu.getContainerWorth());
 		float left = this.leftPos + 8;
 		this.font.draw(stack, bonusPoints, left, topPos + 45, 4210752);
 		this.font.draw(stack, invWorth, left, topPos + 56, 4210752);

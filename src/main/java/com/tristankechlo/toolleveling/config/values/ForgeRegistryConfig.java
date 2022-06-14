@@ -15,9 +15,8 @@ import com.tristankechlo.toolleveling.ToolLeveling;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 
-public class ForgeRegistryConfig<T extends IForgeRegistryEntry<T>> extends AbstractConfigValue<ImmutableList<T>> {
+public class ForgeRegistryConfig<T> extends AbstractConfigValue<ImmutableList<T>> {
 
 	private final ImmutableList<T> defaultValues;
 	private ImmutableList<T> values;
@@ -38,7 +37,7 @@ public class ForgeRegistryConfig<T extends IForgeRegistryEntry<T>> extends Abstr
 		this.defaultValues = ImmutableList.copyOf(defaultValues);
 
 		for (T arg : defaultValues) {
-			rawValues.add(arg.getRegistryName().toString());
+			rawValues.add(registry.getKey(arg).toString());
 		}
 		values = ImmutableList.copyOf(defaultValues);
 	}
@@ -56,7 +55,7 @@ public class ForgeRegistryConfig<T extends IForgeRegistryEntry<T>> extends Abstr
 	@Override
 	public void serialize(JsonObject jsonObject) {
 		List<String> tempValues = getValue().stream().map((element) -> {
-			return element.getRegistryName().toString();
+			return registry.getKey(element).toString();
 		}).collect(Collectors.toList());
 		JsonElement jsonElement = GSON.toJsonTree(tempValues, type);
 		jsonObject.add(getIdentifier(), jsonElement);
@@ -103,13 +102,12 @@ public class ForgeRegistryConfig<T extends IForgeRegistryEntry<T>> extends Abstr
 		}
 	}
 
-	private static <T extends IForgeRegistryEntry<T>> void addAllWildcards(List<T> tempValues, List<String> modids,
-			final IForgeRegistry<T> registry) {
+	private static <T> void addAllWildcards(List<T> tempValues, List<String> modids, final IForgeRegistry<T> registry) {
 		if (modids.isEmpty()) {
 			return;
 		}
 		registry.getValues().stream().filter((element) -> {
-			return modids.contains(element.getRegistryName().getNamespace());
+			return modids.contains(registry.getKey(element).getNamespace());
 		}).forEach((element) -> tempValues.add(element));
 	}
 

@@ -7,7 +7,6 @@ import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -15,7 +14,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class ItemValueScreen extends Screen {
 
 	private static final int SPACING = 30;
-	private static final Component TITLE = new TranslatableComponent("block.toolleveling.item_values");
+	private static final Component TITLE = Component.translatable("block.toolleveling.item_values");
 	private ItemValuesListWidget itemValues;
 
 	public ItemValueScreen() {
@@ -35,7 +34,7 @@ public class ItemValueScreen extends Screen {
 		this.renderBackground(matrixStack); // render translucent grey background
 		this.itemValues.render(matrixStack, mouseX, mouseY, partialTicks); // render item list widget
 		super.render(matrixStack, mouseX, mouseY, partialTicks); // render buttons
-		drawCenteredString(matrixStack, font, new TranslatableComponent("screen.toolleveling.default_item_value_worth",
+		drawCenteredString(matrixStack, font, Component.translatable("screen.toolleveling.default_item_value_worth",
 				ToolLevelingConfig.defaultItemWorth.getValue()), width / 2, 10, 0xFFFFFF);
 	}
 
