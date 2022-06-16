@@ -1,2 +1,4 @@
 accessWidener v1 named
+
+# make this accessible to register a custom command argument type
 accessible field net/minecraft/command/argument/ArgumentTypes CLASS_MAP Ljava/util/Map;
