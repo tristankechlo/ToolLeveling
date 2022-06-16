@@ -6,7 +6,6 @@ import org.apache.logging.log4j.Logger;
 import com.tristankechlo.toolleveling.blockentity.ToolLevelingTableBlockEntity;
 import com.tristankechlo.toolleveling.blocks.ToolLevelingTableBlock;
 import com.tristankechlo.toolleveling.commands.ConfigIdentifierArgumentType;
-import com.tristankechlo.toolleveling.commands.OpenItemValueScreenCommand;
 import com.tristankechlo.toolleveling.commands.SuperEnchantCommand;
 import com.tristankechlo.toolleveling.commands.ToolLevelingCommand;
 import com.tristankechlo.toolleveling.config.ConfigManager;
@@ -67,7 +66,6 @@ public final class ToolLeveling implements ModInitializer {
 		// register commands
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
 			ToolLevelingCommand.register(dispatcher);
-			OpenItemValueScreenCommand.register(dispatcher);
 			SuperEnchantCommand.register(dispatcher);
 		});
 
