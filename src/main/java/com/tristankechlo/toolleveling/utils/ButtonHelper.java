@@ -10,7 +10,6 @@ import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 
 public final class ButtonHelper {
@@ -68,26 +67,25 @@ public final class ButtonHelper {
 	}
 
 	public static Text getButtonText(ButtonEntry entry) {
-		return new TranslatableText(entry.name).formatted(getButtonTextFormatting(entry));
+		return Text.translatable(entry.name).formatted(getButtonTextFormatting(entry));
 	}
 
 	@SuppressWarnings("resource")
 	public static List<Text> getButtonToolTips(ButtonEntry data) {
 		List<Text> tooltip = new ArrayList<>();
-		tooltip.add(new TranslatableText(data.name).formatted(Formatting.AQUA));
+		tooltip.add(Text.translatable(data.name).formatted(Formatting.AQUA));
 		final String start = "container.toolleveling.tool_leveling_table";
 		if (ButtonHelper.shouldButtonBeActive(data)
 				|| Utils.freeCreativeUpgrades(MinecraftClient.getInstance().player)) {
+			tooltip.add(Text.translatable(start + ".current_level", data.currentLevel).formatted(Formatting.DARK_GRAY));
 			tooltip.add(
-					new TranslatableText(start + ".current_level", data.currentLevel).formatted(Formatting.DARK_GRAY));
-			tooltip.add(new TranslatableText(start + ".next_level", (data.currentLevel + 1))
-					.formatted(Formatting.DARK_GRAY));
-			tooltip.add(new TranslatableText(start + ".cost", data.upgradeCost).formatted(Formatting.DARK_GRAY));
+					Text.translatable(start + ".next_level", (data.currentLevel + 1)).formatted(Formatting.DARK_GRAY));
+			tooltip.add(Text.translatable(start + ".cost", data.upgradeCost).formatted(Formatting.DARK_GRAY));
 		}
 		if (Utils.freeCreativeUpgrades(MinecraftClient.getInstance().player)) {
-			tooltip.add(new TranslatableText(start + ".free_creative").formatted(Formatting.GREEN));
+			tooltip.add(Text.translatable(start + ".free_creative").formatted(Formatting.GREEN));
 		} else if (data.status != ButtonStatus.NORMAL) {
-			tooltip.add(new TranslatableText(start + ".error." + data.status.toString().toLowerCase())
+			tooltip.add(Text.translatable(start + ".error." + data.status.toString().toLowerCase())
 					.formatted(ButtonHelper.getButtonTextFormatting(data)));
 		}
 		return tooltip;

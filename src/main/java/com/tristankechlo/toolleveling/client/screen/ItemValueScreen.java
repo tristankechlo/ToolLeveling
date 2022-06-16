@@ -10,13 +10,12 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 
 @Environment(EnvType.CLIENT)
 public class ItemValueScreen extends Screen {
 
 	private static final int SPACING = 30;
-	private static final Text TITLE = new TranslatableText("block.toolleveling.item_values");
+	private static final Text TITLE = Text.translatable("block.toolleveling.item_values");
 	private Text defaultValue;
 	private ItemValuesListWidget itemValues;
 
@@ -27,7 +26,7 @@ public class ItemValueScreen extends Screen {
 	@Override
 	protected void init() {
 		super.init();
-		defaultValue = new TranslatableText("screen.toolleveling.default_item_value_worth",
+		defaultValue = Text.translatable("screen.toolleveling.default_item_value_worth",
 				ToolLevelingConfig.defaultItemWorth.getValue());
 		this.itemValues = new ItemValuesListWidget(this, width - (2 * SPACING), SPACING, height - SPACING);
 		this.itemValues.setLeftPos(SPACING);

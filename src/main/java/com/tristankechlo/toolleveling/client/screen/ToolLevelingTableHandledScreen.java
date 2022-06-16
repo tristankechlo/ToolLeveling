@@ -17,7 +17,6 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
@@ -81,8 +80,8 @@ public class ToolLevelingTableHandledScreen extends HandledScreen<ToolLevelingTa
 
 	private void renderPointsSummary(MatrixStack stack) {
 		String start = "container.toolleveling.tool_leveling_table.worth.";
-		Text bonusPoints = new TranslatableText(start + "bonus_points", this.getScreenHandler().getBonusPoints());
-		Text invWorth = new TranslatableText(start + "inv", this.getScreenHandler().getContainerWorth());
+		Text bonusPoints = Text.translatable(start + "bonus_points", this.getScreenHandler().getBonusPoints());
+		Text invWorth = Text.translatable(start + "inv", this.getScreenHandler().getContainerWorth());
 		float left = this.x + 8;
 		this.textRenderer.draw(stack, bonusPoints, left, y + 45, 4210752);
 		this.textRenderer.draw(stack, invWorth, left, y + 56, 4210752);

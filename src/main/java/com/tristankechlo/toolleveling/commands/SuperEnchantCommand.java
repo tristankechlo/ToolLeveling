@@ -21,7 +21,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 
 public final class SuperEnchantCommand {
 
@@ -33,18 +33,18 @@ public final class SuperEnchantCommand {
 
 	static {
 		NONLIVING_ENTITY_EXCEPTION = new DynamicCommandExceptionType((entityName) -> {
-			return new TranslatableText("commands.enchant.failed.entity", entityName);
+			return Text.translatable("commands.enchant.failed.entity", entityName);
 		});
 		INCOMPATIBLE_ENCHANTS_EXCEPTION = new DynamicCommandExceptionType((itemName) -> {
-			return new TranslatableText("commands.superenchant.failed.incompatible", itemName);
+			return Text.translatable("commands.superenchant.failed.incompatible", itemName);
 		});
 		WRONG_ENCHANTS_EXCEPTION = new DynamicCommandExceptionType((itemName) -> {
-			return new TranslatableText("commands.superenchant.failed.wrong", itemName);
+			return Text.translatable("commands.superenchant.failed.wrong", itemName);
 		});
 		ITEMLESS_EXCEPTION = new DynamicCommandExceptionType((entityName) -> {
-			return new TranslatableText("commands.enchant.failed.itemless", entityName);
+			return Text.translatable("commands.enchant.failed.itemless", entityName);
 		});
-		FAILED_EXCEPTION = new SimpleCommandExceptionType(new TranslatableText("commands.enchant.failed"));
+		FAILED_EXCEPTION = new SimpleCommandExceptionType(Text.translatable("commands.enchant.failed"));
 	}
 
 	public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
@@ -101,11 +101,11 @@ public final class SuperEnchantCommand {
 			throw FAILED_EXCEPTION.create();
 		} else {
 			if (targets.size() == 1) {
-				source.sendFeedback(new TranslatableText("commands.enchant.success.single",
-						enchantmentIn.getName(level), targets.iterator().next().getDisplayName()), true);
+				source.sendFeedback(Text.translatable("commands.enchant.success.single", enchantmentIn.getName(level),
+						targets.iterator().next().getDisplayName()), true);
 			} else {
-				source.sendFeedback(new TranslatableText("commands.enchant.success.multiple",
-						enchantmentIn.getName(level), targets.size()), true);
+				source.sendFeedback(Text.translatable("commands.enchant.success.multiple", enchantmentIn.getName(level),
+						targets.size()), true);
 			}
 
 			return i;

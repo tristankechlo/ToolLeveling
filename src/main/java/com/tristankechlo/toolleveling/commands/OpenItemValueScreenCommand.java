@@ -4,7 +4,6 @@ import static net.minecraft.server.command.CommandManager.literal;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.network.ServerNetworkHandler;
 
@@ -23,9 +22,6 @@ public final class OpenItemValueScreenCommand {
 		try {
 			ServerPlayerEntity player = context.getSource().getPlayer();
 			ServerNetworkHandler.sendOpenItemValues(player);
-		} catch (CommandSyntaxException e) {
-			ToolLeveling.LOGGER.error("Error while sending command '/openitemvalues', invalid sender!");
-			return 0;
 		} catch (Exception e) {
 			ToolLeveling.LOGGER.error("Error while sending command '/openitemvalues'!\n" + e.getMessage());
 			return 0;

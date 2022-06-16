@@ -27,7 +27,6 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -35,7 +34,7 @@ import net.minecraft.util.math.Direction;
 public class ToolLevelingTableBlockEntity extends BlockEntity
 		implements Inventory, SidedInventory, NamedScreenHandlerFactory, ExtendedScreenHandlerFactory {
 
-	private static final Text CUSTOMNAME = new TranslatableText("container." + Names.MOD_ID + ".tool_leveling_table");
+	private static final Text CUSTOMNAME = Text.translatable("container." + Names.MOD_ID + ".tool_leveling_table");
 	private DefaultedList<ItemStack> items = DefaultedList.ofSize(NUMBER_OF_SLOTS, ItemStack.EMPTY);
 	public static final int NUMBER_OF_SLOTS = 16;
 	public static final int[] SLOTS = IntStream.range(1, NUMBER_OF_SLOTS).toArray();

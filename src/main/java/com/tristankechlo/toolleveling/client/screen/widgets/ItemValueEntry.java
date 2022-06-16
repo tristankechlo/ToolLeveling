@@ -13,7 +13,6 @@ import net.minecraft.client.gui.widget.ElementListWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Pair;
 import net.minecraft.util.collection.DefaultedList;
@@ -50,8 +49,7 @@ public class ItemValueEntry extends ElementListWidget.Entry<ItemValueEntry> {
 
 	private void renderItemTooltip(MatrixStack mStack, ItemStack iStack, int mouseX, int mouseY, long worth) {
 		List<Text> tooltips = screen.getTooltipFromItem(iStack);
-		tooltips.add(
-				new TranslatableText("screen.toolleveling.item_value_worth", worth).formatted(Formatting.DARK_GRAY));
+		tooltips.add(Text.translatable("screen.toolleveling.item_value_worth", worth).formatted(Formatting.DARK_GRAY));
 		screen.renderTooltip(mStack, tooltips, mouseX, mouseY);
 	}
 
