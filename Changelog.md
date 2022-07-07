@@ -3,6 +3,7 @@
 ### Version 1.18.2 - 1.3.2
  - port to 1.18.2
  - move the command to view the item values from `/openitemvalues` to `/toolleveling openitemvalues`
+ - fix missing language file on servers
 
 ### Version 1.18.1 - 1.3.0
  - support wildcards in enchantmentBlacklist and enchantmentWhitelist
