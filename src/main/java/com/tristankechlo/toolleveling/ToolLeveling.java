@@ -6,7 +6,6 @@ import org.apache.logging.log4j.Logger;
 import com.tristankechlo.toolleveling.blockentity.ToolLevelingTableBlockEntity;
 import com.tristankechlo.toolleveling.blocks.ToolLevelingTableBlock;
 import com.tristankechlo.toolleveling.commands.EnumArgument;
-import com.tristankechlo.toolleveling.commands.OpenItemValueScreenCommand;
 import com.tristankechlo.toolleveling.commands.SuperEnchantCommand;
 import com.tristankechlo.toolleveling.commands.ToolLevelingCommand;
 import com.tristankechlo.toolleveling.config.ConfigManager;
@@ -21,7 +20,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
-import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.command.argument.ArgumentTypes;
@@ -41,8 +40,7 @@ public final class ToolLeveling implements ModInitializer {
 	public static final ScreenHandlerType<ToolLevelingTableScreenhandler> TLT_SCREEN_HANDLER;
 
 	static {
-		TLT_SCREEN_HANDLER = ScreenHandlerRegistry.registerExtended(TOOLLEVELING_TABLE_ID,
-				ToolLevelingTableScreenhandler::new);
+		TLT_SCREEN_HANDLER = new ExtendedScreenHandlerType<>(ToolLevelingTableScreenhandler::new);
 	}
 
 	@Override
@@ -66,7 +64,6 @@ public final class ToolLeveling implements ModInitializer {
 		// register commands
 		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
 			ToolLevelingCommand.register(dispatcher);
-			OpenItemValueScreenCommand.register(dispatcher);
 			SuperEnchantCommand.register(dispatcher);
 		});
 

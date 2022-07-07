@@ -1,5 +1,8 @@
 # Changelog
 
+### Version 1.18.2 - 1.3.2
+ - port to 1.18.2
+
 ### Version 1.18.1 - 1.3.0
  - support wildcards in enchantmentBlacklist and enchantmentWhitelist
      - this will whitelist/blacklist all enchantments from the specified mod

@@ -10,14 +10,14 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
-import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
+import net.minecraft.client.gui.screen.ingame.HandledScreens;
 
 @Environment(EnvType.CLIENT)
 public final class ToolLevelingClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
-		ScreenRegistry.register(ToolLeveling.TLT_SCREEN_HANDLER, ToolLevelingTableHandledScreen::new);
+		HandledScreens.register(ToolLeveling.TLT_SCREEN_HANDLER, ToolLevelingTableHandledScreen::new);
 		BlockEntityRendererRegistry.register(ToolLeveling.TLT_BLOCK_ENTITY, ToolLevelingTableRenderer::new);
 
 		// setup client packet reciever
