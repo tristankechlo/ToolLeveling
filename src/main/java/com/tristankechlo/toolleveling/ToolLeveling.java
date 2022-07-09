@@ -56,6 +56,7 @@ public final class ToolLeveling implements ModInitializer {
 				new BlockItem(TLT_BLOCK, new FabricItemSettings().group(ItemGroup.DECORATIONS).maxCount(64)));
 		TLT_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, TOOLLEVELING_TABLE_ID,
 				FabricBlockEntityTypeBuilder.create(ToolLevelingTableBlockEntity::new, TLT_BLOCK).build(null));
+		Registry.register(Registry.SCREEN_HANDLER, TOOLLEVELING_TABLE_ID, TLT_SCREEN_HANDLER);
 
 		// register command argument-types
 		ArgumentTypes.register(Names.MOD_ID + ":enum_argument", EnumArgument.class,

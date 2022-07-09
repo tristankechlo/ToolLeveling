@@ -1,5 +1,8 @@
 # Changelog
 
+### Version 1.18.2 - 1.3.3
+ - fix that the table could not be opened
+
 ### Version 1.18.2 - 1.3.2
  - port to 1.18.2
  - move the command to view the item values from `/openitemvalues` to `/toolleveling openitemvalues`
