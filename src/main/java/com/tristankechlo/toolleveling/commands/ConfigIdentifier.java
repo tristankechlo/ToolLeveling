@@ -6,11 +6,16 @@ import net.minecraft.util.StringIdentifiable;
 
 public enum ConfigIdentifier implements StringIdentifiable {
 
-	GENERAL,
-	ITEMVALUES;
+	GENERAL("general"),
+	ITEMVALUES("item_values");
 
 	@SuppressWarnings("deprecation")
 	public static final Codec<ConfigIdentifier> CODEC;
+	private final String name;
+
+	private ConfigIdentifier(String name) {
+		this.name = name;
+	}
 
 	@Override
 	public String asString() {
@@ -18,7 +23,7 @@ public enum ConfigIdentifier implements StringIdentifiable {
 	}
 
 	public String withModID() {
-		return Names.MOD_ID + ":" + this.toString().toLowerCase();
+		return Names.MOD_ID + ":" + this.name;
 	}
 
 	static {

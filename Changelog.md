@@ -1,5 +1,8 @@
 # Changelog
 
+### Version 1.19 - 1.3.3
+ - rename config-identifier from `itemvalues` to `item_values`
+
 ### Version 1.19 - 1.3.2
  - fix missing language file on servers
 
