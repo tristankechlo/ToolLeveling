@@ -2,6 +2,7 @@
 
 ### Version 1.18.2 - 1.3.3
  - fix that the table could not be opened
+ - rename config-identifier from `itemValues` to `item_values`
 
 ### Version 1.18.2 - 1.3.2
  - port to 1.18.2
