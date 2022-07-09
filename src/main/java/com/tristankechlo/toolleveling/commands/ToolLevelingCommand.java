@@ -82,7 +82,7 @@ public final class ToolLevelingCommand {
 
 	private static enum Identifier {
 		GENERAL(Names.MOD_ID + ":general"),
-		ITEMVALUES(Names.MOD_ID + ":itemValues");
+		ITEMVALUES(Names.MOD_ID + ":item_values");
 
 		public final String id;
 

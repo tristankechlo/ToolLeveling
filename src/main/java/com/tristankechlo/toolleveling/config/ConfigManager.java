@@ -164,7 +164,7 @@ public final class ConfigManager {
 		configs.put(Names.MOD_ID + ":general", new Config("toolleveling.json", ToolLevelingConfig::setToDefaultValues,
 				ToolLevelingConfig::serialize, ToolLevelingConfig::deserialize));
 
-		configs.put(Names.MOD_ID + ":itemValues", new Config("item_values.json", ItemValues::setToDefaultValues,
+		configs.put(Names.MOD_ID + ":item_values", new Config("item_values.json", ItemValues::setToDefaultValues,
 				ItemValues::serialize, ItemValues::deserialize));
 
 		return configs;

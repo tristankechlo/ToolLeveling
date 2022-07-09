@@ -1,5 +1,8 @@
 # Changelog
 
+### Version 1.18.2 - 1.3.3
+ - rename config-identifier from `itemValues` to `item_values`
+
 ### Version 1.18.2 - 1.3.1
  - port to 1.18.2
  - move the command to view the item values from `/openitemvalues` to `/toolleveling openitemvalues`
