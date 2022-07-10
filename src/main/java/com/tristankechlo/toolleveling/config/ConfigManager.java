@@ -112,7 +112,8 @@ public final class ConfigManager {
 	private static void loadConfigFromFile(Config config, File file) {
 		JsonObject json = null;
 		try {
-			JsonElement jsonElement = JsonParser.parseReader(new FileReader(file));
+			JsonParser parser = new JsonParser();
+			JsonElement jsonElement = parser.parse(new FileReader(file));
 			json = jsonElement.getAsJsonObject();
 		} catch (Exception e) {
 			ToolLeveling.LOGGER.error("There was an error loading the config file: " + config.getFileName());

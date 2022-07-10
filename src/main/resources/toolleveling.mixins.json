@@ -1,7 +1,7 @@
 {
 	"required" : true,
 	"package" : "com.tristankechlo.toolleveling.mixin",
-	"compatibilityLevel" : "JAVA_16",
+	"compatibilityLevel" : "JAVA_17",
 	"refmap" : "toolleveling.refmap.json",
 	"mixins" : [
 		"MixinEnchantmentHelper"

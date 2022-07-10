@@ -28,7 +28,8 @@ public final class SyncToolLevelingConfig {
 
 	public static SyncToolLevelingConfig decode(FriendlyByteBuf buffer) {
 		String identifier = buffer.readUtf();
-		JsonObject json = JsonParser.parseString(buffer.readUtf()).getAsJsonObject();
+		JsonParser parser = new JsonParser();
+		JsonObject json = parser.parse(buffer.readUtf()).getAsJsonObject();
 		return new SyncToolLevelingConfig(identifier, json);
 	}
 

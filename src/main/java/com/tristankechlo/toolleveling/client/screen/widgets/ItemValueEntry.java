@@ -7,7 +7,6 @@ import com.tristankechlo.toolleveling.client.screen.ItemValueScreen;
 import com.tristankechlo.toolleveling.utils.Names;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
@@ -15,7 +14,6 @@ import net.minecraft.util.Tuple;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.RenderProperties;
 
 @OnlyIn(Dist.CLIENT)
 public class ItemValueEntry extends ObjectSelectionList.Entry<ItemValueEntry> {
@@ -49,8 +47,6 @@ public class ItemValueEntry extends ObjectSelectionList.Entry<ItemValueEntry> {
 	}
 
 	private void renderItemTooltip(PoseStack mStack, ItemStack iStack, int mouseX, int mouseY, long worth) {
-		Font font = RenderProperties.get(iStack).getFont(iStack);
-		font = (font == null) ? screen.getFontRenderer() : font;
 		List<Component> tooltips = screen.getTooltipFromItem(iStack);
 		tooltips.add(Component.translatable("screen.toolleveling.item_value_worth", worth)
 				.withStyle(ChatFormatting.DARK_GRAY));
