@@ -44,7 +44,7 @@ public final class ToolLeveling {
 	@SubscribeEvent
 	public void onPlayerJoinEvent(final PlayerLoggedInEvent event) {
 		// send server-config to player
-		ConfigManager.syncAllConfigsToOneClient((ServerPlayer) event.getPlayer());
+		ConfigManager.syncAllConfigsToOneClient((ServerPlayer) event.getEntity());
 	}
 
 }

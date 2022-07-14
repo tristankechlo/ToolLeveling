@@ -1,5 +1,9 @@
 # Changelog
 
+### Version 1.19 - 1.3.4
+ - fix error `toolleveling failed to load correctly`
+   - requires forge to be greater than 41.0.95
+
 ### Version 1.19 - 1.3.3
  - rename config-identifier from `itemValues` to `item_values`
 

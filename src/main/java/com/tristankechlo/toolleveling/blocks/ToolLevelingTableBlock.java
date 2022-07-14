@@ -58,7 +58,7 @@ public class ToolLevelingTableBlock extends BaseEntityBlock {
 		} else {
 			BlockEntity blockentity = level.getBlockEntity(pos);
 			if (blockentity instanceof ToolLevelingTableBlockEntity) {
-				NetworkHooks.openGui((ServerPlayer) player, (ToolLevelingTableBlockEntity) blockentity, buf -> {
+				NetworkHooks.openScreen((ServerPlayer) player, (ToolLevelingTableBlockEntity) blockentity, buf -> {
 					buf.writeBlockPos(pos);
 				});
 			}
