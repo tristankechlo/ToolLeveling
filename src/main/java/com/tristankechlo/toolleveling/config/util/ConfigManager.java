@@ -17,14 +17,12 @@ public final class ConfigManager {
 
     public static final Map<String, Config> CONFIGS = getConfigList();
     private static final File ConfigDir = FMLPaths.CONFIGDIR.get().resolve("toolleveling").toFile();
+    public static Gson GSON = new GsonBuilder().setPrettyPrinting().serializeNulls().disableHtmlEscaping().create();
 
     private ConfigManager() {
     }
 
     public static void setup() {
-        if (!ConfigDir.exists()) {
-            ConfigDir.mkdirs();
-        }
         for (Map.Entry<String, Config> element : CONFIGS.entrySet()) {
             Config config = element.getValue();
             config.setToDefault();
@@ -41,9 +39,6 @@ public final class ConfigManager {
     }
 
     public static void reloadAllConfigs() {
-        if (!ConfigDir.exists()) {
-            ConfigDir.mkdirs();
-        }
         for (Map.Entry<String, Config> element : CONFIGS.entrySet()) {
             Config config = element.getValue();
             File configFile = new File(ConfigDir, config.getFileName());
@@ -59,19 +54,7 @@ public final class ConfigManager {
         }
     }
 
-    public static void resetAllConfigs() {
-        if (!ConfigDir.exists()) {
-            ConfigDir.mkdirs();
-        }
-        for (Map.Entry<String, Config> element : CONFIGS.entrySet()) {
-            resetOneConfig(element.getKey(), element.getValue());
-        }
-    }
-
     public static void resetOneConfig(String identifier) {
-        if (!ConfigDir.exists()) {
-            ConfigDir.mkdirs();
-        }
         Config config = CONFIGS.get(identifier);
         if (config != null) {
             resetOneConfig(identifier, config);
@@ -91,7 +74,7 @@ public final class ConfigManager {
         jsonObject.addProperty("_commentSyntax", "to check if your config-file has the correct "
                 + "syntax, test your configuration on this website: https://jsonlint.com/");
         jsonObject = config.serialize(jsonObject);
-        String jsonString = ConfigManager.getGson().toJson(jsonObject);
+        String jsonString = GSON.toJson(jsonObject);
         try {
             FileWriter writer = new FileWriter(file);
             writer.write(jsonString);
@@ -120,14 +103,6 @@ public final class ConfigManager {
         }
     }
 
-    public static Gson getGson() {
-        GsonBuilder gson = new GsonBuilder();
-        gson.setPrettyPrinting();
-        gson.serializeNulls();
-        gson.disableHtmlEscaping();
-        return gson.create();
-    }
-
     private static Map<String, Config> getConfigList() {
         Map<String, Config> configs = new HashMap<>();
         configs.put(Names.MOD_ID + ":general", new Config("toolleveling.json", ToolLevelingConfig::setToDefaultValues, ToolLevelingConfig::serialize, ToolLevelingConfig::deserialize));
@@ -148,4 +123,11 @@ public final class ConfigManager {
         return configFile.getAbsolutePath();
     }
 
+    public static void createConfigFolder() {
+        if (!ConfigDir.exists()) {
+            if (!ConfigDir.mkdirs()) {
+                throw new RuntimeException("Could not create config folder: " + ConfigDir.getAbsolutePath());
+            }
+        }
+    }
 }

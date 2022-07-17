@@ -22,30 +22,33 @@ public final class ToolLeveling {
 
     public static final Logger LOGGER = LogUtils.getLogger();
 
-	public ToolLeveling() {
-		final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+    public ToolLeveling() {
+        final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-		PacketHandler.registerPackets();
+        PacketHandler.registerPackets();
 
-		ModRegistry.ITEMS.register(modEventBus);
-		ModRegistry.BLOCKS.register(modEventBus);
-		ModRegistry.TILE_ENTITIES.register(modEventBus);
-		ModRegistry.CONTAINER_TYPES.register(modEventBus);
+        ModRegistry.ITEMS.register(modEventBus);
+        ModRegistry.BLOCKS.register(modEventBus);
+        ModRegistry.TILE_ENTITIES.register(modEventBus);
+        ModRegistry.CONTAINER_TYPES.register(modEventBus);
 
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::init);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::init);
 
-		MinecraftForge.EVENT_BUS.register(this);
-	}
+        MinecraftForge.EVENT_BUS.register(this);
+    }
 
-	private void commonSetup(final FMLCommonSetupEvent event) {
-		ConfigManager.setup();
-	}
+    private void commonSetup(final FMLCommonSetupEvent event) {
+        //make sure config folder exists
+        ConfigManager.createConfigFolder();
+        //load configs from file
+        ConfigManager.setup();
+    }
 
-	@SubscribeEvent
-	public void onPlayerJoinEvent(final PlayerLoggedInEvent event) {
-		// send server-config to player
-		ConfigSyncing.syncAllConfigsToOneClient((ServerPlayer) event.getEntity());
-	}
+    @SubscribeEvent
+    public void onPlayerJoinEvent(final PlayerLoggedInEvent event) {
+        // send server-config to player
+        ConfigSyncing.syncAllConfigsToOneClient((ServerPlayer) event.getEntity());
+    }
 
 }
