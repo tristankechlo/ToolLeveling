@@ -13,8 +13,8 @@ public final class ClientSyncToolLevelingConfig {
 
 	public static void handle(SyncToolLevelingConfig msg, Supplier<NetworkEvent.Context> context) {
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-			boolean check = ConfigSyncing.deserializeConfig(msg.identifier, msg.json);
-			if (!check) {
+			boolean success = ConfigSyncing.deserializeConfig(msg.identifier, msg.json);
+			if (!success) {
 				ToolLeveling.LOGGER.error("Config " + msg.identifier + " could not be loaded");
 				throw new RuntimeException("Config " + msg.identifier + " could not be loaded");
 			} else {
