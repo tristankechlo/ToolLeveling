@@ -2,7 +2,8 @@ package com.tristankechlo.toolleveling;
 
 import com.mojang.logging.LogUtils;
 import com.tristankechlo.toolleveling.client.ClientSetup;
-import com.tristankechlo.toolleveling.config.ConfigManager;
+import com.tristankechlo.toolleveling.config.util.ConfigManager;
+import com.tristankechlo.toolleveling.config.util.ConfigSyncing;
 import com.tristankechlo.toolleveling.init.ModRegistry;
 import com.tristankechlo.toolleveling.network.PacketHandler;
 import com.tristankechlo.toolleveling.utils.Names;
@@ -44,7 +45,7 @@ public final class ToolLeveling {
 	@SubscribeEvent
 	public void onPlayerJoinEvent(final PlayerLoggedInEvent event) {
 		// send server-config to player
-		ConfigManager.syncAllConfigsToOneClient((ServerPlayer) event.getEntity());
+		ConfigSyncing.syncAllConfigsToOneClient((ServerPlayer) event.getEntity());
 	}
 
 }
