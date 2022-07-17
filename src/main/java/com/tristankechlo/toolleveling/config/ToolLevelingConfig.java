@@ -1,56 +1,48 @@
 package com.tristankechlo.toolleveling.config;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gson.JsonObject;
-import com.tristankechlo.toolleveling.config.values.BooleanValue;
-import com.tristankechlo.toolleveling.config.values.EnchantmentCaps;
-import com.tristankechlo.toolleveling.config.values.EnchantmentModifier;
-import com.tristankechlo.toolleveling.config.values.ForgeRegistryConfig;
-import com.tristankechlo.toolleveling.config.values.number.DoubleValue;
-import com.tristankechlo.toolleveling.config.values.number.LongValue;
-import com.tristankechlo.toolleveling.config.values.number.ShortValue;
-
+import com.tristankechlo.toolleveling.config.values.*;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public final class ToolLevelingConfig {
 
-	public static final DoubleValue globalUpgradeCostMultiplier;
-	public static final LongValue minUpgradeCost;
-	public static final LongValue defaultItemWorth;
+	public static final NumberValue<Double> globalUpgradeCostMultiplier;
+	public static final NumberValue<Long> minUpgradeCost;
+	public static final NumberValue<Long> defaultItemWorth;
 	public static final BooleanValue allowLevelingUselessEnchantments;
 	public static final BooleanValue allowLevelingBreakingEnchantments;
 	public static final BooleanValue allowWrongEnchantments;
 	public static final BooleanValue allowIncompatibleEnchantments;
 	public static final BooleanValue freeUpgradesForCreativePlayers;
-	public static final ShortValue globalEnchantmentCap;
+	public static final NumberValue<Short> globalEnchantmentCap;
 	public static final ForgeRegistryConfig<Enchantment> enchantmentWhitelist;
 	public static final ForgeRegistryConfig<Enchantment> enchantmentBlacklist;
 	public static final EnchantmentCaps enchantmentCaps;
 	public static final EnchantmentModifier enchantmentUpgradeCostModifier;
 
 	static {
-		globalUpgradeCostMultiplier = new DoubleValue("globalUpgradeCostMultiplier", 1.0D, 0.0D, 100.0D);
-		minUpgradeCost = new LongValue("minUpgradeCost", 1000, 1, Long.MAX_VALUE);
-		defaultItemWorth = new LongValue("defaultItemWorth", 10, 0, Long.MAX_VALUE);
+		globalUpgradeCostMultiplier = new NumberValue<>("globalUpgradeCostMultiplier", 1.0D, 0.0D, 100.0D);
+		minUpgradeCost = new NumberValue<>("minUpgradeCost", 1000L, 1L, Long.MAX_VALUE);
+		defaultItemWorth = new NumberValue<>("defaultItemWorth", 10L, 0L, Long.MAX_VALUE);
 		allowLevelingUselessEnchantments = new BooleanValue("allowLevelingOfUselessEnchantments", true);
 		allowLevelingBreakingEnchantments = new BooleanValue("allowLevelingOfBreakingEnchanments", true);
 		allowWrongEnchantments = new BooleanValue("allowWrongEnchantments", true);
 		allowIncompatibleEnchantments = new BooleanValue("allowIncompatibleEnchantments", true);
 		freeUpgradesForCreativePlayers = new BooleanValue("freeUpgradesForCreativePlayers", true);
-		globalEnchantmentCap = new ShortValue("globalEnchantmentCap", (short) 0, (short) 0, Short.MAX_VALUE);
-		enchantmentWhitelist = new ForgeRegistryConfig<>("enchantmentWhitelist", ForgeRegistries.ENCHANTMENTS,
-				new ArrayList<>());
-		enchantmentBlacklist = new ForgeRegistryConfig<>("enchantmentBlacklist", ForgeRegistries.ENCHANTMENTS,
-				getDefaultEnchantmentBlacklist());
+		globalEnchantmentCap = new NumberValue<>("globalEnchantmentCap", (short) 0, (short) 0, Short.MAX_VALUE);
+		enchantmentWhitelist = new ForgeRegistryConfig<>("enchantmentWhitelist", ForgeRegistries.ENCHANTMENTS, new ArrayList<>());
+		enchantmentBlacklist = new ForgeRegistryConfig<>("enchantmentBlacklist", ForgeRegistries.ENCHANTMENTS, getDefaultEnchantmentBlacklist());
 		enchantmentCaps = new EnchantmentCaps();
 		enchantmentUpgradeCostModifier = new EnchantmentModifier();
 	}
 
-	private ToolLevelingConfig() {}
+	private ToolLevelingConfig() {
+	}
 
 	public static void setToDefaultValues() {
 		globalUpgradeCostMultiplier.setToDefault();

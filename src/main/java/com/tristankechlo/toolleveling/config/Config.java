@@ -7,10 +7,10 @@ import com.google.gson.JsonObject;
 
 public final class Config {
 
-	private String fileName;
-	private Runnable reset;
-	private Function<JsonObject, JsonObject> serializer;
-	private Consumer<JsonObject> deserializer;
+	private final String fileName;
+	private final Runnable reset;
+	private final Function<JsonObject, JsonObject> serializer;
+	private final Consumer<JsonObject> deserializer;
 
 	public Config(String fileName, Runnable reset, Function<JsonObject, JsonObject> serializer,
 			Consumer<JsonObject> deserializer) {
