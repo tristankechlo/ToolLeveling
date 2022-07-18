@@ -1,5 +1,9 @@
 # Changelog
 
+### Version 1.19 - 1.3.5
+- filter out items while parsing the `item_values.json`
+   - this way there are proper messages in the log for items that are not valid as payment items
+
 ### Version 1.19 - 1.3.3
  - rename config-identifier from `itemvalues` to `item_values`
 
