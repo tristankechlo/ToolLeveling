@@ -71,6 +71,9 @@ public final class ToolLeveling implements ModInitializer {
 
 		// server start evet
 		ServerLifecycleEvents.SERVER_STARTED.register((server) -> {
+			//make sure config folder exists
+			ConfigManager.createConfigFolder();
+			//load configs from file
 			ConfigManager.setup();
 		});
 	}

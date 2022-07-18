@@ -20,7 +20,7 @@ public final class ItemValues {
 	public static Map<Item, Long> itemValues;
 	private static Map<String, Long> rawItemValues;
 	private static final Type type = new TypeToken<Map<String, Long>>() {}.getType();
-	private static Gson GSON = new Gson();
+	private static final Gson GSON = new Gson();
 
 	private ItemValues() {}
 
