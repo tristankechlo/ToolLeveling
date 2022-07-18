@@ -8,7 +8,7 @@ import com.tristankechlo.toolleveling.blocks.ToolLevelingTableBlock;
 import com.tristankechlo.toolleveling.commands.ConfigIdentifierArgumentType;
 import com.tristankechlo.toolleveling.commands.SuperEnchantCommand;
 import com.tristankechlo.toolleveling.commands.ToolLevelingCommand;
-import com.tristankechlo.toolleveling.config.ConfigManager;
+import com.tristankechlo.toolleveling.config.util.ConfigManager;
 import com.tristankechlo.toolleveling.network.ServerNetworkHandler;
 import com.tristankechlo.toolleveling.screenhandler.ToolLevelingTableScreenhandler;
 import com.tristankechlo.toolleveling.utils.Names;

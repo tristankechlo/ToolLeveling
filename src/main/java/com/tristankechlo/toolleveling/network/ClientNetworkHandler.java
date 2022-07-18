@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.client.screen.ItemValueScreen;
-import com.tristankechlo.toolleveling.config.ConfigManager;
+import com.tristankechlo.toolleveling.config.util.ConfigSyncing;
 import com.tristankechlo.toolleveling.utils.Names.NetworkChannels;
 
 import net.fabricmc.api.EnvType;
@@ -48,7 +48,7 @@ public final class ClientNetworkHandler {
 		final String identifier = buf.readString();
 		final JsonObject json = JsonParser.parseString(buf.readString()).getAsJsonObject();
 		client.execute(() -> {
-			boolean check = ConfigManager.deserializeConfig(identifier, json);
+			boolean check = ConfigSyncing.deserializeConfig(identifier, json);
 			if (!check) {
 				ToolLeveling.LOGGER.error("Config " + identifier + " could not be loaded");
 				throw new RuntimeException("Config " + identifier + " could not be loaded");

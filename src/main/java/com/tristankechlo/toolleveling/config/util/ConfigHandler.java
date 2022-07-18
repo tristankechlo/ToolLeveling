@@ -1,4 +1,4 @@
-package com.tristankechlo.toolleveling.config;
+package com.tristankechlo.toolleveling.config.util;
 
 import java.util.function.Consumer;
 import java.util.function.Function;

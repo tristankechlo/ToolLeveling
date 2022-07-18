@@ -7,7 +7,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.tristankechlo.toolleveling.ToolLeveling;
-import com.tristankechlo.toolleveling.config.ConfigManager;
+import com.tristankechlo.toolleveling.config.util.ConfigManager;
 import com.tristankechlo.toolleveling.network.ServerNetworkHandler;
 
 import net.minecraft.server.command.ServerCommandSource;
