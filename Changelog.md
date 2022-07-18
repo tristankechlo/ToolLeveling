@@ -1,5 +1,9 @@
 # Changelog
 
+### Version 1.19 - 1.3.5
+ - filter out items while parsing the `item_values.json`
+   - this way there are proper messages in the log for items that are not valid as payment items
+
 ### Version 1.19 - 1.3.4
  - fix error `toolleveling failed to load correctly`
    - requires forge to be greater than 41.0.95
