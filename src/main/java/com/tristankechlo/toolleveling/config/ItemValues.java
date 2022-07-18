@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken;
 import com.tristankechlo.toolleveling.ToolLeveling;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -132,6 +133,18 @@ public final class ItemValues {
             }
             if (!ForgeRegistries.ITEMS.containsKey(loc)) {
                 Item item = ForgeRegistries.ITEMS.getValue(loc);
+                if (item == null) {
+                    ToolLeveling.LOGGER.warn("Item {} not found in registry", loc);
+                    continue;
+                }
+                if (item.isDamageable(new ItemStack(item))) {
+                    ToolLeveling.LOGGER.warn("Item {} is damageable, it not a valid item to use in the toolleveling table", loc);
+                    continue;
+                }
+                if (item.isEnchantable(new ItemStack(item))) {
+                    ToolLeveling.LOGGER.warn("Item {} is enchantable, it not a valid item to use in the toolleveling table", loc);
+                    continue;
+                }
                 itemValues.put(item, worth);
             } else {
                 ToolLeveling.LOGGER.warn("Ignoring invalid item with id: " + element.getKey());
