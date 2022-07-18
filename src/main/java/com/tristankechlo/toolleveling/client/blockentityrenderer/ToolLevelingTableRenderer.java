@@ -1,7 +1,6 @@
 package com.tristankechlo.toolleveling.client.blockentityrenderer;
 
 import com.tristankechlo.toolleveling.blockentity.ToolLevelingTableBlockEntity;
-
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -18,28 +17,28 @@ import net.minecraft.util.math.Vec3f;
 @Environment(EnvType.CLIENT)
 public class ToolLevelingTableRenderer implements BlockEntityRenderer<ToolLevelingTableBlockEntity> {
 
-	private final Quaternion quaternion = new Quaternion(Vec3f.NEGATIVE_X, 1.5707F, false);
+    private final Quaternion quaternion = new Quaternion(Vec3f.NEGATIVE_X, 1.5707F, false);
 
-	public ToolLevelingTableRenderer(BlockEntityRendererFactory.Context dispatcher) {}
+    public ToolLevelingTableRenderer(BlockEntityRendererFactory.Context dispatcher) {}
 
-	@Override
-	public void render(ToolLevelingTableBlockEntity entity, float tickDelta, MatrixStack matrices,
-			VertexConsumerProvider vertexConsumers, int light, int overlay) {
-		ItemStack stack = entity.getStackToEnchant();
-		if (!stack.isEmpty()) {
-			matrices.push();
-			matrices.translate(0.5D, 0.83D, 0.5D);
-			matrices.scale(0.6F, 0.6F, 0.6F);
-			matrices.multiply(quaternion);
-			renderItem(stack, tickDelta, matrices, vertexConsumers, light, overlay);
-			matrices.pop();
-		}
-	}
+    @Override
+    public void render(ToolLevelingTableBlockEntity entity, float tickDelta, MatrixStack matrices,
+                       VertexConsumerProvider vertexConsumers, int light, int overlay) {
+        ItemStack stack = entity.getStackToEnchant();
+        if (!stack.isEmpty()) {
+            matrices.push();
+            matrices.translate(0.5D, 0.83D, 0.5D);
+            matrices.scale(0.6F, 0.6F, 0.6F);
+            matrices.multiply(quaternion);
+            renderItem(stack, tickDelta, matrices, vertexConsumers, light, overlay);
+            matrices.pop();
+        }
+    }
 
-	private void renderItem(ItemStack stack, float partialTicks, MatrixStack matrices,
-			VertexConsumerProvider vertexConsumers, int light, int overlay) {
-		MinecraftClient.getInstance().getItemRenderer().renderItem(stack, ModelTransformation.Mode.FIXED, light,
-				overlay, matrices, vertexConsumers, OverlayTexture.DEFAULT_UV);
-	}
+    private void renderItem(ItemStack stack, float partialTicks, MatrixStack matrices,
+                            VertexConsumerProvider vertexConsumers, int light, int overlay) {
+        MinecraftClient.getInstance().getItemRenderer().renderItem(stack, ModelTransformation.Mode.FIXED, light,
+                overlay, matrices, vertexConsumers, OverlayTexture.DEFAULT_UV);
+    }
 
 }
