@@ -73,27 +73,25 @@ public final class ToolLevelingConfig {
     }
 
     public static void deserialize(JsonObject json) {
-        if (!json.has(GENERAL_OPTIONS)) {
-            throw new IllegalArgumentException("Missing general options");
-        }
-        if (!json.has(ENCHANTMENT_OPTIONS)) {
-            throw new IllegalArgumentException("Missing enchantment options");
-        }
         //deserialize general options
-        JsonObject general = json.getAsJsonObject(GENERAL_OPTIONS);
-        minimumUpgradeCost.deserialize(general);
-        allowLevelingUselessEnchantments.deserialize(general);
-        allowLevelingBreakingEnchantments.deserialize(general);
-        freeUpgradesForCreativePlayers.deserialize(general);
+        if (json.has(GENERAL_OPTIONS)) {
+            JsonObject general = json.getAsJsonObject(GENERAL_OPTIONS);
+            minimumUpgradeCost.deserialize(general);
+            allowLevelingUselessEnchantments.deserialize(general);
+            allowLevelingBreakingEnchantments.deserialize(general);
+            freeUpgradesForCreativePlayers.deserialize(general);
+        }
 
         //deserialize enchantment options
-        JsonObject enchantment = json.getAsJsonObject(ENCHANTMENT_OPTIONS);
-        whitelist.deserialize(enchantment);
-        blacklist.deserialize(enchantment);
-        globalEnchantmentCap.deserialize(enchantment);
-        enchantmentCaps.deserialize(enchantment);
-        globalUpgradeCostMultiplier.deserialize(enchantment);
-        enchantmentUpgradeCostModifier.deserialize(enchantment);
+        if (json.has(ENCHANTMENT_OPTIONS)) {
+            JsonObject enchantment = json.getAsJsonObject(ENCHANTMENT_OPTIONS);
+            whitelist.deserialize(enchantment);
+            blacklist.deserialize(enchantment);
+            globalEnchantmentCap.deserialize(enchantment);
+            enchantmentCaps.deserialize(enchantment);
+            globalUpgradeCostMultiplier.deserialize(enchantment);
+            enchantmentUpgradeCostModifier.deserialize(enchantment);
+        }
     }
 
     private static List<Enchantment> getDefaultEnchantmentBlacklist() {
