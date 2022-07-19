@@ -13,7 +13,7 @@
 	"container.toolleveling.tool_leveling_table.worth.bonus_points" : "Бонус: %s",
 	"container.toolleveling.tool_leveling_table.error.blacklisted" : "Эти чары отключены!",
 	"container.toolleveling.tool_leveling_table.error.useless" : "Прокачка не повлияет!",
-	"container.toolleveling.tool_leveling_table.error.maxlevel" : "Максимальный уровень достигнут!",
+	"container.toolleveling.tool_leveling_table.error.max_level" : "Максимальный уровень достигнут!",
 	"container.toolleveling.tool_leveling_table.error.break" : "Предмет будет бесполезен при прокачке!",
 	"container.toolleveling.tool_leveling_table.error.capped" : "Уровень достиг максимума!",
 	

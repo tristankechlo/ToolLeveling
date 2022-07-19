@@ -7,6 +7,7 @@ import com.tristankechlo.toolleveling.config.primitives.LongValue;
 import com.tristankechlo.toolleveling.config.primitives.ShortValue;
 import com.tristankechlo.toolleveling.config.values.EnchantmentCaps;
 import com.tristankechlo.toolleveling.config.values.EnchantmentModifier;
+import com.tristankechlo.toolleveling.config.values.MinimumEnchantmentLevels;
 import com.tristankechlo.toolleveling.config.values.RegistryListConfig;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
@@ -32,6 +33,8 @@ public final class ToolLevelingConfig {
     public static final EnchantmentCaps enchantmentCaps = new EnchantmentCaps("enchantment_caps");
     public static final DoubleValue globalUpgradeCostMultiplier = new DoubleValue("global_upgrade_cost_multiplier", 1.0D, 0.0D, 100.0D);
     public static final EnchantmentModifier enchantmentUpgradeCostModifier = new EnchantmentModifier("enchantment_upgrade_cost_modifier");
+    public static final ShortValue globalMinimumEnchantmentLevel = new ShortValue("global_minimum_enchantment_level", (short) 0, (short) 0, Short.MAX_VALUE);
+    public static final MinimumEnchantmentLevels minimumEnchantmentLevels = new MinimumEnchantmentLevels("minimum_enchantment_levels");
 
     private ToolLevelingConfig() {}
 
@@ -49,6 +52,8 @@ public final class ToolLevelingConfig {
         enchantmentCaps.setToDefault();
         globalUpgradeCostMultiplier.setToDefault();
         enchantmentUpgradeCostModifier.setToDefault();
+        globalMinimumEnchantmentLevel.setToDefault();
+        minimumEnchantmentLevels.setToDefault();
     }
 
     public static JsonObject serialize(JsonObject json) {
@@ -68,6 +73,8 @@ public final class ToolLevelingConfig {
         enchantmentCaps.serialize(enchantment);
         globalUpgradeCostMultiplier.serialize(enchantment);
         enchantmentUpgradeCostModifier.serialize(enchantment);
+        globalMinimumEnchantmentLevel.serialize(enchantment);
+        minimumEnchantmentLevels.serialize(enchantment);
         json.add(ENCHANTMENT_OPTIONS, enchantment);
         return json;
     }
@@ -91,6 +98,8 @@ public final class ToolLevelingConfig {
             enchantmentCaps.deserialize(enchantment);
             globalUpgradeCostMultiplier.deserialize(enchantment);
             enchantmentUpgradeCostModifier.deserialize(enchantment);
+            globalMinimumEnchantmentLevel.deserialize(enchantment);
+            minimumEnchantmentLevels.deserialize(enchantment);
         }
     }
 

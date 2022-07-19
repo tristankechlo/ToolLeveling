@@ -40,8 +40,13 @@ public final class Utils {
         return stack.getCount() * Utils.getItemWorth(stack);
     }
 
+    /**
+     * if global cap is not set, use the enchantment specific one<br>
+     * if global cap is set, use the lowest of the two
+     */
     public static boolean isEnchantmentAtCap(Enchantment enchantment, int level) {
         short globalEnchantmentCap = ToolLevelingConfig.globalEnchantmentCap.getValue();
+        // global cap is set, use the lowest of the two
         if (globalEnchantmentCap > 0) {
             if (ToolLevelingConfig.enchantmentCaps.getValue().containsKey(enchantment)) {
                 short enchantmentCap = ToolLevelingConfig.enchantmentCaps.getValue().get(enchantment);
@@ -51,10 +56,34 @@ public final class Utils {
             }
             return level >= globalEnchantmentCap;
         }
+        // global cap is not set, use the enchantment specific one
         if (ToolLevelingConfig.enchantmentCaps.getValue().containsKey(enchantment)) {
             return (level >= ToolLevelingConfig.enchantmentCaps.getValue().get(enchantment));
         }
         return false;
+    }
+
+    /**
+     * if global minimum is not set, use the enchantment specific one<br>
+     * if global minimum is set, use the highest of the two
+     */
+    public static boolean isEnchantmentOverMinimum(Enchantment enchantment, int level) {
+        short globalEnchantmentMin = ToolLevelingConfig.globalMinimumEnchantmentLevel.getValue();
+        // global minimum is set, use the highest of the two
+        if (globalEnchantmentMin > 0) {
+            if (ToolLevelingConfig.minimumEnchantmentLevels.getValue().containsKey(enchantment)) {
+                short enchantmentMin = ToolLevelingConfig.minimumEnchantmentLevels.getValue().get(enchantment);
+                if (enchantmentMin > globalEnchantmentMin) {
+                    return level >= enchantmentMin;
+                }
+            }
+            return level >= globalEnchantmentMin;
+        }
+        // global minimum is not set, use the enchantment specific one
+        if (ToolLevelingConfig.minimumEnchantmentLevels.getValue().containsKey(enchantment)) {
+            return level >= ToolLevelingConfig.minimumEnchantmentLevels.getValue().get(enchantment);
+        }
+        return level >= globalEnchantmentMin;
     }
 
     public static boolean willEnchantmentBreak(Enchantment enchantment, int level) {

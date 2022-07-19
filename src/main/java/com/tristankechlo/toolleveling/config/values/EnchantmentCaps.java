@@ -26,7 +26,7 @@ public final class EnchantmentCaps extends RegistryMapConfig<Enchantment, Short>
 
     @Override
     protected boolean isKeyValid(Enchantment key, Identifier identifier) {
-        return true;
+        return key != null;
     }
 
     @Override

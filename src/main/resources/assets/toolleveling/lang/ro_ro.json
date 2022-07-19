@@ -18,7 +18,7 @@
 	"container.toolleveling.tool_leveling_table.worth.bonus_points" : "Prima: %s",
 	"container.toolleveling.tool_leveling_table.error.blacklisted" : "Acest enchantment este deactivat!",
 	"container.toolleveling.tool_leveling_table.error.useless" : "Nivelarea nu va avea niciun effect!",
-	"container.toolleveling.tool_leveling_table.error.maxlevel" : "Nivelul maxim atins!",
+	"container.toolleveling.tool_leveling_table.error.max_level" : "Nivelul maxim atins!",
 	"container.toolleveling.tool_leveling_table.error.break" : "Enchantment se va rupe cand este nivelata!",
 	"container.toolleveling.tool_leveling_table.error.capped" : "Nivelul este la maximul setat!",
 	"container.toolleveling.tool_leveling_table.free_creative": "Leveling e gratis, pentru ca tu esti in creative mode.",
