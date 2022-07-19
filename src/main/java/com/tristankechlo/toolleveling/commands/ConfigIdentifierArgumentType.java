@@ -1,5 +1,6 @@
 package com.tristankechlo.toolleveling.commands;
 
+import com.tristankechlo.toolleveling.config.util.ConfigIdentifier;
 import net.minecraft.command.argument.EnumArgumentType;
 
 public class ConfigIdentifierArgumentType extends EnumArgumentType<ConfigIdentifier> {

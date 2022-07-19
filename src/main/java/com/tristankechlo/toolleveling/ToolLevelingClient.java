@@ -11,9 +11,13 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Environment(EnvType.CLIENT)
 public final class ToolLevelingClient implements ClientModInitializer {
+
+	public static final Logger LOGGER = LogManager.getLogger();
 
 	@Override
 	public void onInitializeClient() {

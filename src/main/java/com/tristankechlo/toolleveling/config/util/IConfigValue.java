@@ -1,4 +1,4 @@
-package com.tristankechlo.toolleveling.config.values;
+package com.tristankechlo.toolleveling.config.util;
 
 import com.google.gson.JsonObject;
 

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.tristankechlo.toolleveling.client.screen.ItemValueScreen;
-import com.tristankechlo.toolleveling.config.ItemValues;
+import com.tristankechlo.toolleveling.config.ItemValueConfig;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -36,7 +36,7 @@ public class ItemValuesListWidget extends ElementListWidget<ItemValueEntry> {
 	}
 
 	private void refreshList() {
-		List<Pair<ItemStack, Long>> entries = ItemValues.itemValues.entrySet().stream()
+		List<Pair<ItemStack, Long>> entries = ItemValueConfig.itemValues.getValue().entrySet().stream()
 				.sorted((o1, o2) -> o2.getValue().compareTo(o1.getValue()))
 				.map((entry) -> new Pair<>(new ItemStack(entry.getKey()), entry.getValue()))
 				.collect(Collectors.toList());

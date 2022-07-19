@@ -1,8 +1,12 @@
 # Changelog
 
-### Version 1.19 - 1.3.5
+### Version 1.19 - 1.4.0
 - filter out items while parsing the `item_values.json`
    - this way there are proper messages in the log for items that are not valid as payment items
+- enchantment modifier are now allowed in range [0, Double.MAX_VALUE] instead of [1, Double.MAX_VALUE]
+- overhaul the format of the config files
+  - config options are now grouped better together 
+  - **IMPORTANT**: if you have customized your config, you need to backup the config before updating the mod
 
 ### Version 1.19 - 1.3.3
  - rename config-identifier from `itemvalues` to `item_values`

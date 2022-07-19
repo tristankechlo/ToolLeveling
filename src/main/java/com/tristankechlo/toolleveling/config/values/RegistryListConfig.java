@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.tristankechlo.toolleveling.ToolLeveling;
+import com.tristankechlo.toolleveling.config.util.AbstractConfigValue;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -15,16 +16,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class RegistryConfig<T> extends AbstractConfigValue<ImmutableList<T>> {
+public class RegistryListConfig<T> extends AbstractConfigValue<ImmutableList<T>> {
 
-    private final ImmutableList<T> defaultValues;
     private ImmutableList<T> values;
+    private final ImmutableList<T> defaultValues;
     private List<String> rawValues = new ArrayList<>();
     private final Type type = new TypeToken<List<String>>() {}.getType();
-    private final Gson GSON = new Gson();
     private final Registry<T> registry;
+    private static final Gson GSON = new Gson();
 
-    public RegistryConfig(String identifier, Registry<T> registry, List<T> defaultValues) {
+    public RegistryListConfig(String identifier, Registry<T> registry, List<T> defaultValues) {
         super(identifier);
         if (registry == null) {
             throw new NullPointerException("registry of the config value can't be null");
@@ -72,7 +73,7 @@ public class RegistryConfig<T> extends AbstractConfigValue<ImmutableList<T>> {
             rawValues = GSON.fromJson(jsonElement, type);
             if (rawValues == null) {
                 this.setToDefault();
-                ToolLeveling.LOGGER.warn("Error while loading the config value for " + getIdentifier() + ", using defaultvalues instead");
+                ToolLeveling.LOGGER.warn("Error while parsing the config value for " + getIdentifier() + ", using defaultvalues instead");
                 return;
             }
             List<T> tempValues = new ArrayList<>();

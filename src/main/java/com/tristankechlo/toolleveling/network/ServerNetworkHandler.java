@@ -1,9 +1,10 @@
 package com.tristankechlo.toolleveling.network;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.blockentity.ToolLevelingTableBlockEntity;
+import com.tristankechlo.toolleveling.config.util.ConfigIdentifier;
+import com.tristankechlo.toolleveling.config.util.ConfigManager;
 import com.tristankechlo.toolleveling.utils.Names.NetworkChannels;
 import com.tristankechlo.toolleveling.utils.Utils;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -70,10 +71,10 @@ public final class ServerNetworkHandler {
         });
     }
 
-    public static void sendSyncConfig(ServerPlayerEntity player, String identifier, JsonObject json) {
+    public static void sendSyncConfig(ServerPlayerEntity player, ConfigIdentifier config, JsonObject json) {
         PacketByteBuf buf = PacketByteBufs.create();
-        buf.writeString(identifier);
-        buf.writeString(new Gson().toJson(json));
+        buf.writeString(config.withModID());
+        buf.writeString(ConfigManager.GSON.toJson(json));
         ServerPlayNetworking.send(player, NetworkChannels.SYNC_CONFIG, buf);
     }
 

@@ -1,4 +1,6 @@
-package com.tristankechlo.toolleveling.config.values;
+package com.tristankechlo.toolleveling.config.util;
+
+import com.tristankechlo.toolleveling.config.util.IConfigValue;
 
 public abstract class AbstractConfigValue<T> implements IConfigValue<T> {
 

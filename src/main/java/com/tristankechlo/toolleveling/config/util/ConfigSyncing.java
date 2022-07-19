@@ -1,38 +1,41 @@
 package com.tristankechlo.toolleveling.config.util;
 
 import com.google.gson.JsonObject;
+import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.network.ServerNetworkHandler;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 
-import java.util.Map;
-
 public final class ConfigSyncing {
 
+    //executed on the server side
     public static void syncAllConfigsToOneClient(ServerPlayerEntity player) {
-        for (Map.Entry<String, ConfigHandler> element : ConfigManager.CONFIGS.entrySet()) {
-            ConfigHandler config = element.getValue();
-            String identifier = element.getKey();
+        for (ConfigIdentifier config : ConfigIdentifier.values()) {
             JsonObject json = config.serialize(new JsonObject());
-            ServerNetworkHandler.sendSyncConfig(player, identifier, json);
+            ToolLeveling.LOGGER.info("Sending config to client: '{}'", config.withModID());
+            ServerNetworkHandler.sendSyncConfig(player, config, json);
         }
     }
 
-    public static void syncOneConfigToAllClients(MinecraftServer server, String identifier, ConfigHandler config) {
+    //executed on the server side
+    public static void syncOneConfigToAllClients(MinecraftServer server, ConfigIdentifier config) {
         JsonObject json = config.serialize(new JsonObject());
         for (ServerPlayerEntity player : PlayerLookup.all(server)) {
-            ServerNetworkHandler.sendSyncConfig(player, identifier, json);
+            ToolLeveling.LOGGER.info("Sending config to client: '{}'", config.withModID());
+            ServerNetworkHandler.sendSyncConfig(player, config, json);
         }
     }
 
+    //executed on the client side
     public static boolean deserializeConfig(String identifier, JsonObject json) {
-        ConfigHandler config = ConfigManager.CONFIGS.get(identifier);
-        if (config == null) {
-            return false;
+        for (ConfigIdentifier config : ConfigIdentifier.values()) {
+            if (config.withModID().equals(identifier)) {
+                config.deserialize(json);
+                return true;
+            }
         }
-        config.deserialize(json);
-        return true;
+        return false;
     }
 
 }

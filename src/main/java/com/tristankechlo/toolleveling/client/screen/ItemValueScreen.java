@@ -1,7 +1,7 @@
 package com.tristankechlo.toolleveling.client.screen;
 
 import com.tristankechlo.toolleveling.client.screen.widgets.ItemValuesListWidget;
-import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
+import com.tristankechlo.toolleveling.config.ItemValueConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -25,7 +25,7 @@ public class ItemValueScreen extends Screen {
     @Override
     protected void init() {
         super.init();
-        defaultValue = Text.translatable("screen.toolleveling.default_item_value_worth", ToolLevelingConfig.defaultItemWorth.getValue());
+        defaultValue = Text.translatable("screen.toolleveling.default_item_value_worth", ItemValueConfig.defaultItemWorth.getValue());
         this.itemValues = new ItemValuesListWidget(this, width - (2 * SPACING), SPACING, height - SPACING);
         this.itemValues.setLeftPos(SPACING);
         this.addSelectableChild(itemValues);

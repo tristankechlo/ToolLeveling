@@ -28,8 +28,8 @@ public final class ButtonHelper {
 
     public static ButtonEntry getButtonEntry(ToolLevelingTableHandledScreen parent, Enchantment enchantment,
                                              int level) {
-        List<Enchantment> whitelist = ToolLevelingConfig.enchantmentWhitelist.getValue();
-        List<Enchantment> blacklist = ToolLevelingConfig.enchantmentBlacklist.getValue();
+        List<Enchantment> whitelist = ToolLevelingConfig.whitelist.getValue();
+        List<Enchantment> blacklist = ToolLevelingConfig.blacklist.getValue();
         ButtonEntry buttonEntry = new ButtonEntry(parent, enchantment, level);
 
         // if whitelist is not empty, mark all enchantments as blacklisted if they are

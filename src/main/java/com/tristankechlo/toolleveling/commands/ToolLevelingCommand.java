@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.tristankechlo.toolleveling.ToolLeveling;
+import com.tristankechlo.toolleveling.config.util.ConfigIdentifier;
 import com.tristankechlo.toolleveling.config.util.ConfigManager;
 import com.tristankechlo.toolleveling.network.ServerNetworkHandler;
 import net.minecraft.server.command.ServerCommandSource;
@@ -39,13 +40,9 @@ public final class ToolLevelingCommand {
 
     private static int configShow(CommandContext<ServerCommandSource> context) {
         ServerCommandSource source = context.getSource();
-        final ConfigIdentifier identifier = context.getArgument("identifier", ConfigIdentifier.class);
-        if (!ConfigManager.hasIdentifier(identifier.withModID())) {
-            source.sendFeedback(Text.translatable("commands.toolleveling.config.noconfig"), true);
-            return -1;
-        }
-        String name = ConfigManager.getConfigFileName(identifier.withModID());
-        String path = ConfigManager.getConfigPath(identifier.withModID());
+        final ConfigIdentifier config = context.getArgument("identifier", ConfigIdentifier.class);
+        String name = config.getFileName();
+        String path = ConfigManager.getConfigPath(config);
         MutableText mutableText = (Text.literal(name)).formatted(Formatting.UNDERLINE).styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, path)));
         source.sendFeedback(Text.translatable("commands.toolleveling.config.path", mutableText), true);
         return 1;
@@ -53,13 +50,9 @@ public final class ToolLevelingCommand {
 
     private static int configReset(CommandContext<ServerCommandSource> context) {
         ServerCommandSource source = context.getSource();
-        final ConfigIdentifier identifier = context.getArgument("identifier", ConfigIdentifier.class);
-        if (!ConfigManager.hasIdentifier(identifier.withModID())) {
-            source.sendFeedback(Text.translatable("commands.toolleveling.config.noconfig"), true);
-            return -1;
-        }
-        ConfigManager.resetOneConfig(source.getServer(), identifier.withModID());
-        source.sendFeedback(Text.translatable("commands.toolleveling.config.reset", identifier.withModID()), true);
+        final ConfigIdentifier config = context.getArgument("identifier", ConfigIdentifier.class);
+        ConfigManager.resetOneConfig(source.getServer(), config);
+        source.sendFeedback(Text.translatable("commands.toolleveling.config.reset", config.withModID()), true);
         ToolLeveling.LOGGER.error(ConfigIdentifier.values());
         return 1;
     }
@@ -69,7 +62,7 @@ public final class ToolLevelingCommand {
             ServerPlayerEntity player = context.getSource().getPlayer();
             ServerNetworkHandler.sendOpenItemValues(player);
         } catch (Exception e) {
-            ToolLeveling.LOGGER.error("Error while sending command '/openitemvalues'!\n" + e.getMessage());
+            ToolLeveling.LOGGER.error("Error while sending command '/toolleveling openitemvalues'!\n" + e.getMessage());
             return 0;
         }
         return 1;
