@@ -19,19 +19,19 @@ public final class ToolLevelingConfig {
 
     // General options
     private static final String GENERAL_OPTIONS = "general_options";
-    public static final LongValue minimumUpgradeCost = new LongValue("minimumUpgradeCost", 1000L, 1L, Long.MAX_VALUE);
-    public static final BooleanValue allowLevelingUselessEnchantments = new BooleanValue("allowLevelingOfUselessEnchantments", true);
-    public static final BooleanValue allowLevelingBreakingEnchantments = new BooleanValue("allowLevelingOfBreakingEnchantments", true);
-    public static final BooleanValue freeUpgradesForCreativePlayers = new BooleanValue("freeUpgradesForCreativePlayers", true);
+    public static final LongValue minimumUpgradeCost = new LongValue("minimum_upgrade_cost", 1000L, 1L, Long.MAX_VALUE);
+    public static final BooleanValue allowLevelingUselessEnchantments = new BooleanValue("allow_leveling_of_useless_enchantments", true);
+    public static final BooleanValue allowLevelingBreakingEnchantments = new BooleanValue("allow_leveling_of_breaking_enchantments", true);
+    public static final BooleanValue freeUpgradesForCreativePlayers = new BooleanValue("free_upgrades_for_creative_players", true);
 
     // Enchantment options
     private static final String ENCHANTMENT_OPTIONS = "enchantment_options";
-    public static final RegistryListConfig<Enchantment> whitelist = new RegistryListConfig<>("enchantmentWhitelist", Registry.ENCHANTMENT, new ArrayList<>());
-    public static final RegistryListConfig<Enchantment> blacklist = new RegistryListConfig<>("enchantmentBlacklist", Registry.ENCHANTMENT, getDefaultEnchantmentBlacklist());
-    public static final ShortValue globalEnchantmentCap = new ShortValue("globalEnchantmentCap", (short) 0, (short) 0, Short.MAX_VALUE);
-    public static final EnchantmentCaps enchantmentCaps = new EnchantmentCaps("enchantmentCaps");
-    public static final DoubleValue globalUpgradeCostMultiplier = new DoubleValue("globalUpgradeCostMultiplier", 1.0D, 0.0D, 100.0D);
-    public static final EnchantmentModifier enchantmentUpgradeCostModifier = new EnchantmentModifier("enchantmentUpgradeCostModifier");
+    public static final RegistryListConfig<Enchantment> whitelist = new RegistryListConfig<>("enchantment_whitelist", Registry.ENCHANTMENT, new ArrayList<>());
+    public static final RegistryListConfig<Enchantment> blacklist = new RegistryListConfig<>("enchantment_blacklist", Registry.ENCHANTMENT, getDefaultEnchantmentBlacklist());
+    public static final ShortValue globalEnchantmentCap = new ShortValue("global_enchantment_cap", (short) 0, (short) 0, Short.MAX_VALUE);
+    public static final EnchantmentCaps enchantmentCaps = new EnchantmentCaps("enchantment_caps");
+    public static final DoubleValue globalUpgradeCostMultiplier = new DoubleValue("global_upgrade_cost_multiplier", 1.0D, 0.0D, 100.0D);
+    public static final EnchantmentModifier enchantmentUpgradeCostModifier = new EnchantmentModifier("enchantment_upgrade_cost_modifier");
 
     private ToolLevelingConfig() {}
 

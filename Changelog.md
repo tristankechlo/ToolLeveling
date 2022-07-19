@@ -5,7 +5,8 @@
    - this way there are proper messages in the log for items that are not valid as payment items
 - enchantment modifier are now allowed in range [0, Double.MAX_VALUE] instead of [1, Double.MAX_VALUE]
 - overhaul the format of the config files
-  - config options are now grouped better together 
+  - config options are now grouped better together
+  - renamed all options to use snake_case instead of camelCase
   - **IMPORTANT**: if you have customized your config, you need to backup the config before updating the mod
 
 ### Version 1.19 - 1.3.3

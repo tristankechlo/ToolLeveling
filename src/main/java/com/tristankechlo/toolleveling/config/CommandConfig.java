@@ -6,8 +6,8 @@ import com.tristankechlo.toolleveling.config.primitives.BooleanValue;
 public final class CommandConfig {
 
     private static final String SUPERENCHANT = "superenchant";
-    public static final BooleanValue allowWrongEnchantments = new BooleanValue("allowWrongEnchantments", true);
-    public static final BooleanValue allowIncompatibleEnchantments = new BooleanValue("allowIncompatibleEnchantments", true);
+    public static final BooleanValue allowWrongEnchantments = new BooleanValue("allow_wrong_enchantments", true);
+    public static final BooleanValue allowIncompatibleEnchantments = new BooleanValue("allow_incompatible_enchantments", true);
 
     //private static final String TOOLLEVELING = "toolleveling";
 
