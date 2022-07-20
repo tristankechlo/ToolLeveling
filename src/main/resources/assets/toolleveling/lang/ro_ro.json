@@ -25,7 +25,7 @@
 	
 	"commands.superenchant.failed.incompatible" : "%s Nu poate suporta acea Enchantment, puteti activa acest lucru in ToolLevelingConfig (allowIncompatibleEnchantments)",
 	"commands.superenchant.failed.wrong" : "%s Nu poate suporta acea Enchantment, puteti activa acest lucru in ToolLevelingConfig (allowWrongEnchantments)",
-  	"commands.toolleveling.config.path": "Configuratia pentru ToolLeveling poate fi gasita aici: %s",
+  	"commands.toolleveling.config.path": "Configuratia pentru %s poate fi gasita aici: %s",
   	"commands.toolleveling.config.reload": "Configuratia pentru ToolLeveling a fost reincarcata cu succes.",
   	"commands.toolleveling.config.noconfig": "Configuratia pentru ToolLeveling Nu a putut fi gasita.",
   	"commands.toolleveling.config.reset": "Configuratia %s a fost setata la default."
