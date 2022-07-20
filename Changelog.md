@@ -1,6 +1,7 @@
 # Changelog
 
 ### Version 1.19 - 1.4.0 `Config-Update`
+- **IMPORTANT**: if you have customized your config, you need to backup the config before updating the mod
 - filter out items while parsing the `item_values.json`
    - this way there are proper messages in the log for items that are not valid as payment items
    - currently filters out items that are enchantable or damageable
@@ -8,7 +9,6 @@
 - overhaul the format of the config files
   - config options are now grouped better together
   - renamed all options to use snake_case instead of camelCase
-  - **IMPORTANT**: if you have customized your config, you need to backup the config before updating the mod
 - add new config option `global_minimum_enchantment_level`
   - can be used to set a minimum level for all enchantments before they can be leveled in the tool leveling table
 - add new config option `minimum_enchantment_levels`
