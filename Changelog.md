@@ -16,6 +16,7 @@
   - for example: can be used to allow minecraft:sharpness to be leveled only if the enchantment level is already at level X
 - if both `global_minimum_enchantment_level` and `minimum_enchantment_levels` are set, the higher of the two will be used
 - update in-game mod icon to the newer blockmodel
+- add new command `/toolleveling config info <config>` to display links to the config-explanation
 
 ### Version 1.19 - 1.3.3
  - rename config-identifier from `itemvalues` to `item_values`

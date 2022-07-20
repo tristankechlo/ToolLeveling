@@ -2,6 +2,7 @@ package com.tristankechlo.toolleveling.config.util;
 
 import com.google.gson.*;
 import com.tristankechlo.toolleveling.ToolLeveling;
+import com.tristankechlo.toolleveling.utils.Names;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.MinecraftServer;
 
@@ -130,20 +131,17 @@ public final class ConfigManager {
         lines.add("");
         lines.add("----------- tool_leveling_table.json ------------");
         lines.add("This config file contains all options that are used in the tool leveling table.");
-        lines.add("Full explanation for this config https://gist.github.com/tristankechlo/3818a20804ba69809422de42bf51ee81");
-        lines.add("The default config can be found here https://gist.github.com/tristankechlo/43d78f0caa16a1f52da45c7cc459d0b7");
+        lines.add("Full explanation for this config " + Names.URLs.CONFIG_INFO_GENERAL);
         lines.add("-------------------------------------------------");
         lines.add("");
         lines.add("--------------- item_values.json ----------------");
         lines.add("In this config file you can define the worth of each item.");
-        lines.add("Full explanation for this config https://gist.github.com/tristankechlo/31903eaca2c3f05cde7223cb2c19b416");
-        lines.add("The default config can be found here https://gist.github.com/tristankechlo/c1bde77a67b56c2cb3ca3c94005a93df");
+        lines.add("Full explanation for this config " + Names.URLs.CONFIG_INFO_ITEM_VALUES);
         lines.add("-------------------------------------------------");
         lines.add("");
         lines.add("--------------- command_config.json -------------");
         lines.add("This config file contains all options that are used in the commands.");
-        lines.add("Full explanation for this config https://gist.github.com/tristankechlo/246643b3c94d8ad4aabfc37165a891d7");
-        lines.add("The default config can be found here https://gist.github.com/tristankechlo/26a3e2ff47ab0306dc8950dfe38ce8ee");
+        lines.add("Full explanation for this config " + Names.URLs.CONFIG_INFO_COMMANDS);
         lines.add("-------------------------------------------------");
         lines.add("");
         return lines;

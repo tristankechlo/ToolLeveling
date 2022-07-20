@@ -9,10 +9,7 @@ import com.tristankechlo.toolleveling.config.util.ConfigManager;
 import com.tristankechlo.toolleveling.network.ServerNetworkHandler;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.ClickEvent;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
@@ -26,7 +23,9 @@ public final class ToolLevelingCommand {
                         .then(literal("show").then(argument("identifier", ConfigIdentifierArgumentType.get())
                                 .executes(ToolLevelingCommand::configShow)))
                         .then(literal("reset").then(argument("identifier", ConfigIdentifierArgumentType.get())
-                                .executes(ToolLevelingCommand::configReset))))
+                                .executes(ToolLevelingCommand::configReset)))
+                        .then(literal("info").then(argument("identifier", ConfigIdentifierArgumentType.get())
+                                .executes(ToolLevelingCommand::configInfo))))
                 .then(literal("openitemvalues").requires((source) -> source.hasPermissionLevel(0)).executes(ToolLevelingCommand::showScreen));
         dispatcher.register(toollevelingCommand);
     }
@@ -53,7 +52,15 @@ public final class ToolLevelingCommand {
         final ConfigIdentifier config = context.getArgument("identifier", ConfigIdentifier.class);
         ConfigManager.resetOneConfig(source.getServer(), config);
         source.sendFeedback(Text.translatable("commands.toolleveling.config.reset", config.withModID()), true);
-        ToolLeveling.LOGGER.error(ConfigIdentifier.values());
+        return 1;
+    }
+
+    private static int configInfo(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        final ConfigIdentifier config = context.getArgument("identifier", ConfigIdentifier.class);
+
+        ResponseHelper.sendMessageConfigGeneral(source);
+        ResponseHelper.sendMessageConfigSingle(source, config);
         return 1;
     }
 
@@ -62,9 +69,10 @@ public final class ToolLevelingCommand {
             ServerPlayerEntity player = context.getSource().getPlayer();
             ServerNetworkHandler.sendOpenItemValues(player);
         } catch (Exception e) {
-            ToolLeveling.LOGGER.error("Error while sending command '/toolleveling openitemvalues'!\n" + e.getMessage());
+            ToolLeveling.LOGGER.error("Error while executing command '/toolleveling openitemvalues'!\n" + e.getMessage());
             return 0;
         }
         return 1;
     }
+
 }

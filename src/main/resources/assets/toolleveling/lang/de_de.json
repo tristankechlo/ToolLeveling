@@ -29,6 +29,9 @@
   	"commands.toolleveling.config.path": "Konfiguration f\u00fcr ToolLeveling kann hier eingesehen werden: %s",
   	"commands.toolleveling.config.reload": "Konfigurationen f\u00fcr ToolLeveling wurden erfolgreich neu geladen.",
   	"commands.toolleveling.config.noconfig": "Konfiguration f\u00fcr ToolLeveling konnte nicht gefunden werden.",
+	"commands.toolleveling.config.info_general": "Generelle Erkl\u00e4rungen zu den Konfigurationen k\u00f6nnen hier eingesehen werden: %s",
+	"commands.toolleveling.config.info_single": "Erkl\u00e4rungen zu der Konfiguration %s kann hier eingesehen werden: %s",
   	"commands.toolleveling.config.reset": "Die Konfiguration %s wurde zur\u00fcck gesetzt.",
-  	"commands.arguments.enum.invalid": "Der Parameter %s steht nicht zur Auswahl. M\u00F6gliche Parameter: %s"
+  	"commands.arguments.enum.invalid": "Der Parameter %s steht nicht zur Auswahl. M\u00F6gliche Parameter: %s",
+	"commands.link.click_me": "[Klicke hier]"
 }
