@@ -41,14 +41,14 @@ public final class ButtonHelper {
         else if (whitelist.isEmpty() && blacklist.contains(enchantment)) {
             buttonEntry.status = ButtonStatus.BLACKLISTED;
         }
-        // check if the enchantment is over the set minimum level
-        else if (!Utils.isEnchantmentOverMinimum(enchantment, level)) {
-            buttonEntry.status = ButtonStatus.MIN_LEVEL;
-        }
         // check if the enchantment is allowed to level up
         // determinated by the config enchantmentCaps
         else if (Utils.isEnchantmentAtCap(enchantment, level)) {
             buttonEntry.status = ButtonStatus.CAPPED;
+        }
+        // check if the enchantment is over the set minimum level
+        else if (!Utils.isEnchantmentOverMinimum(enchantment, level)) {
+            buttonEntry.status = ButtonStatus.MIN_LEVEL;
         }
         // although the level is defined as an integer, the actual maximum is a short
         // a higher enchantment level than a short will result in a negative level
