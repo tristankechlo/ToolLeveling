@@ -15,10 +15,10 @@ public final class ClientSyncToolLevelingConfig {
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
 			boolean success = ConfigSyncing.deserializeConfig(msg.identifier, msg.json);
 			if (!success) {
-				ToolLeveling.LOGGER.error("Config " + msg.identifier + " could not be loaded");
+				ToolLeveling.LOGGER.error("Config {} could not be loaded", msg.identifier);
 				throw new RuntimeException("Config " + msg.identifier + " could not be loaded");
 			} else {
-				ToolLeveling.LOGGER.info("Config " + msg.identifier + " recieved and loaded.");
+				ToolLeveling.LOGGER.info("Config {} received and loaded.", msg.identifier);
 			}
 		});
 	}

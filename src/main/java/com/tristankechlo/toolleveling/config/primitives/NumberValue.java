@@ -1,21 +1,16 @@
-package com.tristankechlo.toolleveling.config.values;
+package com.tristankechlo.toolleveling.config.primitives;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.tristankechlo.toolleveling.ToolLeveling;
+import com.tristankechlo.toolleveling.config.util.AbstractConfigValue;
 
-import java.lang.reflect.Type;
-
-public class NumberValue<T extends Number & Comparable<T>> extends AbstractConfigValue<T> {
+public abstract class NumberValue<T extends Number & Comparable<T>> extends AbstractConfigValue<T> {
 
     protected T value;
     protected final T defaultValue;
     protected final T minValue;
     protected final T maxValue;
-    private static final Gson GSON = new Gson();
-    private final Type TYPE = new TypeToken<T>() {}.getType();
 
     public NumberValue(String identifier, T defaultValue, T min, T max) {
         super(identifier);
@@ -33,13 +28,6 @@ public class NumberValue<T extends Number & Comparable<T>> extends AbstractConfi
         this.maxValue = max;
     }
 
-    /**
-     * check if a given value is in range [min|max]
-     */
-    protected boolean checkInRange(T check, T min, T max) {
-        return check.compareTo(min) >= 0 && check.compareTo(max) <= 0;
-    }
-
     @Override
     public void setToDefault() {
         value = defaultValue;
@@ -55,6 +43,12 @@ public class NumberValue<T extends Number & Comparable<T>> extends AbstractConfi
         jsonObject.addProperty(getIdentifier(), getValue());
     }
 
+    abstract T getAsType(JsonElement jsonElement);
+
+    boolean checkInRange(T checkMe, T min, T max) {
+        return checkMe.compareTo(min) >= 0 && checkMe.compareTo(max) <= 0;
+    }
+
     @Override
     public void deserialize(JsonObject jsonObject) {
         try {
@@ -64,7 +58,7 @@ public class NumberValue<T extends Number & Comparable<T>> extends AbstractConfi
                 ToolLeveling.LOGGER.warn("Error while loading the config value " + getIdentifier() + ", using defaultvalue instead");
                 return;
             }
-            T checkMe = getAsCast(jsonElement);
+            T checkMe = getAsType(jsonElement);
             if (checkInRange(checkMe, minValue, maxValue)) {
                 value = checkMe;
                 return;
@@ -73,10 +67,6 @@ public class NumberValue<T extends Number & Comparable<T>> extends AbstractConfi
             ToolLeveling.LOGGER.warn("Error while loading the config value " + getIdentifier() + ", using defaultvalue instead");
         }
         value = defaultValue;
-    }
-
-    protected T getAsCast(JsonElement jsonElement) {
-        return GSON.fromJson(jsonElement, TYPE);
     }
 
 }

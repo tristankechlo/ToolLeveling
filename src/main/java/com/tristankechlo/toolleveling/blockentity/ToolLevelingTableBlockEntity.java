@@ -25,7 +25,7 @@ import java.util.stream.IntStream;
 
 public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer {
 
-    private final Component customname = Component.translatable("container." + Names.MOD_ID + ".tool_leveling_table");
+    private final Component CUSTOMNAME = Component.translatable("container." + Names.MOD_ID + ".tool_leveling_table");
     private NonNullList<ItemStack> items = NonNullList.withSize(NUMBER_OF_SLOTS, ItemStack.EMPTY);
     public static final int NUMBER_OF_SLOTS = 16;
     public static final int[] SLOTS = IntStream.range(1, NUMBER_OF_SLOTS).toArray();
@@ -117,7 +117,7 @@ public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity imple
 
     @Override
     public Component getName() {
-        return this.customname;
+        return this.CUSTOMNAME;
     }
 
     @Override
@@ -171,7 +171,7 @@ public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity imple
 
     @Override
     protected Component getDefaultName() {
-        return this.customname;
+        return this.CUSTOMNAME;
     }
 
     @Override

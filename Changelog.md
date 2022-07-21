@@ -1,5 +1,24 @@
 # Changelog
 
+### Version 1.19 - 1.4.0 `Config-Update`
+- **IMPORTANT**: if you have customized your config, you need to backup the config before updating the mod
+- filter out items while parsing the `item_values.json`
+   - this way there are proper messages in the log for items that are not valid as payment items
+   - currently filters out items that are enchantable or damageable
+- enchantment modifier are now allowed in range [0, Double.MAX_VALUE] instead of [1, Double.MAX_VALUE]
+- overhaul the format of the config files
+   - config options are now grouped better together
+   - renamed all options to use snake_case instead of camelCase
+- add new config option `global_minimum_enchantment_level`
+   - can be used to set a minimum level for all enchantments before they can be leveled in the tool leveling table
+- add new config option `minimum_enchantment_levels`
+   - can be used to set a minimum level for specific enchantment before it can be leveled in the tool leveling table
+   - for example: can be used to allow minecraft:sharpness to be leveled only if the enchantment level is already at level X
+- if both `global_minimum_enchantment_level` and `minimum_enchantment_levels` are set, the higher of the two will be used
+- update in-game mod icon to the newer blockmodel
+- add new command `/toolleveling config info <config>` to display links to the config-explanation
+- create consistent formatting for command responses
+
 ### Version 1.19 - 1.3.5
  - filter out items while parsing the `item_values.json`
    - this way there are proper messages in the log for items that are not valid as payment items

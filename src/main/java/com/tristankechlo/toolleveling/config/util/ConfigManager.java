@@ -2,78 +2,62 @@ package com.tristankechlo.toolleveling.config.util;
 
 import com.google.gson.*;
 import com.tristankechlo.toolleveling.ToolLeveling;
-import com.tristankechlo.toolleveling.config.ItemValues;
-import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
 import com.tristankechlo.toolleveling.utils.Names;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class ConfigManager {
 
-    public static final Map<String, Config> CONFIGS = getConfigList();
-    private static final File ConfigDir = FMLPaths.CONFIGDIR.get().resolve("toolleveling").toFile();
-    public static Gson GSON = new GsonBuilder().setPrettyPrinting().serializeNulls().disableHtmlEscaping().create();
+    private static final File CONFIG_DIR = FMLPaths.CONFIGDIR.get().resolve("toolleveling").toFile();
+    public static final Gson GSON = new GsonBuilder().setPrettyPrinting().serializeNulls().disableHtmlEscaping().create();
 
-    private ConfigManager() {
-    }
+    private ConfigManager() {}
 
     public static void setup() {
-        for (Map.Entry<String, Config> element : CONFIGS.entrySet()) {
-            Config config = element.getValue();
+        for (ConfigIdentifier config : ConfigIdentifier.values()) {
             config.setToDefault();
-            File configFile = new File(ConfigDir, config.getFileName());
+            File configFile = new File(CONFIG_DIR, config.getFileName());
             if (configFile.exists()) {
                 ConfigManager.loadConfigFromFile(config, configFile);
                 ConfigManager.writeConfigToFile(config, configFile);
-                ToolLeveling.LOGGER.info("Saved the checked/corrected config: " + element.getKey());
+                ToolLeveling.LOGGER.info("Saved the checked/corrected config: " + config.getFileName());
             } else {
                 ConfigManager.writeConfigToFile(config, configFile);
-                ToolLeveling.LOGGER.info("No config[" + element.getKey() + "] was found, created a new one.");
+                ToolLeveling.LOGGER.warn("No config '{}' was found, created a new one.", config.getFileName());
             }
         }
     }
 
     public static void reloadAllConfigs() {
-        for (Map.Entry<String, Config> element : CONFIGS.entrySet()) {
-            Config config = element.getValue();
-            File configFile = new File(ConfigDir, config.getFileName());
+        for (ConfigIdentifier config : ConfigIdentifier.values()) {
+            File configFile = new File(CONFIG_DIR, config.getFileName());
             if (configFile.exists()) {
                 ConfigManager.loadConfigFromFile(config, configFile);
                 ConfigManager.writeConfigToFile(config, configFile);
-                ToolLeveling.LOGGER.info("Saved the checked/corrected config: " + element.getKey());
+                ToolLeveling.LOGGER.info("Saved the checked/corrected config: " + config.getFileName());
             } else {
                 ConfigManager.writeConfigToFile(config, configFile);
-                ToolLeveling.LOGGER.info("No config [" + element.getKey() + "] was found, created a new one.");
+                ToolLeveling.LOGGER.warn("No config '{}' was found, created a new one.", config.getFileName());
             }
-            ConfigSyncing.syncOneConfigToAllClients(element.getKey(), config);
+            ConfigSyncing.syncOneConfigToAllClients(config);
         }
     }
 
-    public static void resetOneConfig(String identifier) {
-        Config config = CONFIGS.get(identifier);
-        if (config != null) {
-            resetOneConfig(identifier, config);
-        }
-    }
-
-    private static void resetOneConfig(String identifier, Config config) {
+    public static void resetOneConfig(ConfigIdentifier config) {
         config.setToDefault();
-        File configFile = new File(ConfigDir, config.getFileName());
+        File configFile = new File(CONFIG_DIR, config.getFileName());
         ConfigManager.writeConfigToFile(config, configFile);
-        ToolLeveling.LOGGER.info("Config [" + identifier + "] was set to default.");
-        ConfigSyncing.syncOneConfigToAllClients(identifier, config);
+        ToolLeveling.LOGGER.info("Config '{}' was set to default.", config.getFileName());
+        ConfigSyncing.syncOneConfigToAllClients(config);
     }
 
-    private static void writeConfigToFile(Config config, File file) {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("_commentSyntax", "to check if your config-file has the correct "
-                + "syntax, test your configuration on this website: https://jsonlint.com/");
-        jsonObject = config.serialize(jsonObject);
+    private static void writeConfigToFile(ConfigIdentifier config, File file) {
+        JsonObject jsonObject = config.serialize(new JsonObject());
         String jsonString = GSON.toJson(jsonObject);
         try {
             FileWriter writer = new FileWriter(file);
@@ -85,7 +69,7 @@ public final class ConfigManager {
         }
     }
 
-    private static void loadConfigFromFile(Config config, File file) {
+    private static void loadConfigFromFile(ConfigIdentifier config, File file) {
         JsonObject json = null;
         try {
             JsonParser parser = new JsonParser();
@@ -97,37 +81,48 @@ public final class ConfigManager {
         }
         if (json != null) {
             config.deserialize(json);
-            ToolLeveling.LOGGER.info("Config[" + config.getFileName() + "] was successfully loaded.");
+            ToolLeveling.LOGGER.info("Config '{}' was successfully loaded.", config.getFileName());
         } else {
-            ToolLeveling.LOGGER.error("Error loading config[" + config.getFileName() + "], config hasn't been loaded.");
+            ToolLeveling.LOGGER.error("Error loading config '{}', config hasn't been loaded.", config.getFileName());
         }
     }
 
-    private static Map<String, Config> getConfigList() {
-        Map<String, Config> configs = new HashMap<>();
-        configs.put(Names.MOD_ID + ":general", new Config("toolleveling.json", ToolLevelingConfig::setToDefaultValues, ToolLevelingConfig::serialize, ToolLevelingConfig::deserialize));
-        configs.put(Names.MOD_ID + ":item_values", new Config("item_values.json", ItemValues::setToDefaultValues, ItemValues::serialize, ItemValues::deserialize));
-        return configs;
-    }
-
-    public static boolean hasIdentifier(String identifier) {
-        return CONFIGS.containsKey(identifier);
-    }
-
-    public static String getConfigFileName(String identifier) {
-        return CONFIGS.get(identifier).getFileName();
-    }
-
-    public static String getConfigPath(String identifier) {
-        File configFile = new File(ConfigDir, CONFIGS.get(identifier).getFileName());
+    public static String getConfigPath(ConfigIdentifier identifier) {
+        File configFile = new File(CONFIG_DIR, identifier.getFileName());
         return configFile.getAbsolutePath();
     }
 
     public static void createConfigFolder() {
-        if (!ConfigDir.exists()) {
-            if (!ConfigDir.mkdirs()) {
-                throw new RuntimeException("Could not create config folder: " + ConfigDir.getAbsolutePath());
+        if (!CONFIG_DIR.exists()) {
+            if (!CONFIG_DIR.mkdirs()) {
+                throw new RuntimeException("Could not create config folder: " + CONFIG_DIR.getAbsolutePath());
             }
         }
+        //create README.txt
+        try {
+            FileWriter writer = new FileWriter(new File(CONFIG_DIR, "README.txt"));
+            for (String line : ConfigManager.getReadmeContent()) {
+                writer.write(line + "\n");
+            }
+            writer.close();
+            ToolLeveling.LOGGER.info("Created README.txt in config folder.");
+        } catch (Exception e) {
+            ToolLeveling.LOGGER.error("Could not create README.txt in config folder: " + CONFIG_DIR.getAbsolutePath());
+            e.printStackTrace();
+        }
     }
+
+    private static List<String> getReadmeContent() {
+        List<String> lines = new ArrayList<>();
+        lines.add("============================================================");
+        lines.add("                        IMPORTANT");
+        lines.add("============================================================");
+        lines.add("");
+        lines.add("Before editing the config, please take a look at the wiki.");
+        lines.add("You can find information about all configs, and it's options there.");
+        lines.add("The wiki is located at: " + Names.URLS.WIKI);
+        lines.add("");
+        return lines;
+    }
+
 }

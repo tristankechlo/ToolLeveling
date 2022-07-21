@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import com.tristankechlo.toolleveling.config.CommandConfig;
 import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -22,19 +23,27 @@ import java.util.Map;
 
 public final class SuperEnchantCommand {
 
-    private static final DynamicCommandExceptionType NONLIVING_ENTITY_EXCEPTION = new DynamicCommandExceptionType((entityName) -> {
-        return Component.translatable("commands.enchant.failed.entity", entityName);
-    });
-    private static final DynamicCommandExceptionType INCOMPATIBLE_ENCHANTS_EXCEPTION = new DynamicCommandExceptionType((itemName) -> {
-        return Component.translatable("commands.superenchant.failed.incompatible", itemName);
-    });
-    private static final DynamicCommandExceptionType WRONG_ENCHANTS_EXCEPTION = new DynamicCommandExceptionType((itemName) -> {
-        return Component.translatable("commands.superenchant.failed.wrong", itemName);
-    });
-    private static final DynamicCommandExceptionType ITEMLESS_EXCEPTION = new DynamicCommandExceptionType((entityName) -> {
-        return Component.translatable("commands.enchant.failed.itemless", entityName);
-    });
-    private static final SimpleCommandExceptionType FAILED_EXCEPTION = new SimpleCommandExceptionType(Component.translatable("commands.enchant.failed"));
+    private static final DynamicCommandExceptionType NONLIVING_ENTITY_EXCEPTION;
+    private static final DynamicCommandExceptionType INCOMPATIBLE_ENCHANTS_EXCEPTION;
+    private static final DynamicCommandExceptionType WRONG_ENCHANTS_EXCEPTION;
+    private static final DynamicCommandExceptionType ITEMLESS_EXCEPTION;
+    private static final SimpleCommandExceptionType FAILED_EXCEPTION;
+
+    static {
+        NONLIVING_ENTITY_EXCEPTION = new DynamicCommandExceptionType((entityName) -> {
+            return Component.translatable("commands.enchant.failed.entity", entityName);
+        });
+        INCOMPATIBLE_ENCHANTS_EXCEPTION = new DynamicCommandExceptionType((itemName) -> {
+            return Component.translatable("commands.superenchant.failed.incompatible", itemName);
+        });
+        WRONG_ENCHANTS_EXCEPTION = new DynamicCommandExceptionType((itemName) -> {
+            return Component.translatable("commands.superenchant.failed.wrong", itemName);
+        });
+        ITEMLESS_EXCEPTION = new DynamicCommandExceptionType((entityName) -> {
+            return Component.translatable("commands.enchant.failed.itemless", entityName);
+        });
+        FAILED_EXCEPTION = new SimpleCommandExceptionType(Component.translatable("commands.enchant.failed"));
+    }
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("superenchant").requires((player) -> {
@@ -60,9 +69,9 @@ public final class SuperEnchantCommand {
                 LivingEntity livingentity = (LivingEntity) entity;
                 ItemStack stack = livingentity.getMainHandItem();
                 if (!stack.isEmpty()) {
-                    if (enchantmentIn.canEnchant(stack) || ToolLevelingConfig.allowWrongEnchantments.getValue()) {
+                    if (enchantmentIn.canEnchant(stack) || CommandConfig.allowWrongEnchantments.getValue()) {
                         if (EnchantmentHelper.isEnchantmentCompatible(EnchantmentHelper.getEnchantments(stack).keySet(), enchantmentIn)
-                                || ToolLevelingConfig.allowIncompatibleEnchantments.getValue()) {
+                                || CommandConfig.allowIncompatibleEnchantments.getValue()) {
 
                             Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
                             if (enchantments.containsKey(enchantmentIn) && level == 0) {

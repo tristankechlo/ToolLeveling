@@ -13,14 +13,14 @@
 	"container.toolleveling.tool_leveling_table.worth.bonus_points" : "Бонус: %s",
 	"container.toolleveling.tool_leveling_table.error.blacklisted" : "Эти чары отключены!",
 	"container.toolleveling.tool_leveling_table.error.useless" : "Прокачка не повлияет!",
-	"container.toolleveling.tool_leveling_table.error.maxlevel" : "Максимальный уровень достигнут!",
+	"container.toolleveling.tool_leveling_table.error.max_level" : "Максимальный уровень достигнут!",
 	"container.toolleveling.tool_leveling_table.error.break" : "Предмет будет бесполезен при прокачке!",
 	"container.toolleveling.tool_leveling_table.error.capped" : "Уровень достиг максимума!",
-	
+
 	"commands.superenchant.failed.incompatible" :  "%s не может поддерживать это зачарование, вы можете включить это в ToolLevelingConfig (allowIncompatibleEnchantments)",
 	"commands.superenchant.failed.wrong" : "%s не может поддерживать это зачарование, вы можете включить это в ToolLevelingConfig (allowWrongEnchantments)",
-  	"commands.toolleveling.config.path": "Конфиг ToolLeveling можно найти здесь: %s",
-  	"commands.toolleveling.config.reload": "Конфигурация для ToolLeveling была успешно перезагружена.",
-  	"commands.toolleveling.config.noconfig": "Не удалось найти конфигурацию для ToolLeveling.",
-  	"commands.toolleveling.config.reset": "Конфигурация %s установлена ​​по умолчанию."
+	"commands.toolleveling.config.path": "Конфиг %s можно найти здесь: %s",
+	"commands.toolleveling.config.reload": "Конфигурация для ToolLeveling была успешно перезагружена.",
+	"commands.toolleveling.config.noconfig": "Не удалось найти конфигурацию для ToolLeveling.",
+	"commands.toolleveling.config.reset": "Конфигурация %s установлена ​​по умолчанию."
 }

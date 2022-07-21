@@ -20,15 +20,16 @@ public final class ButtonHelper {
             return ToolLevelingConfig.allowLevelingUselessEnchantments.getValue();
         } else if (entry.status == ButtonStatus.BREAK) {
             return ToolLevelingConfig.allowLevelingBreakingEnchantments.getValue();
-        } else if (entry.status == ButtonStatus.BLACKLISTED || entry.status == ButtonStatus.CAPPED || entry.status == ButtonStatus.MAXLEVEL) {
+        } else if (entry.status == ButtonStatus.BLACKLISTED || entry.status == ButtonStatus.CAPPED
+                || entry.status == ButtonStatus.MAX_LEVEL || entry.status == ButtonStatus.MIN_LEVEL) {
             return false;
         }
         return false;
     }
 
     public static ButtonEntry getButtonEntry(ToolLevelingTableScreen parent, Enchantment enchantment, int level) {
-        List<Enchantment> whitelist = ToolLevelingConfig.enchantmentWhitelist.getValue();
-        List<Enchantment> blacklist = ToolLevelingConfig.enchantmentBlacklist.getValue();
+        List<Enchantment> whitelist = ToolLevelingConfig.whitelist.getValue();
+        List<Enchantment> blacklist = ToolLevelingConfig.blacklist.getValue();
         ButtonEntry buttonEntry = new ButtonEntry(parent, enchantment, level);
 
         // if whitelist is not empty, mark all enchantments as blacklisted if they are
@@ -45,10 +46,14 @@ public final class ButtonHelper {
         else if (Utils.isEnchantmentAtCap(enchantment, level)) {
             buttonEntry.status = ButtonStatus.CAPPED;
         }
+        // check if the enchantment is over the set minimum level
+        else if (!Utils.isEnchantmentOverMinimum(enchantment, level)) {
+            buttonEntry.status = ButtonStatus.MIN_LEVEL;
+        }
         // although the level is defined as an integer, the actual maximum is a short
         // a higher enchantment level than a short will result in a negative level
         else if (level >= Short.MAX_VALUE) {
-            buttonEntry.status = ButtonStatus.MAXLEVEL;
+            buttonEntry.status = ButtonStatus.MAX_LEVEL;
         }
         // leveling these enchantments will do absolutely nothing
         else if (enchantment.getMaxLevel() == 1) {
@@ -99,11 +104,12 @@ public final class ButtonHelper {
     }
 
     public enum ButtonStatus {
-        NORMAL,
-        BLACKLISTED,
-        USELESS,
-        MAXLEVEL,
-        BREAK,
-        CAPPED;
+        NORMAL, // nothing special, can be leveled
+        BLACKLISTED, // enchantment is blacklisted, or not on the whitelist
+        USELESS, // leveling this enchantment will have no effect
+        BREAK, // enchantment will break when leveled higher
+        MAX_LEVEL, // enchantment is at the possible maximum level (Short.MAX_VALUE)
+        CAPPED, // enchantment is at the maximum level (enchantmentCaps)
+        MIN_LEVEL // enchantment is not over the set minimum level (minimumEnchantmentLevel)
     }
 }

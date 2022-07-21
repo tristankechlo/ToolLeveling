@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.tristankechlo.toolleveling.ToolLeveling;
+import com.tristankechlo.toolleveling.config.util.AbstractConfigValue;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ForgeRegistryConfig<T> extends AbstractConfigValue<ImmutableList<T>> {
+public class RegistryListConfig<T> extends AbstractConfigValue<ImmutableList<T>> {
 
     private final ImmutableList<T> defaultValues;
     private ImmutableList<T> values;
@@ -24,7 +25,7 @@ public class ForgeRegistryConfig<T> extends AbstractConfigValue<ImmutableList<T>
     private final Gson GSON = new Gson();
     private final IForgeRegistry<T> registry;
 
-    public ForgeRegistryConfig(String identifier, IForgeRegistry<T> registry, List<T> defaultValues) {
+    public RegistryListConfig(String identifier, IForgeRegistry<T> registry, List<T> defaultValues) {
         super(identifier);
         if (registry == null) {
             throw new NullPointerException("registry of the config value can't be null");

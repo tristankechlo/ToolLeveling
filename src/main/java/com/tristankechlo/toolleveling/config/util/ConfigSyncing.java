@@ -1,6 +1,7 @@
 package com.tristankechlo.toolleveling.config.util;
 
 import com.google.gson.JsonObject;
+import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.network.PacketHandler;
 import com.tristankechlo.toolleveling.network.packets.SyncToolLevelingConfig;
 import net.minecraft.network.Connection;
@@ -8,32 +9,32 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.PacketDistributor;
 
-import java.util.Map;
-
 public final class ConfigSyncing {
 
     public static void syncAllConfigsToOneClient(ServerPlayer player) {
         Connection connection = player.connection.getConnection();
-        for (Map.Entry<String, Config> element : ConfigManager.CONFIGS.entrySet()) {
-            Config config = element.getValue();
-            String identifier = element.getKey();
+        for (ConfigIdentifier config : ConfigIdentifier.values()) {
+            String identifier = config.withModID();
             JsonObject json = config.serialize(new JsonObject());
+            ToolLeveling.LOGGER.info("Sending config to client: '{}'", config.withModID());
             PacketHandler.INSTANCE.sendTo(new SyncToolLevelingConfig(identifier, json), connection, NetworkDirection.PLAY_TO_CLIENT);
         }
     }
 
-    public static void syncOneConfigToAllClients(String identifier, Config config) {
+    public static void syncOneConfigToAllClients(ConfigIdentifier config) {
         JsonObject json = config.serialize(new JsonObject());
-        PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), new SyncToolLevelingConfig(identifier, json));
+        ToolLeveling.LOGGER.info("Sending config to all clients: '{}'", config.withModID());
+        PacketHandler.INSTANCE.send(PacketDistributor.ALL.noArg(), new SyncToolLevelingConfig(config.withModID(), json));
     }
 
     public static boolean deserializeConfig(String identifier, JsonObject json) {
-        Config config = ConfigManager.CONFIGS.get(identifier);
-        if (config == null) {
-            return false;
+        for (ConfigIdentifier config : ConfigIdentifier.values()) {
+            if (config.withModID().equals(identifier)) {
+                config.deserialize(json);
+                return true;
+            }
         }
-        config.deserialize(json);
-        return true;
+        return false;
     }
 
 }

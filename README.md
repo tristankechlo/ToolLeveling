@@ -43,9 +43,9 @@ multiple items are allowed as payment items, and there worth can be changed thro
 ---
 
 ### Translations:
-| Language | up to modversion | Translator | since version |
-|:--------:|:----------------:|:-----------| :-----------: |
-| **en_us** | 1.3.1 | tristankechlo ([Github](https://github.com/tristankechlo)) | always |
-| **de_de** | 1.3.1 | tristankechlo ([Github](https://github.com/tristankechlo)) | always |
-| **ro_ro** | 1.3.1 | Potato man | 1.2.12 |
-| **ru_ru** | 1.2.3 | damnarsanis ([CurseForge](https://www.curseforge.com/members/damnarsanis/)) | 1.2.3 |
+| Language  | up to modversion | Translator                                                                  | since version |
+|:---------:|:----------------:|:----------------------------------------------------------------------------|:-------------:|
+| **en_us** |      1.4.0       | tristankechlo ([Github](https://github.com/tristankechlo))                  |    always     |
+| **de_de** |      1.4.0       | tristankechlo ([Github](https://github.com/tristankechlo))                  |    always     |
+| **ro_ro** |      1.3.1       | Potato man                                                                  |    1.2.12     |
+| **ru_ru** |      1.2.3       | damnarsanis ([CurseForge](https://www.curseforge.com/members/damnarsanis/)) |     1.2.3     |
