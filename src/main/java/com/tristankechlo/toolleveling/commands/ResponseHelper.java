@@ -30,7 +30,7 @@ public final class ResponseHelper {
     }
 
     public static void sendMessageConfigGeneral(ServerCommandSource source) {
-        MutableText urlGeneral = clickableLink(Names.URLs.CONFIG_START);
+        MutableText urlGeneral = clickableLink(Names.URLS.CONFIG_START);
         MutableText general = Text.translatable("commands.toolleveling.config.info_general", urlGeneral);
         sendMessage(source, general.formatted(Formatting.WHITE), false);
     }

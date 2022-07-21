@@ -12,9 +12,9 @@ import java.util.function.Function;
 
 public enum ConfigIdentifier implements StringIdentifiable {
 
-    GENERAL("general", "tool_leveling_table.json", Names.URLs.CONFIG_INFO_GENERAL, ToolLevelingConfig::setToDefault, ToolLevelingConfig::serialize, ToolLevelingConfig::deserialize),
-    ITEM_VALUES("item_values", "item_values.json", Names.URLs.CONFIG_INFO_ITEM_VALUES, ItemValueConfig::setToDefault, ItemValueConfig::serialize, ItemValueConfig::deserialize),
-    COMMANDS("commands", "command_config.json", Names.URLs.CONFIG_INFO_COMMANDS, CommandConfig::setToDefault, CommandConfig::serialize, CommandConfig::deserialize);
+    GENERAL("general", "tool_leveling_table.json", Names.URLS.CONFIG_INFO_GENERAL, ToolLevelingConfig::setToDefault, ToolLevelingConfig::serialize, ToolLevelingConfig::deserialize),
+    ITEM_VALUES("item_values", "item_values.json", Names.URLS.CONFIG_INFO_ITEM_VALUES, ItemValueConfig::setToDefault, ItemValueConfig::serialize, ItemValueConfig::deserialize),
+    COMMANDS("commands", "command_config.json", Names.URLS.CONFIG_INFO_COMMANDS, CommandConfig::setToDefault, CommandConfig::serialize, CommandConfig::deserialize);
 
     @SuppressWarnings("deprecation")
     public static final Codec<ConfigIdentifier> CODEC;

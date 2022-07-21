@@ -115,34 +115,12 @@ public final class ConfigManager {
     private static List<String> getReadmeContent() {
         List<String> lines = new ArrayList<>();
         lines.add("============================================================");
-        lines.add("General information about the config files");
+        lines.add("                        IMPORTANT");
         lines.add("============================================================");
         lines.add("");
-        lines.add("Before loading the config, always make sure the file has the correct syntax.");
-        lines.add("If you try to load a config with invalid syntax, the config will reset to its default values.");
-        lines.add("You can check if your config is valid, by pasting the complete file to https://jsonlint.com/");
-        lines.add("");
-        lines.add("If you want to reset a config, just delete the file and reload the game.");
-        lines.add("");
-        lines.add("");
-        lines.add("============================================================");
-        lines.add("Configuration files");
-        lines.add("============================================================");
-        lines.add("");
-        lines.add("----------- tool_leveling_table.json ------------");
-        lines.add("This config file contains all options that are used in the tool leveling table.");
-        lines.add("Full explanation for this config " + Names.URLs.CONFIG_INFO_GENERAL);
-        lines.add("-------------------------------------------------");
-        lines.add("");
-        lines.add("--------------- item_values.json ----------------");
-        lines.add("In this config file you can define the worth of each item.");
-        lines.add("Full explanation for this config " + Names.URLs.CONFIG_INFO_ITEM_VALUES);
-        lines.add("-------------------------------------------------");
-        lines.add("");
-        lines.add("--------------- command_config.json -------------");
-        lines.add("This config file contains all options that are used in the commands.");
-        lines.add("Full explanation for this config " + Names.URLs.CONFIG_INFO_COMMANDS);
-        lines.add("-------------------------------------------------");
+        lines.add("Before editing the config, please take a look at the wiki.");
+        lines.add("You can find information about all configs, and it's options there.");
+        lines.add("The wiki is located at: " + Names.URLS.WIKI);
         lines.add("");
         return lines;
     }
