@@ -21,7 +21,7 @@ public final class ButtonHelper {
             return ToolLevelingConfig.allowLevelingUselessEnchantments.getValue();
         } else if (status == ButtonStatus.BREAK) {
             return ToolLevelingConfig.allowLevelingBreakingEnchantments.getValue();
-        } else if (status == ButtonStatus.BLACKLISTED || status == ButtonStatus.CAPPED
+        } else if (status == ButtonStatus.NOT_WHITELISTED ||status == ButtonStatus.BLACKLISTED || status == ButtonStatus.CAPPED
                 || status == ButtonStatus.MAX_LEVEL || status == ButtonStatus.MIN_LEVEL) {
             return false;
         }
@@ -36,7 +36,7 @@ public final class ButtonHelper {
         // if whitelist is not empty, mark all enchantments as blacklisted if they are
         // not on the whitelist
         if (!whitelist.isEmpty() && !whitelist.contains(enchantment)) {
-            buttonEntry.setStatus(ButtonStatus.BLACKLISTED);
+            buttonEntry.setStatus(ButtonStatus.NOT_WHITELISTED);
             return buttonEntry;
         }
         // only list enchantments that are not on the blacklist
@@ -112,7 +112,8 @@ public final class ButtonHelper {
 
     public enum ButtonStatus {
         NORMAL, // nothing special, can be leveled
-        BLACKLISTED, // enchantment is blacklisted, or not on the whitelist
+        NOT_WHITELISTED, // not on the whitelist
+        BLACKLISTED, // enchantment is blacklisted
         USELESS, // leveling this enchantment will have no effect
         BREAK, // enchantment will break when leveled higher
         MAX_LEVEL, // enchantment is at the possible maximum level (Short.MAX_VALUE)
