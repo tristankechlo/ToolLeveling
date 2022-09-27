@@ -24,7 +24,7 @@ public class ButtonEntry extends ObjectSelectionList.Entry<ButtonEntry> {
     public String name;
     public int currentLevel;
     public long upgradeCost;
-    public ButtonStatus status;
+    private ButtonStatus status = ButtonStatus.NORMAL;
     private final ToolLevelingTableScreen screen;
     private static Component NARRATION = null;
 
@@ -32,7 +32,6 @@ public class ButtonEntry extends ObjectSelectionList.Entry<ButtonEntry> {
         this.enchantment = enchantment;
         this.currentLevel = level;
         this.name = enchantment.getDescriptionId();
-        this.status = ButtonStatus.NORMAL;
         this.screen = screen;
         this.upgradeCost = Utils.getEnchantmentUpgradeCost(enchantment, level + 1);
 
@@ -71,4 +70,14 @@ public class ButtonEntry extends ObjectSelectionList.Entry<ButtonEntry> {
         }
         return NARRATION;
     }
+
+    public void setStatus(ButtonStatus status) {
+        this.status = status;
+        this.updateButtonText();
+    }
+
+    public ButtonStatus getStatus() {
+        return this.status;
+    }
+
 }

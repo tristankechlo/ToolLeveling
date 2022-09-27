@@ -14,14 +14,15 @@ import java.util.List;
 public final class ButtonHelper {
 
     public static boolean shouldButtonBeActive(ButtonEntry entry) {
-        if (entry.status == ButtonStatus.NORMAL) {
+        ButtonStatus status = entry.getStatus();
+        if (status == ButtonStatus.NORMAL) {
             return true;
-        } else if (entry.status == ButtonStatus.USELESS) {
+        } else if (status == ButtonStatus.USELESS) {
             return ToolLevelingConfig.allowLevelingUselessEnchantments.getValue();
-        } else if (entry.status == ButtonStatus.BREAK) {
+        } else if (status == ButtonStatus.BREAK) {
             return ToolLevelingConfig.allowLevelingBreakingEnchantments.getValue();
-        } else if (entry.status == ButtonStatus.BLACKLISTED || entry.status == ButtonStatus.CAPPED
-                || entry.status == ButtonStatus.MAX_LEVEL || entry.status == ButtonStatus.MIN_LEVEL) {
+        } else if (status == ButtonStatus.BLACKLISTED || status == ButtonStatus.CAPPED
+                || status == ButtonStatus.MAX_LEVEL || status == ButtonStatus.MIN_LEVEL) {
             return false;
         }
         return false;
@@ -35,36 +36,42 @@ public final class ButtonHelper {
         // if whitelist is not empty, mark all enchantments as blacklisted if they are
         // not on the whitelist
         if (!whitelist.isEmpty() && !whitelist.contains(enchantment)) {
-            buttonEntry.status = ButtonStatus.BLACKLISTED;
+            buttonEntry.setStatus(ButtonStatus.BLACKLISTED);
+            return buttonEntry;
         }
         // only list enchantments that are not on the blacklist
-        else if (whitelist.isEmpty() && blacklist.contains(enchantment)) {
-            buttonEntry.status = ButtonStatus.BLACKLISTED;
-        }
-        // check if the enchantment is allowed to level up
-        // determinated by the config enchantmentCaps
-        else if (Utils.isEnchantmentAtCap(enchantment, level)) {
-            buttonEntry.status = ButtonStatus.CAPPED;
-        }
-        // check if the enchantment is over the set minimum level
-        else if (!Utils.isEnchantmentOverMinimum(enchantment, level)) {
-            buttonEntry.status = ButtonStatus.MIN_LEVEL;
+        if (whitelist.isEmpty() && blacklist.contains(enchantment)) {
+            buttonEntry.setStatus(ButtonStatus.BLACKLISTED);
+            return buttonEntry;
         }
         // although the level is defined as an integer, the actual maximum is a short
         // a higher enchantment level than a short will result in a negative level
-        else if (level >= Short.MAX_VALUE) {
-            buttonEntry.status = ButtonStatus.MAX_LEVEL;
+        if (level >= Short.MAX_VALUE) {
+            buttonEntry.setStatus(ButtonStatus.MAX_LEVEL);
+            return buttonEntry;
+        }
+        // check if the enchantment is allowed to level up
+        // determinated by the config enchantmentCaps
+        if (Utils.isEnchantmentAtCap(enchantment, level)) {
+            buttonEntry.setStatus(ButtonStatus.CAPPED);
+            return buttonEntry;
+        }
+        // check if the enchantment is over the set minimum level
+        if (!Utils.isEnchantmentOverMinimum(enchantment, level)) {
+            buttonEntry.setStatus(ButtonStatus.MIN_LEVEL);
+            return buttonEntry;
         }
         // leveling these enchantments will do absolutely nothing
-        else if (enchantment.getMaxLevel() == 1) {
-            buttonEntry.status = ButtonStatus.USELESS;
+        if (enchantment.getMaxLevel() == 1) {
+            buttonEntry.setStatus(ButtonStatus.USELESS);
+            return buttonEntry;
         }
         // check if the enchantment can still be leveled
         // some enchantments will break when leveled to high
-        else if (Utils.willEnchantmentBreak(enchantment, level)) {
-            buttonEntry.status = ButtonStatus.BREAK;
+        if (Utils.willEnchantmentBreak(enchantment, level)) {
+            buttonEntry.setStatus(ButtonStatus.BREAK);
+            return buttonEntry;
         }
-        buttonEntry.updateButtonText();
         return buttonEntry;
     }
 
@@ -83,8 +90,8 @@ public final class ButtonHelper {
         }
         if (Utils.freeCreativeUpgrades(Minecraft.getInstance().player)) {
             tooltip.add(Component.translatable(start + ".free_creative").withStyle(ChatFormatting.GREEN));
-        } else if (data.status != ButtonStatus.NORMAL) {
-            tooltip.add(Component.translatable(start + ".error." + data.status.toString().toLowerCase()).withStyle(ButtonHelper.getButtonTextFormatting(data)));
+        } else if (data.getStatus() != ButtonStatus.NORMAL) {
+            tooltip.add(Component.translatable(start + ".error." + data.getStatus().toString().toLowerCase()).withStyle(ButtonHelper.getButtonTextFormatting(data)));
         }
         return tooltip;
     }
@@ -94,10 +101,10 @@ public final class ButtonHelper {
         if (Utils.freeCreativeUpgrades(Minecraft.getInstance().player)) {
             return ChatFormatting.RESET;
         }
-        if (entry.status != ButtonStatus.NORMAL) {
+        if (entry.getStatus() != ButtonStatus.NORMAL) {
             format = ChatFormatting.DARK_RED;
         }
-        if (entry.status == ButtonStatus.USELESS) {
+        if (entry.getStatus() == ButtonStatus.USELESS) {
             format = ChatFormatting.YELLOW;
         }
         return format;
