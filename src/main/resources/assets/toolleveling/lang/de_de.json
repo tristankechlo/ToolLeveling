@@ -16,6 +16,7 @@
 	"container.toolleveling.tool_leveling_table.cost" : "Upgrade Kosten: %s",
 	"container.toolleveling.tool_leveling_table.worth.inv" : "Wert: %s",
 	"container.toolleveling.tool_leveling_table.worth.bonus_points" : "Bonus: %s",
+	"container.toolleveling.tool_leveling_table.error.not_whitelisted" : "Diese Verzauberung ist nicht auf der Whitelist!",
 	"container.toolleveling.tool_leveling_table.error.blacklisted" : "Diese Verzauberung ist deaktiviert!",
 	"container.toolleveling.tool_leveling_table.error.useless" : "Ein Level-Up hat keinen Effekt!",
 	"container.toolleveling.tool_leveling_table.error.max_level" : "Maximal Level erreicht!",
