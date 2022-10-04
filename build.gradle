@@ -13,7 +13,7 @@ mixin {
     add sourceSets.main, "toolleveling.refmap.json"
 }
 
-version = "${mod_version}"
+version = "forge-${mod_version}"
 group = 'com.tristankechlo.toolleveling'
 archivesBaseName = 'toolleveling'
 

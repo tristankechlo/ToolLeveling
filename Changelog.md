@@ -1,5 +1,10 @@
 # Changelog
 
+### Version 1.19.2 - 1.4.1
+- port to 1.19.2
+- fix error where whitelisted enchantment could be leveled above the enchantment cap
+- add additional message for enchantments that are not whitelisted
+
 ### Version 1.19 - 1.4.0 `Config-Update`
 - **IMPORTANT**: if you have customized your config, you need to backup the config before updating the mod
 - filter out items while parsing the `item_values.json`
