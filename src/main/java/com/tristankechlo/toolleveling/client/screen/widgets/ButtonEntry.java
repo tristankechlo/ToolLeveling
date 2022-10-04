@@ -27,7 +27,7 @@ public class ButtonEntry extends ElementListWidget.Entry<ButtonEntry> {
     public String name;
     public int currentLevel;
     public long upgradeCost;
-    public ButtonStatus status;
+    private ButtonStatus status = ButtonStatus.NORMAL;
     private final ToolLevelingTableHandledScreen screen;
     private final List<ClickableWidget> list;
 
@@ -35,7 +35,6 @@ public class ButtonEntry extends ElementListWidget.Entry<ButtonEntry> {
         this.enchantment = enchantment;
         this.currentLevel = level;
         this.name = enchantment.getTranslationKey();
-        this.status = ButtonStatus.NORMAL;
         this.screen = screen;
         this.upgradeCost = Utils.getEnchantmentUpgradeCost(enchantment, level + 1);
 
@@ -75,6 +74,15 @@ public class ButtonEntry extends ElementListWidget.Entry<ButtonEntry> {
     @Override
     public List<? extends Selectable> selectableChildren() {
         return this.list;
+    }
+
+    public void setStatus(ButtonStatus status) {
+        this.status = status;
+        this.updateButtonText();
+    }
+
+    public ButtonStatus getStatus() {
+        return this.status;
     }
 
 }
