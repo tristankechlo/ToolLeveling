@@ -7,23 +7,24 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.config.util.AbstractConfigValue;
-import net.fabricmc.loader.api.FabricLoader;
+import com.tristankechlo.toolleveling.config.util.ConfigUtils;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class RegistryListConfig<T> extends AbstractConfigValue<ImmutableList<T>> {
 
-    private ImmutableList<T> values;
     private final ImmutableList<T> defaultValues;
+    private ImmutableList<T> values;
     private List<String> rawValues = new ArrayList<>();
     private final Type type = new TypeToken<List<String>>() {}.getType();
+    private final Gson GSON = new Gson();
     private final Registry<T> registry;
-    private static final Gson GSON = new Gson();
 
     public RegistryListConfig(String identifier, Registry<T> registry, List<T> defaultValues) {
         super(identifier);
@@ -37,14 +38,16 @@ public class RegistryListConfig<T> extends AbstractConfigValue<ImmutableList<T>>
         this.defaultValues = ImmutableList.copyOf(defaultValues);
 
         for (T arg : defaultValues) {
-            rawValues.add(registry.getId(arg).toString());
+            rawValues.add(registry.getKey(arg).toString());
         }
         values = ImmutableList.copyOf(defaultValues);
     }
 
     @Override
     public void setToDefault() {
-        values = ImmutableList.copyOf(defaultValues);
+        this.values = ImmutableList.copyOf(defaultValues);
+        this.rawValues.clear();
+        this.defaultValues.forEach(x -> this.rawValues.add(this.registry.getId(x).toString()));
     }
 
     @Override
@@ -54,10 +57,7 @@ public class RegistryListConfig<T> extends AbstractConfigValue<ImmutableList<T>>
 
     @Override
     public void serialize(JsonObject jsonObject) {
-        List<String> tempValues = getValue().stream().map((element) -> {
-            return registry.getId(element).toString();
-        }).collect(Collectors.toList());
-        JsonElement jsonElement = GSON.toJsonTree(tempValues, type);
+        JsonElement jsonElement = GSON.toJsonTree(rawValues, type);
         jsonObject.add(getIdentifier(), jsonElement);
     }
 
@@ -67,54 +67,63 @@ public class RegistryListConfig<T> extends AbstractConfigValue<ImmutableList<T>>
             JsonElement jsonElement = jsonObject.get(getIdentifier());
             if (jsonElement == null) {
                 this.setToDefault();
-                ToolLeveling.LOGGER.warn("Error while loading the config value for " + getIdentifier() + ", using defaultvalues instead");
+                ToolLeveling.LOGGER.warn("Error while loading the config value " + getIdentifier() + ", using default values instead");
                 return;
             }
             rawValues = GSON.fromJson(jsonElement, type);
             if (rawValues == null) {
                 this.setToDefault();
-                ToolLeveling.LOGGER.warn("Error while parsing the config value for " + getIdentifier() + ", using defaultvalues instead");
+                ToolLeveling.LOGGER.warn("Error while loading the config value " + getIdentifier() + ", using default values instead");
                 return;
             }
-            List<T> tempValues = new ArrayList<>();
-            List<String> modids = new ArrayList<>();
-            for (String element : rawValues) {
-                Identifier loc = Identifier.tryParse(element);
+
+            Iterator<String> iterator = rawValues.iterator();
+            List<T> parsedValues = new ArrayList<>();
+            while (iterator.hasNext()) {
+                String nextValue = iterator.next();
+
+                //if nextValue is wildcard, add all entries of the registry
+                if (nextValue.contains("*")) {
+                    String modId = ConfigUtils.getModIdFromWildcard(nextValue);
+                    if (modId != null) {
+                        ToolLeveling.LOGGER.info("Found wildcard with modid: '{}' in '{}'", modId, getIdentifier());
+                        parsedValues.addAll(ConfigUtils.getAllFromWildcard(modId, registry));
+                        continue;
+                    }
+                    ToolLeveling.LOGGER.warn("Found wildcard with invalid modid '{}' in '{}'", nextValue, getIdentifier());
+                }
+
+                //if nextValue is tag, add all entries of the tag
+                if (nextValue.startsWith("#")) {
+                    TagKey<T> tagKey = ConfigUtils.getTagKeyFromTag(nextValue, registry);
+                    if (tagKey != null) {
+                        ToolLeveling.LOGGER.info("Found tag '{}' in '{}'", tagKey, getIdentifier());
+                        parsedValues.addAll(ConfigUtils.getAllFromTag(tagKey, registry));
+                        continue;
+                    }
+                    ToolLeveling.LOGGER.warn("Found tag with invalid name '{}' in '{}'", nextValue, getIdentifier());
+                }
+
+                //if nextValue is single valid entry, add it
+                Identifier loc = Identifier.tryParse(nextValue);
                 if (loc != null && registry.containsId(loc)) {
-                    tempValues.add(registry.get(loc));
-                } else {
-                    String modid = getModidFromWildcard(element);
-                    if (modid != null) {
-                        ToolLeveling.LOGGER.info("Found wildcard for mod: '" + modid + "' in '" + getIdentifier() + "'");
-                        modids.add(modid);
+                    T entry = registry.get(loc);
+                    if (entry != null) {
+                        parsedValues.add(entry);
+                        continue;
                     }
                 }
+
+                //else nextValue is invalid, remove it
+                ToolLeveling.LOGGER.warn("Found invalid entry '{}' in '{}'", nextValue, getIdentifier());
+                iterator.remove();
             }
-            addAllWildcards(tempValues, modids, registry);
-            values = ImmutableList.copyOf(tempValues);
+
+            values = ImmutableList.copyOf(parsedValues);
         } catch (Exception e) {
             values = ImmutableList.copyOf(defaultValues);
-            ToolLeveling.LOGGER.warn("Error while loading the config value " + getIdentifier() + ", using defaultvalue instead");
+            ToolLeveling.LOGGER.error("Error while loading the config value " + getIdentifier() + ", using default values instead");
         }
-    }
-
-    private static <T> void addAllWildcards(List<T> tempValues, List<String> modids, final Registry<T> registry) {
-        if (modids.isEmpty()) {
-            return;
-        }
-        registry.stream().filter((element) -> {
-            return modids.contains(registry.getId(element).getNamespace());
-        }).forEach((element) -> tempValues.add(element));
-    }
-
-    private static String getModidFromWildcard(String element) {
-        if (element.contains(":")) {
-            String[] splitted = element.split(":");
-            if (splitted[1].equals("*") && FabricLoader.getInstance().isModLoaded(splitted[0])) {
-                return splitted[0];
-            }
-        }
-        return null;
     }
 
 }

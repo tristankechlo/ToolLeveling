@@ -6,18 +6,22 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.config.util.AbstractConfigValue;
+import com.tristankechlo.toolleveling.config.util.ConfigUtils;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public abstract class RegistryMapConfig<X, Y> extends AbstractConfigValue<ImmutableMap<X, Y>> {
 
     private ImmutableMap<X, Y> values;
     private final ImmutableMap<X, Y> defaultValues;
+    private Map<String, Y> rawValues = new HashMap<>();
     private final Registry<X> registry;
     private static final Gson GSON = new Gson();
 
@@ -30,6 +34,8 @@ public abstract class RegistryMapConfig<X, Y> extends AbstractConfigValue<Immuta
     @Override
     public void setToDefault() {
         this.values = ImmutableMap.copyOf(this.defaultValues);
+        this.rawValues.clear();
+        this.defaultValues.forEach((x, y) -> this.rawValues.put(this.registry.getId(x).toString(), y));
     }
 
     @Override
@@ -39,14 +45,7 @@ public abstract class RegistryMapConfig<X, Y> extends AbstractConfigValue<Immuta
 
     @Override
     public void serialize(JsonObject jsonObject) {
-        Map<String, Y> tempValues = new HashMap<>();
-        for (Map.Entry<X, Y> entry : getValue().entrySet()) {
-            X key = entry.getKey();
-            String keyString = Objects.requireNonNull(registry.getId(key)).toString();
-            Y value = entry.getValue();
-            tempValues.put(keyString, value);
-        }
-        JsonElement jsonElement = GSON.toJsonTree(tempValues, this.getType());
+        JsonElement jsonElement = GSON.toJsonTree(rawValues, this.getType());
         jsonObject.add(getIdentifier(), jsonElement);
     }
 
@@ -55,42 +54,79 @@ public abstract class RegistryMapConfig<X, Y> extends AbstractConfigValue<Immuta
         JsonElement jsonElement = jsonObject.get(getIdentifier());
         if (jsonElement == null) {
             this.setToDefault();
-            ToolLeveling.LOGGER.warn("Error while loading the config value {}, using default values instead", getIdentifier());
+            ToolLeveling.LOGGER.error("Error while loading the config value '{}', using default values instead", getIdentifier());
             return;
         }
-        Map<String, Y> rawValues = GSON.fromJson(jsonElement, this.getType());
+        rawValues = GSON.fromJson(jsonElement, this.getType());
         if (rawValues == null) {
             this.setToDefault();
-            ToolLeveling.LOGGER.warn("Error while parsing the config value {}, using default values instead", getIdentifier());
+            ToolLeveling.LOGGER.error("Error while parsing the config value '{}', using default values instead", getIdentifier());
             return;
         }
-        Map<X, Y> tempValues = new HashMap<>();
-        for (Map.Entry<String, Y> entry : rawValues.entrySet()) {
-            //try parsing the key
-            Identifier identifier = Identifier.tryParse(entry.getKey());
-            if (identifier == null) {
-                ToolLeveling.LOGGER.warn("Ignoring unknown element {} from {}", entry.getKey(), getIdentifier());
-                continue;
-            }
-            //check if value is in range
+
+        Iterator<Map.Entry<String, Y>> iterator = rawValues.entrySet().iterator();
+        Map<X, Y> parsedValues = new HashMap<>();
+        while (iterator.hasNext()) {
+            Map.Entry<String, Y> entry = iterator.next();
+
+            //check if value is valid
             Y value = entry.getValue();
             if (!isValueValid(value)) {
-                ToolLeveling.LOGGER.warn("Ignoring value {} from {} because it is out of range", value.toString(), identifier);
+                ToolLeveling.LOGGER.warn("Removing '{}' because the value '{}' is not valid", entry.getKey(), entry.getValue());
+                iterator.remove();
                 continue;
             }
-            //check if key is in the registry
-            if (registry.containsId(identifier)) {
-                X key = registry.get(identifier);
-                if (!isKeyValid(key, identifier)) {
-                    ToolLeveling.LOGGER.warn("Ignoring value {} from {} because it is not allowed", identifier, getIdentifier());
+
+            //if key is wildcard, add all entries of the registry
+            if (entry.getKey().contains("*")) {
+                String modid = ConfigUtils.getModIdFromWildcard(entry.getKey());
+                if (modid != null) {
+                    List<X> entries = ConfigUtils.getAllFromWildcard(modid, registry);
+                    addAllEntries(parsedValues, entries, value);
+                    ToolLeveling.LOGGER.info("Found wildcard with modid: '{}' in '{}'", modid, getIdentifier());
                     continue;
                 }
-                tempValues.put(key, value);
-            } else {
-                ToolLeveling.LOGGER.warn("Ignoring unknown element {} from {}", entry.getKey(), getIdentifier());
+                ToolLeveling.LOGGER.warn("Found wildcard with invalid modid '{}' in '{}'", entry.getKey(), getIdentifier());
             }
+
+            //if key is tag, add all entries of the tag
+            if (entry.getKey().startsWith("#")) {
+                TagKey<X> tagKey = ConfigUtils.getTagKeyFromTag(entry.getKey(), registry);
+                if (tagKey != null) {
+                    List<X> entries = ConfigUtils.getAllFromTag(tagKey, registry);
+                    addAllEntries(parsedValues, entries, value);
+                    ToolLeveling.LOGGER.info("Found tag '{}' in '{}'", tagKey.id(), getIdentifier());
+                    continue;
+                }
+                ToolLeveling.LOGGER.warn("Found tag with invalid name '{}' in '{}'", entry.getKey(), getIdentifier());
+            }
+
+            //if key is single valid entry, add it
+            Identifier loc = Identifier.tryParse(entry.getKey());
+            if (loc != null && registry.containsId(loc)) {
+                X singleEntry = registry.get(loc);
+                if (singleEntry != null && isKeyValid(singleEntry, loc)) {
+                    parsedValues.put(singleEntry, value);
+                    continue;
+                }
+                ToolLeveling.LOGGER.warn("Ignoring value '{}' from '{}' because it is not allowed", loc, getIdentifier());
+            }
+
+            //else key is invalid, remove it
+            ToolLeveling.LOGGER.warn("Found invalid entry '{}' in '{}'", entry.getKey(), getIdentifier());
+            iterator.remove();
         }
-        this.values = ImmutableMap.copyOf(tempValues);
+        this.values = ImmutableMap.copyOf(parsedValues);
+    }
+
+    public void addAllEntries(Map<X, Y> parsedValues, List<X> entries, Y value) {
+        entries.forEach((key) -> {
+            if (isKeyValid(key, registry.getId(key))) {
+                parsedValues.put(key, value);
+            } else {
+                ToolLeveling.LOGGER.warn("Ignoring value '{}' from '{}' because it is not allowed", key, registry.getKey(key).toString());
+            }
+        });
     }
 
     protected abstract Type getType();
