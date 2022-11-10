@@ -46,6 +46,8 @@ public class RegistryListConfig<T> extends AbstractConfigValue<ImmutableList<T>>
     @Override
     public void setToDefault() {
         values = ImmutableList.copyOf(defaultValues);
+        this.rawValues.clear();
+        this.defaultValues.forEach(x -> this.rawValues.add(this.registry.getKey(x).toString()));
     }
 
     @Override

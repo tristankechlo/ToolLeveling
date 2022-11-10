@@ -34,6 +34,8 @@ public abstract class RegistryMapConfig<X, Y> extends AbstractConfigValue<Immuta
     @Override
     public void setToDefault() {
         this.values = ImmutableMap.copyOf(this.defaultValues);
+        this.rawValues.clear();
+        this.defaultValues.forEach((x, y) -> this.rawValues.put(this.registry.getKey(x).toString(), y));
     }
 
     @Override
