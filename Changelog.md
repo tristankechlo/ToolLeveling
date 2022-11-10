@@ -12,6 +12,7 @@
         - enchantment caps
         - enchantment modifier
         - minimum enchantment levels
+- add chinese translation by [@GodGun968](https://github.com/GodGun968)
 
 ### Version 1.19.2 - 1.4.1
 - port to 1.19.2
