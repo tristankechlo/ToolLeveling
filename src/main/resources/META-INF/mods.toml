@@ -6,7 +6,7 @@ showAsResourcePack=false
 
 [[mods]]
 modId="toolleveling"
-version="1.19.2-1.4.1"
+version="1.19.2-1.4.2"
 displayName="Tool Leveling"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/tool-leveling-plus"
 logoFile="tool_leveling_banner.png"

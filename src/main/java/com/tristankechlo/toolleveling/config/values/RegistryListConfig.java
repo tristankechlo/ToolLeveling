@@ -7,14 +7,15 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.config.util.AbstractConfigValue;
+import com.tristankechlo.toolleveling.config.util.ConfigUtils;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fml.ModList;
+import net.minecraft.tags.TagKey;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class RegistryListConfig<T> extends AbstractConfigValue<ImmutableList<T>> {
 
@@ -54,10 +55,7 @@ public class RegistryListConfig<T> extends AbstractConfigValue<ImmutableList<T>>
 
     @Override
     public void serialize(JsonObject jsonObject) {
-        List<String> tempValues = getValue().stream().map((element) -> {
-            return registry.getKey(element).toString();
-        }).collect(Collectors.toList());
-        JsonElement jsonElement = GSON.toJsonTree(tempValues, type);
+        JsonElement jsonElement = GSON.toJsonTree(rawValues, type);
         jsonObject.add(getIdentifier(), jsonElement);
     }
 
@@ -67,54 +65,63 @@ public class RegistryListConfig<T> extends AbstractConfigValue<ImmutableList<T>>
             JsonElement jsonElement = jsonObject.get(getIdentifier());
             if (jsonElement == null) {
                 this.setToDefault();
-                ToolLeveling.LOGGER.warn("Error while loading the config value " + getIdentifier() + ", using defaultvalue instead");
+                ToolLeveling.LOGGER.warn("Error while loading the config value " + getIdentifier() + ", using default values instead");
                 return;
             }
             rawValues = GSON.fromJson(jsonElement, type);
             if (rawValues == null) {
                 this.setToDefault();
-                ToolLeveling.LOGGER.warn("Error while loading the config value " + getIdentifier() + ", using defaultvalue instead");
+                ToolLeveling.LOGGER.warn("Error while loading the config value " + getIdentifier() + ", using default values instead");
                 return;
             }
-            List<T> tempValues = new ArrayList<>();
-            List<String> modids = new ArrayList<>();
-            for (String element : rawValues) {
-                ResourceLocation loc = ResourceLocation.tryParse(element);
+
+            Iterator<String> iterator = rawValues.iterator();
+            List<T> parsedValues = new ArrayList<>();
+            while (iterator.hasNext()) {
+                String nextValue = iterator.next();
+
+                //if nextValue is wildcard, add all entries of the registry
+                if (nextValue.contains("*")) {
+                    String modId = ConfigUtils.getModIdFromWildcard(nextValue);
+                    if (modId != null) {
+                        ToolLeveling.LOGGER.info("Found wildcard with modid: '{}' in '{}'", modId, getIdentifier());
+                        parsedValues.addAll(ConfigUtils.getAllFromWildcard(modId, registry));
+                        continue;
+                    }
+                    ToolLeveling.LOGGER.warn("Found wildcard with invalid modid '{}' in '{}'", nextValue, getIdentifier());
+                }
+
+                //if nextValue is tag, add all entries of the tag
+                if (nextValue.startsWith("#")) {
+                    TagKey<T> tagKey = ConfigUtils.getTagKeyFromTag(nextValue, registry);
+                    if (tagKey != null) {
+                        ToolLeveling.LOGGER.info("Found tag '{}' in '{}'", tagKey, getIdentifier());
+                        parsedValues.addAll(ConfigUtils.getAllFromTag(tagKey, registry));
+                        continue;
+                    }
+                    ToolLeveling.LOGGER.warn("Found tag with invalid name '{}' in '{}'", nextValue, getIdentifier());
+                }
+
+                //if nextValue is single valid entry, add it
+                ResourceLocation loc = ResourceLocation.tryParse(nextValue);
                 if (loc != null && registry.containsKey(loc)) {
-                    tempValues.add(registry.getValue(loc));
-                } else {
-                    String modid = getModidFromWildcard(element);
-                    if (modid != null) {
-                        ToolLeveling.LOGGER.info("Found wildcard for mod: '" + modid + "' in '" + getIdentifier() + "'");
-                        modids.add(modid);
+                    T entry = registry.getValue(loc);
+                    if (entry != null) {
+                        parsedValues.add(entry);
+                        continue;
                     }
                 }
+
+                //else nextValue is invalid, remove it
+                ToolLeveling.LOGGER.warn("Found invalid entry '{}' in '{}'", nextValue, getIdentifier());
+                iterator.remove();
             }
-            addAllWildcards(tempValues, modids, registry);
-            values = ImmutableList.copyOf(tempValues);
+
+            values = ImmutableList.copyOf(parsedValues);
         } catch (Exception e) {
             values = ImmutableList.copyOf(defaultValues);
-            ToolLeveling.LOGGER.warn("Error while loading the config value " + getIdentifier() + ", using defaultvalue instead");
+            ToolLeveling.LOGGER.error("Error while loading the config value " + getIdentifier() + ", using default values instead");
         }
-    }
-
-    private static <T> void addAllWildcards(List<T> tempValues, List<String> modids, final IForgeRegistry<T> registry) {
-        if (modids.isEmpty()) {
-            return;
-        }
-        registry.getValues().stream().filter((element) -> {
-            return modids.contains(registry.getKey(element).getNamespace());
-        }).forEach((element) -> tempValues.add(element));
-    }
-
-    private static String getModidFromWildcard(String element) {
-        if (element.contains(":")) {
-            String[] splitted = element.split(":");
-            if (splitted[1].equals("*") && ModList.get().isLoaded(splitted[0])) {
-                return splitted[0];
-            }
-        }
-        return null;
     }
 
 }
