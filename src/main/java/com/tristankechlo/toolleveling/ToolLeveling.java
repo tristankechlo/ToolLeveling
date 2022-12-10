@@ -8,7 +8,9 @@ import com.tristankechlo.toolleveling.init.ModRegistry;
 import com.tristankechlo.toolleveling.network.PacketHandler;
 import com.tristankechlo.toolleveling.utils.Names;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -32,8 +34,9 @@ public final class ToolLeveling {
         ModRegistry.TILE_ENTITIES.register(modEventBus);
         ModRegistry.CONTAINER_TYPES.register(modEventBus);
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientSetup::init);
+        modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(ClientSetup::init);
+        modEventBus.addListener(this::populateCreativeTab);
 
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -49,6 +52,10 @@ public final class ToolLeveling {
     public void onPlayerJoinEvent(final PlayerLoggedInEvent event) {
         // send server-config to player
         ConfigSyncing.syncAllConfigsToOneClient((ServerPlayer) event.getEntity());
+    }
+
+    private void populateCreativeTab(CreativeModeTabEvent.BuildContents event) {
+        event.registerSimple(CreativeModeTabs.FUNCTIONAL_BLOCKS, ModRegistry.TLT_ITEM.get());
     }
 
 }

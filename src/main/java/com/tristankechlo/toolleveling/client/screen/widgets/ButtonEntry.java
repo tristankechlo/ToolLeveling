@@ -35,18 +35,18 @@ public class ButtonEntry extends ObjectSelectionList.Entry<ButtonEntry> {
         this.screen = screen;
         this.upgradeCost = Utils.getEnchantmentUpgradeCost(enchantment, level + 1);
 
-        this.button = new Button(0, 0, 121, 20, ButtonHelper.getButtonText(this), (b) -> {
+        this.button = new Button.Builder(ButtonHelper.getButtonText(this), (b) -> {
             // send new data to server
             PacketHandler.INSTANCE.sendToServer(new SetEnchantmentToolLevelingTable(this.screen.getMenu().getPos(), this.enchantment, this.currentLevel + 1));
-        });
+        }).pos(0, 0).size(121, 20).build();
     }
 
     @Override
     public void render(PoseStack mStack, int index, int top, int left, int entryWidth, int entryHeight, int mouseX,
                        int mouseY, boolean isMouseOver, float partialTicks) {
 
-        this.button.x = left;
-        this.button.y = top;
+        this.button.setX(left);
+        this.button.setY(top);
         long worth = this.screen.getMenu().getContainerWorth() + this.screen.getMenu().getBonusPoints();
         boolean normallyActive = (this.upgradeCost <= worth) && ButtonHelper.shouldButtonBeActive(this);
         this.button.active = normallyActive || Utils.freeCreativeUpgrades(Minecraft.getInstance().player);

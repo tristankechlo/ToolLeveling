@@ -23,7 +23,7 @@ public final class ModRegistry {
     public static final DeferredRegister<MenuType<?>> CONTAINER_TYPES = DeferredRegister.create(ForgeRegistries.MENU_TYPES, Names.MOD_ID);
     public static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Names.MOD_ID);
 
-    private static final Properties std_properties = new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS).stacksTo(64);
+    private static final Properties std_properties = new Item.Properties().stacksTo(64);
 
     public static final RegistryObject<Block> TLT_BLOCK = BLOCKS.register(Names.TABLE, () -> new ToolLevelingTableBlock());
 

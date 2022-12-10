@@ -1,5 +1,9 @@
 # Changelog
 
+### Version 1.19.3 - 1.4.3
+- port to 1.19.3
+- ToolLeveling Table is now in the creative tab of functional blocks
+
 ### Version 1.19.2 - 1.4.2
 - allow tags/wildcards to be used as config values
     - formattings

@@ -1,12 +1,12 @@
 modLoader="javafml"
-loaderVersion="[41,)"
+loaderVersion="[44,)"
 license="CC BY-NC-ND 4.0"
 issueTrackerURL="https://github.com/tristankechlo/ToolLeveling/issues"
 showAsResourcePack=false
 
 [[mods]]
 modId="toolleveling"
-version="1.19.2-1.4.2"
+version="1.19.3-1.4.3"
 displayName="Tool Leveling"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/tool-leveling-plus"
 logoFile="tool_leveling_banner.png"
@@ -17,13 +17,13 @@ description='''adds the possibility to upgrade your enchantments higher than the
 [[dependencies.toolleveling]]
     modId="forge"
     mandatory=true
-    versionRange="[41.0.95,)"
+    versionRange="[44,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.toolleveling]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19,1.20)"
+    versionRange="[1.19.3,1.20)"
     ordering="NONE"
     side="BOTH"

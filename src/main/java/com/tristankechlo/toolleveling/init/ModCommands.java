@@ -5,6 +5,7 @@ import com.tristankechlo.toolleveling.commands.SuperEnchantCommand;
 import com.tristankechlo.toolleveling.commands.ToolLevelingCommand;
 import com.tristankechlo.toolleveling.utils.Names;
 
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -17,7 +18,8 @@ public final class ModCommands {
 	@SubscribeEvent
 	public static void register(final RegisterCommandsEvent event) {
 		final CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
-		SuperEnchantCommand.register(dispatcher);
+		final CommandBuildContext context = event.getBuildContext();
+		SuperEnchantCommand.register(dispatcher, context);
 		ToolLevelingCommand.register(dispatcher);
 	}
 
