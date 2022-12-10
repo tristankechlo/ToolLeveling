@@ -30,13 +30,13 @@ public final class ResponseHelper {
     }
 
     public static void sendMessageConfigGeneral(CommandSourceStack source) {
-        MutableComponent urlGeneral = clickableLink(Names.URLS.CONFIG_START);
+        MutableComponent urlGeneral = clickableLink1(Names.URLS.CONFIG_START);
         MutableComponent general = Component.translatable("commands.toolleveling.config.info_general", urlGeneral);
         sendMessage(source, general.withStyle(ChatFormatting.WHITE), false);
     }
 
     public static void sendMessageConfigSingle(CommandSourceStack source, ConfigIdentifier config) {
-        MutableComponent url = clickableLink(config.getInfoUrl());
+        MutableComponent url = clickableLink1(config.getInfoUrl());
         MutableComponent clickableFile = clickableFile(config);
         MutableComponent single = Component.translatable("commands.toolleveling.config.info_single", clickableFile, url);
         sendMessage(source, single.withStyle(ChatFormatting.WHITE), false);
@@ -51,7 +51,18 @@ public final class ResponseHelper {
         source.sendSuccess(start, broadcastToOps);
     }
 
-    public static MutableComponent clickableLink(String url) {
+    public static MutableComponent clickableLink(String url, String displayText) {
+        MutableComponent mutableComponent = Component.literal(displayText);
+        mutableComponent.withStyle(ChatFormatting.GREEN, ChatFormatting.UNDERLINE);
+        mutableComponent.withStyle(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url)));
+        return mutableComponent;
+    }
+
+    public static MutableComponent clickableLink2(String url) {
+        return clickableLink(url, url);
+    }
+
+    public static MutableComponent clickableLink1(String url) {
         MutableComponent open = Component.literal("[");
         MutableComponent click = Component.translatable("commands.link.click_here");
         MutableComponent close = Component.literal("]");

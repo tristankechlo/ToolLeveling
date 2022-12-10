@@ -1,6 +1,5 @@
 package com.tristankechlo.toolleveling;
 
-import com.mojang.logging.LogUtils;
 import com.tristankechlo.toolleveling.client.ClientSetup;
 import com.tristankechlo.toolleveling.config.util.ConfigManager;
 import com.tristankechlo.toolleveling.config.util.ConfigSyncing;
@@ -17,12 +16,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Mod(Names.MOD_ID)
 public final class ToolLeveling {
 
-    public static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogManager.getLogger(Names.MOD_NAME);
 
     public ToolLeveling() {
         final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
