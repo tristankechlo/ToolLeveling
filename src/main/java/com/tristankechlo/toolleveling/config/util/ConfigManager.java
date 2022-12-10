@@ -120,7 +120,7 @@ public final class ConfigManager {
         lines.add("");
         lines.add("Before editing the config, please take a look at the wiki.");
         lines.add("You can find information about all configs, and it's options there.");
-        lines.add("The wiki is located at: " + Names.URLS.WIKI);
+        lines.add("The wiki is located at: " + Names.URLS.GITHUB_WIKI);
         lines.add("");
         return lines;
     }

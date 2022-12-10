@@ -7,9 +7,12 @@ import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.config.util.ConfigIdentifier;
 import com.tristankechlo.toolleveling.config.util.ConfigManager;
 import com.tristankechlo.toolleveling.network.ServerNetworkHandler;
+import com.tristankechlo.toolleveling.utils.Names;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
@@ -17,7 +20,7 @@ import static net.minecraft.server.command.CommandManager.literal;
 public final class ToolLevelingCommand {
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
-        LiteralArgumentBuilder<ServerCommandSource> toollevelingCommand = literal("toolleveling")
+        LiteralArgumentBuilder<ServerCommandSource> command = literal("toolleveling")
                 .then(literal("config").requires((source) -> source.hasPermissionLevel(3))
                         .then(literal("reload").executes(ToolLevelingCommand::configReload))
                         .then(literal("show").then(argument("identifier", ConfigIdentifierArgumentType.get())
@@ -26,8 +29,14 @@ public final class ToolLevelingCommand {
                                 .executes(ToolLevelingCommand::configReset)))
                         .then(literal("info").then(argument("identifier", ConfigIdentifierArgumentType.get())
                                 .executes(ToolLevelingCommand::configInfo))))
-                .then(literal("openitemvalues").requires((source) -> source.hasPermissionLevel(0)).executes(ToolLevelingCommand::showScreen));
-        dispatcher.register(toollevelingCommand);
+                .then(literal("openitemvalues").requires((source) -> source.hasPermissionLevel(0)).executes(ToolLevelingCommand::showScreen))
+                .then(literal("github").executes(ToolLevelingCommand::github))
+                .then(literal("issue").executes(ToolLevelingCommand::issue))
+                .then(literal("wiki").executes(ToolLevelingCommand::wiki))
+                .then(literal("discord").executes(ToolLevelingCommand::discord))
+                .then(literal("curseforge").executes(ToolLevelingCommand::curseforge))
+                .then(literal("modrinth").executes(ToolLevelingCommand::modrinth));
+        dispatcher.register(command);
     }
 
     private static int configReload(CommandContext<ServerCommandSource> context) {
@@ -69,6 +78,54 @@ public final class ToolLevelingCommand {
             ToolLeveling.LOGGER.error("Error while executing command '/toolleveling openitemvalues'!\n" + e.getMessage());
             return 0;
         }
+        return 1;
+    }
+
+    private static int github(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        MutableText link = ResponseHelper.clickableLink2(Names.URLS.GITHUB);
+        MutableText message = Text.literal("Check out the source code on GitHub: ").formatted(Formatting.WHITE).append(link);
+        ResponseHelper.sendMessage(source, message, false);
+        return 1;
+    }
+
+    private static int issue(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        MutableText link = ResponseHelper.clickableLink2(Names.URLS.GITHUB_ISSUE);
+        MutableText message = Text.literal("If you found an issue, submit it here: ").formatted(Formatting.WHITE).append(link);
+        ResponseHelper.sendMessage(source, message, false);
+        return 1;
+    }
+
+    private static int wiki(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        MutableText link = ResponseHelper.clickableLink2(Names.URLS.GITHUB_WIKI);
+        MutableText message = Text.literal("The wiki can be found here: ").formatted(Formatting.WHITE).append(link);
+        ResponseHelper.sendMessage(source, message, false);
+        return 1;
+    }
+
+    private static int discord(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        MutableText link = ResponseHelper.clickableLink2(Names.URLS.DISCORD);
+        MutableText message = Text.literal("Join the Discord here: ").formatted(Formatting.WHITE).append(link);
+        ResponseHelper.sendMessage(source, message, false);
+        return 1;
+    }
+
+    private static int curseforge(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        MutableText link = ResponseHelper.clickableLink2(Names.URLS.CURSEFORGE);
+        MutableText message = Text.literal("Check out the CurseForge page here: ").formatted(Formatting.WHITE).append(link);
+        ResponseHelper.sendMessage(source, message, false);
+        return 1;
+    }
+
+    private static int modrinth(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        MutableText link = ResponseHelper.clickableLink2(Names.URLS.MODRINTH);
+        MutableText message = Text.literal("Check out the Modrinth page here: ").formatted(Formatting.WHITE).append(link);
+        ResponseHelper.sendMessage(source, message, false);
         return 1;
     }
 

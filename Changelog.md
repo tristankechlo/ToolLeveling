@@ -3,6 +3,13 @@
 ### Version 1.19.3 - 1.4.3
 - port to 1.19.3
 - ToolLeveling Table is now in the creative tab of functional blocks
+- extended the `/toolleveling` command
+    - `/toolleveling github` shows the url to the github page
+    - `/toolleveling discord` shows the url to the discord server
+    - `/toolleveling wiki` shows the url to the wiki
+    - `/toolleveling issues` shows the url to the issues page
+    - `/toolleveling curseforge` shows the url to the curseforge page
+    - `/toolleveling modrinth` shows the url to the modrinth page
 
 ### Version 1.19.2 - 1.4.2
 - allow tags/wildcards to be used as config values

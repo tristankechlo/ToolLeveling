@@ -30,13 +30,13 @@ public final class ResponseHelper {
     }
 
     public static void sendMessageConfigGeneral(ServerCommandSource source) {
-        MutableText urlGeneral = clickableLink(Names.URLS.CONFIG_START);
+        MutableText urlGeneral = clickableLink1(Names.URLS.CONFIG_START);
         MutableText general = Text.translatable("commands.toolleveling.config.info_general", urlGeneral);
         sendMessage(source, general.formatted(Formatting.WHITE), false);
     }
 
     public static void sendMessageConfigSingle(ServerCommandSource source, ConfigIdentifier config) {
-        MutableText url = clickableLink(config.getInfoUrl());
+        MutableText url = clickableLink1(config.getInfoUrl());
         MutableText clickableFile = clickableFile(config);
         MutableText single = Text.translatable("commands.toolleveling.config.info_single", clickableFile, url);
         sendMessage(source, single.formatted(Formatting.WHITE), false);
@@ -51,7 +51,7 @@ public final class ResponseHelper {
         source.sendFeedback(start, broadcastToOps);
     }
 
-    public static MutableText clickableLink(String url) {
+    public static MutableText clickableLink1(String url) {
         MutableText open = Text.literal("[");
         MutableText click = Text.translatable("commands.link.click_here");
         MutableText close = Text.literal("]");
@@ -67,6 +67,17 @@ public final class ResponseHelper {
         mutableText.formatted(Formatting.GREEN, Formatting.UNDERLINE);
         mutableText.styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, filePath)));
         return mutableText;
+    }
+
+    public static MutableText clickableLink2(String url, String displayText) {
+        MutableText mutableComponent = Text.literal(displayText);
+        mutableComponent.formatted(Formatting.GREEN, Formatting.UNDERLINE);
+        mutableComponent.styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url)));
+        return mutableComponent;
+    }
+
+    public static MutableText clickableLink2(String url) {
+        return clickableLink2(url, url);
     }
 
 }

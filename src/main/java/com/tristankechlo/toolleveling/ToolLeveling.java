@@ -35,7 +35,7 @@ import org.apache.logging.log4j.Logger;
 
 public final class ToolLeveling implements ModInitializer {
 
-    public static final Logger LOGGER = LogManager.getLogger();
+    public static final Logger LOGGER = LogManager.getLogger(Names.MOD_NAME);
     public static final Identifier TOOLLEVELING_TABLE_ID = new Identifier(Names.MOD_ID, Names.TABLE);
     public static final Block TLT_BLOCK = new ToolLevelingTableBlock();
     public static final Item TLT_ITEM = new BlockItem(TLT_BLOCK, new FabricItemSettings().maxCount(64));
