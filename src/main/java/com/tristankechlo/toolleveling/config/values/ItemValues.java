@@ -5,8 +5,8 @@ import com.tristankechlo.toolleveling.ToolLeveling;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -17,7 +17,7 @@ public final class ItemValues extends RegistryMapConfig<Item, Long> {
     private static final Type TYPE = new TypeToken<Map<String, Long>>() {}.getType();
 
     public ItemValues(String identifier) {
-        super(identifier, Registry.ITEM, getDefaultItemValues());
+        super(identifier, Registries.ITEM, getDefaultItemValues());
     }
 
     @Override

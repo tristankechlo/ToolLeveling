@@ -11,7 +11,7 @@ import com.tristankechlo.toolleveling.config.values.MinimumEnchantmentLevels;
 import com.tristankechlo.toolleveling.config.values.RegistryListConfig;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +27,8 @@ public final class ToolLevelingConfig {
 
     // Enchantment options
     private static final String ENCHANTMENT_OPTIONS = "enchantment_options";
-    public static final RegistryListConfig<Enchantment> whitelist = new RegistryListConfig<>("enchantment_whitelist", Registry.ENCHANTMENT, new ArrayList<>());
-    public static final RegistryListConfig<Enchantment> blacklist = new RegistryListConfig<>("enchantment_blacklist", Registry.ENCHANTMENT, getDefaultEnchantmentBlacklist());
+    public static final RegistryListConfig<Enchantment> whitelist = new RegistryListConfig<>("enchantment_whitelist", Registries.ENCHANTMENT, new ArrayList<>());
+    public static final RegistryListConfig<Enchantment> blacklist = new RegistryListConfig<>("enchantment_blacklist", Registries.ENCHANTMENT, getDefaultEnchantmentBlacklist());
     public static final ShortValue globalEnchantmentCap = new ShortValue("global_enchantment_cap", (short) 0, (short) 0, Short.MAX_VALUE);
     public static final EnchantmentCaps enchantmentCaps = new EnchantmentCaps("enchantment_caps");
     public static final DoubleValue globalUpgradeCostMultiplier = new DoubleValue("global_upgrade_cost_multiplier", 1.0D, 0.0D, 100.0D);

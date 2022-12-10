@@ -2,9 +2,8 @@ package com.tristankechlo.toolleveling.config.values;
 
 import com.google.gson.reflect.TypeToken;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.Enchantments;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -15,7 +14,7 @@ public final class MinimumEnchantmentLevels extends RegistryMapConfig<Enchantmen
     private static final Type TYPE = new TypeToken<Map<String, Short>>() {}.getType();
 
     public MinimumEnchantmentLevels(String identifier) {
-        super(identifier, Registry.ENCHANTMENT, getDefaults());
+        super(identifier, Registries.ENCHANTMENT, getDefaults());
     }
 
     @Override

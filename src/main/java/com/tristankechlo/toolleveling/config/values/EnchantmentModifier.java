@@ -3,8 +3,8 @@ package com.tristankechlo.toolleveling.config.values;
 import com.google.gson.reflect.TypeToken;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -15,7 +15,7 @@ public final class EnchantmentModifier extends RegistryMapConfig<Enchantment, Do
     private static final Type TYPE = new TypeToken<Map<String, Double>>() {}.getType();
 
     public EnchantmentModifier(String identifier) {
-        super(identifier, Registry.ENCHANTMENT, getDefaultEnchantmentModifier());
+        super(identifier, Registries.ENCHANTMENT, getDefaultEnchantmentModifier());
     }
 
     @Override

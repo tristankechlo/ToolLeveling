@@ -6,13 +6,16 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.tristankechlo.toolleveling.config.CommandConfig;
-import net.minecraft.command.argument.EnchantmentArgumentType;
+import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.EntityArgumentType;
+import net.minecraft.command.argument.RegistryEntryArgumentType;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 
@@ -46,38 +49,36 @@ public final class SuperEnchantCommand {
         FAILED_EXCEPTION = new SimpleCommandExceptionType(Text.translatable("commands.enchant.failed"));
     }
 
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+    public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess access) {
         dispatcher.register(literal("superenchant").requires((player) -> {
             return player.hasPermissionLevel(3);
         }).then(argument("targets", EntityArgumentType.entities())
-                .then(argument("enchantment", EnchantmentArgumentType.enchantment()).executes((context) -> {
-                    return enchant(context.getSource(), EntityArgumentType.getEntities(context, "targets"),
-                            EnchantmentArgumentType.getEnchantment(context, "enchantment"), 1);
+                .then(argument("enchantment", RegistryEntryArgumentType.registryEntry(access, RegistryKeys.ENCHANTMENT)).executes((context) -> {
+                    return enchant(context.getSource(), EntityArgumentType.getEntities(context, "targets"), RegistryEntryArgumentType.getEnchantment(context, "enchantment"), 1);
                 }).then(argument("level", IntegerArgumentType.integer(0, Short.MAX_VALUE)).executes((context) -> {
-                    return enchant(context.getSource(), EntityArgumentType.getEntities(context, "targets"),
-                            EnchantmentArgumentType.getEnchantment(context, "enchantment"),
-                            IntegerArgumentType.getInteger(context, "level"));
+                    return enchant(context.getSource(), EntityArgumentType.getEntities(context, "targets"), RegistryEntryArgumentType.getEnchantment(context, "enchantment"), IntegerArgumentType.getInteger(context, "level"));
                 })))));
     }
 
-    private static int enchant(ServerCommandSource source, Collection<? extends Entity> targets,
-                               Enchantment enchantmentIn, int level) throws CommandSyntaxException {
+    private static int enchant(ServerCommandSource source, Collection<? extends Entity> targets, RegistryEntry<Enchantment> enchantmentIn, int level)
+            throws CommandSyntaxException {
         int i = 0;
+        Enchantment enchantment = enchantmentIn.value();
 
         for (Entity entity : targets) {
             if (entity instanceof LivingEntity) {
                 LivingEntity livingentity = (LivingEntity) entity;
                 ItemStack stack = livingentity.getMainHandStack();
                 if (!stack.isEmpty()) {
-                    if (enchantmentIn.isAcceptableItem(stack) || CommandConfig.allowWrongEnchantments.getValue()) {
-                        if (EnchantmentHelper.isCompatible(EnchantmentHelper.get(stack).keySet(), enchantmentIn)
+                    if (enchantment.isAcceptableItem(stack) || CommandConfig.allowWrongEnchantments.getValue()) {
+                        if (EnchantmentHelper.isCompatible(EnchantmentHelper.get(stack).keySet(), enchantment)
                                 || CommandConfig.allowIncompatibleEnchantments.getValue()) {
 
                             Map<Enchantment, Integer> enchantments = EnchantmentHelper.get(stack);
-                            if (enchantments.containsKey(enchantmentIn) && level == 0) {
-                                enchantments.remove(enchantmentIn);
+                            if (enchantments.containsKey(enchantment) && level == 0) {
+                                enchantments.remove(enchantment);
                             } else {
-                                enchantments.put(enchantmentIn, level);
+                                enchantments.put(enchantment, level);
                             }
                             EnchantmentHelper.set(enchantments, stack);
                             i++;
@@ -100,9 +101,9 @@ public final class SuperEnchantCommand {
             throw FAILED_EXCEPTION.create();
         } else {
             if (targets.size() == 1) {
-                source.sendFeedback(Text.translatable("commands.enchant.success.single", enchantmentIn.getName(level), targets.iterator().next().getDisplayName()), true);
+                source.sendFeedback(Text.translatable("commands.enchant.success.single", enchantment.getName(level), targets.iterator().next().getDisplayName()), true);
             } else {
-                source.sendFeedback(Text.translatable("commands.enchant.success.multiple", enchantmentIn.getName(level), targets.size()), true);
+                source.sendFeedback(Text.translatable("commands.enchant.success.multiple", enchantment.getName(level), targets.size()), true);
             }
 
             return i;

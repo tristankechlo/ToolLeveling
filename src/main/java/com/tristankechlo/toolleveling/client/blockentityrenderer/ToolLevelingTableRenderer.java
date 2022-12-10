@@ -11,13 +11,10 @@ import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.Quaternion;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.RotationAxis;
 
 @Environment(EnvType.CLIENT)
 public class ToolLevelingTableRenderer implements BlockEntityRenderer<ToolLevelingTableBlockEntity> {
-
-    private final Quaternion quaternion = new Quaternion(Vec3f.NEGATIVE_X, 1.5707F, false);
 
     public ToolLevelingTableRenderer(BlockEntityRendererFactory.Context dispatcher) {}
 
@@ -29,7 +26,7 @@ public class ToolLevelingTableRenderer implements BlockEntityRenderer<ToolLeveli
             matrices.push();
             matrices.translate(0.5D, 0.83D, 0.5D);
             matrices.scale(0.6F, 0.6F, 0.6F);
-            matrices.multiply(quaternion);
+            matrices.multiply(RotationAxis.NEGATIVE_X.rotation(1.5707F));
             renderItem(stack, tickDelta, matrices, vertexConsumers, light, overlay);
             matrices.pop();
         }

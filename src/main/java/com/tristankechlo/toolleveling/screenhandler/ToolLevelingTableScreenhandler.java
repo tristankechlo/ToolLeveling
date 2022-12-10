@@ -85,7 +85,7 @@ public class ToolLevelingTableScreenhandler extends ScreenHandler {
     }
 
     @Override
-    public ItemStack transferSlot(PlayerEntity playerIn, int index) {
+    public ItemStack quickMove(PlayerEntity playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         int slotCount = ToolLevelingTableBlockEntity.NUMBER_OF_SLOTS;

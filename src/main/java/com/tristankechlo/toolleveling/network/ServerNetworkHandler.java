@@ -15,12 +15,12 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 
 import java.util.Map;
 
@@ -33,7 +33,7 @@ public final class ServerNetworkHandler {
     @SuppressWarnings("deprecation")
     public static void recieveSetEnchantmentLevel(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
         final BlockPos pos = buf.readBlockPos();
-        final Enchantment enchantment = Registry.ENCHANTMENT.get(buf.readIdentifier());
+        final Enchantment enchantment = Registries.ENCHANTMENT.get(buf.readIdentifier());
         final int level = buf.readInt();
         server.execute(() -> {
             if (player == null) {

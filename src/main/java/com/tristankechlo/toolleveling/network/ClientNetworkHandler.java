@@ -15,9 +15,9 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 
 @Environment(EnvType.CLIENT)
 public final class ClientNetworkHandler {
@@ -31,7 +31,7 @@ public final class ClientNetworkHandler {
     public static void sendSetEnchantmentLevel(BlockPos pos, Enchantment enchantment, int level) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeBlockPos(pos);
-        Identifier identifier = Registry.ENCHANTMENT.getId(enchantment);
+        Identifier identifier = Registries.ENCHANTMENT.getId(enchantment);
         if (identifier == null) {
             ToolLevelingClient.LOGGER.warn("Error while encoding the packet for " + NetworkChannels.SET_ENCHANTMENT_LEVEL);
         }

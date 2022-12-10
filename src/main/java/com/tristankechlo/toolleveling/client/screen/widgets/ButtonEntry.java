@@ -38,9 +38,9 @@ public class ButtonEntry extends ElementListWidget.Entry<ButtonEntry> {
         this.screen = screen;
         this.upgradeCost = Utils.getEnchantmentUpgradeCost(enchantment, level + 1);
 
-        this.button = new ButtonWidget(0, 0, 121, 20, ButtonHelper.getButtonText(this), b -> {
+        this.button = new ButtonWidget.Builder(ButtonHelper.getButtonText(this), (b) -> {
             ClientNetworkHandler.sendSetEnchantmentLevel(this.screen.getScreenHandler().getPos(), this.enchantment, this.currentLevel + 1);
-        });
+        }).position(0, 0).size(121, 20).build();
         this.list = ImmutableList.of(this.button);
     }
 
@@ -48,8 +48,8 @@ public class ButtonEntry extends ElementListWidget.Entry<ButtonEntry> {
     public void render(MatrixStack mStack, int index, int top, int left, int entryWidth, int entryHeight, int mouseX,
                        int mouseY, boolean isMouseOver, float partialTicks) {
 
-        this.button.x = left;
-        this.button.y = top;
+        this.button.setX(left);
+        this.button.setY(top);
         long worth = this.screen.getScreenHandler().getContainerWorth() + this.screen.getScreenHandler().getBonusPoints();
         boolean normallyActive = (this.upgradeCost <= worth) && ButtonHelper.shouldButtonBeActive(this);
         this.button.active = normallyActive || Utils.freeCreativeUpgrades(MinecraftClient.getInstance().player);
