@@ -55,7 +55,9 @@ public final class ToolLeveling {
     }
 
     private void populateCreativeTab(CreativeModeTabEvent.BuildContents event) {
-        event.registerSimple(CreativeModeTabs.FUNCTIONAL_BLOCKS, ModRegistry.TLT_ITEM.get());
+        if (event.getTab() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
+            event.accept(ModRegistry.TLT_ITEM.get());
+        }
     }
 
 }
