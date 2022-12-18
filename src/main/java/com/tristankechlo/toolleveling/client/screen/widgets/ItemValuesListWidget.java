@@ -5,8 +5,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.tristankechlo.toolleveling.client.screen.ItemValueScreen;
-import com.tristankechlo.toolleveling.config.ItemValues;
 
+import com.tristankechlo.toolleveling.config.ItemValueConfig;
+import com.tristankechlo.toolleveling.config.values.ItemValues;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.core.NonNullList;
 import net.minecraft.util.Tuple;
@@ -36,7 +37,7 @@ public class ItemValuesListWidget extends ObjectSelectionList<ItemValueEntry> {
 	}
 
 	private void refreshList() {
-		List<Tuple<ItemStack, Long>> entries = ItemValues.itemValues.entrySet().stream()
+		List<Tuple<ItemStack, Long>> entries = ItemValueConfig.itemValues.getValue().entrySet().stream()
 				.sorted((o1, o2) -> o2.getValue().compareTo(o1.getValue()))
 				.map((entry) -> new Tuple<>(new ItemStack(entry.getKey()), entry.getValue()))
 				.collect(Collectors.toList());

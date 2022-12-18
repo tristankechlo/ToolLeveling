@@ -4,11 +4,11 @@
 <br/>
 
 how the mod works:
- - craft the Tool Leveling Table
- - put an enchanted item in the first slot
- - put enough payment items in the slots below
- - higher enchantment levels will required more items / items with higher worth
- - click the enchantment you want to upgrade
+- craft the Tool Leveling Table
+- put an enchanted item in the first slot
+- put enough payment items in the slots below
+- higher enchantment levels will required more items / items with higher worth
+- click the enchantment you want to upgrade
 
 ## Design of the table
 <img src="https://i.ibb.co/gD56FHW/screenshot.png" height="150">
@@ -24,28 +24,29 @@ multiple items are allowed as payment items, and there worth can be changed thro
 ### History
 <details>
 	<summary>recipe before modversion 1.3.0</summary>  
-   
- ![recipe](https://i.ibb.co/fQxtBV2/Recipe-new.png)  
- *any enchanted book will work
+
+![recipe](https://i.ibb.co/fQxtBV2/Recipe-new.png)  
+*any enchanted book will work
 </details>
 <details>
  <summary>design of the table before modversion 1.3.0</summary>
-   
+
  <img src="https://i.ibb.co/WNXP2LC/tool-leveling-table-screenshot.png" height="150">
 </details>
 <details>
  <summary>GUI before modversion 1.2.2</summary>
-   
- ![GUI](https://i.ibb.co/8P27vMD/GUI-NEW-2.png)  
- only one item is allowed as payment item (by default Netherite Ingot, but it is changeable through the config)
+
+![GUI](https://i.ibb.co/8P27vMD/GUI-NEW-2.png)  
+only one item is allowed as payment item (by default Netherite Ingot, but it is changeable through the config)
 </details>
 
 ---
 
 ### Translations:
-| Language | up to modversion | Translator | since version |
-|:--------:|:----------------:|:-----------| :-----------: |
-| **en_us** | 1.3.0 | tristankechlo ([Github](https://github.com/tristankechlo)) | always |
-| **de_de** | 1.3.0 | tristankechlo ([Github](https://github.com/tristankechlo)) | always |
-| **ro_ro** | 1.3.0 | Potato man | 1.2.12 |
-| **ru_ru** | 1.2.3 | damnarsanis ([CurseForge](https://www.curseforge.com/members/damnarsanis/)) | 1.2.3 |
+| Language  | up to modversion | Translator                                                                  | since version |
+|:---------:|:----------------:|:----------------------------------------------------------------------------|:-------------:|
+| **en_us** |      1.4.4       | tristankechlo ([Github](https://github.com/tristankechlo))                  |    always     |
+| **de_de** |      1.4.4       | tristankechlo ([Github](https://github.com/tristankechlo))                  |    always     |
+| **ro_ro** |      1.3.1       | Potato man                                                                  |    1.2.12     |
+| **ru_ru** |      1.2.3       | damnarsanis ([CurseForge](https://www.curseforge.com/members/damnarsanis/)) |     1.2.3     |
+| **zh_cn** |      1.4.2       | GodGun968 ([Github](https://github.com/GodGun968))                          |     1.4.2     |

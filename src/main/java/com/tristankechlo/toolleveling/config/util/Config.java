@@ -1,19 +1,18 @@
-package com.tristankechlo.toolleveling.config;
+package com.tristankechlo.toolleveling.config.util;
+
+import com.google.gson.JsonObject;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import com.google.gson.JsonObject;
-
 public final class Config {
 
-	private String fileName;
-	private Runnable reset;
-	private Function<JsonObject, JsonObject> serializer;
-	private Consumer<JsonObject> deserializer;
+	private final String fileName;
+	private final Runnable reset;
+	private final Function<JsonObject, JsonObject> serializer;
+	private final Consumer<JsonObject> deserializer;
 
-	public Config(String fileName, Runnable reset, Function<JsonObject, JsonObject> serializer,
-			Consumer<JsonObject> deserializer) {
+	public Config(String fileName, Runnable reset, Function<JsonObject, JsonObject> serializer, Consumer<JsonObject> deserializer) {
 		this.fileName = fileName;
 		this.reset = reset;
 		this.serializer = serializer;

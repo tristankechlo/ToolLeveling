@@ -1,16 +1,14 @@
-package com.tristankechlo.toolleveling.config.values;
+package com.tristankechlo.toolleveling.config.primitives;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.tristankechlo.toolleveling.ToolLeveling;
+import com.tristankechlo.toolleveling.config.util.AbstractConfigValue;
 
 public final class BooleanValue extends AbstractConfigValue<Boolean> {
 
 	private boolean value;
 	private final boolean defaultValue;
-
-	public BooleanValue(String identifier) {
-		this(identifier, true);
-	}
 
 	public BooleanValue(String identifier, boolean defaultValue) {
 		super(identifier);
@@ -36,11 +34,13 @@ public final class BooleanValue extends AbstractConfigValue<Boolean> {
 	@Override
 	public void deserialize(JsonObject jsonObject) {
 		try {
-			value = jsonObject.get(getIdentifier()).getAsBoolean();
+			JsonElement element = jsonObject.get(getIdentifier());
+			if (element != null) {
+				value = element.getAsBoolean();
+			}
 		} catch (Exception e) {
 			value = defaultValue;
-			ToolLeveling.LOGGER
-					.warn("Error while loading the config value " + getIdentifier() + ", using defaultvalue instead");
+			ToolLeveling.LOGGER.warn("Error while loading the config value " + getIdentifier() + ", using defaultvalue instead");
 		}
 	}
 

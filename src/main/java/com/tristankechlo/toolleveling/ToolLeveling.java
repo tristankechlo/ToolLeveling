@@ -1,10 +1,11 @@
 package com.tristankechlo.toolleveling;
 
+import com.tristankechlo.toolleveling.config.util.ConfigSyncing;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.tristankechlo.toolleveling.client.ClientSetup;
-import com.tristankechlo.toolleveling.config.ConfigManager;
+import com.tristankechlo.toolleveling.config.util.ConfigManager;
 import com.tristankechlo.toolleveling.init.ModRegistry;
 import com.tristankechlo.toolleveling.network.PacketHandler;
 import com.tristankechlo.toolleveling.utils.Names;
@@ -40,13 +41,16 @@ public final class ToolLeveling {
 	}
 
 	private void commonSetup(final FMLCommonSetupEvent event) {
+		//make sure config folder exists
+		ConfigManager.createConfigFolder();
+		//load configs from file
 		ConfigManager.setup();
 	}
 
 	@SubscribeEvent
 	public void onPlayerJoinEvent(final PlayerLoggedInEvent event) {
 		// send server-config to player
-		ConfigManager.syncAllConfigsToOneClient((ServerPlayer) event.getPlayer());
+		ConfigSyncing.syncAllConfigsToOneClient((ServerPlayer) event.getEntity());
 	}
 
 }

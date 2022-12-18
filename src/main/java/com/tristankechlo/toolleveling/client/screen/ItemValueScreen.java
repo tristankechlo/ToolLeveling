@@ -2,6 +2,7 @@ package com.tristankechlo.toolleveling.client.screen;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.tristankechlo.toolleveling.client.screen.widgets.ItemValuesListWidget;
+import com.tristankechlo.toolleveling.config.ItemValueConfig;
 import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
 
 import net.minecraft.client.gui.Font;
@@ -36,7 +37,7 @@ public class ItemValueScreen extends Screen {
 		this.itemValues.render(matrixStack, mouseX, mouseY, partialTicks); // render item list widget
 		super.render(matrixStack, mouseX, mouseY, partialTicks); // render buttons
 		drawCenteredString(matrixStack, font, new TranslatableComponent("screen.toolleveling.default_item_value_worth",
-				ToolLevelingConfig.defaultItemWorth.getValue()), width / 2, 10, 0xFFFFFF);
+				ItemValueConfig.defaultItemWorth.getValue()), width / 2, 10, 0xFFFFFF);
 	}
 
 	@Override
