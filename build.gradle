@@ -1,17 +1,22 @@
 buildscript {
-    repositories {
-        maven { url = 'https://maven.minecraftforge.net' }
-        jcenter()
-        mavenCentral()
-    }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
     }
 }
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'eclipse'
 
-version = "${mod_version}"
+plugins {
+    id 'net.minecraftforge.gradle' version '5.1.+'
+}
+apply plugin: 'org.spongepowered.mixin'
+
+mixin {
+    add sourceSets.main, "toolleveling.refmap.json"
+    config 'toolleveling.mixins.json'
+    debug.verbose = true
+    debug.export = true
+}
+
+version = "forge-${mod_version}"
 group = 'com.tristankechlo.toolleveling'
 archivesBaseName = 'toolleveling'
 
@@ -20,7 +25,7 @@ println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getPro
 
 minecraft {
     mappings channel: 'official', version: project.mappings
-    
+
     runs {
         client {
             workingDirectory project.file('run')
@@ -44,17 +49,26 @@ repositories {
     maven { url 'https://maven.blamejared.com' }
 }
 
-dependencies {    
+dependencies {
     minecraft "net.minecraftforge:forge:${forge_version}"
+    implementation 'org.spongepowered:mixin:0.8.4:processor'
+    annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
 }
 
 jar {
     manifest {
         attributes([
-            "Specification-Title": "Tool Leveling",
-            "Implementation-Title": project.name,
-            "Implementation-Version": "${version}",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+            "Specification-Title"     : "Tool Leveling",
+            "Implementation-Title"    : project.name,
+            "Implementation-Version"  : project.jar.archiveVersion,
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+            "TweakClass"              : "org.spongepowered.asm.launch.MixinTweaker",
+            "TweakOrder"              : 0,
+            "MixinConfigs"            : "toolleveling.mixins.json"
         ])
     }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }

@@ -18,14 +18,15 @@
 	"container.toolleveling.tool_leveling_table.worth.bonus_points" : "Prima: %s",
 	"container.toolleveling.tool_leveling_table.error.blacklisted" : "Acest enchantment este deactivat!",
 	"container.toolleveling.tool_leveling_table.error.useless" : "Nivelarea nu va avea niciun effect!",
-	"container.toolleveling.tool_leveling_table.error.maxlevel" : "Nivelul maxim atins!",
+	"container.toolleveling.tool_leveling_table.error.max_level" : "Nivelul maxim atins!",
 	"container.toolleveling.tool_leveling_table.error.break" : "Enchantment se va rupe cand este nivelata!",
 	"container.toolleveling.tool_leveling_table.error.capped" : "Nivelul este la maximul setat!",
+	"container.toolleveling.tool_leveling_table.free_creative": "Leveling e gratis, pentru ca tu esti in creative mode.",
 
 	"commands.superenchant.failed.incompatible" : "%s Nu poate suporta acea Enchantment, puteti activa acest lucru in ToolLevelingConfig (allowIncompatibleEnchantments)",
 	"commands.superenchant.failed.wrong" : "%s Nu poate suporta acea Enchantment, puteti activa acest lucru in ToolLevelingConfig (allowWrongEnchantments)",
-  	"commands.toolleveling.config.path": "Configuratia pentru ToolLeveling poate fi gasita aici: %s",
-  	"commands.toolleveling.config.reload": "Configuratia pentru ToolLeveling a fost reincarcata cu succes.",
-  	"commands.toolleveling.config.noconfig": "Configuratia pentru ToolLeveling Nu a putut fi gasita.",
-  	"commands.toolleveling.config.reset": "Configuratia %s a fost setata la default."
-} 
+	"commands.toolleveling.config.path": "Configuratia pentru %s poate fi gasita aici: %s",
+	"commands.toolleveling.config.reload": "Configuratia pentru ToolLeveling a fost reincarcata cu succes.",
+	"commands.toolleveling.config.noconfig": "Configuratia pentru ToolLeveling Nu a putut fi gasita.",
+	"commands.toolleveling.config.reset": "Configuratia %s a fost setata la default."
+}

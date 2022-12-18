@@ -1,14 +1,15 @@
 modLoader="javafml"
 loaderVersion="[33,)"
 license="CC BY-NC-ND 4.0"
+issueTrackerURL="https://github.com/tristankechlo/ToolLeveling/issues"
 showAsResourcePack=false
 
 [[mods]]
 modId="toolleveling"
-version="1.16.5 - 1.2.12"
+version="1.16.5-1.4.4"
 displayName="Tool Leveling"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/tool-leveling-plus"
-#logoFile="examplemod.png"
+logoFile="tool_leveling_banner.png"
 #credits="Thanks for this example mod goes to Java"
 authors="Buecher_wurm"
 description='''adds the possibility to upgrade your enchantments higher than the vanilla limit'''

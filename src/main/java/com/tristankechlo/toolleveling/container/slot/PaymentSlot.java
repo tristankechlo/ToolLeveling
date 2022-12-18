@@ -6,12 +6,12 @@ import net.minecraft.item.ItemStack;
 
 public class PaymentSlot extends Slot {
 
-	public PaymentSlot(IInventory inv, int index, int xPosition, int yPosition) {
-		super(inv, index, xPosition, yPosition);
-	}
+    public PaymentSlot(IInventory inv, int index, int xPosition, int yPosition) {
+        super(inv, index, xPosition, yPosition);
+    }
 
-	@Override
-	public boolean mayPlace(ItemStack stack) {
-		return !stack.isEnchantable() && !stack.isDamageableItem();
-	}
+    @Override
+    public boolean mayPlace(ItemStack stack) {
+        return !stack.isEnchantable() && !stack.isDamageableItem();
+    }
 }
