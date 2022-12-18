@@ -1,5 +1,10 @@
 # Changelog
 
+### Version 1.18.2 - 1.4.4
+- **THIS UPDATE WILL RESET YOUR CONFIG, MAKE BACKUPS BEFORE LOADING**
+- backport all updates from newer versions
+- checkout all updates here [Changelog 1.19-Fabric](https://github.com/tristankechlo/ToolLeveling/blob/1.19-Fabric/Changelog.md#version-1193---144)
+
 ### Version 1.18.2 - 1.3.3
  - fix that the table could not be opened
  - rename config-identifier from `itemValues` to `item_values`

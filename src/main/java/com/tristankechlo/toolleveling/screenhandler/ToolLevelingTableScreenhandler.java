@@ -7,7 +7,6 @@ import com.tristankechlo.toolleveling.screenhandler.slot.OffhandSlot;
 import com.tristankechlo.toolleveling.screenhandler.slot.PaymentSlot;
 import com.tristankechlo.toolleveling.screenhandler.slot.UpgradeSlot;
 import com.tristankechlo.toolleveling.utils.Utils;
-
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
@@ -24,20 +23,16 @@ import net.minecraft.world.World;
 public class ToolLevelingTableScreenhandler extends ScreenHandler {
 
 	private final Inventory inventory;
-	private static final EquipmentSlot[] VALID_EQUIPMENT_SLOTS = new EquipmentSlot[] { EquipmentSlot.HEAD,
-			EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET };
-	private static final int[][] EQUIPMENT_SLOT_POINTS = new int[][] { { 197, 136 }, { 197, 154 }, { 215, 136 },
-			{ 215, 154 } };
+	private static final EquipmentSlot[] VALID_EQUIPMENT_SLOTS = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
+	private static final int[][] EQUIPMENT_SLOT_POINTS = new int[][]{{197, 136}, {197, 154}, {215, 136}, {215, 154}};
 	private final BlockPos pos;
 	private final World world;
 
 	public ToolLevelingTableScreenhandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf) {
-		this(syncId, playerInventory, new SimpleInventory(ToolLevelingTableBlockEntity.NUMBER_OF_SLOTS),
-				buf.readBlockPos());
+		this(syncId, playerInventory, new SimpleInventory(ToolLevelingTableBlockEntity.NUMBER_OF_SLOTS), buf.readBlockPos());
 	}
 
-	public ToolLevelingTableScreenhandler(int syncId, PlayerInventory playerInventory, Inventory inventory,
-			BlockPos pos) {
+	public ToolLevelingTableScreenhandler(int syncId, PlayerInventory playerInventory, Inventory inventory, BlockPos pos) {
 		super(ToolLeveling.TLT_SCREEN_HANDLER, syncId);
 		checkSize(inventory, ToolLevelingTableBlockEntity.NUMBER_OF_SLOTS);
 		this.inventory = inventory;
@@ -55,8 +50,7 @@ public class ToolLevelingTableScreenhandler extends ScreenHandler {
 		int slotSizePlus2 = 18;
 		for (int row = 0; row < 3; row++) {
 			for (int column = 0; column < 5; column++) {
-				this.addSlot(new PaymentSlot(inventory, 1 + (row * 5) + column, startX + (column * slotSizePlus2),
-						startY + (row * slotSizePlus2)));
+				this.addSlot(new PaymentSlot(inventory, 1 + (row * 5) + column, startX + (column * slotSizePlus2), startY + (row * slotSizePlus2)));
 			}
 		}
 
@@ -65,8 +59,7 @@ public class ToolLevelingTableScreenhandler extends ScreenHandler {
 		startX = 17;
 		for (int row = 0; row < 3; row++) {
 			for (int column = 0; column < 9; column++) {
-				this.addSlot(new Slot(playerInventory, 9 + (row * 9) + column, startX + (column * slotSizePlus2),
-						startY + (row * slotSizePlus2)));
+				this.addSlot(new Slot(playerInventory, 9 + (row * 9) + column, startX + (column * slotSizePlus2), startY + (row * slotSizePlus2)));
 			}
 		}
 
@@ -96,7 +89,7 @@ public class ToolLevelingTableScreenhandler extends ScreenHandler {
 		ItemStack itemstack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(index);
 		int slotCount = ToolLevelingTableBlockEntity.NUMBER_OF_SLOTS;
-		if (slot != null && slot.hasStack()) {
+		if (slot.hasStack()) {
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
 			if (index >= 0 && index < slotCount) {

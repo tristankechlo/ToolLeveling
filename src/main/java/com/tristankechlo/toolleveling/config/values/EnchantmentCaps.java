@@ -1,95 +1,42 @@
 package com.tristankechlo.toolleveling.config.values;
 
-import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.tristankechlo.toolleveling.ToolLeveling;
-
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
-public final class EnchantmentCaps implements IConfigValue<Map<Enchantment, Short>> {
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 
-	private Map<Enchantment, Short> enchantmentCaps;
-	private Map<String, Short> rawEnchantmentCaps;
-	private static final Type TYPE = new TypeToken<Map<String, Short>>() {}.getType();
-	public static final String IDENTIFIER = "enchantmentCaps";
-	private static final Gson GSON = new Gson();
+public final class EnchantmentCaps extends RegistryMapConfig<Enchantment, Short> {
 
-	public EnchantmentCaps() {
-		this.setToDefault();
-	}
+    private static final Type TYPE = new TypeToken<Map<String, Short>>() {}.getType();
 
-	@Override
-	public String getIdentifier() {
-		return IDENTIFIER;
-	}
+    public EnchantmentCaps(String identifier) {
+        super(identifier, Registry.ENCHANTMENT, getDefaultEnchantmentCaps());
+    }
 
-	@Override
-	public void setToDefault() {
-		enchantmentCaps = new HashMap<>();
-		enchantmentCaps.put(Enchantments.FIRE_PROTECTION, (short) 100);
-	}
+    private static Map<Enchantment, Short> getDefaultEnchantmentCaps() {
+        Map<Enchantment, Short> enchantmentCaps = new HashMap<>();
+        enchantmentCaps.put(Enchantments.FIRE_PROTECTION, (short) 100);
+        return enchantmentCaps;
+    }
 
-	public Map<Enchantment, Short> getMap() {
-		return this.getValue();
-	}
+    @Override
+    protected boolean isKeyValid(Enchantment key, Identifier identifier) {
+        return key != null;
+    }
 
-	@Override
-	public Map<Enchantment, Short> getValue() {
-		return enchantmentCaps;
-	}
+    @Override
+    protected boolean isValueValid(Short value) {
+        return value >= 1;
+    }
 
-	@Override
-	public void serialize(JsonObject jsonObject) {
-		Map<String, Short> tempCaps = enchantmentCaps.entrySet().stream().collect(
-				Collectors.toMap((e) -> Registry.ENCHANTMENT.getId(e.getKey()).toString(), (e) -> e.getValue()));
-		JsonElement caps = GSON.toJsonTree(tempCaps, TYPE);
-		jsonObject.add(getIdentifier(), caps);
-	}
-
-	@Override
-	public void deserialize(JsonObject jsonObject) {
-		JsonElement jsonElement = jsonObject.get(getIdentifier());
-		if (jsonElement == null) {
-			this.setToDefault();
-			ToolLeveling.LOGGER
-					.warn("Error while loading the config value " + getIdentifier() + ", using defaultvalues instead");
-			return;
-		}
-		rawEnchantmentCaps = GSON.fromJson(jsonElement, TYPE);
-		if (rawEnchantmentCaps == null) {
-			this.setToDefault();
-			ToolLeveling.LOGGER
-					.warn("Error while loading the config value " + getIdentifier() + ", using defaultvalues instead");
-			return;
-		}
-		enchantmentCaps = new HashMap<>();
-		for (Map.Entry<String, Short> element : rawEnchantmentCaps.entrySet()) {
-			Identifier loc = Identifier.tryParse(element.getKey());
-			if (loc == null) {
-				ToolLeveling.LOGGER.warn("Ignoring unknown enchantment " + loc + " from " + getIdentifier());
-				continue;
-			}
-			short level = element.getValue();
-			if (level < 1) {
-				continue;
-			}
-			if (Registry.ENCHANTMENT.containsId(loc)) {
-				Enchantment ench = Registry.ENCHANTMENT.get(loc);
-				enchantmentCaps.put(ench, level);
-			} else {
-				ToolLeveling.LOGGER.warn("Ignoring unknown enchantment " + loc + " for " + getIdentifier());
-			}
-		}
-	}
+    @Override
+    protected Type getType() {
+        return TYPE;
+    }
 
 }

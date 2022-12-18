@@ -1,126 +1,120 @@
 package com.tristankechlo.toolleveling.config;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gson.JsonObject;
-import com.tristankechlo.toolleveling.config.values.BooleanValue;
+import com.tristankechlo.toolleveling.config.primitives.BooleanValue;
+import com.tristankechlo.toolleveling.config.primitives.DoubleValue;
+import com.tristankechlo.toolleveling.config.primitives.LongValue;
+import com.tristankechlo.toolleveling.config.primitives.ShortValue;
 import com.tristankechlo.toolleveling.config.values.EnchantmentCaps;
 import com.tristankechlo.toolleveling.config.values.EnchantmentModifier;
-import com.tristankechlo.toolleveling.config.values.RegistryConfig;
-import com.tristankechlo.toolleveling.config.values.number.DoubleValue;
-import com.tristankechlo.toolleveling.config.values.number.LongValue;
-import com.tristankechlo.toolleveling.config.values.number.ShortValue;
-
+import com.tristankechlo.toolleveling.config.values.MinimumEnchantmentLevels;
+import com.tristankechlo.toolleveling.config.values.RegistryListConfig;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.util.registry.Registry;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public final class ToolLevelingConfig {
 
-	public static final DoubleValue globalUpgradeCostMultiplier;
-	public static final LongValue minUpgradeCost;
-	public static final LongValue defaultItemWorth;
-	public static final BooleanValue allowLevelingUselessEnchantments;
-	public static final BooleanValue allowLevelingBreakingEnchantments;
-	public static final BooleanValue allowWrongEnchantments;
-	public static final BooleanValue allowIncompatibleEnchantments;
-	public static final BooleanValue freeUpgradesForCreativePlayers;
-	public static final ShortValue globalEnchantmentCap;
-	public static final RegistryConfig<Enchantment> enchantmentWhitelist;
-	public static final RegistryConfig<Enchantment> enchantmentBlacklist;
-	public static final EnchantmentCaps enchantmentCaps;
-	public static final EnchantmentModifier enchantmentUpgradeCostModifier;
+    // General options
+    private static final String GENERAL_OPTIONS = "general_options";
+    public static final LongValue minimumUpgradeCost = new LongValue("minimum_upgrade_cost", 1000L, 1L, Long.MAX_VALUE);
+    public static final BooleanValue allowLevelingUselessEnchantments = new BooleanValue("allow_leveling_of_useless_enchantments", true);
+    public static final BooleanValue allowLevelingBreakingEnchantments = new BooleanValue("allow_leveling_of_breaking_enchantments", true);
+    public static final BooleanValue freeUpgradesForCreativePlayers = new BooleanValue("free_upgrades_for_creative_players", true);
 
-	static {
-		globalUpgradeCostMultiplier = new DoubleValue("globalUpgradeCostMultiplier", 1.0D, 0.0D, 100.0D);
-		minUpgradeCost = new LongValue("minUpgradeCost", 1000, 1, Long.MAX_VALUE);
-		defaultItemWorth = new LongValue("defaultItemWorth", 10, 0, Long.MAX_VALUE);
-		allowLevelingUselessEnchantments = new BooleanValue("allowLevelingOfUselessEnchantments", true);
-		allowLevelingBreakingEnchantments = new BooleanValue("allowLevelingOfBreakingEnchanments", true);
-		allowWrongEnchantments = new BooleanValue("allowWrongEnchantments", true);
-		allowIncompatibleEnchantments = new BooleanValue("allowIncompatibleEnchantments", true);
-		freeUpgradesForCreativePlayers = new BooleanValue("freeUpgradesForCreativePlayers", true);
-		globalEnchantmentCap = new ShortValue("globalEnchantmentCap", (short) 0, (short) 0, Short.MAX_VALUE);
-		enchantmentWhitelist = new RegistryConfig<>("enchantmentWhitelist", Registry.ENCHANTMENT, new ArrayList<>());
-		enchantmentBlacklist = new RegistryConfig<>("enchantmentBlacklist", Registry.ENCHANTMENT,
-				getDefaultEnchantmentBlacklist());
-		enchantmentCaps = new EnchantmentCaps();
-		enchantmentUpgradeCostModifier = new EnchantmentModifier();
-	}
+    // Enchantment options
+    private static final String ENCHANTMENT_OPTIONS = "enchantment_options";
+    public static final RegistryListConfig<Enchantment> whitelist = new RegistryListConfig<>("enchantment_whitelist", Registry.ENCHANTMENT, new ArrayList<>());
+    public static final RegistryListConfig<Enchantment> blacklist = new RegistryListConfig<>("enchantment_blacklist", Registry.ENCHANTMENT, getDefaultEnchantmentBlacklist());
+    public static final ShortValue globalEnchantmentCap = new ShortValue("global_enchantment_cap", (short) 0, (short) 0, Short.MAX_VALUE);
+    public static final EnchantmentCaps enchantmentCaps = new EnchantmentCaps("enchantment_caps");
+    public static final DoubleValue globalUpgradeCostMultiplier = new DoubleValue("global_upgrade_cost_multiplier", 1.0D, 0.0D, 100.0D);
+    public static final EnchantmentModifier enchantmentUpgradeCostModifier = new EnchantmentModifier("enchantment_upgrade_cost_modifier");
+    public static final ShortValue globalMinimumEnchantmentLevel = new ShortValue("global_minimum_enchantment_level", (short) 0, (short) 0, Short.MAX_VALUE);
+    public static final MinimumEnchantmentLevels minimumEnchantmentLevels = new MinimumEnchantmentLevels("minimum_enchantment_levels");
 
-	private ToolLevelingConfig() {}
+    private ToolLevelingConfig() {}
 
-	public static void setToDefaultValues() {
-		globalUpgradeCostMultiplier.setToDefault();
-		minUpgradeCost.setToDefault();
-		defaultItemWorth.setToDefault();
-		allowLevelingUselessEnchantments.setToDefault();
-		allowLevelingBreakingEnchantments.setToDefault();
-		allowIncompatibleEnchantments.setToDefault();
-		allowWrongEnchantments.setToDefault();
-		freeUpgradesForCreativePlayers.setToDefault();
-		globalEnchantmentCap.setToDefault();
+    public static void setToDefault() {
+        //reset general options
+        minimumUpgradeCost.setToDefault();
+        allowLevelingUselessEnchantments.setToDefault();
+        allowLevelingBreakingEnchantments.setToDefault();
+        freeUpgradesForCreativePlayers.setToDefault();
 
-		enchantmentWhitelist.setToDefault();
-		enchantmentBlacklist.setToDefault();
+        //reset enchantment options
+        whitelist.setToDefault();
+        blacklist.setToDefault();
+        globalEnchantmentCap.setToDefault();
+        enchantmentCaps.setToDefault();
+        globalUpgradeCostMultiplier.setToDefault();
+        enchantmentUpgradeCostModifier.setToDefault();
+        globalMinimumEnchantmentLevel.setToDefault();
+        minimumEnchantmentLevels.setToDefault();
+    }
 
-		enchantmentCaps.setToDefault();
-		enchantmentUpgradeCostModifier.setToDefault();
-	}
+    public static JsonObject serialize(JsonObject json) {
+        //serialize general options
+        JsonObject general = new JsonObject();
+        minimumUpgradeCost.serialize(general);
+        allowLevelingUselessEnchantments.serialize(general);
+        allowLevelingBreakingEnchantments.serialize(general);
+        freeUpgradesForCreativePlayers.serialize(general);
+        json.add(GENERAL_OPTIONS, general);
 
-	public static JsonObject serialize(JsonObject json) {
-		String url = "https://github.com/tristankechlo/Tool-Leveling/wiki/";
-		json.addProperty("_comment", "explanation to the config structure can be found here: " + url);
-		globalUpgradeCostMultiplier.serialize(json);
-		minUpgradeCost.serialize(json);
-		allowIncompatibleEnchantments.serialize(json);
-		allowWrongEnchantments.serialize(json);
-		defaultItemWorth.serialize(json);
-		allowLevelingUselessEnchantments.serialize(json);
-		allowLevelingBreakingEnchantments.serialize(json);
-		freeUpgradesForCreativePlayers.serialize(json);
-		globalEnchantmentCap.serialize(json);
+        //serialize enchantment options
+        JsonObject enchantment = new JsonObject();
+        whitelist.serialize(enchantment);
+        blacklist.serialize(enchantment);
+        globalEnchantmentCap.serialize(enchantment);
+        enchantmentCaps.serialize(enchantment);
+        globalUpgradeCostMultiplier.serialize(enchantment);
+        enchantmentUpgradeCostModifier.serialize(enchantment);
+        globalMinimumEnchantmentLevel.serialize(enchantment);
+        minimumEnchantmentLevels.serialize(enchantment);
+        json.add(ENCHANTMENT_OPTIONS, enchantment);
+        return json;
+    }
 
-		enchantmentWhitelist.serialize(json);
-		enchantmentBlacklist.serialize(json);
+    public static void deserialize(JsonObject json) {
+        //deserialize general options
+        if (json.has(GENERAL_OPTIONS)) {
+            JsonObject general = json.getAsJsonObject(GENERAL_OPTIONS);
+            minimumUpgradeCost.deserialize(general);
+            allowLevelingUselessEnchantments.deserialize(general);
+            allowLevelingBreakingEnchantments.deserialize(general);
+            freeUpgradesForCreativePlayers.deserialize(general);
+        }
 
-		enchantmentCaps.serialize(json);
-		enchantmentUpgradeCostModifier.serialize(json);
+        //deserialize enchantment options
+        if (json.has(ENCHANTMENT_OPTIONS)) {
+            JsonObject enchantment = json.getAsJsonObject(ENCHANTMENT_OPTIONS);
+            whitelist.deserialize(enchantment);
+            blacklist.deserialize(enchantment);
+            globalEnchantmentCap.deserialize(enchantment);
+            enchantmentCaps.deserialize(enchantment);
+            globalUpgradeCostMultiplier.deserialize(enchantment);
+            enchantmentUpgradeCostModifier.deserialize(enchantment);
+            globalMinimumEnchantmentLevel.deserialize(enchantment);
+            minimumEnchantmentLevels.deserialize(enchantment);
+        }
+    }
 
-		return json;
-	}
-
-	public static void deserialize(JsonObject json) {
-		globalUpgradeCostMultiplier.deserialize(json);
-		minUpgradeCost.deserialize(json);
-		defaultItemWorth.deserialize(json);
-		allowIncompatibleEnchantments.deserialize(json);
-		allowWrongEnchantments.deserialize(json);
-		allowLevelingUselessEnchantments.deserialize(json);
-		allowLevelingBreakingEnchantments.deserialize(json);
-		freeUpgradesForCreativePlayers.deserialize(json);
-		globalEnchantmentCap.deserialize(json);
-
-		enchantmentWhitelist.deserialize(json);
-		enchantmentBlacklist.deserialize(json);
-
-		enchantmentCaps.deserialize(json);
-		enchantmentUpgradeCostModifier.deserialize(json);
-	}
-
-	private static List<Enchantment> getDefaultEnchantmentBlacklist() {
-		List<Enchantment> enchantments = new ArrayList<>();
-		enchantments.add(Enchantments.MENDING);
-		enchantments.add(Enchantments.AQUA_AFFINITY);
-		enchantments.add(Enchantments.CHANNELING);
-		enchantments.add(Enchantments.BINDING_CURSE);
-		enchantments.add(Enchantments.VANISHING_CURSE);
-		enchantments.add(Enchantments.FLAME);
-		enchantments.add(Enchantments.INFINITY);
-		enchantments.add(Enchantments.MULTISHOT);
-		enchantments.add(Enchantments.SILK_TOUCH);
-		return enchantments;
-	}
+    private static List<Enchantment> getDefaultEnchantmentBlacklist() {
+        List<Enchantment> enchantments = new ArrayList<>();
+        enchantments.add(Enchantments.MENDING);
+        enchantments.add(Enchantments.AQUA_AFFINITY);
+        enchantments.add(Enchantments.CHANNELING);
+        enchantments.add(Enchantments.BINDING_CURSE);
+        enchantments.add(Enchantments.VANISHING_CURSE);
+        enchantments.add(Enchantments.FLAME);
+        enchantments.add(Enchantments.INFINITY);
+        enchantments.add(Enchantments.MULTISHOT);
+        enchantments.add(Enchantments.SILK_TOUCH);
+        return enchantments;
+    }
 
 }
