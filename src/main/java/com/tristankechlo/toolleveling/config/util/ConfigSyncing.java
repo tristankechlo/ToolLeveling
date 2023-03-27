@@ -12,7 +12,7 @@ import net.minecraftforge.network.PacketDistributor;
 public final class ConfigSyncing {
 
     public static void syncAllConfigsToOneClient(ServerPlayer player) {
-        Connection connection = player.connection.getConnection();
+        Connection connection = player.connection.connection;
         for (ConfigIdentifier config : ConfigIdentifier.values()) {
             String identifier = config.withModID();
             JsonObject json = config.serialize(new JsonObject());

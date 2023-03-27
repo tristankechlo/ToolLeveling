@@ -38,7 +38,7 @@ public class ItemValueEntry extends ObjectSelectionList.Entry<ItemValueEntry> {
             int x = left + (i * indexWidth);
             int y = top + 3;
             Tuple<ItemStack, Long> tuple = list.get(i);
-            screen.getMinecraft().getItemRenderer().renderGuiItem(tuple.getA(), x, y);
+            screen.getMinecraft().getItemRenderer().renderGuiItem(mStack, tuple.getA(), x, y);
             if (isMouseOverItem(x, y, mouseX, mouseY)) {
                 this.renderItemTooltip(mStack, tuple.getA(), mouseX, mouseY, tuple.getB());
             }

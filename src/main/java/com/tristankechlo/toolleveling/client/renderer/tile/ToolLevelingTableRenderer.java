@@ -5,10 +5,10 @@ import com.mojang.math.Axis;
 import com.tristankechlo.toolleveling.blockentity.ToolLevelingTableBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -36,8 +36,8 @@ public class ToolLevelingTableRenderer implements BlockEntityRenderer<ToolLeveli
 
     private void renderItem(ItemStack stack, float partialTicks, PoseStack pstack, MultiBufferSource bufferIn,
                             int combinedLightIn, int combinedOverlayIn) {
-        Minecraft.getInstance().getItemRenderer().renderStatic(stack, TransformType.FIXED, combinedLightIn,
-                combinedOverlayIn, pstack, bufferIn, OverlayTexture.NO_OVERLAY);
+        Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemDisplayContext.FIXED, combinedLightIn,
+                combinedOverlayIn, pstack, bufferIn, null, OverlayTexture.NO_OVERLAY);
     }
 
 }
