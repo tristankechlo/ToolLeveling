@@ -8,7 +8,7 @@ import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
-import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.RotationAxis;
@@ -34,8 +34,8 @@ public class ToolLevelingTableRenderer implements BlockEntityRenderer<ToolLeveli
 
     private void renderItem(ItemStack stack, float partialTicks, MatrixStack matrices,
                             VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        MinecraftClient.getInstance().getItemRenderer().renderItem(stack, ModelTransformation.Mode.FIXED, light,
-                overlay, matrices, vertexConsumers, OverlayTexture.DEFAULT_UV);
+        MinecraftClient.getInstance().getItemRenderer().renderItem(stack, ModelTransformationMode.FIXED, light,
+                overlay, matrices, vertexConsumers, null, OverlayTexture.DEFAULT_UV);
     }
 
 }

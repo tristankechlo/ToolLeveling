@@ -36,7 +36,7 @@ public class ItemValueScreen extends Screen {
         this.renderBackground(matrixStack); // render translucent grey background
         this.itemValues.render(matrixStack, mouseX, mouseY, partialTicks); // render item list widget
         super.render(matrixStack, mouseX, mouseY, partialTicks); // render buttons
-        drawCenteredText(matrixStack, textRenderer, defaultValue, width / 2, 10, 0xFFFFFF);
+        drawCenteredTextWithShadow(matrixStack, textRenderer, defaultValue, width / 2, 10, 0xFFFFFF);
     }
 
     @Override
