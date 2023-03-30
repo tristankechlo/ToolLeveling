@@ -1,5 +1,8 @@
 # Changelog
 
+### Version 1.19.4 - 1.4.5
+- fix incorrect calculation when using up items from the inventory
+
 ### Version 1.19.4 - 1.4.4
  - port to 1.19.4
 
