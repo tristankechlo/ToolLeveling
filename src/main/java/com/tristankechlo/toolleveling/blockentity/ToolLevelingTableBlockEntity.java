@@ -80,36 +80,44 @@ public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity imple
             this.setChanged();
             return true;
         }
+        // use bonusPoints first
         upgradeCost -= bonusPoints;
         bonusPoints = 0;
+
+        // use items in inventory
         for (int i = 1; i < NUMBER_OF_SLOTS; i++) {
+            if (upgradeCost <= 0) {
+                return true;
+            }
             ItemStack stack = this.items.get(i).copy();
-            if (stack.isEmpty() || upgradeCost <= 0) {
+            if (stack.isEmpty() || stack.is(Items.AIR)) {
                 continue;
             }
+
             long stackWorth = Utils.getStackWorth(stack);
             if (stackWorth <= upgradeCost) {
+                // whole stack is worth less than upgradeCost, remove whole stack
                 upgradeCost -= stackWorth;
-                stack = ItemStack.EMPTY;
+                this.items.set(i, ItemStack.EMPTY);
+
             } else {
-                long itemWorth = Utils.getItemWorth(stack);
-                int stackCount = stack.getCount();
-                for (int j = 0; j < stack.getCount(); j++) {
-                    if (upgradeCost <= 0 || stackCount == 0) {
-                        break;
-                    }
-                    if (itemWorth > upgradeCost) {
-                        stackCount--;
-                        bonusPoints = Math.abs(upgradeCost - itemWorth);
-                        upgradeCost = 0;
-                    } else {
-                        stackCount--;
-                        upgradeCost -= itemWorth;
-                    }
+                // whole stack is worth more than what is needed
+                // split stack and provide bonusPoints
+                long singleItemWorth = Utils.getItemWorth(stack);
+                int itemsNeeded = (int) Math.ceil((float) upgradeCost / (float) singleItemWorth);
+                int remainingItems = stack.getCount() - itemsNeeded;
+
+                long itemsUsedWorth = itemsNeeded * singleItemWorth;
+                bonusPoints += (itemsUsedWorth - upgradeCost);
+                upgradeCost -= itemsUsedWorth;
+
+                if (remainingItems <= 0) {
+                    this.items.set(i, ItemStack.EMPTY);
+                } else {
+                    stack.setCount(remainingItems);
+                    this.items.set(i, stack);
                 }
-                stack.setCount(stackCount);
             }
-            this.items.set(i, stack);
         }
         this.setChanged();
         return true;
