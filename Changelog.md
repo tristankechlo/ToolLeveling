@@ -1,5 +1,8 @@
 # Changelog
 
+### Version 1.18.2 - 1.4.5
+- fix incorrect calculation when using up items from the inventory
+
 ### Version 1.18.2 - 1.4.4
 - **THIS UPDATE WILL RESET YOUR CONFIG, MAKE BACKUPS BEFORE LOADING**
 - backport all updates from newer versions
