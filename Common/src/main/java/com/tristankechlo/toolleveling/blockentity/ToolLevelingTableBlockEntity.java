@@ -151,4 +151,10 @@ public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity imple
         return this.getItem(0);
     }
 
+    @Override
+    public void setChanged() {
+        super.setChanged();
+        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2);
+    }
+
 }

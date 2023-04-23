@@ -1,6 +1,7 @@
 package com.tristankechlo.toolleveling.platform;
 
 import com.tristankechlo.toolleveling.ToolLeveling;
+import com.tristankechlo.toolleveling.blockentity.ForgeBlockEntity;
 import com.tristankechlo.toolleveling.blockentity.ToolLevelingTableBlockEntity;
 import com.tristankechlo.toolleveling.menu.ToolLevelingTableMenu;
 import net.minecraft.core.BlockPos;
@@ -39,7 +40,7 @@ public class ForgePlatformHelper implements PlatformHelper {
 
     @Override
     public Supplier<BlockEntityType<? extends ToolLevelingTableBlockEntity>> buildBlockEntityType() {
-        return () -> BlockEntityType.Builder.of(ToolLevelingTableBlockEntity::new, ToolLeveling.TLT_BLOCK.get()).build(null);
+        return () -> BlockEntityType.Builder.of(ForgeBlockEntity::new, ToolLeveling.TLT_BLOCK.get()).build(null);
     }
 
     @Override
@@ -49,7 +50,7 @@ public class ForgePlatformHelper implements PlatformHelper {
 
     @Override
     public ToolLevelingTableBlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new ToolLevelingTableBlockEntity(pos, state);
+        return new ForgeBlockEntity(pos, state);
     }
 
 }

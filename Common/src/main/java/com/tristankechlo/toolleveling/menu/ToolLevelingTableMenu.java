@@ -37,7 +37,17 @@ public class ToolLevelingTableMenu extends AbstractContainerMenu {
         this.pos = pos;
 
         // upgrade slot
-        this.addSlot(new UpgradeSlot(container, 0, 53, 53));
+        this.addSlot(new UpgradeSlot(container, 0, 54, 54));
+
+        // payment slots
+        this.addSlot(new PaymentSlot(container, 1, 21, 54));
+        this.addSlot(new PaymentSlot(container, 2, 71, 23));
+        this.addSlot(new PaymentSlot(container, 3, 71, 85));
+
+        // enchanted book slots
+        this.addSlot(new BookSlot(container, 4, 37, 23));
+        this.addSlot(new BookSlot(container, 5, 87, 54));
+        this.addSlot(new BookSlot(container, 6, 37, 85));
 
         // main inventory
         int startX = 8;
@@ -53,27 +63,53 @@ public class ToolLevelingTableMenu extends AbstractContainerMenu {
         for (int column = 0; column < 9; column++) {
             this.addSlot(new Slot(playerInv, column, startX + (column * slotSizePlus2), startY));
         }
-
-        // payment slots
-        this.addSlot(new PaymentSlot(container, 1, 21, 54));
-        this.addSlot(new PaymentSlot(container, 2, 71, 23));
-        this.addSlot(new PaymentSlot(container, 3, 71, 85));
-
-        // enchanted book slots
-        this.addSlot(new BookSlot(container, 4, 37, 23));
-        this.addSlot(new BookSlot(container, 5, 87, 54));
-        this.addSlot(new BookSlot(container, 6, 37, 85));
     }
 
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.slots.get(index);
+        Slot clickedSlot = this.slots.get(index);
         int slotCount = ToolLevelingTableBlockEntity.NUMBER_OF_SLOTS;
-        if (!slot.hasItem()) {
+
+        if (!clickedSlot.hasItem()) { // clicked on an empty slot
             return itemstack;
         }
-        return null;
+
+        ItemStack itemstack1 = clickedSlot.getItem();
+        itemstack = itemstack1.copy();
+
+        if (index >= 0 && index < slotCount) { // shift clicked in the table
+            if (!this.moveItemStackTo(itemstack1, slotCount, 36 + slotCount, true)) {
+                return ItemStack.EMPTY;
+            }
+        } else if (this.slots.get(1).mayPlace(itemstack1)) { // try placing into book slot
+            if (!this.moveItemStackTo(itemstack1, 1, 4, false)) {
+                return ItemStack.EMPTY;
+            }
+        } else if (this.slots.get(4).mayPlace(itemstack1)) { // try placing into payment slot
+            if (!this.moveItemStackTo(itemstack1, 4, slotCount, false)) {
+                return ItemStack.EMPTY;
+            }
+        } else { // try placing into upgrade slot
+            if (this.slots.get(0).hasItem() || !this.slots.get(0).mayPlace(itemstack1)) {
+                return ItemStack.EMPTY;
+            }
+            ItemStack itemstack2 = itemstack1.copy();
+            itemstack2.setCount(1);
+            itemstack1.shrink(1);
+            this.slots.get(0).set(itemstack2);
+        }
+
+        if (itemstack1.isEmpty()) {
+            clickedSlot.set(ItemStack.EMPTY);
+        } else {
+            clickedSlot.setChanged();
+        }
+        if (itemstack1.getCount() == itemstack.getCount()) {
+            return ItemStack.EMPTY;
+        }
+        clickedSlot.onTake(player, itemstack1);
+        return itemstack;
     }
 
     @Override
