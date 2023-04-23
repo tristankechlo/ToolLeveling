@@ -1,0 +1,42 @@
+{
+    "schemaVersion": 1,
+    "id": "toolleveling",
+    "version": "${version}",
+    "name": "ToolLeveling+",
+    "description": "adds the possibility to upgrade your enchantments higher than the vanilla limit",
+    "authors": [
+        "Buecher_wurm"
+    ],
+    "contact": {
+        "sources": "https://github.com/tristankechlo/ToolLeveling",
+        "issues": "https://github.com/tristankechlo/ToolLeveling/issues",
+        "homepage": "https://github.com/tristankechlo/ToolLeveling"
+    },
+    "license": "CC BY-NC-ND 4.0",
+    "icon": "logo.png",
+    "environment": "*",
+    "entrypoints": {
+        "main": [
+            "com.tristankechlo.toolleveling.FabricToolLeveling"
+        ]
+    },
+    "mixins": [
+        "toolleveling.mixins.json"
+    ],
+    "depends": {
+        "fabricloader": ">=0.14",
+        "fabric": "*",
+        "minecraft": ">=1.19.2",
+        "java": ">=17"
+    },
+    "custom": {
+        "modmenu": {
+            "links": {
+                "modmenu.discord": "https://discord.gg/bhUaWhq",
+                "modmenu.curseforge": "https://www.curseforge.com/minecraft/mc-mods/tool-leveling-plus-fabric",
+                "modmenu.modrinth": "https://modrinth.com/mod/tool-leveling",
+                "modmenu.wiki": "https://github.com/tristankechlo/ToolLeveling/wiki"
+            }
+        }
+    }
+}

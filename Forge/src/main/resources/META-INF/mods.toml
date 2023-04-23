@@ -1,0 +1,28 @@
+modLoader="javafml"
+loaderVersion="[45,)"
+license="CC BY-NC-ND 4.0"
+showAsResourcePack=false
+issueTrackerURL="https://github.com/tristankechlo/ToolLeveling/issues"
+
+[[mods]]
+modId="toolleveling"
+version="${version}"
+displayName="ToolLeveling+"
+displayURL="https://github.com/tristankechlo/ToolLeveling"
+logoFile="banner.png"
+authors="Buecher_wurm"
+description='''adds the possibility to upgrade your enchantments higher than the vanilla limit'''
+
+[[dependencies.toolleveling]]
+modId="forge"
+mandatory=true
+versionRange="[45,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.toolleveling]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.19.4,1.20)"
+ordering="NONE"
+side="BOTH"
