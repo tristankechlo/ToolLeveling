@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " g ",
+        "gEg",
+        "OOO"
+    ],
+    "key": {
+        "g": {
+            "tag": "forge:ingots/gold"
+        },
+        "E": {
+            "item": "minecraft:enchanting_table"
+        },
+        "O": {
+            "tag": "forge:obsidian"
+        }
+    },
+    "result": {
+        "item": "toolleveling:tool_leveling_table",
+        "count": 1
+    }
+}

@@ -1,0 +1,7 @@
+{
+    "variants" : {
+        "" : {
+            "model" : "toolleveling:block/tool_leveling_table"
+        }
+    }
+}
