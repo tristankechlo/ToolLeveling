@@ -1,9 +1,10 @@
 {
     "required": true,
-    "package": "com.tristankechlo.toolleveing.mixin",
+    "package": "com.tristankechlo.toolleveling.mixins",
     "compatibilityLevel": "JAVA_17",
     "minVersion": "0.8",
     "mixins": [
+        "EnchantmentHelperMixin"
     ],
     "client": [
     ],
