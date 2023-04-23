@@ -33,6 +33,7 @@ public class ToolLeveling {
     public static final RegistryObject<MenuType<ToolLevelingTableMenu>> TLT_MENU = MENU_TYPES.register(TABLE_NAME, PlatformHelper.INSTANCE.buildMenuType());
 
     public static void init() {
+        LOGGER.info("Initializing " + MOD_NAME + "...");
     }
 
 }
