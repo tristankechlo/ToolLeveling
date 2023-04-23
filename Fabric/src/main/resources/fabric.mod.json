@@ -18,6 +18,9 @@
     "entrypoints": {
         "main": [
             "com.tristankechlo.toolleveling.FabricToolLeveling"
+        ],
+        "client": [
+            "com.tristankechlo.toolleveling.FabricToolLevelingClient"
         ]
     },
     "mixins": [

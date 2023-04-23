@@ -1,6 +1,9 @@
 package com.tristankechlo.toolleveling;
 
+import com.tristankechlo.toolleveling.blockentity.ToolLevelingTableBlockEntity;
 import com.tristankechlo.toolleveling.blocks.ToolLevelingTableBlock;
+import com.tristankechlo.toolleveling.menu.ToolLevelingTableMenu;
+import com.tristankechlo.toolleveling.platform.PlatformHelper;
 import com.tristankechlo.toolleveling.platform.RegistrationProvider;
 import com.tristankechlo.toolleveling.platform.RegistryObject;
 import net.minecraft.core.registries.Registries;
@@ -26,6 +29,8 @@ public class ToolLeveling {
 
     public static final RegistryObject<Block> TLT_BLOCK = BLOCKS.register(TABLE_NAME, ToolLevelingTableBlock::new);
     public static final RegistryObject<Item> TLT_ITEM = ITEMS.register(TABLE_NAME, () -> new BlockItem(TLT_BLOCK.get(), new Item.Properties()));
+    public static final RegistryObject<BlockEntityType<? extends ToolLevelingTableBlockEntity>> TLT_BLOCK_ENTITY = BLOCK_ENTITIES.register(TABLE_NAME, PlatformHelper.INSTANCE.buildBlockEntityType());
+    public static final RegistryObject<MenuType<ToolLevelingTableMenu>> TLT_MENU = MENU_TYPES.register(TABLE_NAME, PlatformHelper.INSTANCE.buildMenuType());
 
     public static void init() {
     }

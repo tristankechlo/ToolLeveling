@@ -14,6 +14,7 @@ public class ForgeToolLeveling {
         ToolLeveling.init();
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        modEventBus.addListener(ForgeToolLevelingClient::init);
         modEventBus.addListener(this::populateCreativeTab);
 
         MinecraftForge.EVENT_BUS.register(this);
