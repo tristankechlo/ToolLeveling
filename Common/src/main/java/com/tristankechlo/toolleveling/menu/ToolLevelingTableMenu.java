@@ -2,25 +2,31 @@ package com.tristankechlo.toolleveling.menu;
 
 import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.blockentity.ToolLevelingTableBlockEntity;
-import com.tristankechlo.toolleveling.menu.slot.BookSlot;
-import com.tristankechlo.toolleveling.menu.slot.PaymentSlot;
+import com.tristankechlo.toolleveling.menu.slot.PredicateSlot;
 import com.tristankechlo.toolleveling.menu.slot.UpgradeSlot;
+import com.tristankechlo.toolleveling.util.Predicates;
+import com.tristankechlo.toolleveling.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ToolLevelingTableMenu extends AbstractContainerMenu {
 
-    private static final EquipmentSlot[] VALID_EQUIPMENT_SLOTS = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
-    private static final int[][] EQUIPMENT_SLOT_POINTS = new int[][]{{197, 136}, {197, 154}, {215, 136}, {215, 154}};
     private final Container table;
     private final Level level;
     private final BlockPos pos;
@@ -37,21 +43,21 @@ public class ToolLevelingTableMenu extends AbstractContainerMenu {
         this.pos = pos;
 
         // upgrade slot
-        this.addSlot(new UpgradeSlot(container, 0, 54, 54));
+        this.addSlot(new UpgradeSlot(container, 0, 80, 49));
 
         // payment slots
-        this.addSlot(new PaymentSlot(container, 1, 21, 54));
-        this.addSlot(new PaymentSlot(container, 2, 71, 23));
-        this.addSlot(new PaymentSlot(container, 3, 71, 85));
+        this.addSlot(new PredicateSlot(container, 1, 49, 50, Predicates.PAYMENT));
+        this.addSlot(new PredicateSlot(container, 2, 97, 80, Predicates.PAYMENT));
+        this.addSlot(new PredicateSlot(container, 3, 97, 18, Predicates.PAYMENT));
 
         // enchanted book slots
-        this.addSlot(new BookSlot(container, 4, 37, 23));
-        this.addSlot(new BookSlot(container, 5, 87, 54));
-        this.addSlot(new BookSlot(container, 6, 37, 85));
+        this.addSlot(new PredicateSlot(container, 4, 63, 18, Predicates.BOOK));
+        this.addSlot(new PredicateSlot(container, 5, 63, 80, Predicates.BOOK));
+        this.addSlot(new PredicateSlot(container, 6, 111, 49, Predicates.BOOK));
 
         // main inventory
         int startX = 8;
-        int startY = 125;
+        int startY = 112;
         int slotSizePlus2 = 18;
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 9; column++) {
@@ -59,7 +65,7 @@ public class ToolLevelingTableMenu extends AbstractContainerMenu {
             }
         }
         // hotbar
-        startY = 183;
+        startY += 58;
         for (int column = 0; column < 9; column++) {
             this.addSlot(new Slot(playerInv, column, startX + (column * slotSizePlus2), startY));
         }
@@ -119,6 +125,21 @@ public class ToolLevelingTableMenu extends AbstractContainerMenu {
 
     public BlockPos getPos() {
         return this.pos;
+    }
+
+    public List<Tuple<Enchantment, Float>> getPercentages() {
+        int totalWeight = 0;
+        Map<Enchantment, Integer> enchantments = new HashMap<>();
+        for (int i = 4; i < 7; i++) {
+            ItemStack stack = this.slots.get(i).getItem();
+            Map<Enchantment, Integer> m = EnchantmentHelper.getEnchantments(stack);
+            for (Map.Entry<Enchantment, Integer> entry : m.entrySet()) {
+                enchantments.merge(entry.getKey(), entry.getValue(), Integer::sum);
+                totalWeight += entry.getValue();
+            }
+        }
+        int finalTotalWeight = totalWeight;
+        return enchantments.entrySet().stream().map(e -> new Tuple<>(e.getKey(), (float) e.getValue() / (float) finalTotalWeight)).collect(Collectors.toList());
     }
 
 }
