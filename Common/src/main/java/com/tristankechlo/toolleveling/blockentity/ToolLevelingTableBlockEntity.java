@@ -1,5 +1,6 @@
 package com.tristankechlo.toolleveling.blockentity;
 
+import com.google.common.base.Preconditions;
 import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.menu.ToolLevelingTableMenu;
 import com.tristankechlo.toolleveling.util.Predicates;
@@ -11,10 +12,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.util.RandomSource;
-import net.minecraft.util.random.SimpleWeightedRandomList;
-import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
@@ -22,21 +19,17 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.IntStream;
 
 public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer {
 
     private static final Component CONTAINER_NAME = Component.translatable("container." + ToolLeveling.MOD_ID + "." + ToolLeveling.TABLE_NAME);
     private NonNullList<ItemStack> items = NonNullList.withSize(NUMBER_OF_SLOTS, ItemStack.EMPTY);
-    public static final int NUMBER_OF_SLOTS = 7;
+    public static final int NUMBER_OF_SLOTS = 10;
     public static final int[] SLOTS = IntStream.range(1, NUMBER_OF_SLOTS).toArray();
 
     public ToolLevelingTableBlockEntity(BlockPos pos, BlockState state) {
@@ -126,8 +119,11 @@ public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity imple
         if (index >= 1 && index <= 3) {
             return Predicates.PAYMENT.test(stack);
         }
-        if (index >= 4 && index < NUMBER_OF_SLOTS) {
+        if (index >= 4 && index <= 6) {
             return Predicates.BOOK.test(stack);
+        }
+        if (index >= 7 && index <= 9) {
+            return Predicates.BONUS.test(stack);
         }
         return false;
     }
@@ -142,6 +138,20 @@ public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity imple
     @Override
     public Packet<ClientGamePacketListener> getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    public final void sync() {
+        Preconditions.checkNotNull(this.level);
+        if (this.level.isClientSide()) {
+            throw new IllegalStateException("Cannot call sync() on the logical client!");
+        }
+        level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
+    }
+
+    @Override
+    public void setChanged() {
+        super.setChanged();
+        this.sync();
     }
 
     @Override
@@ -161,20 +171,6 @@ public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity imple
 
     public ItemStack getStackToEnchant() {
         return this.getItem(0);
-    }
-
-    public Optional<Enchantment> getRandomEnchantment(RandomSource random) {
-        SimpleWeightedRandomList.Builder<Enchantment> builder = new SimpleWeightedRandomList.Builder<>();
-
-        for (int i = 4; i < 7; i++) {
-            ItemStack stack = this.getItem(i);
-            Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
-            enchantments.forEach(builder::add);
-        }
-
-        SimpleWeightedRandomList<Enchantment> enchantmentWeights = builder.build();
-        Optional<WeightedEntry.Wrapper<Enchantment>> result = enchantmentWeights.getRandom(random);
-        return result.map(WeightedEntry.Wrapper::getData);
     }
 
 }

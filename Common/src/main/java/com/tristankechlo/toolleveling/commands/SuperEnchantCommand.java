@@ -5,6 +5,8 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import com.tristankechlo.toolleveling.config.CommandConfig;
+import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -64,8 +66,8 @@ public final class SuperEnchantCommand {
             throws CommandSyntaxException {
         int i = 0;
         Enchantment enchantment = enchantmentIn.value();
-        boolean allowUnsupportedEnchantments = true;
-        boolean allowIncompatibleEnchantments = true;
+        boolean allowUnsupportedEnchantments = CommandConfig.allowWrongEnchantments.get();
+        boolean allowIncompatibleEnchantments = CommandConfig.allowIncompatibleEnchantments.get();
 
         for (Entity entity : targets) {
             if (entity instanceof LivingEntity) {

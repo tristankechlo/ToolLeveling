@@ -5,7 +5,6 @@ import com.tristankechlo.toolleveling.blockentity.ToolLevelingTableBlockEntity;
 import com.tristankechlo.toolleveling.menu.slot.PredicateSlot;
 import com.tristankechlo.toolleveling.menu.slot.UpgradeSlot;
 import com.tristankechlo.toolleveling.util.Predicates;
-import com.tristankechlo.toolleveling.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.Tuple;
@@ -43,17 +42,22 @@ public class ToolLevelingTableMenu extends AbstractContainerMenu {
         this.pos = pos;
 
         // upgrade slot
-        this.addSlot(new UpgradeSlot(container, 0, 80, 49));
+        this.addSlot(new UpgradeSlot(container, 0, 56, 49));
 
         // payment slots
-        this.addSlot(new PredicateSlot(container, 1, 49, 50, Predicates.PAYMENT));
-        this.addSlot(new PredicateSlot(container, 2, 97, 80, Predicates.PAYMENT));
-        this.addSlot(new PredicateSlot(container, 3, 97, 18, Predicates.PAYMENT));
+        this.addSlot(new PredicateSlot(container, 1, 25, 50, Predicates.PAYMENT));
+        this.addSlot(new PredicateSlot(container, 2, 73, 80, Predicates.PAYMENT));
+        this.addSlot(new PredicateSlot(container, 3, 73, 18, Predicates.PAYMENT));
 
         // enchanted book slots
-        this.addSlot(new PredicateSlot(container, 4, 63, 18, Predicates.BOOK));
-        this.addSlot(new PredicateSlot(container, 5, 63, 80, Predicates.BOOK));
-        this.addSlot(new PredicateSlot(container, 6, 111, 49, Predicates.BOOK));
+        this.addSlot(new PredicateSlot(container, 4, 39, 18, Predicates.BOOK));
+        this.addSlot(new PredicateSlot(container, 5, 39, 80, Predicates.BOOK));
+        this.addSlot(new PredicateSlot(container, 6, 87, 49, Predicates.BOOK));
+
+        // bonus slots
+        this.addSlot(new PredicateSlot(container, 7, 134, 18, Predicates.BONUS, 1));
+        this.addSlot(new PredicateSlot(container, 8, 134, 36, Predicates.BONUS, 1));
+        this.addSlot(new PredicateSlot(container, 9, 134, 54, Predicates.BONUS, 1));
 
         // main inventory
         int startX = 8;
@@ -93,15 +97,26 @@ public class ToolLevelingTableMenu extends AbstractContainerMenu {
                 return ItemStack.EMPTY;
             }
         } else if (this.slots.get(4).mayPlace(itemstack1)) { // try placing into payment slot
-            if (!this.moveItemStackTo(itemstack1, 4, slotCount, false)) {
+            if (!this.moveItemStackTo(itemstack1, 4, 7, false)) {
                 return ItemStack.EMPTY;
+            }
+        } else if (this.slots.get(7).mayPlace(itemstack1)) { // try placing into bonus slot
+            if (this.slots.get(7).hasItem() && this.slots.get(8).hasItem() && this.slots.get(9).hasItem()) {
+                return ItemStack.EMPTY;
+            }
+            ItemStack itemstack2 = itemstack1.copyWithCount(1);
+            itemstack1.shrink(1); // reduce original stack size by 1
+            for (int i = 7; i < 10; i++) {
+                if (!this.slots.get(i).hasItem()) {
+                    this.slots.get(i).set(itemstack2);
+                    break;
+                }
             }
         } else { // try placing into upgrade slot
             if (this.slots.get(0).hasItem() || !this.slots.get(0).mayPlace(itemstack1)) {
                 return ItemStack.EMPTY;
             }
-            ItemStack itemstack2 = itemstack1.copy();
-            itemstack2.setCount(1);
+            ItemStack itemstack2 = itemstack1.copyWithCount(1);
             itemstack1.shrink(1);
             this.slots.get(0).set(itemstack2);
         }
@@ -127,7 +142,16 @@ public class ToolLevelingTableMenu extends AbstractContainerMenu {
         return this.pos;
     }
 
-    public List<Tuple<Enchantment, Float>> getPercentages() {
+    public boolean hasAnyBooks() {
+        for (int i = 4; i < 7; i++) {
+            if (this.slots.get(i).hasItem()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public List<Tuple<String, Float>> getPercentages() {
         int totalWeight = 0;
         Map<Enchantment, Integer> enchantments = new HashMap<>();
         for (int i = 4; i < 7; i++) {
@@ -139,7 +163,7 @@ public class ToolLevelingTableMenu extends AbstractContainerMenu {
             }
         }
         int finalTotalWeight = totalWeight;
-        return enchantments.entrySet().stream().map(e -> new Tuple<>(e.getKey(), (float) e.getValue() / (float) finalTotalWeight)).collect(Collectors.toList());
+        return enchantments.entrySet().stream().map(e -> new Tuple<>(e.getKey().getDescriptionId(), (float) e.getValue() / (float) finalTotalWeight)).collect(Collectors.toList());
     }
 
 }

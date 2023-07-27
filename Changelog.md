@@ -2,6 +2,8 @@
 
 ### Version 1.19.4 - 2.0.0
 
+- new interface for the tool leveling table
+
 ### Version 1.19.4 - 1.4.5
 
 - fix incorrect calculation when using up items from the inventory

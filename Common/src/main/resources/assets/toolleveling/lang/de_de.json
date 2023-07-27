@@ -1,5 +1,7 @@
 {
-    "block.toolleveling.tool_leveling_table": "Tool Leveling Table",
-    "container.toolleveling.tool_leveling_table": "Tool Leveling Table",
-    "commands.superenchant.failed": "%s kann damit nicht verzaubert werden, du kannst dies in der ToolLevelingConfig \u00C4ndern (%s)"
+    "commands.superenchant.failed": "%s kann damit nicht verzaubert werden, du kannst dies in der ToolLevelingConfig \u00C4ndern (%s)",
+    "screen.toolleveling.tool_leveling_table.success_chance": "Erfolgschance",
+    "screen.toolleveling.tool_leveling_table.tooltip.percentages": "Wahrscheinlichkeiten umschalten",
+    "screen.toolleveling.tool_leveling_table.tooltip.help": "Hilfe umschalten",
+    "screen.toolleveling.tool_leveling_table.percentages.title": "Wahrscheinlichkeiten"
 }
