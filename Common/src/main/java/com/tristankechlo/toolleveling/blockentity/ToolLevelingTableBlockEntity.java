@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.menu.ToolLevelingTableMenu;
 import com.tristankechlo.toolleveling.util.Predicates;
+import com.tristankechlo.toolleveling.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -176,6 +177,17 @@ public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity imple
 
     public ItemStack getStackToEnchant() {
         return this.getItem(0);
+    }
+
+    public boolean canStartUpgrade() {
+        // in all three book slots is an enchantment book
+        for (int i = 4; i <= 6; i++) {
+            if (this.getItem(i).isEmpty()) {
+                return false;
+            }
+        }
+        // the upgrade slot is not empty
+        return !getStackToEnchant().isEmpty();
     }
 
     public List<WeightedEntry.Wrapper<Enchantment>> getEnchantments() {

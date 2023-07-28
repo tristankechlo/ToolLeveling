@@ -5,6 +5,7 @@ import com.tristankechlo.toolleveling.blockentity.ToolLevelingTableBlockEntity;
 import com.tristankechlo.toolleveling.menu.slot.PredicateSlot;
 import com.tristankechlo.toolleveling.menu.slot.UpgradeSlot;
 import com.tristankechlo.toolleveling.util.Predicates;
+import com.tristankechlo.toolleveling.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
@@ -147,6 +148,14 @@ public class ToolLevelingTableMenu extends AbstractContainerMenu {
             }
         }
         return false;
+    }
+
+    public int getCycles() {
+        return Util.getCycles(this.table);
+    }
+
+    public int getLevels() {
+        return Util.getLevels(this.table);
     }
 
     public List<PercentageHolder> getPercentages() {
