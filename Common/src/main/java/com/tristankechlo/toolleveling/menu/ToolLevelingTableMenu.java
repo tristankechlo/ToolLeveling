@@ -7,7 +7,6 @@ import com.tristankechlo.toolleveling.menu.slot.UpgradeSlot;
 import com.tristankechlo.toolleveling.util.Predicates;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -22,7 +21,6 @@ import net.minecraft.world.level.Level;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class ToolLevelingTableMenu extends AbstractContainerMenu {
 
@@ -151,19 +149,41 @@ public class ToolLevelingTableMenu extends AbstractContainerMenu {
         return false;
     }
 
-    public List<Tuple<String, Float>> getPercentages() {
+    public List<PercentageHolder> getPercentages() {
         int totalWeight = 0;
         Map<Enchantment, Integer> enchantments = new HashMap<>();
-        for (int i = 4; i < 7; i++) {
+        for (int i = 4; i <= 6; i++) {
             ItemStack stack = this.slots.get(i).getItem();
-            Map<Enchantment, Integer> m = EnchantmentHelper.getEnchantments(stack);
+            var m = EnchantmentHelper.getEnchantments(stack);
             for (Map.Entry<Enchantment, Integer> entry : m.entrySet()) {
                 enchantments.merge(entry.getKey(), entry.getValue(), Integer::sum);
                 totalWeight += entry.getValue();
             }
         }
-        int finalTotalWeight = totalWeight;
-        return enchantments.entrySet().stream().map(e -> new Tuple<>(e.getKey().getDescriptionId(), (float) e.getValue() / (float) finalTotalWeight)).collect(Collectors.toList());
+        float finalWeight = totalWeight;
+        return enchantments.entrySet().stream().map(PercentageHolder::new).map((p) -> p.calcPercentage(finalWeight)).sorted().toList();
     }
 
+    public static class PercentageHolder implements Comparable<PercentageHolder> {
+
+        public final Enchantment enchantment;
+        private final int weight;
+        public float percentage;
+
+        public PercentageHolder(Map.Entry<Enchantment, Integer> entry) {
+            enchantment = entry.getKey();
+            weight = entry.getValue();
+        }
+
+        public PercentageHolder calcPercentage(float totalWeight) {
+            percentage = weight / totalWeight;
+            return this;
+        }
+
+        @Override
+        public int compareTo(PercentageHolder o) {
+            return Float.compare(o.percentage, this.percentage);
+        }
+
+    }
 }

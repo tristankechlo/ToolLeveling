@@ -14,4 +14,11 @@ public interface NetworkHelper {
 
     void openMenu(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit);
 
+    /**
+     * Sends a packet to the server to start the upgrade process
+     *
+     * @param pos the position of the Tool Leveling Table
+     */
+    void startUpgradeProcess(BlockPos pos);
+
 }

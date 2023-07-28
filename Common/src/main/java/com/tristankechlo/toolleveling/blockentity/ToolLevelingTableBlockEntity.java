@@ -12,6 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
@@ -19,15 +20,19 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.IntStream;
 
 public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer {
 
-    private static final Component CONTAINER_NAME = Component.translatable("container." + ToolLeveling.MOD_ID + "." + ToolLeveling.TABLE_NAME);
+    private static final Component CONTAINER_NAME = Component.translatable("container.toolleveling.tool_leveling_table");
     private NonNullList<ItemStack> items = NonNullList.withSize(NUMBER_OF_SLOTS, ItemStack.EMPTY);
     public static final int NUMBER_OF_SLOTS = 10;
     public static final int[] SLOTS = IntStream.range(1, NUMBER_OF_SLOTS).toArray();
@@ -171,6 +176,19 @@ public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity imple
 
     public ItemStack getStackToEnchant() {
         return this.getItem(0);
+    }
+
+    public List<WeightedEntry.Wrapper<Enchantment>> getEnchantments() {
+        var weights = new ArrayList<WeightedEntry.Wrapper<Enchantment>>();
+
+        for (int i = 4; i <= 6; i++) {
+            var enchantments = EnchantmentHelper.getEnchantments(this.items.get(i));
+            for (var entry : enchantments.entrySet()) {
+                weights.add(WeightedEntry.wrap(entry.getKey(), entry.getValue()));
+            }
+        }
+
+        return weights;
     }
 
 }

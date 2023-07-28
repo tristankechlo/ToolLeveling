@@ -3,6 +3,8 @@
     "container.toolleveling.tool_leveling_table": "Tool Leveling Table",
     "commands.superenchant.failed": "%s cannot support that enchantment, you can enable this in the ToolLevelingConfig (%s)",
     "screen.toolleveling.tool_leveling_table.success_chance": "Success Chance",
+    "screen.toolleveling.tool_leveling_table.min_success_chance": "Minimum",
+    "screen.toolleveling.tool_leveling_table.max_success_chance": "Maximum",
     "screen.toolleveling.tool_leveling_table.tooltip.help": "Toggle Help",
     "screen.toolleveling.tool_leveling_table.tooltip.percentages": "Toggle Percentages",
     "screen.toolleveling.tool_leveling_table.percentages.title": "Percentages",

@@ -3,7 +3,9 @@ package com.tristankechlo.toolleveling.client;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.tristankechlo.toolleveling.ToolLeveling;
+import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
 import com.tristankechlo.toolleveling.menu.ToolLevelingTableMenu;
+import com.tristankechlo.toolleveling.network.NetworkHelper;
 import com.tristankechlo.toolleveling.util.Util;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.components.Button;
@@ -12,7 +14,6 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.player.Inventory;
 
 import java.util.List;
@@ -23,11 +24,13 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
     private static final ResourceLocation GUI_TEXTURE = new ResourceLocation(ToolLeveling.MOD_ID, "textures/gui/tool_leveling_table.png");
     private static final Tooltip TOOLTIP_PERCENTAGES = Tooltip.create(make(".tooltip.percentages"));
     private static final Tooltip TOOLTIP_HELP = Tooltip.create(make(".tooltip.help"));
-    private static final Component PERCENTAGES_TITLE = make(".percentages.title").withStyle(ChatFormatting.GRAY);
+    private static final Component PERCENTAGES_TITLE = make(".percentages.title").withStyle(ChatFormatting.GOLD, ChatFormatting.UNDERLINE);
     private static boolean shouldRenderPercentages = false;
     private static boolean shouldRenderHelp = false;
     private final InfoFieldRenderer percentagesInfoField = new InfoFieldRenderer(0xFF212121, 0xFF7C0053, 0xFFD82FA0);
     private final InfoFieldRenderer successChanceField = new InfoFieldRenderer(0xFF212121, 0xFF3B51BF, 0xFF4F80FF);
+    private Component minChanceText;
+    private Component maxChanceText;
     private byte ticksSinceUpdate = 0;
     private Button infoButton;
     private Button helpButton;
@@ -50,7 +53,14 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
                 .pos(this.leftPos + this.imageWidth - 18, this.topPos + 94).size(14, 14)
                 .tooltip(TOOLTIP_HELP).build());
 
+        this.addRenderableWidget(new Button.Builder(Component.literal("start"), (b) -> {
+            NetworkHelper.INSTANCE.startUpgradeProcess(this.getMenu().getPos());
+        }).pos(this.leftPos + imageWidth - 76, this.topPos + 94).size(40, 14).build());
+
         this.percentagesInfoField.setSpaceAfterTitle(true);
+
+        this.minChanceText = makePercentageComponent("screen.toolleveling.tool_leveling_table.min_success_chance", ToolLevelingConfig.minSuccessChance.get() / 100);
+        this.maxChanceText = makePercentageComponent("screen.toolleveling.tool_leveling_table.max_success_chance", ToolLevelingConfig.maxSuccessChance.get() / 100);
     }
 
     @Override
@@ -65,15 +75,14 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
 
             // update percentages
             var percentages = this.getMenu().getPercentages();
-            percentages.sort((o1, o2) -> Float.compare(o2.getB(), o1.getB()));
-            var components = percentages.stream().map(ToolLevelingTableScreen::createComponent).collect(Collectors.toList());
+            var components = percentages.stream().map(ToolLevelingTableScreen::makePercentageComponent).collect(Collectors.toList());
             components.add(0, PERCENTAGES_TITLE);
             this.percentagesInfoField.setLines(components);
 
             // update success chance
             float successChance = Util.getSuccessChance(this.getMenu());
-            Component chanceText = createComponent(new Tuple<>("screen.toolleveling.tool_leveling_table.success_chance", successChance));
-            this.successChanceField.setLines(List.of(chanceText));
+            Component chanceText = makePercentageComponent("screen.toolleveling.tool_leveling_table.success_chance", successChance);
+            this.successChanceField.setLines(List.of(chanceText, minChanceText, maxChanceText));
         }
     }
 
@@ -110,14 +119,6 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
         blit(poseStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
     }
 
-    private static Component createComponent(Tuple<String, Float> tuple) {
-        float percentage = tuple.getB();
-        percentage = Math.round(percentage * 10000F) / 100F; // round to 2 decimal place
-        MutableComponent text = Component.translatable(tuple.getA()).withStyle(ChatFormatting.GRAY);
-        text.append(Component.literal(" " + percentage + "%").withStyle(ChatFormatting.GREEN));
-        return text;
-    }
-
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (!this.infoButton.isMouseOver(mouseX, mouseY)) {
@@ -131,6 +132,17 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
 
     private static MutableComponent make(String string) {
         return Component.translatable("screen.toolleveling.tool_leveling_table" + string);
+    }
+
+    public static Component makePercentageComponent(ToolLevelingTableMenu.PercentageHolder p) {
+        return makePercentageComponent(p.enchantment.getDescriptionId(), p.percentage);
+    }
+
+    public static Component makePercentageComponent(String str, float percentage) {
+        percentage = Math.round(percentage * 10000F) / 100F; // round to 2 decimal place
+        MutableComponent text = Component.translatable(str).withStyle(ChatFormatting.GRAY);
+        text.append(Component.literal(" " + percentage + "%").withStyle(ChatFormatting.GREEN));
+        return text;
     }
 
 }
