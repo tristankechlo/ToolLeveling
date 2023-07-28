@@ -2,7 +2,7 @@ package com.tristankechlo.toolleveling.network;
 
 import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.blockentity.ToolLevelingTableBlockEntity;
-import com.tristankechlo.toolleveling.network.packets.StartUpgradeProcess;
+import com.tristankechlo.toolleveling.network.packets.TableUpgradeProcess;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -18,7 +18,6 @@ import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 
-import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 public final class ForgeNetworkHelper implements NetworkHelper {
@@ -28,11 +27,11 @@ public final class ForgeNetworkHelper implements NetworkHelper {
             new ResourceLocation(ToolLeveling.MOD_ID, "main"),
             () -> PROTOCOL_VERSION, PROTOCOL_VERSION::equals, PROTOCOL_VERSION::equals);
 
-    public static void registerPackets() {
-        INSTANCE.registerMessage(0, StartUpgradeProcess.class,
-                StartUpgradeProcess::encode,
-                StartUpgradeProcess::decode,
-                (msg, ctx) -> handle(msg, ctx, StartUpgradeProcess::handle));
+    public void registerPackets() {
+        INSTANCE.registerMessage(0, TableUpgradeProcess.class,
+                (msg, buf) -> TableUpgradeProcess.encode(buf, msg.pos()),
+                TableUpgradeProcess::decode,
+                (msg, ctx) -> handle(msg, ctx, TableUpgradeProcess::handle));
     }
 
     @Override
@@ -47,20 +46,20 @@ public final class ForgeNetworkHelper implements NetworkHelper {
 
     @Override
     public void startUpgradeProcess(BlockPos pos) {
-        INSTANCE.sendToServer(new StartUpgradeProcess(pos));
+        INSTANCE.sendToServer(new TableUpgradeProcess(pos));
     }
 
     /**
      * generic method to handle packets,
-     * unwraps the {@link ServerLevel} and calls the actual handler
+     * unwraps the {@link ServerLevel} and calls the actual packet handler
      */
-    static <MSG> void handle(MSG msg, Supplier<NetworkEvent.Context> context, BiConsumer<MSG, ServerLevel> handler) {
+    static <MSG> void handle(MSG msg, Supplier<NetworkEvent.Context> context, PacketHandler<MSG> handler) {
         context.get().enqueueWork(() -> {
             ServerPlayer player = context.get().getSender();
             if (player == null) {
                 return;
             }
-            handler.accept(msg, player.getLevel());
+            handler.handle(msg, player.getLevel());
         });
         context.get().setPacketHandled(true);
     }

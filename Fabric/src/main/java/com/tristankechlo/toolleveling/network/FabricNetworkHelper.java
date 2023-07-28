@@ -1,17 +1,15 @@
 package com.tristankechlo.toolleveling.network;
 
 import com.tristankechlo.toolleveling.ToolLeveling;
-import com.tristankechlo.toolleveling.network.packets.StartUpgradeProcess;
+import com.tristankechlo.toolleveling.network.packets.TableUpgradeProcess;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
@@ -23,8 +21,9 @@ public final class FabricNetworkHelper implements NetworkHelper {
 
     private static final ResourceLocation START_UPGRADE_PROCESS = new ResourceLocation(ToolLeveling.MOD_ID, "tool_leveling_table");
 
-    public static void registerPackets() {
-        ServerPlayNetworking.registerGlobalReceiver(START_UPGRADE_PROCESS, FabricNetworkHelper::handleStartUpgradeProcess);
+    public void registerPackets() {
+        ServerPlayNetworking.registerGlobalReceiver(START_UPGRADE_PROCESS,
+                (server, player, listener, buf, sender) -> handle(server, player, buf, TableUpgradeProcess::decode, TableUpgradeProcess::handle));
     }
 
     @Override
@@ -38,16 +37,20 @@ public final class FabricNetworkHelper implements NetworkHelper {
     @Override
     public void startUpgradeProcess(BlockPos pos) {
         FriendlyByteBuf buf = PacketByteBufs.create();
-        StartUpgradeProcess.encode(new StartUpgradeProcess(pos), buf);
+        TableUpgradeProcess.encode(buf, pos);
         ClientPlayNetworking.send(START_UPGRADE_PROCESS, buf);
     }
 
-    static void handleStartUpgradeProcess(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler, FriendlyByteBuf buf, PacketSender responseSender) {
+    /**
+     * generic method to handle packets,
+     * decodes the buffer and calls the actual packet handler
+     */
+    static <MSG> void handle(MinecraftServer server, ServerPlayer player, FriendlyByteBuf buf, PacketDecoder<MSG> decoder, PacketHandler<MSG> handler) {
         if (player == null) {
             return;
         }
-        StartUpgradeProcess msg = StartUpgradeProcess.decode(buf);
-        server.execute(() -> StartUpgradeProcess.handle(msg, player.getLevel()));
+        MSG msg = decoder.decode(buf);
+        server.execute(() -> handler.handle(msg, player.getLevel()));
     }
 
 }

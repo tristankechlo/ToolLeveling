@@ -3,6 +3,7 @@ package com.tristankechlo.toolleveling;
 import com.mojang.brigadier.CommandDispatcher;
 import com.tristankechlo.toolleveling.commands.SuperEnchantCommand;
 import com.tristankechlo.toolleveling.network.FabricNetworkHelper;
+import com.tristankechlo.toolleveling.network.NetworkHelper;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries;
@@ -16,8 +17,8 @@ public class FabricToolLeveling implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        ToolLeveling.init();
-        FabricNetworkHelper.registerPackets();
+        ToolLeveling.init(); // register all items, blocks, etc.
+        NetworkHelper.setup(); // register all packets
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(this::populateCreativeTab);
         CommandRegistrationCallback.EVENT.register(this::registerCommands);
     }

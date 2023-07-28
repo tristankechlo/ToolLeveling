@@ -1,7 +1,7 @@
 package com.tristankechlo.toolleveling;
 
 import com.tristankechlo.toolleveling.commands.SuperEnchantCommand;
-import com.tristankechlo.toolleveling.network.ForgeNetworkHelper;
+import com.tristankechlo.toolleveling.network.NetworkHelper;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.CreativeModeTabEvent;
@@ -14,9 +14,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 public class ForgeToolLeveling {
 
     public ForgeToolLeveling() {
-        ToolLeveling.init();
-
-        ForgeNetworkHelper.registerPackets();
+        ToolLeveling.init(); // register all items, blocks, etc.
+        NetworkHelper.setup(); // register all packets
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(ForgeToolLevelingClient::init);
