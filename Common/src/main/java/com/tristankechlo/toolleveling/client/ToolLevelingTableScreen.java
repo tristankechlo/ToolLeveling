@@ -8,6 +8,7 @@ import com.tristankechlo.toolleveling.menu.ToolLevelingTableMenu;
 import com.tristankechlo.toolleveling.network.NetworkHelper;
 import com.tristankechlo.toolleveling.util.ComponentUtil;
 import com.tristankechlo.toolleveling.util.Util;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -26,16 +27,16 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
     private static final Component PERCENTAGES_TITLE = ComponentUtil.makeTitle(".title.percentages");
     private static final Component SUCCESS_CHANCE_TITLE = ComponentUtil.makeTitle(".title.success_chance");
     private static final Component BONUS_TITLE = ComponentUtil.makeTitle(".title.bonuses");
+    private static final Component HELP = ComponentUtil.make(".help").withStyle(ChatFormatting.GRAY);
     private static boolean shouldRenderPercentages = false;
     private static boolean shouldRenderHelp = false;
-    private final InfoFieldRenderer percentagesInfoField = new InfoFieldRenderer(0xD9080808, 0xFF7C0053, 0xFFD82FA0);
+    private final InfoFieldRenderer percentagesField = new InfoFieldRenderer(0xD9080808, 0xFF8c045f, 0xFFD82FA0);
     private final InfoFieldRenderer successChanceField = new InfoFieldRenderer(0xD9080808, 0xFF3B51BF, 0xFF4F80FF);
     private final InfoFieldRenderer bonusItemField = new InfoFieldRenderer(0xD9080808, 0xFF007F0E, 0xFF00CC17);
+    private final InfoFieldRenderer helpField = new InfoFieldRenderer(0xFF212121, 0xFF000000, 0xFF555555);
     private Component minChanceText;
     private Component maxChanceText;
     private byte ticksSinceUpdate = 0;
-    private Button infoButton;
-    private Button helpButton;
 
     public ToolLevelingTableScreen(ToolLevelingTableMenu container, Inventory inv, Component name) {
         super(container, inv, name);
@@ -48,23 +49,27 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
     @Override
     protected void init() {
         super.init();
-        this.infoButton = this.addRenderableWidget(new Button.Builder(Component.literal("%"), (b) -> shouldRenderPercentages = !shouldRenderPercentages)
-                .pos(this.leftPos + this.imageWidth - 34, this.topPos + 94).size(14, 14)
-                .tooltip(TOOLTIP_PERCENTAGES).build());
-        this.helpButton = this.addRenderableWidget(new Button.Builder(Component.literal("?"), (b) -> shouldRenderHelp = !shouldRenderHelp)
+        // button percentages
+        this.addRenderableWidget(new Button.Builder(Component.literal("%"), (b) -> shouldRenderPercentages = !shouldRenderPercentages)
                 .pos(this.leftPos + this.imageWidth - 18, this.topPos + 94).size(14, 14)
+                .tooltip(TOOLTIP_PERCENTAGES).build());
+        // button help
+        this.addRenderableWidget(new Button.Builder(Component.literal("?"), (b) -> shouldRenderHelp = !shouldRenderHelp)
+                .pos(this.leftPos + this.imageWidth - 76, this.topPos + 94).size(14, 14)
                 .tooltip(TOOLTIP_HELP).build());
-
+        // button start upgrade process
         this.addRenderableWidget(new Button.Builder(Component.literal("start"), (b) -> {
             NetworkHelper.INSTANCE.startUpgradeProcess(this.getMenu().getPos());
-        }).pos(this.leftPos + imageWidth - 76, this.topPos + 94).size(40, 14).build());
+        }).pos(this.leftPos + imageWidth - 60, this.topPos + 94).size(40, 14).build());
 
-        this.percentagesInfoField.setSpaceAfterTitle(true);
+        this.percentagesField.setSpaceAfterTitle(true);
         this.successChanceField.setSpaceAfterTitle(true);
         this.bonusItemField.setSpaceAfterTitle(true);
 
         this.minChanceText = ComponentUtil.makeChance("min_success_chance", ToolLevelingConfig.minSuccessChance);
         this.maxChanceText = ComponentUtil.makeChance("max_success_chance", ToolLevelingConfig.maxSuccessChance);
+
+        this.helpField.setLines(List.of(HELP), font, this.leftPos - 10);
     }
 
     @Override
@@ -81,7 +86,7 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
             var percentages = this.getMenu().getPercentages();
             var components = percentages.stream().map(ComponentUtil::makePercentage).collect(Collectors.toList());
             components.add(0, PERCENTAGES_TITLE);
-            this.percentagesInfoField.setLines(components);
+            this.percentagesField.setLines(components);
 
             // update success chance
             float successChance = Util.getSuccessChance(this.getMenu());
@@ -108,17 +113,23 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
             int y = this.topPos;
             int fieldWidth = this.calcFieldWidth();
             if (this.getMenu().hasAnyBooks()) {
-                this.percentagesInfoField.render(poseStack, this.font, x, y, fieldWidth);
-                y += this.percentagesInfoField.calcHeight() + 1;
+                this.percentagesField.render(poseStack, this.font, x, y, fieldWidth);
+                y += this.percentagesField.calcHeight() + 1;
             }
             this.successChanceField.render(poseStack, this.font, x, y, fieldWidth);
             y += this.successChanceField.calcHeight() + 1;
             this.bonusItemField.render(poseStack, this.font, x, y, fieldWidth);
         }
+
+        if (shouldRenderHelp) {
+            int x = this.leftPos - this.helpField.calcWidth(this.font);
+            int y = this.topPos;
+            this.helpField.render(poseStack, this.font, x, y);
+        }
     }
 
     private int calcFieldWidth() {
-        int width1 = this.percentagesInfoField.calcWidth(this.font);
+        int width1 = this.percentagesField.calcWidth(this.font);
         int width2 = this.successChanceField.calcWidth(this.font);
         int width3 = this.bonusItemField.calcWidth(this.font);
         int targetWidth = Math.max(width1, Math.max(width2, width3)); // get the widest field
@@ -135,11 +146,10 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (!this.infoButton.isMouseOver(mouseX, mouseY)) {
-            this.infoButton.setFocused(false); // unfocus button if clicked outside of it
-        }
-        if (!this.helpButton.isMouseOver(mouseX, mouseY)) {
-            this.helpButton.setFocused(false); // unfocus button if clicked outside of it
+        for (var widget : this.children()) {
+            if (!widget.isMouseOver(mouseX, mouseY)) {
+                widget.setFocused(false);   // unfocus all widgets if clicked outside of them
+            }
         }
         return super.mouseClicked(mouseX, mouseY, button);
     }

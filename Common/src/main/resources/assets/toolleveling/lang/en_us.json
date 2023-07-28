@@ -12,6 +12,7 @@
     "screen.toolleveling.tool_leveling_table.title.percentages": "Percentages",
     "screen.toolleveling.tool_leveling_table.title.bonuses": "Bonuses",
     "screen.toolleveling.tool_leveling_table.title.success_chance": "Iteration Success",
+    "screen.toolleveling.tool_leveling_table.help": "Red Slot: Tool to upgrade\n\nPurple Slots: Enchanted Books\n\nBlue Slots: Lapis Lazuli\n\nGreen Slots: Nether Star or Enchanted Golden Apple",
     "enchantment.level.0": "0",
     "enchantment.level.11": "11",
     "enchantment.level.12": "12",
