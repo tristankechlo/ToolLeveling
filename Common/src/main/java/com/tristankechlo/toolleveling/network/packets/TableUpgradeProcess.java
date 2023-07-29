@@ -31,7 +31,7 @@ public record TableUpgradeProcess(BlockPos pos) {
         }
         BlockEntity entity = level.getBlockEntity(msg.pos);
         if ((entity instanceof ToolLevelingTableBlockEntity table)) {
-            if (!table.canStartUpgrade()) {
+            if (!Util.canUpgradeProcessBegin(table)) {
                 ToolLeveling.LOGGER.warn("TableUpgradeProcess: can not start upgrade process");
                 return;
             }

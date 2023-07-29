@@ -34,6 +34,7 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
     private final InfoFieldRenderer successChanceField = new InfoFieldRenderer(0xD9080808, 0xFF3B51BF, 0xFF4F80FF);
     private final InfoFieldRenderer bonusItemField = new InfoFieldRenderer(0xD9080808, 0xFF007F0E, 0xFF00CC17);
     private final InfoFieldRenderer helpField = new InfoFieldRenderer(0xFF212121, 0xFF000000, 0xFF555555);
+    private Button startButton;
     private float successChance = 0.0F;
     private byte ticksSinceUpdate = 0;
     private Component minChanceText;
@@ -57,7 +58,7 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
         this.addRenderableWidget(new Button.Builder(Component.literal("Help"), (b) -> shouldRenderHelp = !shouldRenderHelp)
                 .pos(leftPos, topPos - 17).size(48, 16).tooltip(TOOLTIP_HELP).build());
         // button start upgrade process
-        this.addRenderableWidget(new Button.Builder(Component.literal("Start"), (b) -> {
+        this.startButton = this.addRenderableWidget(new Button.Builder(Component.literal("Start"), (b) -> {
             NetworkHelper.INSTANCE.startUpgradeProcess(this.getMenu().getPos());
         }).pos(this.leftPos + 64, this.topPos + 73).size(48, 16).build());
 
@@ -74,7 +75,10 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
     @Override
     protected void containerTick() {
         super.containerTick();
+
         this.successChance = Util.getSuccessChance(this.getMenu());
+        this.startButton.active = Util.canUpgradeProcessBegin(this.getMenu());
+
         if (!shouldRenderPercentages) {
             return;
         }

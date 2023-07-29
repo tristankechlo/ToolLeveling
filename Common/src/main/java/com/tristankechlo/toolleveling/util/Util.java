@@ -6,10 +6,36 @@ import com.tristankechlo.toolleveling.menu.ToolLevelingTableMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.EnchantmentTableBlock;
 
+import java.util.function.Function;
+
+import static com.tristankechlo.toolleveling.blockentity.ToolLevelingTableBlockEntity.BOOK_SLOTS;
+
 public final class Util {
+
+    private static boolean canUpgradeProcessBegin(Function<Integer, ItemStack> f) {
+        int bookCount = 0;
+        for (int i : BOOK_SLOTS) {
+            if (!f.apply(i).isEmpty()) {
+                bookCount++;
+            }
+        }
+        boolean enoughBooks = bookCount >= ToolLevelingConfig.requiredBooks.get(); // the minimum number of books is reached
+        boolean upgradeSlotNotEmpty = !f.apply(0).isEmpty(); // the upgrade slot is not empty
+
+        return enoughBooks && upgradeSlotNotEmpty;
+    }
+
+    public static boolean canUpgradeProcessBegin(AbstractContainerMenu menu) {
+        return canUpgradeProcessBegin((i) -> menu.slots.get(i).getItem());
+    }
+
+    public static boolean canUpgradeProcessBegin(Container menu) {
+        return canUpgradeProcessBegin(menu::getItem);
+    }
 
     public static float getSuccessChance(AbstractContainerMenu menu) {
         BlockPos pos = ((ToolLevelingTableMenu) menu).getPos();

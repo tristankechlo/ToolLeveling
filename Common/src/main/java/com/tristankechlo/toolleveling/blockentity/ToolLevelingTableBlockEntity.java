@@ -177,17 +177,6 @@ public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity imple
         return this.getItem(0);
     }
 
-    public boolean canStartUpgrade() {
-        // in all three book slots is an enchantment book
-        for (int i : BOOK_SLOTS) {
-            if (this.getItem(i).isEmpty()) {
-                return false;
-            }
-        }
-        // the upgrade slot is not empty
-        return !getStackToEnchant().isEmpty();
-    }
-
     public List<WeightedEntry.Wrapper<Enchantment>> getEnchantments() {
         var weights = new ArrayList<WeightedEntry.Wrapper<Enchantment>>();
 

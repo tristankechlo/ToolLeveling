@@ -45,22 +45,22 @@ public class ToolLevelingTableMenu extends AbstractContainerMenu {
 
         // book slots
         this.addSlot(new PredicateSlot(container, 1, 17, 18, Predicates.BOOK));
-        this.addSlot(new PredicateSlot(container, 2, 17, 36, Predicates.BOOK));
-        this.addSlot(new PredicateSlot(container, 3, 17, 54, Predicates.BOOK));
-        this.addSlot(new PredicateSlot(container, 4, 17, 72, Predicates.BOOK));
-        this.addSlot(new PredicateSlot(container, 5, 35, 18, Predicates.BOOK));
-        this.addSlot(new PredicateSlot(container, 6, 35, 36, Predicates.BOOK));
-        this.addSlot(new PredicateSlot(container, 7, 35, 54, Predicates.BOOK));
+        this.addSlot(new PredicateSlot(container, 2, 35, 18, Predicates.BOOK));
+        this.addSlot(new PredicateSlot(container, 3, 17, 36, Predicates.BOOK));
+        this.addSlot(new PredicateSlot(container, 4, 35, 36, Predicates.BOOK));
+        this.addSlot(new PredicateSlot(container, 5, 17, 54, Predicates.BOOK));
+        this.addSlot(new PredicateSlot(container, 6, 35, 54, Predicates.BOOK));
+        this.addSlot(new PredicateSlot(container, 7, 17, 72, Predicates.BOOK));
         this.addSlot(new PredicateSlot(container, 8, 35, 72, Predicates.BOOK));
 
         // bonus slots
         this.addSlot(new PredicateSlot(container, 9, 125, 18, Predicates.BONUS, 1));
-        this.addSlot(new PredicateSlot(container, 10, 125, 36, Predicates.BONUS, 1));
-        this.addSlot(new PredicateSlot(container, 11, 125, 54, Predicates.BONUS, 1));
-        this.addSlot(new PredicateSlot(container, 12, 125, 72, Predicates.BONUS, 1));
-        this.addSlot(new PredicateSlot(container, 13, 143, 18, Predicates.BONUS, 1));
-        this.addSlot(new PredicateSlot(container, 14, 143, 36, Predicates.BONUS, 1));
-        this.addSlot(new PredicateSlot(container, 15, 143, 54, Predicates.BONUS, 1));
+        this.addSlot(new PredicateSlot(container, 10, 143, 18, Predicates.BONUS, 1));
+        this.addSlot(new PredicateSlot(container, 11, 125, 36, Predicates.BONUS, 1));
+        this.addSlot(new PredicateSlot(container, 12, 143, 36, Predicates.BONUS, 1));
+        this.addSlot(new PredicateSlot(container, 13, 125, 54, Predicates.BONUS, 1));
+        this.addSlot(new PredicateSlot(container, 14, 143, 54, Predicates.BONUS, 1));
+        this.addSlot(new PredicateSlot(container, 15, 125, 72, Predicates.BONUS, 1));
         this.addSlot(new PredicateSlot(container, 16, 143, 72, Predicates.BONUS, 1));
 
         // main inventory
