@@ -39,7 +39,7 @@ public record TableUpgradeProcess(BlockPos pos) {
             // determine the enchantments to add
             int cycles = Util.getCycles(table);
             var possibleEnchantments = table.getEnchantments();
-            float successChance = Util.getSuccessChance(table.getItem(1), table.getItem(2), table.getItem(3));
+            float successChance = Util.getSuccessChance(level, msg.pos);
             Map<Enchantment, Integer> enchantmentsToAdd = new HashMap<>();
 
             for (int i = 0; i < cycles; i++) {

@@ -1,31 +1,40 @@
 package com.tristankechlo.toolleveling.util;
 
+import com.tristankechlo.toolleveling.blockentity.ToolLevelingTableBlockEntity;
 import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
+import com.tristankechlo.toolleveling.menu.ToolLevelingTableMenu;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.EnchantmentTableBlock;
 
 public final class Util {
 
     public static float getSuccessChance(AbstractContainerMenu menu) {
-        return getSuccessChance(menu.getSlot(1).getItem(), menu.getSlot(2).getItem(), menu.getSlot(3).getItem());
+        BlockPos pos = ((ToolLevelingTableMenu) menu).getPos();
+        Level level = ((ToolLevelingTableMenu) menu).getLevel();
+        return getSuccessChance(level, pos);
     }
 
-    public static float getSuccessChance(ItemStack stack1, ItemStack stack2, ItemStack stack3) {
-        float minChance = ToolLevelingConfig.minSuccessChance.get() / 100F;
-        float maxChance = ToolLevelingConfig.maxSuccessChance.get() / 100F;
-        int count = stack1.getCount() + stack2.getCount() + stack3.getCount();
-        if (count == 0) {
-            return minChance;
+    public static float getSuccessChance(Level level, BlockPos tablePos) {
+        int count = 0;
+        for (BlockPos pos : EnchantmentTableBlock.BOOKSHELF_OFFSETS) {
+            if (EnchantmentTableBlock.isValidBookShelf(level, tablePos, pos)) {
+                count++;
+            }
         }
-        int maxCount = stack1.getMaxStackSize() + stack2.getMaxStackSize() + stack3.getMaxStackSize();
-        float fullPercent = count / (float) maxCount;
-        return minChance + ((maxChance - minChance) * fullPercent);
+        int maxPossibleCount = ToolLevelingConfig.requiredBookshelves.get();
+        count = Math.min(count, maxPossibleCount); // limit the count to the max possible count
+        float fullPercent = (float) count / (float) maxPossibleCount;
+        float minPercentage = ToolLevelingConfig.minSuccessChance.get() * 0.01F;
+        float maxPercentage = ToolLevelingConfig.maxSuccessChance.get() * 0.01F;
+        return minPercentage + ((maxPercentage - minPercentage) * fullPercent);
     }
 
     public static int getCycles(Container menu) {
         int count = 1;
-        for (int i = 7; i <= 9; i++) {
+        for (int i : ToolLevelingTableBlockEntity.BONUS_SLOTS) {
             if (Predicates.ITEM_EXTRA_ENCHANTMENT.test(menu.getItem(i))) {
                 count++;
             }
@@ -35,7 +44,7 @@ public final class Util {
 
     public static int getLevels(Container menu) {
         int count = 1;
-        for (int i = 7; i <= 9; i++) {
+        for (int i : ToolLevelingTableBlockEntity.BONUS_SLOTS) {
             if (Predicates.ITEM_HIGHER_LEVEL.test(menu.getItem(i))) {
                 count++;
             }

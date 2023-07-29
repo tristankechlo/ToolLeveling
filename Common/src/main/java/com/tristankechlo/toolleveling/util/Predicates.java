@@ -9,7 +9,6 @@ import java.util.function.Predicate;
 public final class Predicates {
 
     public static final Predicate<ItemStack> BOOK = (stack) -> stack.is(Items.ENCHANTED_BOOK); // purple slots
-    public static final Predicate<ItemStack> PAYMENT = ToolLevelingConfig::isPaymentItem; // blue slots
     public static final Predicate<ItemStack> UPGRADE = (stack) -> !BOOK.test(stack) && (stack.isEnchanted() || stack.isEnchantable()); // red slot
 
     public static final Predicate<ItemStack> ITEM_HIGHER_LEVEL = ToolLevelingConfig::isBonusItemHigherLevel;

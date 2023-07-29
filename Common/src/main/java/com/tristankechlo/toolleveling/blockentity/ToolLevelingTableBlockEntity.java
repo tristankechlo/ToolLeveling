@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.menu.ToolLevelingTableMenu;
 import com.tristankechlo.toolleveling.util.Predicates;
-import com.tristankechlo.toolleveling.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -35,8 +34,10 @@ public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity imple
 
     private static final Component CONTAINER_NAME = Component.translatable("container.toolleveling.tool_leveling_table");
     private NonNullList<ItemStack> items = NonNullList.withSize(NUMBER_OF_SLOTS, ItemStack.EMPTY);
-    public static final int NUMBER_OF_SLOTS = 10;
+    public static final int NUMBER_OF_SLOTS = 17;
     public static final int[] SLOTS = IntStream.range(1, NUMBER_OF_SLOTS).toArray();
+    public static final int[] BOOK_SLOTS = IntStream.range(1, 9).toArray();
+    public static final int[] BONUS_SLOTS = IntStream.range(9, NUMBER_OF_SLOTS).toArray();
 
     public ToolLevelingTableBlockEntity(BlockPos pos, BlockState state) {
         super(ToolLeveling.TLT_BLOCK_ENTITY.get(), pos, state);
@@ -122,13 +123,10 @@ public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity imple
         if (index == 0) {
             return Predicates.UPGRADE.test(stack);
         }
-        if (index >= 1 && index <= 3) {
-            return Predicates.PAYMENT.test(stack);
-        }
-        if (index >= 4 && index <= 6) {
+        if (index >= 1 && index <= 8) {
             return Predicates.BOOK.test(stack);
         }
-        if (index >= 7 && index <= 9) {
+        if (index >= 9 && index <= 16) {
             return Predicates.BONUS.test(stack);
         }
         return false;
@@ -181,7 +179,7 @@ public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity imple
 
     public boolean canStartUpgrade() {
         // in all three book slots is an enchantment book
-        for (int i = 4; i <= 6; i++) {
+        for (int i : BOOK_SLOTS) {
             if (this.getItem(i).isEmpty()) {
                 return false;
             }
@@ -193,7 +191,7 @@ public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity imple
     public List<WeightedEntry.Wrapper<Enchantment>> getEnchantments() {
         var weights = new ArrayList<WeightedEntry.Wrapper<Enchantment>>();
 
-        for (int i = 4; i <= 6; i++) {
+        for (int i : BOOK_SLOTS) {
             var enchantments = EnchantmentHelper.getEnchantments(this.items.get(i));
             for (var entry : enchantments.entrySet()) {
                 weights.add(WeightedEntry.wrap(entry.getKey(), entry.getValue()));
