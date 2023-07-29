@@ -121,13 +121,13 @@ public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity imple
     @Override
     public boolean canPlaceItem(int index, ItemStack stack) {
         if (index == 0) {
-            return Predicates.UPGRADE.test(stack);
+            return Predicates.IS_UPGRADE_ITEM.test(stack);
         }
         if (index >= 1 && index <= 8) {
-            return Predicates.BOOK.test(stack);
+            return Predicates.IS_BOOK.test(stack);
         }
         if (index >= 9 && index <= 16) {
-            return Predicates.BONUS.test(stack);
+            return Predicates.IS_BONUS_ITEM.test(stack);
         }
         return false;
     }

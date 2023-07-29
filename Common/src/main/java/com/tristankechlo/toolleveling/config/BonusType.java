@@ -9,9 +9,9 @@ public enum BonusType {
     NONE;
 
     public static BonusType getTypeByItem(ItemStack stack) {
-        if (ToolLevelingConfig.isBonusItemHigherLevel(stack)) {
+        if (ToolLevelingConfig.isBonusItemStrength(stack)) {
             return HIGHER_LEVEL;
-        } else if (ToolLevelingConfig.isBonusItemExtraEnchantment(stack)) {
+        } else if (ToolLevelingConfig.isBonusItemIterations(stack)) {
             return EXTRA_ENCHANTMENT;
         } else {
             return NONE;

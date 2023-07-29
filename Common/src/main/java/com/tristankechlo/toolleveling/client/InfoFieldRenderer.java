@@ -15,7 +15,7 @@ import java.util.List;
 public final class InfoFieldRenderer {
 
     private List<FormattedCharSequence> lines = new ArrayList<>();
-    private boolean spaceAfterTitle = false; // TODO make this an int, so i can specify the amount of space after the title
+    private boolean spaceAfterTitle = true; // TODO make this an int, so i can specify the amount of space after the title
     private final int backgroundColor;
     private final int borderColor1;
     private final int borderColor2;

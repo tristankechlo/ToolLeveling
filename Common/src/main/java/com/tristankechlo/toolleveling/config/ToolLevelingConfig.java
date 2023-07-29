@@ -17,11 +17,11 @@ public final class ToolLevelingConfig {
     // how many books are required to start the enchantment process
     public static final Supplier<Integer> requiredBooks = () -> 4; // 1 - 8
 
-    public static boolean isBonusItemHigherLevel(ItemStack stack) {
+    public static boolean isBonusItemStrength(ItemStack stack) {
         return stack.is(Items.ENCHANTED_GOLDEN_APPLE);
     }
 
-    public static boolean isBonusItemExtraEnchantment(ItemStack stack) {
+    public static boolean isBonusItemIterations(ItemStack stack) {
         return stack.is(Items.NETHER_STAR);
     }
 

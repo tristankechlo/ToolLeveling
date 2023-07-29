@@ -58,20 +58,20 @@ public final class Util {
         return minPercentage + ((maxPercentage - minPercentage) * fullPercent);
     }
 
-    public static int getCycles(Container menu) {
+    public static int getIterations(Container menu) {
         int count = 1;
         for (int i : ToolLevelingTableBlockEntity.BONUS_SLOTS) {
-            if (Predicates.ITEM_EXTRA_ENCHANTMENT.test(menu.getItem(i))) {
+            if (Predicates.BONUS_ITEM_ITERATIONS.test(menu.getItem(i))) {
                 count++;
             }
         }
         return count;
     }
 
-    public static int getLevels(Container menu) {
+    public static int getEnchantmentStrength(Container menu) {
         int count = 1;
         for (int i : ToolLevelingTableBlockEntity.BONUS_SLOTS) {
-            if (Predicates.ITEM_HIGHER_LEVEL.test(menu.getItem(i))) {
+            if (Predicates.BONUS_ITEM_STRENGTH.test(menu.getItem(i))) {
                 count++;
             }
         }

@@ -8,9 +8,7 @@ import com.tristankechlo.toolleveling.menu.ToolLevelingTableMenu;
 import com.tristankechlo.toolleveling.network.NetworkHelper;
 import com.tristankechlo.toolleveling.util.ComponentUtil;
 import com.tristankechlo.toolleveling.util.Util;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -22,12 +20,6 @@ import java.util.stream.Collectors;
 public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelingTableMenu> {
 
     private static final ResourceLocation GUI_TEXTURE = new ResourceLocation(ToolLeveling.MOD_ID, "textures/gui/tool_leveling_table.png");
-    private static final Tooltip TOOLTIP_PERCENTAGES = Tooltip.create(ComponentUtil.make(".tooltip.percentages"));
-    private static final Tooltip TOOLTIP_HELP = Tooltip.create(ComponentUtil.make(".tooltip.help"));
-    private static final Component PERCENTAGES_TITLE = ComponentUtil.makeTitle(".title.percentages");
-    private static final Component SUCCESS_CHANCE_TITLE = ComponentUtil.makeTitle(".title.success_chance");
-    private static final Component BONUS_TITLE = ComponentUtil.makeTitle(".title.bonuses");
-    private static final Component HELP = ComponentUtil.make(".help").withStyle(ChatFormatting.GRAY);
     private static boolean shouldRenderPercentages = false;
     private static boolean shouldRenderHelp = false;
     private final InfoFieldRenderer percentagesField = new InfoFieldRenderer(0xD9080808, 0xFF8c045f, 0xFFD82FA0);
@@ -51,25 +43,28 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
     @Override
     protected void init() {
         super.init();
-        // button percentages
-        this.addRenderableWidget(new Button.Builder(Component.literal("Info"), (b) -> shouldRenderPercentages = !shouldRenderPercentages)
-                .pos(leftPos + 50, topPos - 17).size(48, 16).tooltip(TOOLTIP_PERCENTAGES).build());
-        // button help
-        this.addRenderableWidget(new Button.Builder(Component.literal("Help"), (b) -> shouldRenderHelp = !shouldRenderHelp)
-                .pos(leftPos, topPos - 17).size(48, 16).tooltip(TOOLTIP_HELP).build());
-        // button start upgrade process
-        this.startButton = this.addRenderableWidget(new Button.Builder(Component.literal("Start"), (b) -> {
+
+        int buttonWidth = (this.imageWidth - 2) / 2; // width of the help and info button
+
+        // button to toggle the help field
+        this.addRenderableWidget(Button.builder(ComponentUtil.HELP_BUTTON_TEXT, (b) -> shouldRenderHelp = !shouldRenderHelp)
+                .pos(leftPos, topPos - 17).size(buttonWidth, 16)
+                .tooltip(ComponentUtil.HELP_BUTTON_TOOLTIP.get()).build());
+        // button to toggle the percentages field
+        this.addRenderableWidget(Button.builder(ComponentUtil.INFO_BUTTON_TEXT, (b) -> shouldRenderPercentages = !shouldRenderPercentages)
+                .pos(leftPos + 2 + buttonWidth, topPos - 17).size(buttonWidth, 16)
+                .tooltip(ComponentUtil.INFO_BUTTON_TOOLTIP.get()).build());
+        // button to start upgrade process
+        this.startButton = this.addRenderableWidget(new Button.Builder(ComponentUtil.START_BUTTON_TEXT, (b) -> {
             NetworkHelper.INSTANCE.startUpgradeProcess(this.getMenu().getPos());
-        }).pos(this.leftPos + 64, this.topPos + 73).size(48, 16).build());
+        }).pos(this.leftPos + 64, this.topPos + 73).size(48, 16).tooltip(ComponentUtil.START_BUTTON_TOOLTIP.get()).build());
 
-        this.percentagesField.setSpaceAfterTitle(true);
-        this.successChanceField.setSpaceAfterTitle(true);
-        this.bonusItemField.setSpaceAfterTitle(true);
+        // setup the info fields
+        this.helpField.setLines(List.of(ComponentUtil.TITLE_HELP_FIELD, ComponentUtil.TEXT_HELP_FIELD), font, this.leftPos - 10);
 
-        this.minChanceText = ComponentUtil.makeChance("min_success_chance", ToolLevelingConfig.minSuccessChance);
-        this.maxChanceText = ComponentUtil.makeChance("max_success_chance", ToolLevelingConfig.maxSuccessChance);
-
-        this.helpField.setLines(List.of(HELP), font, this.leftPos - 10);
+        // setup the min and max success chance text
+        this.minChanceText = ComponentUtil.makeChance(".success_chance.min", ToolLevelingConfig.minSuccessChance);
+        this.maxChanceText = ComponentUtil.makeChance(".success_chance.max", ToolLevelingConfig.maxSuccessChance);
     }
 
     @Override
@@ -82,27 +77,27 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
         if (!shouldRenderPercentages) {
             return;
         }
-        this.ticksSinceUpdate++;
         if (this.ticksSinceUpdate % 4 == 0) {
             this.ticksSinceUpdate = 0;
 
             // update percentages
             var percentages = this.getMenu().getPercentages();
             var components = percentages.stream().map(ComponentUtil::makePercentage).collect(Collectors.toList());
-            components.add(0, PERCENTAGES_TITLE);
+            components.add(0, ComponentUtil.TITLE_PERCENTAGES);
             this.percentagesField.setLines(components);
 
             // update success chance
             Component chanceText = ComponentUtil.makePercentage("screen.toolleveling.tool_leveling_table.success_chance", this.successChance);
-            this.successChanceField.setLines(List.of(SUCCESS_CHANCE_TITLE, chanceText, minChanceText, maxChanceText));
+            this.successChanceField.setLines(List.of(ComponentUtil.TITLE_SUCCESS_CHANCE, chanceText, minChanceText, maxChanceText));
 
             // update bonus items
-            var cycles = this.getMenu().getCycles();
-            Component bonusItemText = ComponentUtil.makeBonus("screen.toolleveling.tool_leveling_table.iterations", cycles);
-            var levels = this.getMenu().getLevels();
-            Component bonusLevelText = ComponentUtil.makeBonus("screen.toolleveling.tool_leveling_table.strength", levels);
-            this.bonusItemField.setLines(List.of(BONUS_TITLE, bonusItemText, bonusLevelText));
+            var iterations = this.getMenu().getCycles();
+            Component iterationsText = ComponentUtil.makeBonus("screen.toolleveling.tool_leveling_table.bonuses.iterations", iterations);
+            var strength = this.getMenu().getLevels();
+            Component strengthText = ComponentUtil.makeBonus("screen.toolleveling.tool_leveling_table.bonuses.strength", strength);
+            this.bonusItemField.setLines(List.of(ComponentUtil.TITLE_BONUSES, iterationsText, strengthText));
         }
+        this.ticksSinceUpdate++;
     }
 
     @Override

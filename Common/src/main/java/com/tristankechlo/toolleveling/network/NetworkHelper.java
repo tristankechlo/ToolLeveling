@@ -16,8 +16,8 @@ public interface NetworkHelper {
     NetworkHelper INSTANCE = Services.load(NetworkHelper.class);
 
     static void setup(){
-        ToolLeveling.LOGGER.info("Registering Packets");
         NetworkHelper.INSTANCE.registerPackets();
+        ToolLeveling.LOGGER.info("Packets registered");
     }
 
     void registerPackets();

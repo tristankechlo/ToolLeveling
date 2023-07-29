@@ -36,13 +36,21 @@ public record TableUpgradeProcess(BlockPos pos) {
                 return;
             }
 
-            // determine the enchantments to add
-            int cycles = Util.getCycles(table);
-            var possibleEnchantments = table.getEnchantments();
-            float successChance = Util.getSuccessChance(level, msg.pos);
-            Map<Enchantment, Integer> enchantmentsToAdd = new HashMap<>();
+            int iterations = Util.getIterations(table); // how often the process will be repeated
+            int strength = Util.getEnchantmentStrength(table); // the maximum level of the enchantments
+            var possibleEnchantments = table.getEnchantments(); // the possible enchantments, with their weight
+            float successChance = Util.getSuccessChance(level, msg.pos); // the chance of a success in each iteration
+            ItemStack tool = table.getStackToEnchant(); // the tool to enchant
+            var oldEnchantments = EnchantmentHelper.getEnchantments(tool); // the enchantments the tool already has
+            Map<Enchantment, Integer> enchantmentsToAdd = new HashMap<>(); // the enchantments to add
 
-            for (int i = 0; i < cycles; i++) {
+            // clear all slots except the first one
+            for (int i = 1; i < ToolLevelingTableBlockEntity.NUMBER_OF_SLOTS; i++) {
+                table.setItem(i, ItemStack.EMPTY);
+            }
+
+            // calculate the enchantments to add
+            for (int i = 0; i < iterations; i++) {
                 float nextFloat = level.getRandom().nextFloat();
                 if (nextFloat > successChance) {
                     ToolLeveling.LOGGER.info("TableUpgradeProcess failed {} {}", successChance, nextFloat);
@@ -54,7 +62,7 @@ public record TableUpgradeProcess(BlockPos pos) {
                     continue;
                 }
                 Enchantment e = o.get().getData();
-                int enchantmentLevel = Util.getLevels(table);
+                int enchantmentLevel = level.getRandom().nextInt(strength) + 1;
                 if (enchantmentsToAdd.containsKey(e)) {
                     enchantmentLevel += enchantmentsToAdd.get(e);
                 }
@@ -62,18 +70,12 @@ public record TableUpgradeProcess(BlockPos pos) {
             }
 
             // add the enchantments to the item
-            ItemStack tool = table.getStackToEnchant();
-            var oldEnchantments = EnchantmentHelper.getEnchantments(tool);
             for (var entry : enchantmentsToAdd.entrySet()) {
                 oldEnchantments.merge(entry.getKey(), entry.getValue(), Integer::sum);
                 ToolLeveling.LOGGER.info("TableUpgradeProcess: added {} levels to enchantment {}", entry.getValue(), entry.getKey().getDescriptionId());
             }
             EnchantmentHelper.setEnchantments(oldEnchantments, tool);
-
-            // clear all slots except the first one
-            for (int i = 1; i < ToolLevelingTableBlockEntity.NUMBER_OF_SLOTS; i++) {
-                table.setItem(i, ItemStack.EMPTY);
-            }
+            table.setChanged();
         }
     }
 

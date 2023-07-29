@@ -7,7 +7,7 @@ import net.minecraft.world.item.ItemStack;
 public final class UpgradeSlot extends PredicateSlot {
 
     public UpgradeSlot(Container inv, int index, int xPosition, int yPosition) {
-        super(inv, index, xPosition, yPosition, Predicates.UPGRADE);
+        super(inv, index, xPosition, yPosition, Predicates.IS_UPGRADE_ITEM);
     }
 
     @Override
