@@ -6,8 +6,5 @@
     "mixins": [
         "EnchantmentHelperMixin"
     ],
-    "client": [
-        "GuiComponentInvoker"
-    ],
     "refmap": "toolleveling.refmap.json"
 }

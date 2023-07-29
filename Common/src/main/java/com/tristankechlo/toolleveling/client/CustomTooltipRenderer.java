@@ -1,7 +1,7 @@
 package com.tristankechlo.toolleveling.client;
 
 import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.tristankechlo.toolleveling.mixins.GuiComponentInvoker;
+import net.minecraft.util.FastColor;
 import org.joml.Matrix4f;
 
 public final class CustomTooltipRenderer {
@@ -26,15 +26,30 @@ public final class CustomTooltipRenderer {
     }
 
     public static void renderVerticalLine(Matrix4f matrix4f, BufferBuilder bufferBuilder, int x, int y, int length, int m, int color) {
-        GuiComponentInvoker.fillGradient(matrix4f, bufferBuilder, x, y, x + 1, y + length, m, color, color);
+        fillGradient(matrix4f, bufferBuilder, x, y, x + 1, y + length, m, color, color);
     }
 
     public static void renderHorizontalLine(Matrix4f matrix4f, BufferBuilder bufferBuilder, int x, int y, int length, int m, int color) {
-        GuiComponentInvoker.fillGradient(matrix4f, bufferBuilder, x, y, x + length, y + 1, m, color, color);
+        fillGradient(matrix4f, bufferBuilder, x, y, x + length, y + 1, m, color, color);
     }
 
     public static void renderRectangle(Matrix4f matrix4f, BufferBuilder bufferBuilder, int x, int y, int width, int height, int color) {
-        GuiComponentInvoker.fillGradient(matrix4f, bufferBuilder, x, y, x + width, y + height, 0, color, color);
+        fillGradient(matrix4f, bufferBuilder, x, y, x + width, y + height, 0, color, color);
+    }
+
+    private static void fillGradient(Matrix4f matrix, BufferBuilder buffer, int x1, int y1, int x2, int y2, int m, int color1, int color2) {
+        float $$9 = (float) FastColor.ARGB32.alpha(color1) / 255.0F;
+        float $$10 = (float) FastColor.ARGB32.red(color1) / 255.0F;
+        float $$11 = (float) FastColor.ARGB32.green(color1) / 255.0F;
+        float $$12 = (float) FastColor.ARGB32.blue(color1) / 255.0F;
+        float $$13 = (float) FastColor.ARGB32.alpha(color2) / 255.0F;
+        float $$14 = (float) FastColor.ARGB32.red(color2) / 255.0F;
+        float $$15 = (float) FastColor.ARGB32.green(color2) / 255.0F;
+        float $$16 = (float) FastColor.ARGB32.blue(color2) / 255.0F;
+        buffer.vertex(matrix, (float) x1, (float) y1, (float) m).color($$10, $$11, $$12, $$9).endVertex();
+        buffer.vertex(matrix, (float) x1, (float) y2, (float) m).color($$14, $$15, $$16, $$13).endVertex();
+        buffer.vertex(matrix, (float) x2, (float) y2, (float) m).color($$14, $$15, $$16, $$13).endVertex();
+        buffer.vertex(matrix, (float) x2, (float) y1, (float) m).color($$10, $$11, $$12, $$9).endVertex();
     }
 
 }
