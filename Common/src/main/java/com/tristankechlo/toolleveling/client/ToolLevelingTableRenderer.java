@@ -2,7 +2,6 @@ package com.tristankechlo.toolleveling.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.blockentity.ToolLevelingTableBlockEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -16,26 +15,26 @@ public class ToolLevelingTableRenderer implements BlockEntityRenderer<ToolLeveli
 
     private final ItemRenderer itemRenderer;
 
-    public ToolLevelingTableRenderer(BlockEntityRendererProvider.Context rendererDispatcherIn) {
-        this.itemRenderer = rendererDispatcherIn.getItemRenderer();
+    public ToolLevelingTableRenderer(BlockEntityRendererProvider.Context context) {
+        this.itemRenderer = context.getItemRenderer();
     }
 
     @Override
-    public void render(ToolLevelingTableBlockEntity tileEntityIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
-        ItemStack stack = tileEntityIn.getStackToEnchant();
+    public void render(ToolLevelingTableBlockEntity entity, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int light, int overlay) {
+        ItemStack stack = entity.getStackToEnchant();
         if (stack.isEmpty()) {
             return;
         }
-        matrixStackIn.pushPose();
-        matrixStackIn.translate(0.5D, 0.83D, 0.5D);
-        matrixStackIn.scale(0.6F, 0.6F, 0.6F);
-        matrixStackIn.mulPose(Axis.XN.rotation(1.5707F));
-        renderItem(stack, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
-        matrixStackIn.popPose();
+        poseStack.pushPose();
+        poseStack.translate(0.5D, 0.83D, 0.5D);
+        poseStack.scale(0.7F, 0.7F, 0.7F);
+        poseStack.mulPose(Axis.XN.rotation(1.5707F));
+        renderItem(stack, poseStack, buffer, light, overlay);
+        poseStack.popPose();
     }
 
-    private void renderItem(ItemStack stack, PoseStack pstack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
-        itemRenderer.renderStatic(stack, ItemDisplayContext.FIXED, combinedLightIn, combinedOverlayIn, pstack, bufferIn, null, OverlayTexture.NO_OVERLAY);
+    private void renderItem(ItemStack stack, PoseStack poseStack, MultiBufferSource buffer, int light, int overlay) {
+        itemRenderer.renderStatic(stack, ItemDisplayContext.FIXED, light, overlay, poseStack, buffer, null, OverlayTexture.NO_OVERLAY);
     }
 
 }
