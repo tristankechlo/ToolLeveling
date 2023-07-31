@@ -34,12 +34,10 @@ public final class ForgeNetworkHelper implements NetworkHelper {
     @Override
     public void registerPackets() {
         INSTANCE.registerMessage(0, TableUpgradeProcess.class,
-                (msg, buf) -> TableUpgradeProcess.encode(buf, msg.pos()),
-                TableUpgradeProcess::decode,
+                TableUpgradeProcess::encode, TableUpgradeProcess::decode,
                 (msg, ctx) -> handleOnServer(msg, ctx, TableUpgradeProcess::handle));
         INSTANCE.registerMessage(1, SyncToolLevelingConfig.class,
-                (msg, buf) -> SyncToolLevelingConfig.encode(buf, msg.identifier(), msg.json()),
-                SyncToolLevelingConfig::decode,
+                SyncToolLevelingConfig::encode, SyncToolLevelingConfig::decode,
                 (msg, ctx) -> handleOnClient(msg, ctx, SyncToolLevelingConfig::handle));
     }
 

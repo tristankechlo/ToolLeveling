@@ -17,8 +17,8 @@ public final class CommandConfig extends AbstractConfig {
 
     private CommandConfig() {
         super("command_config.json", ToolLeveling.CONFIG_INFO_COMMANDS);
-        allowWrongEnchantments = new BooleanValue("allowWrongEnchantments", true, "Allow adding enchantments that are not compatible with the tool");
-        allowIncompatibleEnchantments = new BooleanValue("allowIncompatibleEnchantments", true, "Allow adding enchantments that are not compatible with each other");
+        allowWrongEnchantments = new BooleanValue("allow_wrong_enchantments", true, "Allow adding enchantments that are not compatible with the tool");
+        allowIncompatibleEnchantments = new BooleanValue("allow_incompatible_enchantments", true, "Allow adding enchantments that are not compatible with each other");
         values = List.of(allowWrongEnchantments, allowIncompatibleEnchantments);
     }
 
@@ -26,8 +26,8 @@ public final class CommandConfig extends AbstractConfig {
     public JsonObject serialize() {
         JsonObject superEnchant = new JsonObject();
         superEnchant.addProperty("__comment", "This config is for the /superenchant command");
-        superEnchant.add("allowWrongEnchantments", allowWrongEnchantments.serialize());
-        superEnchant.add("allowIncompatibleEnchantments", allowIncompatibleEnchantments.serialize());
+        superEnchant.add(allowWrongEnchantments.getIdentifier(), allowWrongEnchantments.serialize());
+        superEnchant.add(allowIncompatibleEnchantments.getIdentifier(), allowIncompatibleEnchantments.serialize());
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.add("superenchant", superEnchant);

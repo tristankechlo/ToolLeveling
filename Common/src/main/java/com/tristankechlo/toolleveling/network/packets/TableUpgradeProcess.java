@@ -20,6 +20,11 @@ public record TableUpgradeProcess(BlockPos pos) {
 
     public static final ResourceLocation CHANNEL_ID = new ResourceLocation(ToolLeveling.MOD_ID, "tool_leveling_table");
 
+    // forge specific method for packet encoding
+    public static void encode(TableUpgradeProcess msg, FriendlyByteBuf buf) {
+        encode(buf, msg.pos);
+    }
+
     public static void encode(FriendlyByteBuf buf, BlockPos pos) {
         buf.writeBlockPos(pos);
     }

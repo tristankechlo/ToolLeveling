@@ -26,12 +26,12 @@ public final class ToolLevelingConfig extends AbstractConfig {
 
     private ToolLevelingConfig() {
         super("tool_leveling_table.json", ToolLeveling.CONFIG_INFO_GENERAL);
-        minSuccessChance = new NumberValue<>("minSuccessChance", 75.0F, 0.0F, 100.0F, JsonElement::getAsFloat, "lower bound for the success chance of the enchantment process");
-        maxSuccessChance = new NumberValue<>("maxSuccessChance", 100.0F, 0.0F, 100.0F, JsonElement::getAsFloat, "upper bound for the success chance of the enchantment process");
-        requiredBookshelves = new NumberValue<>("requiredBookshelves", 20, 0, 32, JsonElement::getAsInt, "what amount of bookshelves are required to reach the maxSuccessChance");
-        requiredBooks = new NumberValue<>("requiredBooks", 4, 1, 6, JsonElement::getAsInt, "how many books are required to start the enchantment process");
-        bonusItemMoreEnchantments = new IngredientValue("bonusItemMoreEnchantments", Ingredient.of(Items.NETHER_STAR), "what item is required to increase the amount of enchantments that can be added to the tool");
-        bonusItemMoreLevels = new IngredientValue("bonusItemMoreLevels", Ingredient.of(Items.ENCHANTED_GOLDEN_APPLE), "what item is required to increase the amount of levels that can be added to the enchantment");
+        minSuccessChance = new NumberValue<>("min_success_chance", 75.0F, 0.0F, 100.0F, JsonElement::getAsFloat, "lower bound for the success chance of the enchantment process");
+        maxSuccessChance = new NumberValue<>("max_success_chance", 100.0F, 0.0F, 100.0F, JsonElement::getAsFloat, "upper bound for the success chance of the enchantment process");
+        requiredBookshelves = new NumberValue<>("required_bookshelves", 20, 0, 32, JsonElement::getAsInt, "what amount of bookshelves are required to reach the max_success_chance");
+        requiredBooks = new NumberValue<>("required_books", 4, 1, 6, JsonElement::getAsInt, "how many books are required to start the enchantment process");
+        bonusItemMoreEnchantments = new IngredientValue("bonus_item_more_enchantments", Ingredient.of(Items.NETHER_STAR), "what item is required to increase the amount of enchantments that can be added to the tool");
+        bonusItemMoreLevels = new IngredientValue("bonus_item_more_levels", Ingredient.of(Items.ENCHANTED_GOLDEN_APPLE), "what item is required to increase the amount of levels that can be added to the enchantment");
         values = List.of(minSuccessChance, maxSuccessChance, requiredBookshelves, requiredBooks, bonusItemMoreEnchantments, bonusItemMoreLevels);
     }
 
