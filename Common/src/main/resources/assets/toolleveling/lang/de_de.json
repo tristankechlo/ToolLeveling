@@ -13,5 +13,12 @@
     "screen.toolleveling.tool_leveling_table.help.button_text": "Hilfe",
     "screen.toolleveling.tool_leveling_table.help.field_title": "Wie funktioniert das?",
     "screen.toolleveling.tool_leveling_table.help.button_tooltip": "Zeige die Hilfe",
-    "screen.toolleveling.tool_leveling_table.help.field_text": "1. Lege einen verzauberbaren Gegenstand in den großen Slot\n\n2. Platziere genügend Verzauberte Bücher in die linken Slots (mindestens %s Bücher)\n\n3. Bücherregale um den Tisch erhöhen die Erfolgschance\n\n4. Besondere Gegenstände in den rechten Slots führen zu mehr und höherstufigen Verzauberungen\n\n5. Drücke 'Upgrade'"
+    "screen.toolleveling.tool_leveling_table.help.field_text": "1. Lege einen verzauberbaren Gegenstand in den großen Slot\n\n2. Platziere genügend Verzauberte Bücher in die linken Slots (mindestens %s Bücher)\n\n3. Bücherregale um den Tisch erhöhen die Erfolgschance\n\n4. Besondere Gegenstände in den rechten Slots führen zu mehr und höherstufigen Verzauberungen\n\n5. Drücke 'Upgrade'",
+    "commands.link.click_here": "Klicke hier",
+    "commands.toolleveling.config.path": "Einstellungen für %s kann hier gefunden werden: %s",
+    "commands.toolleveling.config.reload": "Einstellungen wurden erfolgreich neugeladen.",
+    "commands.toolleveling.config.info_general": "Allgemeine Informationen zu den Einstellungen können hier gefunden werden: %s",
+    "commands.toolleveling.config.info_single": "Ausführliche Erklärungen zu den Einstellungen %s können hier gefunden werden: %s",
+    "commands.toolleveling.config.reset": "Einstellungen für %s wurden zurückgesetzt.",
+    "commands.toolleveling.config.noconfig": "Einstellungen für ToolLeveling konnten nicht gefunden werden."
 }
