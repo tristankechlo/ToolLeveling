@@ -10,10 +10,12 @@ import com.tristankechlo.toolleveling.util.ComponentUtil;
 import com.tristankechlo.toolleveling.util.Util;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -171,4 +173,34 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
         return mouseX >= x1 && mouseX <= x2 && mouseY >= y1 && mouseY <= y2;
     }
 
+    public List<Rect2i> getExtraAreas() {
+        List<Rect2i> areas = new ArrayList<>();
+        if (shouldRenderHelp) {
+            int width = this.helpField.calcWidth(this.font);
+            int x = this.leftPos - width;
+            int y = this.topPos;
+            int height = this.helpField.calcHeight();
+            areas.add(new Rect2i(x, y, width, height));
+        }
+        if (shouldRenderPercentages) {
+            int x = this.leftPos + this.imageWidth;
+            int y = this.topPos;
+            int fieldWidth = this.calcFieldWidth();
+            if (this.getMenu().hasAnyBooks()) {
+                int height = this.percentagesField.calcHeight() + 1;
+                areas.add(new Rect2i(x, y, fieldWidth, height));
+                y += height;
+            }
+            int height = this.successChanceField.calcHeight() + 1;
+            areas.add(new Rect2i(x, y, fieldWidth, height));
+            y += height;
+            height = this.bonusItemField.calcHeight() + 1;
+            areas.add(new Rect2i(x, y, fieldWidth, height));
+        }
+        // add area for top buttons
+        int buttonWidth = (this.imageWidth - 2) / 2; // width of the help and info button
+        areas.add(new Rect2i(this.leftPos + 1, topPos - 17, buttonWidth, 16));
+        areas.add(new Rect2i(this.leftPos + 2 + buttonWidth, topPos - 17, buttonWidth, 16));
+        return areas;
+    }
 }
