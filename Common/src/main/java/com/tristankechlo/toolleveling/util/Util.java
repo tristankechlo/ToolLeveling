@@ -23,7 +23,7 @@ public final class Util {
                 bookCount++;
             }
         }
-        boolean enoughBooks = bookCount >= ToolLevelingConfig.requiredBooks.get(); // the minimum number of books is reached
+        boolean enoughBooks = bookCount >= ToolLevelingConfig.INSTANCE.requiredBooks(); // the minimum number of books is reached
         boolean upgradeSlotNotEmpty = !f.apply(0).isEmpty(); // the upgrade slot is not empty
 
         return enoughBooks && upgradeSlotNotEmpty;
@@ -50,11 +50,11 @@ public final class Util {
                 count++;
             }
         }
-        int maxPossibleCount = ToolLevelingConfig.requiredBookshelves.get();
+        int maxPossibleCount = ToolLevelingConfig.INSTANCE.requiredBookshelves();
         count = Math.min(count, maxPossibleCount); // limit the count to the max possible count
         float fullPercent = (float) count / (float) maxPossibleCount;
-        float minPercentage = ToolLevelingConfig.minSuccessChance.get() * 0.01F;
-        float maxPercentage = ToolLevelingConfig.maxSuccessChance.get() * 0.01F;
+        float minPercentage = ToolLevelingConfig.INSTANCE.minSuccessChance() * 0.01F;
+        float maxPercentage = ToolLevelingConfig.INSTANCE.maxSuccessChance() * 0.01F;
         return minPercentage + ((maxPercentage - minPercentage) * fullPercent);
     }
 

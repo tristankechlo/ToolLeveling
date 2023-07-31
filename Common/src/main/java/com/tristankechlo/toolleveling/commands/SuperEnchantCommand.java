@@ -61,13 +61,12 @@ public final class SuperEnchantCommand {
                         })))));
     }
 
-    @SuppressWarnings("ConstantConditions")
     private static int enchant(CommandSourceStack source, Collection<? extends Entity> targets, Holder<Enchantment> enchantmentIn, int level)
             throws CommandSyntaxException {
         int i = 0;
         Enchantment enchantment = enchantmentIn.value();
-        boolean allowUnsupportedEnchantments = CommandConfig.allowWrongEnchantments.get();
-        boolean allowIncompatibleEnchantments = CommandConfig.allowIncompatibleEnchantments.get();
+        boolean allowUnsupportedEnchantments = CommandConfig.INSTANCE.allowWrongEnchantments();
+        boolean allowIncompatibleEnchantments = CommandConfig.INSTANCE.allowIncompatibleEnchantments();
 
         for (Entity entity : targets) {
             if (entity instanceof LivingEntity) {

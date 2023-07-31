@@ -22,11 +22,24 @@ public class ToolLeveling {
     public static final String TABLE_NAME = "tool_leveling_table";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_NAME);
 
+    // urls
+    public static final String GITHUB = "https://github.com/tristankechlo/ToolLeveling";
+    public static final String GITHUB_ISSUE = GITHUB + "/issues";
+    public static final String GITHUB_WIKI = GITHUB + "/wiki";
+    public static final String DISCORD = "https://discord.gg/bhUaWhq";
+    public static final String CURSEFORGE = "https://curseforge.com/minecraft/mc-mods/tool-leveling-plus";
+    public static final String MODRINTH = "https://modrinth.com/mod/tool-leveling";
+    public static final String CONFIG_START = "https://github.com/tristankechlo/ToolLeveling/wiki/General-Information-to-the-ToolLeveling-Configs";
+    public static final String CONFIG_INFO_GENERAL = "https://github.com/tristankechlo/ToolLeveling/wiki/Config-tool_leveling_table.json";
+    public static final String CONFIG_INFO_COMMANDS = "https://github.com/tristankechlo/ToolLeveling/wiki/Config-command_config.json";
+
+    // registries
     private static final RegistrationProvider<Block> BLOCKS = RegistrationProvider.get(Registries.BLOCK, MOD_ID);
     private static final RegistrationProvider<Item> ITEMS = RegistrationProvider.get(Registries.ITEM, MOD_ID);
     private static final RegistrationProvider<BlockEntityType<?>> BLOCK_ENTITIES = RegistrationProvider.get(Registries.BLOCK_ENTITY_TYPE, MOD_ID);
     private static final RegistrationProvider<MenuType<?>> MENU_TYPES = RegistrationProvider.get(Registries.MENU, MOD_ID);
 
+    // registry objects
     public static final RegistryObject<Block> TLT_BLOCK = BLOCKS.register(TABLE_NAME, ToolLevelingTableBlock::new);
     public static final RegistryObject<Item> TLT_ITEM = ITEMS.register(TABLE_NAME, () -> new BlockItem(TLT_BLOCK.get(), new Item.Properties()));
     public static final RegistryObject<BlockEntityType<? extends ToolLevelingTableBlockEntity>> TLT_BLOCK_ENTITY = BLOCK_ENTITIES.register(TABLE_NAME, PlatformHelper.INSTANCE.buildBlockEntityType());

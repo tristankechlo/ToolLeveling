@@ -1,10 +1,13 @@
 package com.tristankechlo.toolleveling.network;
 
+import com.google.gson.JsonObject;
 import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.platform.Services;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -15,7 +18,7 @@ public interface NetworkHelper {
 
     NetworkHelper INSTANCE = Services.load(NetworkHelper.class);
 
-    static void setup(){
+    static void setup() {
         NetworkHelper.INSTANCE.registerPackets();
         ToolLeveling.LOGGER.info("Packets registered");
     }
@@ -26,14 +29,27 @@ public interface NetworkHelper {
 
     /**
      * Sends a packet to the server to start the upgrade process
-     *
-     * @param pos the position of the Tool Leveling Table
      */
     void startUpgradeProcess(BlockPos pos);
 
+    /**
+     * Sends a packet to the client to sync one config to one player
+     */
+    void syncToolLevelingConfig(ServerPlayer player, String identifier, JsonObject json);
+
+    /**
+     * Sends a packet to all clients to sync one config to all players
+     */
+    void syncToolLevelingConfigToAllClients(MinecraftServer server, String identifier, JsonObject json);
+
     @FunctionalInterface
-    interface PacketHandler<T> {
+    interface ServerSidePacketHandler<T> {
         void handle(T msg, ServerLevel level);
+    }
+
+    @FunctionalInterface
+    interface ClientSidePacketHandler<T> {
+        void handle(T msg);
     }
 
     @FunctionalInterface

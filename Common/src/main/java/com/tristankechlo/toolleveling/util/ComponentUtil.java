@@ -46,8 +46,8 @@ public final class ComponentUtil {
         return text;
     }
 
-    public static MutableComponent makeChance(String str, Supplier<Float> chance) {
-        return Component.translatable(START + str, chance.get()).withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC);
+    public static MutableComponent makeChance(String str, float chance) {
+        return Component.translatable(START + str, chance).withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC);
     }
 
     public static Component makeHelpField(String str, Integer number) {

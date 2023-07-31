@@ -62,12 +62,12 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
 
         // setup the info fields
         this.helpField.setSpaceAfterTitle(5);
-        var helpText = ComponentUtil.makeHelpField(".help.field_text", ToolLevelingConfig.requiredBooks.get());
+        var helpText = ComponentUtil.makeHelpField(".help.field_text", ToolLevelingConfig.INSTANCE.requiredBooks());
         this.helpField.setLines(List.of(ComponentUtil.TITLE_HELP_FIELD, helpText), font, this.leftPos - 10);
 
         // setup the min and max success chance text
-        this.minChanceText = ComponentUtil.makeChance(".success_chance.min", ToolLevelingConfig.minSuccessChance);
-        this.maxChanceText = ComponentUtil.makeChance(".success_chance.max", ToolLevelingConfig.maxSuccessChance);
+        this.minChanceText = ComponentUtil.makeChance(".success_chance.min", ToolLevelingConfig.INSTANCE.minSuccessChance());
+        this.maxChanceText = ComponentUtil.makeChance(".success_chance.max", ToolLevelingConfig.INSTANCE.maxSuccessChance());
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.tristankechlo.toolleveling.blockentity.ToolLevelingTableBlockEntity;
 import com.tristankechlo.toolleveling.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.item.ItemStack;
@@ -16,6 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public record TableUpgradeProcess(BlockPos pos) {
+
+    public static final ResourceLocation CHANNEL_ID = new ResourceLocation(ToolLeveling.MOD_ID, "tool_leveling_table");
 
     public static void encode(FriendlyByteBuf buf, BlockPos pos) {
         buf.writeBlockPos(pos);
