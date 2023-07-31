@@ -4,11 +4,12 @@
 <br/>
 
 how the mod works:
- - craft the Tool Leveling Table
- - put an enchanted item in the first slot
- - put enough payment items in the slots below
- - higher enchantment levels will required more items / items with higher worth
- - click the enchantment you want to upgrade
+ - Craft the Tool Leveling Table
+ - Put an enchantable item in the big middle slot 
+ - Place enough Enchanted Books in the left slots (by default at least 4 books)
+ - Bookshelfs around the table increase the chance of success 
+ - Special items in the right slots will result in more and higher level enchantments 
+ - Press "Upgrade"
 
 ## Design of the table
 <img src="https://i.ibb.co/gD56FHW/screenshot.png" height="150">

@@ -2,28 +2,22 @@
     "block.toolleveling.tool_leveling_table": "Tool Leveling Table",
     "container.toolleveling.tool_leveling_table": "Tool Leveling Table",
     "commands.superenchant.failed": "%s cannot support that enchantment, you can enable this in the ToolLevelingConfig (%s)",
-
-    "screen.toolleveling.tool_leveling_table.start_upgrade.button_text": "Start",
+    "screen.toolleveling.tool_leveling_table.start_upgrade.button_text": "Upgrade",
     "screen.toolleveling.tool_leveling_table.start_upgrade.button_tooltip": "Start the upgrade process",
-
     "screen.toolleveling.tool_leveling_table.success_chance.field_title": "Iteration Success",
     "screen.toolleveling.tool_leveling_table.success_chance": "Success Chance",
-    "screen.toolleveling.tool_leveling_table.success_chance.min": "Minimum %s",
-    "screen.toolleveling.tool_leveling_table.success_chance.max": "Maximum %s",
-
-    "screen.toolleveling.tool_leveling_table.bonuses.field_title": "Bonuses",
-    "screen.toolleveling.tool_leveling_table.bonuses.iterations": "Iterations",
-    "screen.toolleveling.tool_leveling_table.bonuses.strength": "Strength",
-
+    "screen.toolleveling.tool_leveling_table.success_chance.min": "Minimum %s%%",
+    "screen.toolleveling.tool_leveling_table.success_chance.max": "Maximum %s%%",
+    "screen.toolleveling.tool_leveling_table.summary.field_title": "Summary",
+    "screen.toolleveling.tool_leveling_table.summary.field_text": "Up to %s enchantment(s) will be added to your item, each with a level of %s",
+    "screen.toolleveling.tool_leveling_table.summary.field_text.multi": "Up to %s enchantment(s) will be added to your item, each with a level between %s and %s",
     "screen.toolleveling.tool_leveling_table.percentages.button_text": "Info",
     "screen.toolleveling.tool_leveling_table.percentages.button_tooltip": "Show/Hide the percentages",
     "screen.toolleveling.tool_leveling_table.percentages.field_title": "Chosen Enchantment",
-
     "screen.toolleveling.tool_leveling_table.help.button_text": "Help",
     "screen.toolleveling.tool_leveling_table.help.field_title": "How does this work?",
-    "screen.toolleveling.tool_leveling_table.help.field_text": "Red Slot: Tool to upgrade\n\nPurple Slots: Enchanted Books\n\nBlue Slots: Lapis Lazuli\n\nGreen Slots: Nether Star or Enchanted Golden Apple",
+    "screen.toolleveling.tool_leveling_table.help.field_text": "1. Put an enchantable item in the big middle slot\n\n2. Place enough Enchanted Books in the left slots (at least %s books)\n\n3. Bookshelfs around the table increase the chance of success\n\n4. Special items in the right slots will result in more and higher level enchantments\n\n5. Press 'Upgrade'",
     "screen.toolleveling.tool_leveling_table.help.button_tooltip": "Show/Hide the help text",
-
     "enchantment.level.0": "0",
     "enchantment.level.11": "11",
     "enchantment.level.12": "12",

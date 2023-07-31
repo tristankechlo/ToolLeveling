@@ -29,12 +29,8 @@ public class ToolLevelingTableRenderer implements BlockEntityRenderer<ToolLeveli
         poseStack.translate(0.5D, 0.83D, 0.5D);
         poseStack.scale(0.7F, 0.7F, 0.7F);
         poseStack.mulPose(Axis.XN.rotation(1.5707F));
-        renderItem(stack, poseStack, buffer, light, overlay);
-        poseStack.popPose();
-    }
-
-    private void renderItem(ItemStack stack, PoseStack poseStack, MultiBufferSource buffer, int light, int overlay) {
         itemRenderer.renderStatic(stack, ItemDisplayContext.FIXED, light, overlay, poseStack, buffer, null, OverlayTexture.NO_OVERLAY);
+        poseStack.popPose();
     }
 
 }

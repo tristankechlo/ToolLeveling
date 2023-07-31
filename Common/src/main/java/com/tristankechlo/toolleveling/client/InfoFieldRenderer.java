@@ -15,7 +15,7 @@ import java.util.List;
 public final class InfoFieldRenderer {
 
     private List<FormattedCharSequence> lines = new ArrayList<>();
-    private boolean spaceAfterTitle = true; // TODO make this an int, so i can specify the amount of space after the title
+    private int spaceAfterTitle = 2;
     private final int backgroundColor;
     private final int borderColor1;
     private final int borderColor2;
@@ -26,7 +26,7 @@ public final class InfoFieldRenderer {
         this.borderColor2 = borderColor2;
     }
 
-    public void setSpaceAfterTitle(boolean spaceAfterTitle) {
+    public void setSpaceAfterTitle(int spaceAfterTitle) {
         this.spaceAfterTitle = spaceAfterTitle;
     }
 
@@ -50,7 +50,7 @@ public final class InfoFieldRenderer {
     }
 
     public int calcHeight() {
-        int height = 6 + (lines.size() >= 1 && spaceAfterTitle ? 2 : 0); // add 2 pixels for space after title, when required
+        int height = 6 + (lines.size() >= 1 ? this.spaceAfterTitle : 0); // add 2 pixels for space after title, when required
         height += (lines.size() * 10);
         return height;
     }
@@ -89,12 +89,12 @@ public final class InfoFieldRenderer {
         poseStack.popPose();
     }
 
-    private static void renderLines(Matrix4f matrix4f, MultiBufferSource bufferSource, Font font, List<FormattedCharSequence> lines, boolean spaceAfterTitle) {
+    private static void renderLines(Matrix4f matrix4f, MultiBufferSource bufferSource, Font font, List<FormattedCharSequence> lines, int spaceAfterTitle) {
         int y = 0;
         for (int i = 0; i < lines.size(); i++) {
             FormattedCharSequence line = lines.get(i);
             font.drawInBatch(line, 0, y, -1, false, matrix4f, bufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
-            y += 10 + (i == 0 && spaceAfterTitle ? 2 : 0);
+            y += 10 + (i == 0 ? spaceAfterTitle : 0);
         }
     }
 

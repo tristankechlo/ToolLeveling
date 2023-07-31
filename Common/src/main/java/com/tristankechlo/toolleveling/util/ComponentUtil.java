@@ -21,9 +21,8 @@ public final class ComponentUtil {
     // components related to the info fields
     public static final Component TITLE_PERCENTAGES = makeTitle(".percentages.field_title");
     public static final Component TITLE_SUCCESS_CHANCE = makeTitle(".success_chance.field_title");
-    public static final Component TITLE_BONUSES = makeTitle(".bonuses.field_title");
+    public static final Component TITLE_BONUSES = makeTitle(".summary.field_title");
     public static final Component TITLE_HELP_FIELD = makeTitle(".help.field_title");
-    public static final Component TEXT_HELP_FIELD = make(".help.field_text").withStyle(ChatFormatting.GRAY);
 
     // other stuff
     private static final String START = "screen.toolleveling.tool_leveling_table";
@@ -48,13 +47,21 @@ public final class ComponentUtil {
     }
 
     public static MutableComponent makeChance(String str, Supplier<Float> chance) {
-        return Component.translatable(START + str, chance.get()).withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC).append("%");
+        return Component.translatable(START + str, chance.get()).withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC);
     }
 
-    public static Component makeBonus(String str, int number) {
-        MutableComponent text = Component.translatable(str).withStyle(ChatFormatting.GRAY);
-        text.append(Component.literal(" " + number).withStyle(ChatFormatting.GREEN));
-        return text;
+    public static Component makeHelpField(String str, Integer number) {
+        return Component.translatable(START + str, number).withStyle(ChatFormatting.GRAY);
+    }
+
+    public static Component makeSummary(String str, int iterations, int strength) {
+        MutableComponent iterationsText = Component.literal("" + iterations).withStyle(ChatFormatting.GREEN);
+        MutableComponent strengthText = Component.literal("" + strength).withStyle(ChatFormatting.GREEN);
+        MutableComponent strText = Component.literal("1").withStyle(ChatFormatting.GREEN);
+        if (strength > 1) {
+            str += ".multi";
+        }
+        return Component.translatable(START + str, iterationsText, strText, strengthText).withStyle(ChatFormatting.GRAY);
     }
 
 }

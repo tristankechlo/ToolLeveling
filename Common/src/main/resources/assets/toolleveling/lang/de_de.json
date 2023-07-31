@@ -1,16 +1,17 @@
 {
     "commands.superenchant.failed": "%s kann damit nicht verzaubert werden, du kannst dies in der ToolLevelingConfig \u00C4ndern (%s)",
-    "screen.toolleveling.tool_leveling_table.start_upgrade.button_text": "Start",
+    "screen.toolleveling.tool_leveling_table.start_upgrade.button_text": "Upgrade",
     "screen.toolleveling.tool_leveling_table.start_upgrade.button_tooltip": "Starte den Upgrade Prozess",
     "screen.toolleveling.tool_leveling_table.success_chance.field_title": "Erfolgschance",
     "screen.toolleveling.tool_leveling_table.success_chance": "Durchlaufserfolg",
-    "screen.toolleveling.tool_leveling_table.bonuses.field_title": "Boni",
-    "screen.toolleveling.tool_leveling_table.bonuses.iterations": "Durchg\u00E4nge",
-    "screen.toolleveling.tool_leveling_table.bonuses.strength": "St\u00E4rke",
+    "screen.toolleveling.tool_leveling_table.summary.field_title": "Zusammenfassung",
+    "screen.toolleveling.tool_leveling_table.summary.field_text": "Bis zu %s Verzauberung(en) werden dem Item hinzugefügt, jede mit einer Stufe von %s",
+    "screen.toolleveling.tool_leveling_table.summary.field_text.multi": "Bis zu %s Verzauberung(en) werden dem Item hinzugefügt, jede mit einer Stufe von %s bis %s",
     "screen.toolleveling.tool_leveling_table.percentages.button_text": "Info",
     "screen.toolleveling.tool_leveling_table.percentages.button_tooltip": "Zeige die Wahrscheinlichkeiten f\u00FCr die Verzauberungen",
     "screen.toolleveling.tool_leveling_table.percentages.field_title": "Wahrscheinlichkeiten",
     "screen.toolleveling.tool_leveling_table.help.button_text": "Hilfe",
     "screen.toolleveling.tool_leveling_table.help.field_title": "Wie funktioniert das?",
-    "screen.toolleveling.tool_leveling_table.help.button_tooltip": "Zeige die Hilfe"
+    "screen.toolleveling.tool_leveling_table.help.button_tooltip": "Zeige die Hilfe",
+    "screen.toolleveling.tool_leveling_table.help.field_text": "1. Lege einen verzauberbaren Gegenstand in den großen Slot\n\n2. Platziere genügend Verzauberte Bücher in die linken Slots (mindestens %s Bücher)\n\n3. Bücherregale um den Tisch erhöhen die Erfolgschance\n\n4. Besondere Gegenstände in den rechten Slots führen zu mehr und höherstufigen Verzauberungen\n\n5. Drücke 'Upgrade'"
 }

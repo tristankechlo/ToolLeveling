@@ -31,6 +31,7 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
     private byte ticksSinceUpdate = 0;
     private Component minChanceText;
     private Component maxChanceText;
+    private Component chanceText = Component.empty();
 
     public ToolLevelingTableScreen(ToolLevelingTableMenu container, Inventory inv, Component name) {
         super(container, inv, name);
@@ -60,7 +61,9 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
         }).pos(this.leftPos + 64, this.topPos + 73).size(48, 16).tooltip(ComponentUtil.START_BUTTON_TOOLTIP.get()).build());
 
         // setup the info fields
-        this.helpField.setLines(List.of(ComponentUtil.TITLE_HELP_FIELD, ComponentUtil.TEXT_HELP_FIELD), font, this.leftPos - 10);
+        this.helpField.setSpaceAfterTitle(5);
+        var helpText = ComponentUtil.makeHelpField(".help.field_text", ToolLevelingConfig.requiredBooks.get());
+        this.helpField.setLines(List.of(ComponentUtil.TITLE_HELP_FIELD, helpText), font, this.leftPos - 10);
 
         // setup the min and max success chance text
         this.minChanceText = ComponentUtil.makeChance(".success_chance.min", ToolLevelingConfig.minSuccessChance);
@@ -72,6 +75,7 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
         super.containerTick();
 
         this.successChance = Util.getSuccessChance(this.getMenu());
+        this.chanceText = ComponentUtil.makePercentage("screen.toolleveling.tool_leveling_table.success_chance", this.successChance);
         this.startButton.active = Util.canUpgradeProcessBegin(this.getMenu());
 
         if (!shouldRenderPercentages) {
@@ -87,15 +91,14 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
             this.percentagesField.setLines(components);
 
             // update success chance
-            Component chanceText = ComponentUtil.makePercentage("screen.toolleveling.tool_leveling_table.success_chance", this.successChance);
             this.successChanceField.setLines(List.of(ComponentUtil.TITLE_SUCCESS_CHANCE, chanceText, minChanceText, maxChanceText));
 
             // update bonus items
-            var iterations = this.getMenu().getCycles();
-            Component iterationsText = ComponentUtil.makeBonus("screen.toolleveling.tool_leveling_table.bonuses.iterations", iterations);
-            var strength = this.getMenu().getLevels();
-            Component strengthText = ComponentUtil.makeBonus("screen.toolleveling.tool_leveling_table.bonuses.strength", strength);
-            this.bonusItemField.setLines(List.of(ComponentUtil.TITLE_BONUSES, iterationsText, strengthText));
+            int iterations = this.getMenu().getCycles();
+            int strength = this.getMenu().getLevels();
+            Component summary = ComponentUtil.makeSummary(".summary.field_text", iterations, strength);
+            int maxPossibleWidth = this.width - (this.leftPos + this.imageWidth) - 10;
+            this.bonusItemField.setLines(List.of(ComponentUtil.TITLE_BONUSES, summary), font, maxPossibleWidth);
         }
         this.ticksSinceUpdate++;
     }
@@ -117,6 +120,10 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
             this.successChanceField.render(poseStack, this.font, x, y, fieldWidth);
             y += this.successChanceField.calcHeight() + 1;
             this.bonusItemField.render(poseStack, this.font, x, y, fieldWidth);
+        } else {
+            if (isMouseOverProgressBar(mouseX, mouseY)) {
+                this.renderTooltip(poseStack, chanceText, mouseX, mouseY);
+            }
         }
 
         if (shouldRenderHelp) {
@@ -124,6 +131,26 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
             int y = this.topPos;
             this.helpField.render(poseStack, this.font, x, y);
         }
+    }
+
+    @Override
+    protected void renderBg(PoseStack poseStack, float partialTicks, int mX, int mY) {
+        RenderSystem.setShaderTexture(0, GUI_TEXTURE);
+        blit(poseStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+
+        // render progress bar
+        int targetWidth = (int) (144 * this.successChance);
+        blit(poseStack, this.leftPos + 16, this.topPos + 95, 0, 251, targetWidth, 5);
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        for (var widget : this.children()) {
+            if (!widget.isMouseOver(mouseX, mouseY)) {
+                widget.setFocused(false);   // unfocus the widget if not clicked directly
+            }
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 
     private int calcFieldWidth() {
@@ -136,27 +163,12 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
         return targetWidth;
     }
 
-    @Override
-    protected void renderBg(PoseStack poseStack, float partialTicks, int mX, int mY) {
-        RenderSystem.setShaderTexture(0, GUI_TEXTURE);
-        blit(poseStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
-
-        // render progress bar
-        int targetX = this.leftPos + 16;
-        int targetY = this.topPos + 95;
-        int targetWidth = (int) (144 * this.successChance);
-        int targetHeight = 5;
-        blit(poseStack, targetX, targetY, 0, 251, targetWidth, targetHeight);
-    }
-
-    @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        for (var widget : this.children()) {
-            if (!widget.isMouseOver(mouseX, mouseY)) {
-                widget.setFocused(false);   // unfocus all widgets if clicked outside of them
-            }
-        }
-        return super.mouseClicked(mouseX, mouseY, button);
+    private boolean isMouseOverProgressBar(int mouseX, int mouseY) {
+        int x1 = this.leftPos + 16;
+        int y1 = this.topPos + 95;
+        int x2 = x1 + 144;
+        int y2 = y1 + 5;
+        return mouseX >= x1 && mouseX <= x2 && mouseY >= y1 && mouseY <= y2;
     }
 
 }
