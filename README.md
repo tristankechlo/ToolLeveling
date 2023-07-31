@@ -74,8 +74,8 @@ how the mod works:
 
 | Language  | up to modversion | Translator                                                                  | since version |
 |:---------:|:----------------:|:----------------------------------------------------------------------------|:-------------:|
-| **en_us** |      1.4.5       | tristankechlo ([Github](https://github.com/tristankechlo))                  |    always     |
-| **de_de** |      1.4.5       | tristankechlo ([Github](https://github.com/tristankechlo))                  |    always     |
+| **en_us** |      2.0.0       | tristankechlo ([Github](https://github.com/tristankechlo))                  |    always     |
+| **de_de** |      2.0.0       | tristankechlo ([Github](https://github.com/tristankechlo))                  |    always     |
 | **ro_ro** |      1.3.1       | Potato man                                                                  |    1.2.12     |
 | **ru_ru** |      1.2.3       | damnarsanis ([CurseForge](https://www.curseforge.com/members/damnarsanis/)) |     1.2.3     |
 | **zh_cn** |      1.4.2       | GodGun968 ([Github](https://github.com/GodGun968))                          |     1.4.2     |
