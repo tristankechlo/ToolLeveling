@@ -28,7 +28,7 @@ how the mod works:
 
 <details>
      <summary>Click to see the full GUI with the ingame help displayed</summary>
-    <img src="https://i.ibb.co/1XTZ6DZ/gui-2-0-0-with-help.png">
+    <img src="https://i.ibb.co/1XTZ6DZ/gui-2-0-0-with-help.png" height="500">
 </details>
 
 ---
@@ -37,9 +37,16 @@ how the mod works:
 
 <details>
     <summary>gui before modversion 2.0.0</summary>
-    <img src="https://i.ibb.co/4FdbhBm/toolleveling-gui.png">  
+    <img src="https://i.ibb.co/4FdbhBm/toolleveling-gui.png" height="400">  
 
-multiple items are allowed as payment items, and there worth can be changed through the configs
+multiple items are allowed as payment items, and there worth can be changed through the configs  
+  
+how the mod works:  
+ - craft the Tool Leveling Table
+ - put an enchanted item in the first slot
+ - put enough payment items in the slots below
+ - higher enchantment levels will required more items / items with higher worth
+ - click the enchantment you want to upgrade
 </details>
 
 <details>
