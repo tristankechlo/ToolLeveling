@@ -69,7 +69,7 @@ dependencies {
     implementation 'org.spongepowered:mixin:0.8.4:processor'
     annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
 
-    implementation 'org.codehaus.groovy:groovy-json:3.0.16'
+    implementation(fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}"))
 }
 
 tasks.withType(JavaCompile) {
@@ -83,10 +83,6 @@ processResources {
     filesMatching("META-INF/mods.toml") {
         expand "version": project.version
     }
-
-    //filesMatching('*.mixins.json') {
-    //    expand "refmap_target": "${mod_id}."
-    //}
 
     // minify json files
     doLast {
