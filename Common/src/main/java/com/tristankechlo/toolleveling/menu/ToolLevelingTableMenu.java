@@ -41,31 +41,26 @@ public class ToolLevelingTableMenu extends AbstractContainerMenu {
         this.pos = pos;
 
         // upgrade slot
-        this.addSlot(new UpgradeSlot(container, 0, 80, 45));
+        this.addSlot(new UpgradeSlot(container, 0, 80, 23));
 
-        // book slots
-        this.addSlot(new PredicateSlot(container, 1, 17, 18, Predicates.IS_BOOK));
-        this.addSlot(new PredicateSlot(container, 2, 35, 18, Predicates.IS_BOOK));
-        this.addSlot(new PredicateSlot(container, 3, 17, 36, Predicates.IS_BOOK));
-        this.addSlot(new PredicateSlot(container, 4, 35, 36, Predicates.IS_BOOK));
-        this.addSlot(new PredicateSlot(container, 5, 17, 54, Predicates.IS_BOOK));
-        this.addSlot(new PredicateSlot(container, 6, 35, 54, Predicates.IS_BOOK));
-        this.addSlot(new PredicateSlot(container, 7, 17, 72, Predicates.IS_BOOK));
-        this.addSlot(new PredicateSlot(container, 8, 35, 72, Predicates.IS_BOOK));
+        // Book slots
+        for (int i : ToolLevelingTableBlockEntity.BOOK_SLOTS) {
+            int x = (i % 2 == 1) ? 17 : 35;
+            int y = 18 + (Math.floorDiv((i - 1), 2) * 18);
+            this.addSlot(new PredicateSlot(container, i, x, y, Predicates.IS_BOOK));
+        }
 
-        // bonus slots
-        this.addSlot(new PredicateSlot(container, 9, 125, 18, Predicates.IS_BONUS_ITEM, 1));
-        this.addSlot(new PredicateSlot(container, 10, 143, 18, Predicates.IS_BONUS_ITEM, 1));
-        this.addSlot(new PredicateSlot(container, 11, 125, 36, Predicates.IS_BONUS_ITEM, 1));
-        this.addSlot(new PredicateSlot(container, 12, 143, 36, Predicates.IS_BONUS_ITEM, 1));
-        this.addSlot(new PredicateSlot(container, 13, 125, 54, Predicates.IS_BONUS_ITEM, 1));
-        this.addSlot(new PredicateSlot(container, 14, 143, 54, Predicates.IS_BONUS_ITEM, 1));
-        this.addSlot(new PredicateSlot(container, 15, 125, 72, Predicates.IS_BONUS_ITEM, 1));
-        this.addSlot(new PredicateSlot(container, 16, 143, 72, Predicates.IS_BONUS_ITEM, 1));
+        // Bonus slots
+        for (int i : ToolLevelingTableBlockEntity.BONUS_SLOTS) {
+            int x = (i % 2 == 1) ? 125 : 143;
+            int y = 18 + (Math.floorDiv((i - 7), 2) * 18);
+            this.addSlot(new PredicateSlot(container, i, x, y, Predicates.IS_BONUS_ITEM, 1));
+        }
+
 
         // main inventory
         int startX = 8;
-        int startY = 118;
+        int startY = 100;
         int slotSizePlus2 = 18;
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 9; column++) {
@@ -97,11 +92,11 @@ public class ToolLevelingTableMenu extends AbstractContainerMenu {
                 return ItemStack.EMPTY;
             }
         } else if (this.slots.get(1).mayPlace(itemstack1)) { // try placing into book slot
-            if (!this.moveItemStackTo(itemstack1, 1, 9, false)) {
+            if (!this.moveItemStackTo(itemstack1, 1, 7, false)) {
                 return ItemStack.EMPTY;
             }
-        } else if (this.slots.get(9).mayPlace(itemstack1)) { // try placing into bonus slot
-            boolean allFull = this.slots.subList(9, slotCount).stream().allMatch(Slot::hasItem);
+        } else if (this.slots.get(7).mayPlace(itemstack1)) { // try placing into bonus slot
+            boolean allFull = this.slots.subList(7, slotCount).stream().allMatch(Slot::hasItem);
             if (allFull) {
                 return ItemStack.EMPTY;
             }

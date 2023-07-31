@@ -37,7 +37,7 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
         super(container, inv, name);
         this.imageWidth = 176;
         this.imageHeight = 200;
-        this.inventoryLabelY += 35;
+        this.inventoryLabelY += 17;
         this.titleLabelX -= 2;
     }
 
@@ -58,7 +58,7 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
         // button to start upgrade process
         this.startButton = this.addRenderableWidget(new Button.Builder(ComponentUtil.START_BUTTON_TEXT, (b) -> {
             NetworkHelper.INSTANCE.startUpgradeProcess(this.getMenu().getPos());
-        }).pos(this.leftPos + 64, this.topPos + 73).size(48, 16).tooltip(ComponentUtil.START_BUTTON_TOOLTIP.get()).build());
+        }).pos(this.leftPos + 64, this.topPos + 55).size(48, 16).tooltip(ComponentUtil.START_BUTTON_TOOLTIP.get()).build());
 
         // setup the info fields
         this.helpField.setSpaceAfterTitle(5);
@@ -140,7 +140,7 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
 
         // render progress bar
         int targetWidth = (int) (144 * this.successChance);
-        blit(poseStack, this.leftPos + 16, this.topPos + 95, 0, 251, targetWidth, 5);
+        blit(poseStack, this.leftPos + 16, this.topPos + 77, 0, 251, targetWidth, 5);
     }
 
     @Override
@@ -165,7 +165,7 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
 
     private boolean isMouseOverProgressBar(int mouseX, int mouseY) {
         int x1 = this.leftPos + 16;
-        int y1 = this.topPos + 95;
+        int y1 = this.topPos + 77;
         int x2 = x1 + 144;
         int y2 = y1 + 5;
         return mouseX >= x1 && mouseX <= x2 && mouseY >= y1 && mouseY <= y2;

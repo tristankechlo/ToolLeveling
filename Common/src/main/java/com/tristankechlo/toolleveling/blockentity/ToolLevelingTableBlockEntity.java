@@ -34,10 +34,10 @@ public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity imple
 
     private static final Component CONTAINER_NAME = Component.translatable("container.toolleveling.tool_leveling_table");
     private NonNullList<ItemStack> items = NonNullList.withSize(NUMBER_OF_SLOTS, ItemStack.EMPTY);
-    public static final int NUMBER_OF_SLOTS = 17;
+    public static final int NUMBER_OF_SLOTS = 13;
     public static final int[] SLOTS = IntStream.range(1, NUMBER_OF_SLOTS).toArray();
-    public static final int[] BOOK_SLOTS = IntStream.range(1, 9).toArray();
-    public static final int[] BONUS_SLOTS = IntStream.range(9, NUMBER_OF_SLOTS).toArray();
+    public static final int[] BOOK_SLOTS = IntStream.range(1, 7).toArray();
+    public static final int[] BONUS_SLOTS = IntStream.range(7, NUMBER_OF_SLOTS).toArray();
 
     public ToolLevelingTableBlockEntity(BlockPos pos, BlockState state) {
         super(ToolLeveling.TLT_BLOCK_ENTITY.get(), pos, state);
@@ -123,10 +123,10 @@ public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity imple
         if (index == 0) {
             return Predicates.IS_UPGRADE_ITEM.test(stack);
         }
-        if (index >= 1 && index <= 8) {
+        if (index >= 1 && index <= 6) {
             return Predicates.IS_BOOK.test(stack);
         }
-        if (index >= 9 && index <= 16) {
+        if (index >= 7 && index <= 12) {
             return Predicates.IS_BONUS_ITEM.test(stack);
         }
         return false;
