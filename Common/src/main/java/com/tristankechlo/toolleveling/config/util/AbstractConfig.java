@@ -21,16 +21,13 @@ public abstract class AbstractConfig {
 
     public JsonObject serialize() {
         JsonObject jsonObject = new JsonObject();
-        this.getValues().forEach(value -> jsonObject.add(value.getIdentifier(), value.serialize()));
+        jsonObject.addProperty("__comment", this.getComment());
+        this.getValues().forEach(value -> value.serialize(jsonObject));
         return jsonObject;
     }
 
-    public void deserialize(JsonObject jsonObject) {
-        this.getValues().forEach(value -> {
-            if (jsonObject.has(value.getIdentifier())) {
-                value.deserialize(jsonObject.getAsJsonObject(value.getIdentifier()));
-            }
-        });
+    public void deserialize(JsonObject json) {
+        this.getValues().forEach(value -> value.deserialize(json));
     }
 
     public String getFileName() {
@@ -42,5 +39,7 @@ public abstract class AbstractConfig {
     }
 
     protected abstract List<AbstractConfigValue<?>> getValues();
+
+    protected abstract String getComment();
 
 }

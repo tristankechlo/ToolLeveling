@@ -8,13 +8,11 @@ public final class BooleanValue extends AbstractConfigValue<Boolean> {
 
     private boolean value;
     private final boolean defaultValue;
-    private final String comment;
 
-    public BooleanValue(String identifier, boolean defaultValue, String comment) {
+    public BooleanValue(String identifier, boolean defaultValue) {
         super(identifier);
         this.defaultValue = defaultValue;
         this.value = defaultValue;
-        this.comment = comment;
     }
 
     @Override
@@ -28,19 +26,14 @@ public final class BooleanValue extends AbstractConfigValue<Boolean> {
     }
 
     @Override
-    public JsonObject serialize() {
-        JsonObject jsonObject = new JsonObject();
-        if (comment != null && !comment.isEmpty()) {
-            jsonObject.addProperty("__comment", comment);
-        }
-        jsonObject.addProperty("value", value);
-        return jsonObject;
+    public void serialize(JsonObject json) {
+        json.addProperty(getIdentifier(), value);
     }
 
     @Override
-    public void deserialize(JsonObject jsonObject) {
+    public void deserialize(JsonObject json) {
         try {
-            value = GsonHelper.getAsBoolean(jsonObject, "value", defaultValue);
+            value = GsonHelper.getAsBoolean(json, getIdentifier(), defaultValue);
         } catch (Exception e) {
             value = defaultValue;
             ToolLeveling.LOGGER.warn(e.getMessage());

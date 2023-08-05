@@ -24,8 +24,8 @@ public abstract class AbstractConfigValue<T> implements Supplier<T> {
 
     public abstract void setToDefault();
 
-    public abstract JsonObject serialize();
+    public abstract void serialize(JsonObject json);
 
-    public abstract void deserialize(JsonObject jsonObject);
+    public abstract void deserialize(JsonObject json);
 
 }

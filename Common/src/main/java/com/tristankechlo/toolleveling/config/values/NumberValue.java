@@ -1,10 +1,7 @@
 package com.tristankechlo.toolleveling.config.values;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.tristankechlo.toolleveling.ToolLeveling;
-
-import java.util.function.Function;
 
 public final class NumberValue<T extends Number & Comparable<T>> extends AbstractConfigValue<T> {
 
@@ -12,10 +9,9 @@ public final class NumberValue<T extends Number & Comparable<T>> extends Abstrac
     private final T defaultValue;
     private final T minValue;
     private final T maxValue;
-    private final String comment;
-    private final Function<JsonElement, T> getAsType;
+    private final NumberSupplier<T> supplier;
 
-    public NumberValue(String identifier, T defaultValue, T min, T max, Function<JsonElement, T> getAsType, String comment) {
+    public NumberValue(String identifier, T defaultValue, T min, T max, NumberSupplier<T> supplier) {
         super(identifier);
         //check if min < max
         if (min.compareTo(max) > 0) {
@@ -29,8 +25,7 @@ public final class NumberValue<T extends Number & Comparable<T>> extends Abstrac
         this.defaultValue = defaultValue;
         this.minValue = min;
         this.maxValue = max;
-        this.comment = comment;
-        this.getAsType = getAsType;
+        this.supplier = supplier;
     }
 
     @Override
@@ -39,35 +34,22 @@ public final class NumberValue<T extends Number & Comparable<T>> extends Abstrac
     }
 
     @Override
-    public JsonObject serialize() {
-        JsonObject jsonObject = new JsonObject();
-        if (this.comment != null && !this.comment.isEmpty()) {
-            jsonObject.addProperty("__comment", this.comment);
-        }
-        jsonObject.addProperty("__possibleValues", "range[" + this.minValue + "|" + this.maxValue + "]");
-        jsonObject.addProperty("value", this.value);
-        return jsonObject;
+    public void serialize(JsonObject json) {
+        json.addProperty(getIdentifier(), value);
     }
 
     @Override
-    public void deserialize(JsonObject jsonObject) {
+    public void deserialize(JsonObject json) {
         try {
-            JsonElement jsonElement = jsonObject.get("value");
-            if (jsonElement == null) {
-                value = defaultValue;
-                ToolLeveling.LOGGER.warn("Error while loading the config value " + getIdentifier() + ", using defaultvalue instead");
-                return;
+            T checkMe = this.supplier.getAsType(json, getIdentifier(), defaultValue);
+            if (!checkInRange(checkMe, minValue, maxValue)) {
+                throw new IllegalArgumentException("ConfigValue " + getIdentifier() + " needs to be in range[" + minValue + "|" + maxValue + "]");
             }
-            T checkMe = getAsType.apply(jsonElement);
-            if (checkInRange(checkMe, minValue, maxValue)) {
-                value = checkMe;
-                return;
-            }
+            this.value = checkMe;
         } catch (Exception e) {
             ToolLeveling.LOGGER.warn(e.getMessage());
             ToolLeveling.LOGGER.warn("Error while loading the config value " + getIdentifier() + ", using defaultvalue instead");
         }
-        value = defaultValue;
     }
 
     @Override
@@ -77,6 +59,11 @@ public final class NumberValue<T extends Number & Comparable<T>> extends Abstrac
 
     private boolean checkInRange(T checkMe, T min, T max) {
         return checkMe.compareTo(min) >= 0 && checkMe.compareTo(max) <= 0;
+    }
+
+    @FunctionalInterface
+    public interface NumberSupplier<T extends Number & Comparable<T>> {
+        T getAsType(JsonObject json, String id, T defaultValue);
     }
 
 }

@@ -9,13 +9,11 @@ public final class IngredientValue extends AbstractConfigValue<Ingredient> {
 
     private Ingredient value;
     private final Ingredient defaultValue;
-    private final String comment;
 
-    public IngredientValue(String name, Ingredient defaultValue, String comment) {
+    public IngredientValue(String name, Ingredient defaultValue) {
         super(name);
         this.value = defaultValue;
         this.defaultValue = defaultValue;
-        this.comment = comment;
     }
 
     @Override
@@ -24,19 +22,14 @@ public final class IngredientValue extends AbstractConfigValue<Ingredient> {
     }
 
     @Override
-    public JsonObject serialize() {
-        JsonObject jsonObject = new JsonObject();
-        if (comment != null && !comment.isEmpty()) {
-            jsonObject.addProperty("__comment", comment);
-        }
-        jsonObject.add("value", value.toJson());
-        return jsonObject;
+    public void serialize(JsonObject json) {
+        json.add(getIdentifier(), value.toJson());
     }
 
     @Override
-    public void deserialize(JsonObject jsonObject) {
+    public void deserialize(JsonObject json) {
         try {
-            value = Ingredient.fromJson(GsonHelper.getAsJsonObject(jsonObject, "value"));
+            value = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, getIdentifier()));
         } catch (Exception e) {
             value = defaultValue;
             ToolLeveling.LOGGER.warn(e.getMessage());

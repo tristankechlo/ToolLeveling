@@ -17,8 +17,10 @@ public final class CommandConfig extends AbstractConfig {
 
     private CommandConfig() {
         super("command_config.json", ToolLeveling.CONFIG_INFO_COMMANDS);
-        allowWrongEnchantments = new BooleanValue("allow_wrong_enchantments", true, "Allow adding enchantments that are not compatible with the tool");
-        allowIncompatibleEnchantments = new BooleanValue("allow_incompatible_enchantments", true, "Allow adding enchantments that are not compatible with each other");
+
+        allowWrongEnchantments = new BooleanValue("allow_wrong_enchantments", true);
+        allowIncompatibleEnchantments = new BooleanValue("allow_incompatible_enchantments", true);
+
         values = List.of(allowWrongEnchantments, allowIncompatibleEnchantments);
     }
 
@@ -26,18 +28,19 @@ public final class CommandConfig extends AbstractConfig {
     public JsonObject serialize() {
         JsonObject superEnchant = new JsonObject();
         superEnchant.addProperty("__comment", "This config is for the /superenchant command");
-        superEnchant.add(allowWrongEnchantments.getIdentifier(), allowWrongEnchantments.serialize());
-        superEnchant.add(allowIncompatibleEnchantments.getIdentifier(), allowIncompatibleEnchantments.serialize());
+        allowWrongEnchantments.serialize(superEnchant);
+        allowIncompatibleEnchantments.serialize(superEnchant);
 
         JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("__comment", this.getComment());
         jsonObject.add("superenchant", superEnchant);
         return jsonObject;
     }
 
     @Override
-    public void deserialize(JsonObject jsonObject) {
-        if (jsonObject.has("superenchant")) {
-            JsonObject superEnchant = jsonObject.getAsJsonObject("superenchant");
+    public void deserialize(JsonObject json) {
+        if (json.has("superenchant")) {
+            JsonObject superEnchant = json.getAsJsonObject("superenchant");
             allowWrongEnchantments.deserialize(superEnchant);
             allowIncompatibleEnchantments.deserialize(superEnchant);
         }
@@ -54,6 +57,11 @@ public final class CommandConfig extends AbstractConfig {
     @Override
     protected List<AbstractConfigValue<?>> getValues() {
         return values;
+    }
+
+    @Override
+    protected String getComment() {
+        return "Checkout '" + ToolLeveling.CONFIG_INFO_COMMANDS + "' for more information about this config";
     }
 
 }
