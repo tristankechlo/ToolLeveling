@@ -85,8 +85,8 @@ public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity imple
     }
 
     @Override
-    public ItemStack removeItem(int var1, int var2) {
-        return ContainerHelper.removeItem(this.items, var1, var2);
+    public ItemStack removeItem(int index, int count) {
+        return ContainerHelper.removeItem(this.items, index, count);
     }
 
     @Override
@@ -159,18 +159,18 @@ public class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity imple
     }
 
     @Override
-    public int[] getSlotsForFace(Direction var1) {
+    public int[] getSlotsForFace(Direction direction) {
         return SLOTS;
     }
 
     @Override
-    public boolean canPlaceItemThroughFace(int index, ItemStack var2, Direction var3) {
-        return index != 0 && this.canPlaceItem(index, var2);
+    public boolean canPlaceItemThroughFace(int index, ItemStack stack, Direction direction) {
+        return index != 0 && this.canPlaceItem(index, stack);
     }
 
     @Override
-    public boolean canTakeItemThroughFace(int index, ItemStack var2, Direction var3) {
-        return this.canPlaceItemThroughFace(index, var2, var3);
+    public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
+        return this.canPlaceItemThroughFace(index, stack, direction);
     }
 
     public ItemStack getStackToEnchant() {

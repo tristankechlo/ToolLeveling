@@ -33,7 +33,7 @@ public record SyncToolLevelingConfig(String identifier, JsonObject json) {
         boolean check = ConfigSyncingHelper.deserializeConfig(msg.identifier(), msg.json());
         if (!check) {
             ToolLeveling.LOGGER.error("Config '{}' could not be loaded", msg.identifier());
-            throw new RuntimeException("Config " + msg.identifier + " could not be loaded");
+            throw new RuntimeException("Config '" + msg.identifier() + "' could not be loaded");
         }
         ToolLeveling.LOGGER.info("Config '{}' received and loaded.", msg.identifier());
     }

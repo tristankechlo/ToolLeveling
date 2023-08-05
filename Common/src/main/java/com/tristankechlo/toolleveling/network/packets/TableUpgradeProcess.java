@@ -71,7 +71,7 @@ public record TableUpgradeProcess(BlockPos pos) {
                 }
                 Enchantment e = o.get().getData();
                 int enchantmentLevel = level.getRandom().nextInt(strength) + 1;
-                if (enchantmentsToAdd.containsKey(e)) {
+                if (enchantmentsToAdd.containsKey(e)) { // if the enchantment is already in the map, sum up the levels
                     enchantmentLevel += enchantmentsToAdd.get(e);
                 }
                 enchantmentsToAdd.put(e, enchantmentLevel);
@@ -80,7 +80,6 @@ public record TableUpgradeProcess(BlockPos pos) {
             // add the enchantments to the item
             for (var entry : enchantmentsToAdd.entrySet()) {
                 oldEnchantments.merge(entry.getKey(), entry.getValue(), Integer::sum);
-                ToolLeveling.LOGGER.info("TableUpgradeProcess: added {} levels to enchantment {}", entry.getValue(), entry.getKey().getDescriptionId());
             }
             EnchantmentHelper.setEnchantments(oldEnchantments, tool);
             table.setChanged();

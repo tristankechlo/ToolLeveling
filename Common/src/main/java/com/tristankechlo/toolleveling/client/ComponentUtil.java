@@ -1,4 +1,4 @@
-package com.tristankechlo.toolleveling.util;
+package com.tristankechlo.toolleveling.client;
 
 import com.tristankechlo.toolleveling.menu.ToolLevelingTableMenu;
 import net.minecraft.ChatFormatting;

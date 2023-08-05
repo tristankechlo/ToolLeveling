@@ -29,7 +29,6 @@ public class ToolLevelingTableMenu extends AbstractContainerMenu {
     private final Level level;
     private final BlockPos pos;
 
-
     public ToolLevelingTableMenu(int i, Inventory inventory, FriendlyByteBuf friendlyByteBuf) {
         this(i, inventory, new SimpleContainer(ToolLevelingTableBlockEntity.NUMBER_OF_SLOTS), friendlyByteBuf.readBlockPos());
     }
@@ -57,7 +56,6 @@ public class ToolLevelingTableMenu extends AbstractContainerMenu {
             this.addSlot(new PredicateSlot(container, i, x, y, Predicates.IS_BONUS_ITEM, 1));
         }
 
-
         // main inventory
         int startX = 8;
         int startY = 100;
@@ -67,6 +65,7 @@ public class ToolLevelingTableMenu extends AbstractContainerMenu {
                 this.addSlot(new Slot(playerInv, 9 + (row * 9) + column, startX + (column * slotSizePlus2), startY + (row * slotSizePlus2)));
             }
         }
+
         // hotbar
         startY += 58;
         for (int column = 0; column < 9; column++) {

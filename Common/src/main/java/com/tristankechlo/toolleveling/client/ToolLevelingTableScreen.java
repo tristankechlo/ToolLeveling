@@ -6,7 +6,6 @@ import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
 import com.tristankechlo.toolleveling.menu.ToolLevelingTableMenu;
 import com.tristankechlo.toolleveling.network.NetworkHelper;
-import com.tristankechlo.toolleveling.util.ComponentUtil;
 import com.tristankechlo.toolleveling.util.Util;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -173,8 +172,11 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
         return mouseX >= x1 && mouseX <= x2 && mouseY >= y1 && mouseY <= y2;
     }
 
+    /* used by JustEnoughItems to determine which areas(besides the main texture) are used by this gui */
     public List<Rect2i> getExtraAreas() {
         List<Rect2i> areas = new ArrayList<>();
+
+        // left side of the menu (help text)
         if (shouldRenderHelp) {
             int width = this.helpField.calcWidth(this.font);
             int x = this.leftPos - width;
@@ -182,6 +184,8 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
             int height = this.helpField.calcHeight();
             areas.add(new Rect2i(x, y, width, height));
         }
+
+        // right side of the menu (percentages, success chance, bonus items)
         if (shouldRenderPercentages) {
             int x = this.leftPos + this.imageWidth;
             int y = this.topPos;
@@ -197,6 +201,7 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
             height = this.bonusItemField.calcHeight() + 1;
             areas.add(new Rect2i(x, y, fieldWidth, height));
         }
+
         // add area for top buttons
         int buttonWidth = (this.imageWidth - 2) / 2; // width of the help and info button
         areas.add(new Rect2i(this.leftPos + 1, topPos - 17, buttonWidth, 16));
