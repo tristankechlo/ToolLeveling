@@ -1,7 +1,7 @@
 package com.tristankechlo.toolleveling.blocks;
 
 import com.tristankechlo.toolleveling.blockentity.ToolLevelingTableBlockEntity;
-import com.tristankechlo.toolleveling.network.NetworkHelper;
+import com.tristankechlo.toolleveling.network.ServerNetworkHelper;
 import com.tristankechlo.toolleveling.platform.PlatformHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Containers;
@@ -56,7 +56,7 @@ public class ToolLevelingTableBlock extends BaseEntityBlock {
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (!level.isClientSide()) {
-            NetworkHelper.INSTANCE.openMenu(state, level, pos, player, hand, hit);
+            ServerNetworkHelper.INSTANCE.openMenu(state, level, pos, player, hand, hit);
         }
         return InteractionResult.SUCCESS;
     }

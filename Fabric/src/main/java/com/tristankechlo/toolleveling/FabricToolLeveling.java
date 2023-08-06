@@ -5,7 +5,8 @@ import com.tristankechlo.toolleveling.commands.SuperEnchantCommand;
 import com.tristankechlo.toolleveling.commands.ToolLevelingCommand;
 import com.tristankechlo.toolleveling.config.util.ConfigManager;
 import com.tristankechlo.toolleveling.config.util.ConfigSyncingHelper;
-import com.tristankechlo.toolleveling.network.NetworkHelper;
+import com.tristankechlo.toolleveling.network.FabricServerNetworkHelper;
+import com.tristankechlo.toolleveling.network.ServerNetworkHelper;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -22,7 +23,7 @@ public class FabricToolLeveling implements ModInitializer {
     @Override
     public void onInitialize() {
         ToolLeveling.init(); // register all items, blocks, etc.
-        NetworkHelper.setup(); // register all packets
+        ServerNetworkHelper.setup(); // register server related network stuff
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(this::populateCreativeTab);
         CommandRegistrationCallback.EVENT.register(this::registerCommands);
 

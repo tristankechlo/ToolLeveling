@@ -4,9 +4,7 @@ import com.google.gson.JsonObject;
 import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.platform.Services;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -14,23 +12,18 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
-public interface NetworkHelper {
+public interface ServerNetworkHelper {
 
-    NetworkHelper INSTANCE = Services.load(NetworkHelper.class);
+    ServerNetworkHelper INSTANCE = Services.load(ServerNetworkHelper.class);
 
     static void setup() {
-        NetworkHelper.INSTANCE.registerPackets();
-        ToolLeveling.LOGGER.info("Packets registered");
+        INSTANCE.registerPacketReceiver();
+        ToolLeveling.LOGGER.info("ClientSidePacketHandler registered");
     }
 
-    void registerPackets();
+    default void registerPacketReceiver() {}
 
     void openMenu(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit);
-
-    /**
-     * Sends a packet to the server to start the upgrade process
-     */
-    void startUpgradeProcess(BlockPos pos);
 
     /**
      * Sends a packet to the client to sync one config to one player
@@ -41,20 +34,5 @@ public interface NetworkHelper {
      * Sends a packet to all clients to sync one config to all players
      */
     void syncToolLevelingConfigToAllClients(MinecraftServer server, String identifier, JsonObject json);
-
-    @FunctionalInterface
-    interface ServerSidePacketHandler<T> {
-        void handle(T msg, ServerLevel level);
-    }
-
-    @FunctionalInterface
-    interface ClientSidePacketHandler<T> {
-        void handle(T msg);
-    }
-
-    @FunctionalInterface
-    interface PacketDecoder<T> {
-        T decode(FriendlyByteBuf buf);
-    }
 
 }

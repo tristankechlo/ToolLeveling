@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
 import com.tristankechlo.toolleveling.menu.ToolLevelingTableMenu;
-import com.tristankechlo.toolleveling.network.NetworkHelper;
+import com.tristankechlo.toolleveling.network.ClientNetworkHelper;
 import com.tristankechlo.toolleveling.util.Util;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -58,7 +58,7 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
                 .tooltip(ComponentUtil.INFO_BUTTON_TOOLTIP.get()).build());
         // button to start upgrade process
         this.startButton = this.addRenderableWidget(new Button.Builder(ComponentUtil.START_BUTTON_TEXT, (b) -> {
-            NetworkHelper.INSTANCE.startUpgradeProcess(this.getMenu().getPos());
+            ClientNetworkHelper.INSTANCE.startUpgradeProcess(this.getMenu().getPos());
         }).pos(this.leftPos + 64, this.topPos + 55).size(48, 16).tooltip(ComponentUtil.START_BUTTON_TOOLTIP.get()).build());
 
         // setup the info fields
