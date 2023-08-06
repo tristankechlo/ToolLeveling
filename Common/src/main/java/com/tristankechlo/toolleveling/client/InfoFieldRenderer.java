@@ -3,6 +3,7 @@ package com.tristankechlo.toolleveling.client;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
@@ -55,11 +56,11 @@ public final class InfoFieldRenderer {
         return height;
     }
 
-    public void render(PoseStack poseStack, Font font, int startX, int startY) {
-        render(poseStack, font, startX, startY, calcWidth(font));
+    public void render(GuiGraphics graphics, Font font, int startX, int startY) {
+        render(graphics, font, startX, startY, calcWidth(font));
     }
 
-    public void render(PoseStack poseStack, Font font, int startX, int startY, int width) {
+    public void render(GuiGraphics graphics, Font font, int startX, int startY, int width) {
         // if there are no lines, add the title as the first line, otherwise return
         if (this.lines.isEmpty()) {
             return;
@@ -68,13 +69,13 @@ public final class InfoFieldRenderer {
         // calculate width and height of the info field
         int height = calcHeight();
 
-        poseStack.pushPose();
-        poseStack.translate(startX, startY, 50);
+        graphics.pose().pushPose();
+        graphics.pose().translate(startX, startY, 50);
         // render background
         BufferBuilder bufferBuilder = Tesselator.getInstance().getBuilder();
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
         bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-        Matrix4f matrix4f = poseStack.last().pose();
+        Matrix4f matrix4f = graphics.pose().last().pose();
         CustomTooltipRenderer.renderBackground(matrix4f, bufferBuilder, 0, 0, width, height, backgroundColor, borderColor1, borderColor2);
         RenderSystem.enableDepthTest();
         RenderSystem.enableBlend();
@@ -82,11 +83,10 @@ public final class InfoFieldRenderer {
         BufferUploader.drawWithShader(bufferBuilder.end());
 
         // render text
-        MultiBufferSource.BufferSource bufferSource = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
-        poseStack.translate(4, 4, 50);
-        renderLines(matrix4f, bufferSource, font, lines, spaceAfterTitle);
-        bufferSource.endBatch();
-        poseStack.popPose();
+        graphics.pose().translate(4, 4, 50);
+        renderLines(matrix4f, graphics.bufferSource(), font, lines, spaceAfterTitle);
+        graphics.bufferSource().endBatch();
+        graphics.pose().popPose();
     }
 
     private static void renderLines(Matrix4f matrix4f, MultiBufferSource bufferSource, Font font, List<FormattedCharSequence> lines, int spaceAfterTitle) {

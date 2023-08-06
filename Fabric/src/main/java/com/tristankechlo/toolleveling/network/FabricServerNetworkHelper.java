@@ -62,7 +62,7 @@ public class FabricServerNetworkHelper implements ServerNetworkHelper {
             return;
         }
         MSG msg = decoder.apply(buf);
-        server.execute(() -> handler.accept(msg, player.getLevel()));
+        server.execute(() -> handler.accept(msg, player.serverLevel()));
     }
 
 }

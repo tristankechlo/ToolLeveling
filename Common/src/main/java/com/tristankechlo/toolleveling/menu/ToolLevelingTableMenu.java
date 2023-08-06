@@ -36,7 +36,7 @@ public class ToolLevelingTableMenu extends AbstractContainerMenu {
     public ToolLevelingTableMenu(int id, Inventory playerInv, Container container, BlockPos pos) {
         super(ToolLeveling.TLT_MENU.get(), id);
         this.table = container;
-        this.level = playerInv.player.level;
+        this.level = playerInv.player.level();
         this.pos = pos;
 
         // upgrade slot

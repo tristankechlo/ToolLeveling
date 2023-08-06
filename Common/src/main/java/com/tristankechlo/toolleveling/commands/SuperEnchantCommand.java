@@ -6,7 +6,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.tristankechlo.toolleveling.config.CommandConfig;
-import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -107,9 +106,9 @@ public final class SuperEnchantCommand {
             throw FAILED_EXCEPTION.create();
         } else {
             if (targets.size() == 1) {
-                source.sendSuccess(Component.translatable("commands.enchant.success.single", enchantment.getFullname(level), targets.iterator().next().getDisplayName()), true);
+                source.sendSuccess(() -> Component.translatable("commands.enchant.success.single", enchantment.getFullname(level), targets.iterator().next().getDisplayName()), true);
             } else {
-                source.sendSuccess(Component.translatable("commands.enchant.success.multiple", enchantment.getFullname(level), targets.size()), true);
+                source.sendSuccess(() -> Component.translatable("commands.enchant.success.multiple", enchantment.getFullname(level), targets.size()), true);
             }
             return i;
         }

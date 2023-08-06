@@ -48,7 +48,7 @@ public final class ResponseHelper {
 
     public static void sendMessage(CommandSourceStack source, Component message, boolean broadcastToOps) {
         MutableComponent start = start().append(message);
-        source.sendSuccess(start, broadcastToOps);
+        source.sendSuccess(() -> start, broadcastToOps);
     }
 
     public static MutableComponent clickableLink(String url, String displayText) {

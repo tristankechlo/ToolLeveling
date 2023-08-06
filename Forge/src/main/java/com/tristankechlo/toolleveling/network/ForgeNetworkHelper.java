@@ -42,7 +42,7 @@ public final class ForgeNetworkHelper {
             if (player == null) {
                 return;
             }
-            handler.accept(msg, player.getLevel());
+            handler.accept(msg, player.serverLevel());
         });
         context.get().setPacketHandled(true);
     }

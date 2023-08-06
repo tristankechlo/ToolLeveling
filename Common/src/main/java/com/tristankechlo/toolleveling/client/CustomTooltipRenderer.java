@@ -37,7 +37,7 @@ public final class CustomTooltipRenderer {
         fillGradient(matrix4f, bufferBuilder, x, y, x + width, y + height, 0, color, color);
     }
 
-    /** copied from {@link net.minecraft.client.gui.GuiComponent} */
+    /** copied from {@link net.minecraft.client.gui.GuiGraphics} */
     private static void fillGradient(Matrix4f matrix, BufferBuilder buffer, int x1, int y1, int x2, int y2, int m, int color1, int color2) {
         float $$9 = (float) FastColor.ARGB32.alpha(color1) / 255.0F;
         float $$10 = (float) FastColor.ARGB32.red(color1) / 255.0F;

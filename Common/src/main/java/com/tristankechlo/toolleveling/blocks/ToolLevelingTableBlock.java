@@ -16,8 +16,7 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -34,8 +33,9 @@ public class ToolLevelingTableBlock extends BaseEntityBlock {
     );
 
     public ToolLevelingTableBlock() {
-        super(Block.Properties.of(Material.METAL, MaterialColor.COLOR_GRAY).strength(4.5f, 1000.0f)
-                .sound(SoundType.METAL).requiresCorrectToolForDrops().noOcclusion());
+        super(Block.Properties.of().mapColor(MapColor.COLOR_GRAY).strength(4.5f, 1000.0f)
+                .sound(SoundType.METAL).requiresCorrectToolForDrops().noOcclusion()
+                .pushReaction(PushReaction.IGNORE));
     }
 
     @Override
@@ -46,11 +46,6 @@ public class ToolLevelingTableBlock extends BaseEntityBlock {
     @Override
     public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
-    }
-
-    @Override
-    public PushReaction getPistonPushReaction(BlockState state) {
-        return PushReaction.IGNORE;
     }
 
     @Override

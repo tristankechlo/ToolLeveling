@@ -8,7 +8,7 @@ import com.tristankechlo.toolleveling.network.ForgeNetworkHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.CreativeModeTabEvent;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -51,8 +51,8 @@ public class ForgeToolLeveling {
         SuperEnchantCommand.register(event.getDispatcher(), event.getBuildContext());
     }
 
-    private void populateCreativeTab(CreativeModeTabEvent.BuildContents event) {
-        if (event.getTab() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
+    private void populateCreativeTab(BuildCreativeModeTabContentsEvent event) {
+        if (event.getTabKey().equals(CreativeModeTabs.FUNCTIONAL_BLOCKS)) {
             event.accept(ToolLeveling.TLT_ITEM.get());
         }
     }

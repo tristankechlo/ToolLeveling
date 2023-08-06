@@ -1,12 +1,12 @@
 package com.tristankechlo.toolleveling.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
 import com.tristankechlo.toolleveling.menu.ToolLevelingTableMenu;
 import com.tristankechlo.toolleveling.network.ClientNetworkHelper;
 import com.tristankechlo.toolleveling.util.Util;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.Rect2i;
@@ -105,43 +105,43 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
     }
 
     @Override
-    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(poseStack); // render translucent grey background
-        super.render(poseStack, mouseX, mouseY, partialTicks);
-        this.renderTooltip(poseStack, mouseX, mouseY); // render tooltips if hovered
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(graphics); // render translucent grey background
+        super.render(graphics, mouseX, mouseY, partialTicks);
+        this.renderTooltip(graphics, mouseX, mouseY); // render tooltips if hovered
 
         if (shouldRenderPercentages) {
             int x = this.leftPos + this.imageWidth;
             int y = this.topPos;
             int fieldWidth = this.calcFieldWidth();
             if (this.getMenu().hasAnyBooks()) {
-                this.percentagesField.render(poseStack, this.font, x, y, fieldWidth);
+                this.percentagesField.render(graphics, this.font, x, y, fieldWidth);
                 y += this.percentagesField.calcHeight() + 1;
             }
-            this.successChanceField.render(poseStack, this.font, x, y, fieldWidth);
+            this.successChanceField.render(graphics, this.font, x, y, fieldWidth);
             y += this.successChanceField.calcHeight() + 1;
-            this.bonusItemField.render(poseStack, this.font, x, y, fieldWidth);
+            this.bonusItemField.render(graphics, this.font, x, y, fieldWidth);
         } else {
             if (isMouseOverProgressBar(mouseX, mouseY)) {
-                this.renderTooltip(poseStack, chanceText, mouseX, mouseY);
+                graphics.renderTooltip(font, chanceText, mouseX, mouseY);
             }
         }
 
         if (shouldRenderHelp) {
             int x = this.leftPos - this.helpField.calcWidth(this.font);
             int y = this.topPos;
-            this.helpField.render(poseStack, this.font, x, y);
+            this.helpField.render(graphics, this.font, x, y);
         }
     }
 
     @Override
-    protected void renderBg(PoseStack poseStack, float partialTicks, int mX, int mY) {
+    protected void renderBg(GuiGraphics graphics, float partialTicks, int mX, int mY) {
         RenderSystem.setShaderTexture(0, GUI_TEXTURE);
-        blit(poseStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+        graphics.blit(GUI_TEXTURE, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
         // render progress bar
         int targetWidth = (int) (144 * this.successChance);
-        blit(poseStack, this.leftPos + 16, this.topPos + 77, 0, 251, targetWidth, 5);
+        graphics.blit(GUI_TEXTURE, this.leftPos + 16, this.topPos + 77, 0, 251, targetWidth, 5);
     }
 
     @Override
