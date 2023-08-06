@@ -2,17 +2,19 @@ import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 
 plugins {
-    id 'fabric-loom' version '1.0-SNAPSHOT'
     id 'idea'
+    id 'fabric-loom'
 }
-
-version = "${minecraft_version}-${mod_version}"
-archivesBaseName = "${mod_id}-fabric"
 
 repositories {
     maven {
         url "https://maven.terraformersmc.com/releases"
     }
+}
+
+base {
+    version = "${minecraft_version}-${mod_version}"
+    archivesBaseName = "${mod_id}-fabric"
 }
 
 dependencies {
