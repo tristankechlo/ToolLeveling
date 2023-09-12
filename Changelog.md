@@ -1,5 +1,11 @@
 # Changelog
 
+### Version 1.20.1 - 2.0.1
+
+- fix error where `bonus_item_more_enchantments` and `bonus_item_more_levels` only allowed single objects
+    - now conform with vanilla ingredient format
+    - allows objects and arrays of objects now
+
 ### Version 1.20.1 - 2.0.0
 
 - port to 1.20.1

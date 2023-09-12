@@ -1,8 +1,8 @@
 package com.tristankechlo.toolleveling.config.values;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.tristankechlo.toolleveling.ToolLeveling;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.crafting.Ingredient;
 
 public final class IngredientValue extends AbstractConfigValue<Ingredient> {
@@ -29,7 +29,12 @@ public final class IngredientValue extends AbstractConfigValue<Ingredient> {
     @Override
     public void deserialize(JsonObject json) {
         try {
-            value = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, getIdentifier()));
+            JsonElement jsonElement = json.get(getIdentifier());
+            if (jsonElement != null) {
+                value = Ingredient.fromJson(jsonElement, true);
+            } else {
+                value = defaultValue;
+            }
         } catch (Exception e) {
             value = defaultValue;
             ToolLeveling.LOGGER.warn(e.getMessage());
