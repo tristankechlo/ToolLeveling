@@ -20,6 +20,8 @@ public final class ToolLevelingConfig extends AbstractConfig {
     private final NumberValue<Float> maxSuccessChance;
     private final NumberValue<Integer> requiredBookshelves;
     private final NumberValue<Integer> requiredBooks;
+    private final NumberValue<Integer> baseIterations;
+    private final NumberValue<Integer> baseStrength;
     private final BonusIngredientsValue bonusIngredients;
     private final List<AbstractConfigValue<?>> values;
     public static final ToolLevelingConfig INSTANCE = new ToolLevelingConfig();
@@ -31,12 +33,15 @@ public final class ToolLevelingConfig extends AbstractConfig {
         maxSuccessChance = new NumberValue<>("max_success_chance", 100.0F, 0.0F, 100.0F, GsonHelper::getAsFloat);
         requiredBookshelves = new NumberValue<>("required_bookshelves", 20, 0, 32, GsonHelper::getAsInt);
         requiredBooks = new NumberValue<>("required_books", 4, 1, 6, GsonHelper::getAsInt);
+        baseIterations = new NumberValue<>("base_num_enchantments", 1, 1, Integer.MAX_VALUE, GsonHelper::getAsInt);
+        baseStrength = new NumberValue<>("base_num_levels", 1, 1, Integer.MAX_VALUE, GsonHelper::getAsInt);
         bonusIngredients = new BonusIngredientsValue("bonus_ingredients", new BonusIngredient[]{
             new BonusIngredient(Ingredient.of(Items.NETHER_STAR), 0, 1),
             new BonusIngredient(Ingredient.of(Items.ENCHANTED_GOLDEN_APPLE), 1, 0),
         });
 
-        values = List.of(minSuccessChance, maxSuccessChance, requiredBookshelves, requiredBooks, bonusIngredients);
+        values = List.of(minSuccessChance, maxSuccessChance, requiredBookshelves, requiredBooks,
+            baseIterations, baseStrength, bonusIngredients);
     }
 
     @Override
@@ -63,6 +68,14 @@ public final class ToolLevelingConfig extends AbstractConfig {
 
     public int requiredBooks() {
         return requiredBooks.get();
+    }
+
+    public int getBaseStrength() {
+        return baseStrength.get();
+    }
+
+    public int getBaseIterations() {
+        return baseIterations.get();
     }
 
     @Deprecated
