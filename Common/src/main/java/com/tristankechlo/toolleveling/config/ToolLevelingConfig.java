@@ -3,7 +3,8 @@ package com.tristankechlo.toolleveling.config;
 import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.config.util.AbstractConfig;
 import com.tristankechlo.toolleveling.config.values.AbstractConfigValue;
-import com.tristankechlo.toolleveling.config.values.IngredientValue;
+import com.tristankechlo.toolleveling.config.values.BonusIngredient;
+import com.tristankechlo.toolleveling.config.values.BonusIngredientsValue;
 import com.tristankechlo.toolleveling.config.values.NumberValue;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
@@ -19,8 +20,7 @@ public final class ToolLevelingConfig extends AbstractConfig {
     private final NumberValue<Float> maxSuccessChance;
     private final NumberValue<Integer> requiredBookshelves;
     private final NumberValue<Integer> requiredBooks;
-    private final IngredientValue bonusItemMoreEnchantments;
-    private final IngredientValue bonusItemMoreLevels;
+    private final BonusIngredientsValue bonusIngredients;
     private final List<AbstractConfigValue<?>> values;
     public static final ToolLevelingConfig INSTANCE = new ToolLevelingConfig();
 
@@ -31,10 +31,12 @@ public final class ToolLevelingConfig extends AbstractConfig {
         maxSuccessChance = new NumberValue<>("max_success_chance", 100.0F, 0.0F, 100.0F, GsonHelper::getAsFloat);
         requiredBookshelves = new NumberValue<>("required_bookshelves", 20, 0, 32, GsonHelper::getAsInt);
         requiredBooks = new NumberValue<>("required_books", 4, 1, 6, GsonHelper::getAsInt);
-        bonusItemMoreEnchantments = new IngredientValue("bonus_item_more_enchantments", Ingredient.of(Items.NETHER_STAR));
-        bonusItemMoreLevels = new IngredientValue("bonus_item_more_levels", Ingredient.of(Items.ENCHANTED_GOLDEN_APPLE));
+        bonusIngredients = new BonusIngredientsValue("bonus_ingredients", new BonusIngredient[]{
+            new BonusIngredient(Ingredient.of(Items.NETHER_STAR), false, true),
+            new BonusIngredient(Ingredient.of(Items.ENCHANTED_GOLDEN_APPLE), true, false),
+        });
 
-        values = List.of(minSuccessChance, maxSuccessChance, requiredBookshelves, requiredBooks, bonusItemMoreEnchantments, bonusItemMoreLevels);
+        values = List.of(minSuccessChance, maxSuccessChance, requiredBookshelves, requiredBooks, bonusIngredients);
     }
 
     @Override
@@ -64,11 +66,21 @@ public final class ToolLevelingConfig extends AbstractConfig {
     }
 
     public boolean isBonusItemStrength(ItemStack stack) {
-        return bonusItemMoreLevels.get().test(stack);
+        for (BonusIngredient bonus : bonusIngredients.get()) {
+            if (bonus.ingredient().test(stack) && bonus.maxLevelBonus()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean isBonusItemIterations(ItemStack stack) {
-        return bonusItemMoreEnchantments.get().test(stack);
+        for (BonusIngredient bonus : bonusIngredients.get()) {
+            if (bonus.ingredient().test(stack) && bonus.iterationsBonus()) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
