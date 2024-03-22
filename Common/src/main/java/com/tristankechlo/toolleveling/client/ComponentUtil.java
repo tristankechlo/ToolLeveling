@@ -55,13 +55,22 @@ public final class ComponentUtil {
     }
 
     public static Component makeSummary(String str, int iterations, int strength) {
+        if (iterations <= 0) {
+            MutableComponent iterationsText = Component.literal("" + iterations).withStyle(ChatFormatting.GREEN);
+            return Component.translatable(START + str + ".iterations_too_low", iterationsText).withStyle(ChatFormatting.GRAY);
+        }
+        if (strength <= 0) {
+            MutableComponent iterationsText = Component.literal("" + strength).withStyle(ChatFormatting.GREEN);
+            return Component.translatable(START + str + ".strength_too_low", iterationsText).withStyle(ChatFormatting.GRAY);
+        }
         MutableComponent iterationsText = Component.literal("" + iterations).withStyle(ChatFormatting.GREEN);
         MutableComponent strengthText = Component.literal("" + strength).withStyle(ChatFormatting.GREEN);
         MutableComponent strText = Component.literal("1").withStyle(ChatFormatting.GREEN);
         if (strength > 1) {
-            str += ".multi";
+            return Component.translatable(START + str + ".multi", iterationsText, strText, strengthText).withStyle(ChatFormatting.GRAY);
+        } else {
+            return Component.translatable(START + str, iterationsText, strengthText).withStyle(ChatFormatting.GRAY);
         }
-        return Component.translatable(START + str, iterationsText, strText, strengthText).withStyle(ChatFormatting.GRAY);
     }
 
 }

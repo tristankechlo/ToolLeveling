@@ -33,8 +33,8 @@ public final class ToolLevelingConfig extends AbstractConfig {
         maxSuccessChance = new NumberValue<>("max_success_chance", 100.0F, 0.0F, 100.0F, GsonHelper::getAsFloat);
         requiredBookshelves = new NumberValue<>("required_bookshelves", 20, 0, 32, GsonHelper::getAsInt);
         requiredBooks = new NumberValue<>("required_books", 4, 1, 6, GsonHelper::getAsInt);
-        baseIterations = new NumberValue<>("base_num_enchantments", 1, 1, Integer.MAX_VALUE, GsonHelper::getAsInt);
-        baseStrength = new NumberValue<>("base_num_levels", 1, 1, Integer.MAX_VALUE, GsonHelper::getAsInt);
+        baseIterations = new NumberValue<>("base_num_enchantments", 1, Integer.MIN_VALUE, Integer.MAX_VALUE, GsonHelper::getAsInt);
+        baseStrength = new NumberValue<>("base_num_levels", 1, Integer.MIN_VALUE, Integer.MAX_VALUE, GsonHelper::getAsInt);
         bonusIngredients = new BonusIngredientsValue("bonus_ingredients", new BonusIngredient[]{
             new BonusIngredient(Ingredient.of(Items.NETHER_STAR), 0, 1),
             new BonusIngredient(Ingredient.of(Items.ENCHANTED_GOLDEN_APPLE), 1, 0),

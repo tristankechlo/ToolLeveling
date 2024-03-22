@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.EnchantmentTableBlock;
 
 import java.util.function.Function;
 
+import static com.tristankechlo.toolleveling.blockentity.ToolLevelingTableBlockEntity.BONUS_SLOTS;
 import static com.tristankechlo.toolleveling.blockentity.ToolLevelingTableBlockEntity.BOOK_SLOTS;
 
 public final class Util {
@@ -25,8 +26,10 @@ public final class Util {
         }
         boolean enoughBooks = bookCount >= ToolLevelingConfig.INSTANCE.requiredBooks(); // the minimum number of books is reached
         boolean upgradeSlotNotEmpty = !f.apply(0).isEmpty(); // the upgrade slot is not empty
+        int iterations = getIterations(f);
+        int strength = getEnchantmentStrength(f);
 
-        return enoughBooks && upgradeSlotNotEmpty;
+        return enoughBooks && upgradeSlotNotEmpty && iterations > 0 && strength > 0;
     }
 
     public static boolean canUpgradeProcessBegin(AbstractContainerMenu menu) {
@@ -59,17 +62,25 @@ public final class Util {
     }
 
     public static int getIterations(Container menu) {
+        return getIterations(menu::getItem);
+    }
+
+    private static int getIterations(Function<Integer, ItemStack> f) {
         int count = Predicates.BASE_ITERATIONS_VAL.getAsInt();
-        for (int i : ToolLevelingTableBlockEntity.BONUS_SLOTS) {
-            count += Predicates.BONUS_ITEM_ITERATIONS_VAL.applyAsInt(menu.getItem(i));
+        for (int i : BONUS_SLOTS) {
+            count += Predicates.BONUS_ITEM_ITERATIONS_VAL.applyAsInt(f.apply(i));
         }
         return count;
     }
 
     public static int getEnchantmentStrength(Container menu) {
+        return getEnchantmentStrength(menu::getItem);
+    }
+
+    private static int getEnchantmentStrength(Function<Integer, ItemStack> f) {
         int count = Predicates.BASE_STRENGTH_VAL.getAsInt();
-        for (int i : ToolLevelingTableBlockEntity.BONUS_SLOTS) {
-            count += Predicates.BONUS_ITEM_STRENGTH_VAL.applyAsInt(menu.getItem(i));
+        for (int i : BONUS_SLOTS) {
+            count += Predicates.BONUS_ITEM_STRENGTH_VAL.applyAsInt(f.apply(i));
         }
         return count;
     }

@@ -7,6 +7,8 @@
     "screen.toolleveling.tool_leveling_table.summary.field_title": "Zusammenfassung",
     "screen.toolleveling.tool_leveling_table.summary.field_text": "Bis zu %s Verzauberung(en) werden dem Item hinzugefügt, jede mit einer Stufe von %s",
     "screen.toolleveling.tool_leveling_table.summary.field_text.multi": "Bis zu %s Verzauberung(en) werden dem Item hinzugefügt, jede mit einer Stufe von %s bis %s",
+    "screen.toolleveling.tool_leveling_table.summary.field_text.iterations_too_low": "Nicht genug Verzauberungen (%s) f\u00FCr das Upgrade, verwende andere besondere Gegenstände um mindestens 1 Verzauberung zu erreichen",
+    "screen.toolleveling.tool_leveling_table.summary.field_text.strength_too_low": "Stufe der Verzauberung (%s) zu niedrig f\u00FCr das Upgrade, verwende andere besondere Gegenstände um mindestens Stufe 1 zu erreichen",
     "screen.toolleveling.tool_leveling_table.percentages.button_text": "Info",
     "screen.toolleveling.tool_leveling_table.percentages.button_tooltip": "Zeige die Wahrscheinlichkeiten f\u00FCr die Verzauberungen",
     "screen.toolleveling.tool_leveling_table.percentages.field_title": "Wahrscheinlichkeiten",
