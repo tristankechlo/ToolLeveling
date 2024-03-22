@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.tristankechlo.toolleveling.ToolLeveling;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.crafting.Ingredient;
 
 public final class BonusIngredientsValue extends AbstractConfigValue<BonusIngredient[]> {
 
@@ -34,17 +35,37 @@ public final class BonusIngredientsValue extends AbstractConfigValue<BonusIngred
 
     @Override
     public void deserialize(JsonObject json) {
-        try {
-            JsonArray arr = GsonHelper.getAsJsonArray(json, getIdentifier());
-            value = new BonusIngredient[arr.size()];
-            for (int i = 0; i < arr.size(); i++) {
-                JsonObject obj = GsonHelper.convertToJsonObject(arr.get(i), "[" + i + "]");
-                value[i] = BonusIngredient.deserialize(obj);
+        if (json.has("bonus_item_more_enchantments") && json.has("bonus_item_more_levels")) {
+            // migrate from one ingredient per bonus
+            ToolLeveling.LOGGER.info("Migrating for the config value " + getIdentifier());
+            try {
+                JsonObject moreEnchantsObj = GsonHelper.getAsJsonObject(json, "bonus_item_more_enchantments");
+                Ingredient maxLevelBonusIngredient = Ingredient.fromJson(moreEnchantsObj);
+                JsonObject moreLevelsObj = GsonHelper.getAsJsonObject(json, "bonus_item_more_levels");
+                Ingredient iterationsBonusIngredient = Ingredient.fromJson(moreLevelsObj);
+                value = new BonusIngredient[]{
+                    new BonusIngredient(maxLevelBonusIngredient, 0, 1),
+                    new BonusIngredient(iterationsBonusIngredient, 1, 0)
+                };
+            } catch (Exception e) {
+                value = defaultValue;
+                ToolLeveling.LOGGER.warn(e.getMessage());
+                ToolLeveling.LOGGER.warn("Error while migrating the config value " + getIdentifier() + ", using default value instead");
             }
-        } catch (Exception e) {
-            value = defaultValue;
-            ToolLeveling.LOGGER.warn(e.getMessage());
-            ToolLeveling.LOGGER.warn("Error while loading the config value " + getIdentifier() + ", using default value instead");
+        } else {
+            // deserialize the array-based format
+            try {
+                JsonArray arr = GsonHelper.getAsJsonArray(json, getIdentifier());
+                value = new BonusIngredient[arr.size()];
+                for (int i = 0; i < arr.size(); i++) {
+                    JsonObject obj = GsonHelper.convertToJsonObject(arr.get(i), "[" + i + "]");
+                    value[i] = BonusIngredient.deserialize(obj);
+                }
+            } catch (Exception e) {
+                value = defaultValue;
+                ToolLeveling.LOGGER.warn(e.getMessage());
+                ToolLeveling.LOGGER.warn("Error while loading the config value " + getIdentifier() + ", using default value instead");
+            }
         }
     }
 
