@@ -4,13 +4,13 @@ import com.google.gson.JsonObject;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.crafting.Ingredient;
 
-public record BonusIngredient(Ingredient ingredient, boolean maxLevelBonus, boolean iterationsBonus) {
+public record BonusIngredient(Ingredient ingredient, int maxLevelBonus, int iterationsBonus) {
 
     public BonusIngredient {
         if (ingredient == null) {
             throw new NullPointerException("ingredient of the bonus ingredient can't be null");
         }
-        if (!maxLevelBonus && !iterationsBonus) {
+        if (maxLevelBonus == 0 && iterationsBonus == 0) {
             throw new NullPointerException("bonus ingredient must provide at least one bonus");
         }
     }
@@ -24,8 +24,8 @@ public record BonusIngredient(Ingredient ingredient, boolean maxLevelBonus, bool
     public static BonusIngredient deserialize(JsonObject json) {
         JsonObject obj = GsonHelper.getAsJsonObject(json, "ingredient");
         Ingredient ingredient = Ingredient.fromJson(obj);
-        boolean maxLevelBonus = GsonHelper.getAsBoolean(json, "max_level_bonus", false);
-        boolean iterationsBonus = GsonHelper.getAsBoolean(json, "iterations_bonus", false);
+        int maxLevelBonus = GsonHelper.getAsInt(json, "max_level_bonus", 0);
+        int iterationsBonus = GsonHelper.getAsInt(json, "iterations_bonus", 0);
         return new BonusIngredient(ingredient, maxLevelBonus, iterationsBonus);
     }
 

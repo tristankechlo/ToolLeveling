@@ -61,9 +61,7 @@ public final class Util {
     public static int getIterations(Container menu) {
         int count = 1;
         for (int i : ToolLevelingTableBlockEntity.BONUS_SLOTS) {
-            if (Predicates.BONUS_ITEM_ITERATIONS.test(menu.getItem(i))) {
-                count++;
-            }
+            count += Predicates.BONUS_ITEM_ITERATIONS_VAL.applyAsInt(menu.getItem(i));
         }
         return count;
     }
@@ -71,9 +69,7 @@ public final class Util {
     public static int getEnchantmentStrength(Container menu) {
         int count = 1;
         for (int i : ToolLevelingTableBlockEntity.BONUS_SLOTS) {
-            if (Predicates.BONUS_ITEM_STRENGTH.test(menu.getItem(i))) {
-                count++;
-            }
+            count += Predicates.BONUS_ITEM_STRENGTH_VAL.applyAsInt(menu.getItem(i));
         }
         return count;
     }

@@ -79,7 +79,7 @@ public record TableUpgradeProcess(BlockPos pos) {
 
             // add the enchantments to the item
             for (var entry : enchantmentsToAdd.entrySet()) {
-                oldEnchantments.merge(entry.getKey(), entry.getValue(), Integer::sum);
+                oldEnchantments.merge(entry.getKey(), entry.getValue(), (l, r) -> Math.min(l + r, Short.MAX_VALUE));
             }
             EnchantmentHelper.setEnchantments(oldEnchantments, tool);
             table.setChanged();

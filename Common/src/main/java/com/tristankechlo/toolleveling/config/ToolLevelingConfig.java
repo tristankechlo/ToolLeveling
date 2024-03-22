@@ -32,8 +32,8 @@ public final class ToolLevelingConfig extends AbstractConfig {
         requiredBookshelves = new NumberValue<>("required_bookshelves", 20, 0, 32, GsonHelper::getAsInt);
         requiredBooks = new NumberValue<>("required_books", 4, 1, 6, GsonHelper::getAsInt);
         bonusIngredients = new BonusIngredientsValue("bonus_ingredients", new BonusIngredient[]{
-            new BonusIngredient(Ingredient.of(Items.NETHER_STAR), false, true),
-            new BonusIngredient(Ingredient.of(Items.ENCHANTED_GOLDEN_APPLE), true, false),
+            new BonusIngredient(Ingredient.of(Items.NETHER_STAR), 0, 1),
+            new BonusIngredient(Ingredient.of(Items.ENCHANTED_GOLDEN_APPLE), 1, 0),
         });
 
         values = List.of(minSuccessChance, maxSuccessChance, requiredBookshelves, requiredBooks, bonusIngredients);
@@ -65,22 +65,44 @@ public final class ToolLevelingConfig extends AbstractConfig {
         return requiredBooks.get();
     }
 
+    @Deprecated
     public boolean isBonusItemStrength(ItemStack stack) {
         for (BonusIngredient bonus : bonusIngredients.get()) {
-            if (bonus.ingredient().test(stack) && bonus.maxLevelBonus()) {
+            if (bonus.ingredient().test(stack) && bonus.maxLevelBonus() != 0) {
                 return true;
             }
         }
         return false;
     }
 
+    public int getBonusItemStrength(ItemStack stack) {
+        int total = 0;
+        for (BonusIngredient bonus : bonusIngredients.get()) {
+            if (bonus.ingredient().test(stack)) {
+                total += bonus.maxLevelBonus();
+            }
+        }
+        return total;
+    }
+
+    @Deprecated
     public boolean isBonusItemIterations(ItemStack stack) {
         for (BonusIngredient bonus : bonusIngredients.get()) {
-            if (bonus.ingredient().test(stack) && bonus.iterationsBonus()) {
+            if (bonus.ingredient().test(stack) && bonus.iterationsBonus() != 0) {
                 return true;
             }
         }
         return false;
+    }
+
+    public int getBonusItemIterations(ItemStack stack) {
+        int total = 0;
+        for (BonusIngredient bonus : bonusIngredients.get()) {
+            if (bonus.ingredient().test(stack)) {
+                total += bonus.iterationsBonus();
+            }
+        }
+        return total;
     }
 
 }
