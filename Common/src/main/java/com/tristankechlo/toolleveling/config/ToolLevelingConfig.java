@@ -3,7 +3,8 @@ package com.tristankechlo.toolleveling.config;
 import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.config.util.AbstractConfig;
 import com.tristankechlo.toolleveling.config.values.AbstractConfigValue;
-import com.tristankechlo.toolleveling.config.values.IngredientValue;
+import com.tristankechlo.toolleveling.config.values.BonusIngredient;
+import com.tristankechlo.toolleveling.config.values.BonusIngredientsValue;
 import com.tristankechlo.toolleveling.config.values.NumberValue;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
@@ -19,8 +20,10 @@ public final class ToolLevelingConfig extends AbstractConfig {
     private final NumberValue<Float> maxSuccessChance;
     private final NumberValue<Integer> requiredBookshelves;
     private final NumberValue<Integer> requiredBooks;
-    private final IngredientValue bonusItemMoreEnchantments;
-    private final IngredientValue bonusItemMoreLevels;
+    private final NumberValue<Float> baseIterations;
+    private final NumberValue<Float> baseMinStrength;
+    private final NumberValue<Float> baseStrength;
+    private final BonusIngredientsValue bonusIngredients;
     private final List<AbstractConfigValue<?>> values;
     public static final ToolLevelingConfig INSTANCE = new ToolLevelingConfig();
 
@@ -31,10 +34,16 @@ public final class ToolLevelingConfig extends AbstractConfig {
         maxSuccessChance = new NumberValue<>("max_success_chance", 100.0F, 0.0F, 100.0F, GsonHelper::getAsFloat);
         requiredBookshelves = new NumberValue<>("required_bookshelves", 20, 0, 32, GsonHelper::getAsInt);
         requiredBooks = new NumberValue<>("required_books", 4, 1, 6, GsonHelper::getAsInt);
-        bonusItemMoreEnchantments = new IngredientValue("bonus_item_more_enchantments", Ingredient.of(Items.NETHER_STAR));
-        bonusItemMoreLevels = new IngredientValue("bonus_item_more_levels", Ingredient.of(Items.ENCHANTED_GOLDEN_APPLE));
+        baseIterations = new NumberValue<>("base_num_enchantments", 1.0F, -Float.MAX_VALUE, Float.MAX_VALUE, GsonHelper::getAsFloat);
+        baseMinStrength = new NumberValue<>("base_num_min_levels", 1.0F, -Float.MAX_VALUE, Float.MAX_VALUE, GsonHelper::getAsFloat);
+        baseStrength = new NumberValue<>("base_num_levels", 1.0F, -Float.MAX_VALUE, Float.MAX_VALUE, GsonHelper::getAsFloat);
+        bonusIngredients = new BonusIngredientsValue("bonus_ingredients", new BonusIngredient[]{
+            new BonusIngredient(Ingredient.of(Items.NETHER_STAR), 0.0F, 0.0F, 1.0F),
+            new BonusIngredient(Ingredient.of(Items.ENCHANTED_GOLDEN_APPLE), 0.0F, 1.0F, 0.0F),
+        });
 
-        values = List.of(minSuccessChance, maxSuccessChance, requiredBookshelves, requiredBooks, bonusItemMoreEnchantments, bonusItemMoreLevels);
+        values = List.of(minSuccessChance, maxSuccessChance, requiredBookshelves, requiredBooks,
+            baseIterations, baseMinStrength, baseStrength, bonusIngredients);
     }
 
     @Override
@@ -63,12 +72,46 @@ public final class ToolLevelingConfig extends AbstractConfig {
         return requiredBooks.get();
     }
 
-    public boolean isBonusItemStrength(ItemStack stack) {
-        return bonusItemMoreLevels.get().test(stack);
+    public float getBaseMinStrength() {
+        return baseMinStrength.get();
     }
 
-    public boolean isBonusItemIterations(ItemStack stack) {
-        return bonusItemMoreEnchantments.get().test(stack);
+    public float getBaseStrength() {
+        return baseStrength.get();
+    }
+
+    public float getBaseIterations() {
+        return baseIterations.get();
+    }
+
+    public float getBonusItemMinStrength(ItemStack stack) {
+        float total = 0;
+        for (BonusIngredient bonus : bonusIngredients.get()) {
+            if (bonus.ingredient().test(stack)) {
+                total += bonus.minLevelBonus();
+            }
+        }
+        return total;
+    }
+
+    public float getBonusItemStrength(ItemStack stack) {
+        float total = 0;
+        for (BonusIngredient bonus : bonusIngredients.get()) {
+            if (bonus.ingredient().test(stack)) {
+                total += bonus.maxLevelBonus();
+            }
+        }
+        return total;
+    }
+
+    public float getBonusItemIterations(ItemStack stack) {
+        float total = 0;
+        for (BonusIngredient bonus : bonusIngredients.get()) {
+            if (bonus.ingredient().test(stack)) {
+                total += bonus.iterationsBonus();
+            }
+        }
+        return total;
     }
 
 }

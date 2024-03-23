@@ -95,9 +95,10 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
             this.successChanceField.setLines(List.of(ComponentUtil.TITLE_SUCCESS_CHANCE, chanceText, minChanceText, maxChanceText));
 
             // update bonus items
-            int iterations = this.getMenu().getCycles();
-            int strength = this.getMenu().getLevels();
-            Component summary = ComponentUtil.makeSummary(".summary.field_text", iterations, strength);
+            float iterations = this.getMenu().getCycles();
+            float minStrength = this.getMenu().getMinLevels();
+            float strength = this.getMenu().getLevels();
+            Component summary = ComponentUtil.makeSummary(".summary.field_text", iterations, minStrength, strength);
             int maxPossibleWidth = this.width - (this.leftPos + this.imageWidth) - 10;
             this.bonusItemField.setLines(List.of(ComponentUtil.TITLE_BONUSES, summary), font, maxPossibleWidth);
         }

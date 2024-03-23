@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.EnchantmentTableBlock;
 
 import java.util.function.Function;
 
+import static com.tristankechlo.toolleveling.blockentity.ToolLevelingTableBlockEntity.BONUS_SLOTS;
 import static com.tristankechlo.toolleveling.blockentity.ToolLevelingTableBlockEntity.BOOK_SLOTS;
 
 public final class Util {
@@ -25,8 +26,11 @@ public final class Util {
         }
         boolean enoughBooks = bookCount >= ToolLevelingConfig.INSTANCE.requiredBooks(); // the minimum number of books is reached
         boolean upgradeSlotNotEmpty = !f.apply(0).isEmpty(); // the upgrade slot is not empty
+        float iterations = getIterations(f);
+        float strength = getEnchantmentStrength(f);
+        // no mimumum strength check, it can go below 1 or above strength (which is a waste)
 
-        return enoughBooks && upgradeSlotNotEmpty;
+        return enoughBooks && upgradeSlotNotEmpty && iterations > 0.0F && strength > 0.0F;
     }
 
     public static boolean canUpgradeProcessBegin(AbstractContainerMenu menu) {
@@ -58,22 +62,38 @@ public final class Util {
         return minPercentage + ((maxPercentage - minPercentage) * fullPercent);
     }
 
-    public static int getIterations(Container menu) {
-        int count = 1;
-        for (int i : ToolLevelingTableBlockEntity.BONUS_SLOTS) {
-            if (Predicates.BONUS_ITEM_ITERATIONS.test(menu.getItem(i))) {
-                count++;
-            }
+    public static float getIterations(Container menu) {
+        return getIterations(menu::getItem);
+    }
+
+    private static float getIterations(Function<Integer, ItemStack> f) {
+        float count = ToolLevelingConfig.INSTANCE.getBaseIterations();
+        for (int i : BONUS_SLOTS) {
+            count += ToolLevelingConfig.INSTANCE.getBonusItemIterations(f.apply(i));
         }
         return count;
     }
 
-    public static int getEnchantmentStrength(Container menu) {
-        int count = 1;
-        for (int i : ToolLevelingTableBlockEntity.BONUS_SLOTS) {
-            if (Predicates.BONUS_ITEM_STRENGTH.test(menu.getItem(i))) {
-                count++;
-            }
+    public static float getEnchantmentMinStrength(Container menu) {
+        return getEnchantmentMinStrength(menu::getItem);
+    }
+
+    private static float getEnchantmentMinStrength(Function<Integer, ItemStack> f) {
+        float count = ToolLevelingConfig.INSTANCE.getBaseMinStrength();
+        for (int i : BONUS_SLOTS) {
+            count += ToolLevelingConfig.INSTANCE.getBonusItemMinStrength(f.apply(i));
+        }
+        return count;
+    }
+
+    public static float getEnchantmentStrength(Container menu) {
+        return getEnchantmentStrength(menu::getItem);
+    }
+
+    private static float getEnchantmentStrength(Function<Integer, ItemStack> f) {
+        float count = ToolLevelingConfig.INSTANCE.getBaseStrength();
+        for (int i : BONUS_SLOTS) {
+            count += ToolLevelingConfig.INSTANCE.getBonusItemStrength(f.apply(i));
         }
         return count;
     }
