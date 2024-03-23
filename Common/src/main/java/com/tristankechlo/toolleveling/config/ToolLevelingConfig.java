@@ -20,9 +20,9 @@ public final class ToolLevelingConfig extends AbstractConfig {
     private final NumberValue<Float> maxSuccessChance;
     private final NumberValue<Integer> requiredBookshelves;
     private final NumberValue<Integer> requiredBooks;
-    private final NumberValue<Integer> baseIterations;
-    private final NumberValue<Integer> baseMinStrength;
-    private final NumberValue<Integer> baseStrength;
+    private final NumberValue<Float> baseIterations;
+    private final NumberValue<Float> baseMinStrength;
+    private final NumberValue<Float> baseStrength;
     private final BonusIngredientsValue bonusIngredients;
     private final List<AbstractConfigValue<?>> values;
     public static final ToolLevelingConfig INSTANCE = new ToolLevelingConfig();
@@ -34,12 +34,12 @@ public final class ToolLevelingConfig extends AbstractConfig {
         maxSuccessChance = new NumberValue<>("max_success_chance", 100.0F, 0.0F, 100.0F, GsonHelper::getAsFloat);
         requiredBookshelves = new NumberValue<>("required_bookshelves", 20, 0, 32, GsonHelper::getAsInt);
         requiredBooks = new NumberValue<>("required_books", 4, 1, 6, GsonHelper::getAsInt);
-        baseIterations = new NumberValue<>("base_num_enchantments", 1, Integer.MIN_VALUE, Integer.MAX_VALUE, GsonHelper::getAsInt);
-        baseMinStrength = new NumberValue<>("base_num_min_levels", 1, Integer.MIN_VALUE, Integer.MAX_VALUE, GsonHelper::getAsInt);
-        baseStrength = new NumberValue<>("base_num_levels", 1, Integer.MIN_VALUE, Integer.MAX_VALUE, GsonHelper::getAsInt);
+        baseIterations = new NumberValue<>("base_num_enchantments", 1.0F, -Float.MAX_VALUE, Float.MAX_VALUE, GsonHelper::getAsFloat);
+        baseMinStrength = new NumberValue<>("base_num_min_levels", 1.0F, -Float.MAX_VALUE, Float.MAX_VALUE, GsonHelper::getAsFloat);
+        baseStrength = new NumberValue<>("base_num_levels", 1.0F, -Float.MAX_VALUE, Float.MAX_VALUE, GsonHelper::getAsFloat);
         bonusIngredients = new BonusIngredientsValue("bonus_ingredients", new BonusIngredient[]{
-            new BonusIngredient(Ingredient.of(Items.NETHER_STAR), 0, 0, 1),
-            new BonusIngredient(Ingredient.of(Items.ENCHANTED_GOLDEN_APPLE), 0, 1, 0),
+            new BonusIngredient(Ingredient.of(Items.NETHER_STAR), 0.0F, 0.0F, 1.0F),
+            new BonusIngredient(Ingredient.of(Items.ENCHANTED_GOLDEN_APPLE), 0.0F, 1.0F, 0.0F),
         });
 
         values = List.of(minSuccessChance, maxSuccessChance, requiredBookshelves, requiredBooks,
@@ -72,20 +72,20 @@ public final class ToolLevelingConfig extends AbstractConfig {
         return requiredBooks.get();
     }
 
-    public int getBaseMinStrength() {
+    public float getBaseMinStrength() {
         return baseMinStrength.get();
     }
 
-    public int getBaseStrength() {
+    public float getBaseStrength() {
         return baseStrength.get();
     }
 
-    public int getBaseIterations() {
+    public float getBaseIterations() {
         return baseIterations.get();
     }
 
-    public int getBonusItemMinStrength(ItemStack stack) {
-        int total = 0;
+    public float getBonusItemMinStrength(ItemStack stack) {
+        float total = 0;
         for (BonusIngredient bonus : bonusIngredients.get()) {
             if (bonus.ingredient().test(stack)) {
                 total += bonus.minLevelBonus();
@@ -94,18 +94,8 @@ public final class ToolLevelingConfig extends AbstractConfig {
         return total;
     }
 
-    @Deprecated
-    public boolean isBonusItemStrength(ItemStack stack) {
-        for (BonusIngredient bonus : bonusIngredients.get()) {
-            if (bonus.ingredient().test(stack) && bonus.maxLevelBonus() != 0) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public int getBonusItemStrength(ItemStack stack) {
-        int total = 0;
+    public float getBonusItemStrength(ItemStack stack) {
+        float total = 0;
         for (BonusIngredient bonus : bonusIngredients.get()) {
             if (bonus.ingredient().test(stack)) {
                 total += bonus.maxLevelBonus();
@@ -114,18 +104,8 @@ public final class ToolLevelingConfig extends AbstractConfig {
         return total;
     }
 
-    @Deprecated
-    public boolean isBonusItemIterations(ItemStack stack) {
-        for (BonusIngredient bonus : bonusIngredients.get()) {
-            if (bonus.ingredient().test(stack) && bonus.iterationsBonus() != 0) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public int getBonusItemIterations(ItemStack stack) {
-        int total = 0;
+    public float getBonusItemIterations(ItemStack stack) {
+        float total = 0;
         for (BonusIngredient bonus : bonusIngredients.get()) {
             if (bonus.ingredient().test(stack)) {
                 total += bonus.iterationsBonus();

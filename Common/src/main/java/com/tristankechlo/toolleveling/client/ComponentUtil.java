@@ -54,7 +54,17 @@ public final class ComponentUtil {
         return Component.translatable(START + str, number).withStyle(ChatFormatting.GRAY);
     }
 
-    public static Component makeSummary(String str, int iterations, int minStrength, int strength) {
+    private static MutableComponent literalFloat(float value) {
+        int rounded = Math.round(value);
+        if (rounded == value) {
+            return Component.literal("" + rounded);
+        }
+        else {
+            return Component.literal("" + value);
+        }
+    }
+
+    public static Component makeSummary(String str, float iterations, float minStrength, float strength) {
         if (iterations <= 0) {
             MutableComponent iterationsText = Component.literal("" + iterations).withStyle(ChatFormatting.GREEN);
             return Component.translatable(START + str + ".iterations_too_low", iterationsText).withStyle(ChatFormatting.GRAY);
@@ -63,10 +73,10 @@ public final class ComponentUtil {
             MutableComponent iterationsText = Component.literal("" + strength).withStyle(ChatFormatting.GREEN);
             return Component.translatable(START + str + ".strength_too_low", iterationsText).withStyle(ChatFormatting.GRAY);
         }
-        MutableComponent iterationsText = Component.literal("" + iterations).withStyle(ChatFormatting.GREEN);
-        MutableComponent strengthText = Component.literal("" + strength).withStyle(ChatFormatting.GREEN);
+        MutableComponent iterationsText = literalFloat(iterations).withStyle(ChatFormatting.GREEN);
+        MutableComponent strengthText = literalFloat(strength).withStyle(ChatFormatting.GREEN);
         if (strength > minStrength) {
-            MutableComponent minStrText = Component.literal("" + minStrength).withStyle(ChatFormatting.GREEN);
+            MutableComponent minStrText = literalFloat(minStrength).withStyle(ChatFormatting.GREEN);
             if (minStrength < 0) {
                 minStrText = Component.translatable(START + ".min_strength_capped", minStrText);
             }

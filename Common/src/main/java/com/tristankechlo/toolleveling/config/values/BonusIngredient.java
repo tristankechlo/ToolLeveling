@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.crafting.Ingredient;
 
-public record BonusIngredient(Ingredient ingredient, int minLevelBonus, int maxLevelBonus, int iterationsBonus) {
+public record BonusIngredient(Ingredient ingredient, float minLevelBonus, float maxLevelBonus, float iterationsBonus) {
 
     public BonusIngredient {
         if (ingredient == null) {
@@ -25,9 +25,9 @@ public record BonusIngredient(Ingredient ingredient, int minLevelBonus, int maxL
     public static BonusIngredient deserialize(JsonObject json) {
         JsonObject obj = GsonHelper.getAsJsonObject(json, "ingredient");
         Ingredient ingredient = Ingredient.fromJson(obj);
-        int minLevelBonus = GsonHelper.getAsInt(json, "min_level_bonus", 0);
-        int maxLevelBonus = GsonHelper.getAsInt(json, "max_level_bonus", 0);
-        int iterationsBonus = GsonHelper.getAsInt(json, "iterations_bonus", 0);
+        float minLevelBonus = GsonHelper.getAsFloat(json, "min_level_bonus", 0.0F);
+        float maxLevelBonus = GsonHelper.getAsFloat(json, "max_level_bonus", 0.0F);
+        float iterationsBonus = GsonHelper.getAsFloat(json, "iterations_bonus", 0.0F);
         return new BonusIngredient(ingredient, minLevelBonus, maxLevelBonus, iterationsBonus);
     }
 
