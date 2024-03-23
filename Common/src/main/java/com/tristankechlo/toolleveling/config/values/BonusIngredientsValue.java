@@ -44,8 +44,8 @@ public final class BonusIngredientsValue extends AbstractConfigValue<BonusIngred
                 JsonObject moreLevelsObj = GsonHelper.getAsJsonObject(json, "bonus_item_more_levels");
                 Ingredient iterationsBonusIngredient = Ingredient.fromJson(moreLevelsObj);
                 value = new BonusIngredient[]{
-                    new BonusIngredient(maxLevelBonusIngredient, 0, 1),
-                    new BonusIngredient(iterationsBonusIngredient, 1, 0)
+                    new BonusIngredient(maxLevelBonusIngredient, 0, 0, 1),
+                    new BonusIngredient(iterationsBonusIngredient, 0, 1, 0)
                 };
             } catch (Exception e) {
                 value = defaultValue;

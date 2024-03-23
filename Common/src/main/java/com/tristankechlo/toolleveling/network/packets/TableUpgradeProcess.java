@@ -45,6 +45,7 @@ public record TableUpgradeProcess(BlockPos pos) {
             }
 
             int iterations = Util.getIterations(table); // how often the process will be repeated
+            int minStrength = Util.getEnchantmentMinStrength(table); // the minimum level of the enchantments
             int strength = Util.getEnchantmentStrength(table); // the maximum level of the enchantments
             var possibleEnchantments = table.getEnchantments(); // the possible enchantments, with their weight
             float successChance = Util.getSuccessChance(level, msg.pos); // the chance of a success in each iteration
@@ -70,11 +71,18 @@ public record TableUpgradeProcess(BlockPos pos) {
                     continue;
                 }
                 Enchantment e = o.get().getData();
-                int enchantmentLevel = level.getRandom().nextInt(strength) + 1;
-                if (enchantmentsToAdd.containsKey(e)) { // if the enchantment is already in the map, sum up the levels
-                    enchantmentLevel += enchantmentsToAdd.get(e);
+                // strength wins if it is lower than minStrengtg
+                int enchantmentLevel = Math.min(minStrength, strength);
+                if (strength > minStrength) {
+                    enchantmentLevel += level.getRandom().nextInt(strength - minStrength + 1);
                 }
-                enchantmentsToAdd.put(e, enchantmentLevel);
+                // if minimum strength is below 1, the resulting level can be too - don't add or subtract in that case
+                if (enchantmentLevel > 0) {
+                    if (enchantmentsToAdd.containsKey(e)) { // if the enchantment is already in the map, sum up the levels
+                        enchantmentLevel += enchantmentsToAdd.get(e);
+                    }
+                    enchantmentsToAdd.put(e, enchantmentLevel);
+                }
             }
 
             // add the enchantments to the item

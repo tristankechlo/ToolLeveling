@@ -13,6 +13,7 @@
     "screen.toolleveling.tool_leveling_table.summary.field_text.multi": "Up to %s enchantment(s) will be added to your item, each with a level between %s and %s",
     "screen.toolleveling.tool_leveling_table.summary.field_text.iterations_too_low": "Enchantment count (%s) too low to upgrade, add or remove bonus items for a count of at least 1",
     "screen.toolleveling.tool_leveling_table.summary.field_text.strength_too_low": "Enchantment strength (%s) too low to upgrade, add or remove bonus items for a strength of at least 1",
+    "screen.toolleveling.tool_leveling_table.min_strength_capped": "%s (result lower bounded by 0)",
     "screen.toolleveling.tool_leveling_table.percentages.button_text": "Info",
     "screen.toolleveling.tool_leveling_table.percentages.button_tooltip": "Show/Hide the percentages",
     "screen.toolleveling.tool_leveling_table.percentages.field_title": "Chosen Enchantment",

@@ -21,6 +21,7 @@ public final class ToolLevelingConfig extends AbstractConfig {
     private final NumberValue<Integer> requiredBookshelves;
     private final NumberValue<Integer> requiredBooks;
     private final NumberValue<Integer> baseIterations;
+    private final NumberValue<Integer> baseMinStrength;
     private final NumberValue<Integer> baseStrength;
     private final BonusIngredientsValue bonusIngredients;
     private final List<AbstractConfigValue<?>> values;
@@ -34,14 +35,15 @@ public final class ToolLevelingConfig extends AbstractConfig {
         requiredBookshelves = new NumberValue<>("required_bookshelves", 20, 0, 32, GsonHelper::getAsInt);
         requiredBooks = new NumberValue<>("required_books", 4, 1, 6, GsonHelper::getAsInt);
         baseIterations = new NumberValue<>("base_num_enchantments", 1, Integer.MIN_VALUE, Integer.MAX_VALUE, GsonHelper::getAsInt);
+        baseMinStrength = new NumberValue<>("base_num_min_levels", 1, Integer.MIN_VALUE, Integer.MAX_VALUE, GsonHelper::getAsInt);
         baseStrength = new NumberValue<>("base_num_levels", 1, Integer.MIN_VALUE, Integer.MAX_VALUE, GsonHelper::getAsInt);
         bonusIngredients = new BonusIngredientsValue("bonus_ingredients", new BonusIngredient[]{
-            new BonusIngredient(Ingredient.of(Items.NETHER_STAR), 0, 1),
-            new BonusIngredient(Ingredient.of(Items.ENCHANTED_GOLDEN_APPLE), 1, 0),
+            new BonusIngredient(Ingredient.of(Items.NETHER_STAR), 0, 0, 1),
+            new BonusIngredient(Ingredient.of(Items.ENCHANTED_GOLDEN_APPLE), 0, 1, 0),
         });
 
         values = List.of(minSuccessChance, maxSuccessChance, requiredBookshelves, requiredBooks,
-            baseIterations, baseStrength, bonusIngredients);
+            baseIterations, baseMinStrength, baseStrength, bonusIngredients);
     }
 
     @Override
@@ -70,12 +72,26 @@ public final class ToolLevelingConfig extends AbstractConfig {
         return requiredBooks.get();
     }
 
+    public int getBaseMinStrength() {
+        return baseMinStrength.get();
+    }
+
     public int getBaseStrength() {
         return baseStrength.get();
     }
 
     public int getBaseIterations() {
         return baseIterations.get();
+    }
+
+    public int getBonusItemMinStrength(ItemStack stack) {
+        int total = 0;
+        for (BonusIngredient bonus : bonusIngredients.get()) {
+            if (bonus.ingredient().test(stack)) {
+                total += bonus.minLevelBonus();
+            }
+        }
+        return total;
     }
 
     @Deprecated

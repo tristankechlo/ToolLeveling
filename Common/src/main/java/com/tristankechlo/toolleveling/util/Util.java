@@ -28,6 +28,7 @@ public final class Util {
         boolean upgradeSlotNotEmpty = !f.apply(0).isEmpty(); // the upgrade slot is not empty
         int iterations = getIterations(f);
         int strength = getEnchantmentStrength(f);
+        // no mimumum strength check, it can go below 1 or above strength (which is a waste)
 
         return enoughBooks && upgradeSlotNotEmpty && iterations > 0 && strength > 0;
     }
@@ -69,6 +70,18 @@ public final class Util {
         int count = Predicates.BASE_ITERATIONS_VAL.getAsInt();
         for (int i : BONUS_SLOTS) {
             count += Predicates.BONUS_ITEM_ITERATIONS_VAL.applyAsInt(f.apply(i));
+        }
+        return count;
+    }
+
+    public static int getEnchantmentMinStrength(Container menu) {
+        return getEnchantmentMinStrength(menu::getItem);
+    }
+
+    private static int getEnchantmentMinStrength(Function<Integer, ItemStack> f) {
+        int count = Predicates.BASE_MIN_STRENGTH_VAL.getAsInt();
+        for (int i : BONUS_SLOTS) {
+            count += Predicates.BONUS_ITEM_MIN_STRENGTH_VAL.applyAsInt(f.apply(i));
         }
         return count;
     }

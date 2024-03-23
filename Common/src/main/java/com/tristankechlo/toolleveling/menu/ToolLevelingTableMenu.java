@@ -154,6 +154,10 @@ public class ToolLevelingTableMenu extends AbstractContainerMenu {
         return Util.getIterations(this.table);
     }
 
+    public int getMinLevels() {
+        return Util.getEnchantmentMinStrength(this.table);
+    }
+
     public int getLevels() {
         return Util.getEnchantmentStrength(this.table);
     }
