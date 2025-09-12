@@ -3,6 +3,7 @@ package com.tristankechlo.toolleveling.platform;
 import com.google.auto.service.AutoService;
 import com.tristankechlo.toolleveling.blockentity.FabricBlockEntity;
 import com.tristankechlo.toolleveling.blockentity.ToolLevelingTableBlockEntity;
+import com.tristankechlo.toolleveling.init.ModRegistry;
 import com.tristankechlo.toolleveling.menu.ToolLevelingTableMenu;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
@@ -38,7 +39,7 @@ public final class FabricPlatformHelper implements IPlatformHelper {
 
     @Override
     public Supplier<BlockEntityType<? extends ToolLevelingTableBlockEntity>> buildBlockEntityType() {
-        return () -> FabricBlockEntityTypeBuilder.create(FabricBlockEntity::new).build();
+        return () -> FabricBlockEntityTypeBuilder.create(FabricBlockEntity::new, ModRegistry.TLT_BLOCK.get()).build();
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.tristankechlo.toolleveling.platform;
 import com.google.auto.service.AutoService;
 import com.tristankechlo.toolleveling.blockentity.ForgeBlockEntity;
 import com.tristankechlo.toolleveling.blockentity.ToolLevelingTableBlockEntity;
+import com.tristankechlo.toolleveling.init.ModRegistry;
 import com.tristankechlo.toolleveling.menu.ToolLevelingTableMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -40,7 +41,7 @@ public final class ForgePlatformHelper implements IPlatformHelper {
 
     @Override
     public Supplier<BlockEntityType<? extends ToolLevelingTableBlockEntity>> buildBlockEntityType() {
-        return () -> BlockEntityType.Builder.of(ForgeBlockEntity::new).build(null);
+        return () -> BlockEntityType.Builder.of(ForgeBlockEntity::new, ModRegistry.TLT_BLOCK.get()).build(null);
     }
 
     @Override
