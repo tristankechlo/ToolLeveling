@@ -1,6 +1,6 @@
 package com.tristankechlo.toolleveling.commands;
 
-import com.tristankechlo.toolleveling.utils.Names;
+import com.tristankechlo.toolleveling.ToolLeveling;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.*;
@@ -18,7 +18,7 @@ public final class ResponseHelper {
     }
 
     public static MutableComponent start() {
-        return new TextComponent("[" + Names.MOD_NAME + "] ").withStyle(ChatFormatting.GOLD);
+        return new TextComponent("[" + ToolLeveling.MOD_NAME + "] ").withStyle(ChatFormatting.GOLD);
     }
 
     public static void sendMessage(CommandSourceStack source, Component message, boolean broadcastToOps) {

@@ -19,11 +19,13 @@ public enum ProjectLinks {
     MODRINTH("Check out the Modrinth page here: ", "https://modrinth.com/mod/living-things");
 
     private final MutableComponent message;
+    public final String url;
 
     ProjectLinks(String message, String url) {
         this.message = new TextComponent(message);
         this.message.withStyle(ChatFormatting.WHITE);
         this.message.append(ResponseHelper.clickableLink(url, url));
+        this.url = url;
     }
 
     public int execute(CommandContext<CommandSourceStack> sender) {

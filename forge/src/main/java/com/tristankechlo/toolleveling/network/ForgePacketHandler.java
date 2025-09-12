@@ -2,12 +2,10 @@ package com.tristankechlo.toolleveling.network;
 
 import com.google.auto.service.AutoService;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.network.packets.OpenItemValueScreenPacket;
 import com.tristankechlo.toolleveling.network.packets.SetEnchantmentToolLevelingTable;
 import com.tristankechlo.toolleveling.network.packets.SyncToolLevelingConfig;
-import com.tristankechlo.toolleveling.utils.Names;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.Connection;
@@ -31,7 +29,7 @@ public final class ForgePacketHandler implements IPacketHandler {
 
     private static final String PROTOCOL_VERSION = "1";
     public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation(Names.MOD_ID, "main"), () -> PROTOCOL_VERSION, PROTOCOL_VERSION::equals,
+            new ResourceLocation(ToolLeveling.MOD_ID, "main"), () -> PROTOCOL_VERSION, PROTOCOL_VERSION::equals,
             PROTOCOL_VERSION::equals);
 
     public static void registerPackets() {

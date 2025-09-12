@@ -1,4 +1,4 @@
-package com.tristankechlo.toolleveling.client.renderer.tile;
+package com.tristankechlo.toolleveling.client.blockentityrenderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Quaternion;

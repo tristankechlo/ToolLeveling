@@ -1,6 +1,6 @@
 package com.tristankechlo.toolleveling;
 
-import com.tristankechlo.toolleveling.client.renderer.tile.ToolLevelingTableRenderer;
+import com.tristankechlo.toolleveling.client.blockentityrenderer.ToolLevelingTableRenderer;
 import com.tristankechlo.toolleveling.client.screen.ToolLevelingTableScreen;
 import com.tristankechlo.toolleveling.init.ModRegistry;
 import net.fabricmc.api.ClientModInitializer;

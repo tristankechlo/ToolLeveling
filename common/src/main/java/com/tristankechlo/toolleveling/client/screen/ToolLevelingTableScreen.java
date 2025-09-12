@@ -2,11 +2,11 @@ package com.tristankechlo.toolleveling.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.client.screen.widgets.ButtonEntry;
 import com.tristankechlo.toolleveling.client.screen.widgets.ButtonListWidget;
 import com.tristankechlo.toolleveling.menu.ToolLevelingTableMenu;
 import com.tristankechlo.toolleveling.utils.ButtonHelper;
-import com.tristankechlo.toolleveling.utils.Names;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -20,7 +20,7 @@ import java.util.List;
 @SuppressWarnings("removal") // forge in 1.20.6+
 public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelingTableMenu> {
 
-    private static final ResourceLocation GUI_TEXTURE = new ResourceLocation(Names.MOD_ID, "textures/gui/tool_leveling_table.png");
+    private static final ResourceLocation GUI_TEXTURE = new ResourceLocation(ToolLeveling.MOD_ID, "textures/gui/tool_leveling_table.png");
     protected ButtonListWidget buttonList;
     private byte ticksSinceUpdate = 0;
 

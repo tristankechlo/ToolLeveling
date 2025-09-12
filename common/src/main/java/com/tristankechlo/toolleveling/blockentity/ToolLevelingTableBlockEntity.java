@@ -1,8 +1,8 @@
 package com.tristankechlo.toolleveling.blockentity;
 
+import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.init.ModRegistry;
 import com.tristankechlo.toolleveling.menu.ToolLevelingTableMenu;
-import com.tristankechlo.toolleveling.utils.Names;
 import com.tristankechlo.toolleveling.utils.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -25,7 +25,7 @@ import java.util.stream.IntStream;
 
 public abstract class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer {
 
-    private final Component CUSTOMNAME = new TranslatableComponent("container." + Names.MOD_ID + ".tool_leveling_table");
+    private final Component CUSTOMNAME = new TranslatableComponent("container." + ToolLeveling.MOD_ID + ".tool_leveling_table");
     public static final int NUMBER_OF_SLOTS = 16;
     private NonNullList<ItemStack> items = NonNullList.withSize(NUMBER_OF_SLOTS, ItemStack.EMPTY);
     public static final int[] SLOTS = IntStream.range(1, NUMBER_OF_SLOTS).toArray();

@@ -6,14 +6,13 @@ import com.tristankechlo.toolleveling.commands.ToolLevelingCommand;
 import com.tristankechlo.toolleveling.config.util.ConfigManager;
 import com.tristankechlo.toolleveling.init.ModRegistry;
 import com.tristankechlo.toolleveling.network.ForgePacketHandler;
-import com.tristankechlo.toolleveling.utils.Names;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod(Names.MOD_ID)
+@Mod(ToolLeveling.MOD_ID)
 public final class ForgeToolLeveling {
 
     public ForgeToolLeveling() {

@@ -1,8 +1,8 @@
 package com.tristankechlo.toolleveling.client.screen.widgets;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.client.screen.ItemValueScreen;
-import com.tristankechlo.toolleveling.utils.Names;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.core.NonNullList;
@@ -57,7 +57,7 @@ public class ItemValueEntry extends ObjectSelectionList.Entry<ItemValueEntry> {
     @Override
     public Component getNarration() {
         if (NARRATION == null) {
-            NARRATION = new TranslatableComponent("screen." + Names.MOD_ID + ".item_values");
+            NARRATION = new TranslatableComponent("screen." + ToolLeveling.MOD_ID + ".item_values");
         }
         return NARRATION;
     }

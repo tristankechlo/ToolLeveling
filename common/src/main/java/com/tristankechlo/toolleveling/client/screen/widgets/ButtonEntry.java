@@ -1,11 +1,11 @@
 package com.tristankechlo.toolleveling.client.screen.widgets;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.client.screen.ToolLevelingTableScreen;
 import com.tristankechlo.toolleveling.network.IPacketHandler;
 import com.tristankechlo.toolleveling.utils.ButtonHelper;
 import com.tristankechlo.toolleveling.utils.ButtonHelper.ButtonStatus;
-import com.tristankechlo.toolleveling.utils.Names;
 import com.tristankechlo.toolleveling.utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
@@ -63,7 +63,7 @@ public class ButtonEntry extends ObjectSelectionList.Entry<ButtonEntry> {
     @Override
     public Component getNarration() {
         if (NARRATION == null) {
-            NARRATION = new TranslatableComponent("screen." + Names.MOD_ID + ".tool_leveling_table");
+            NARRATION = new TranslatableComponent("screen." + ToolLeveling.MOD_ID + ".tool_leveling_table");
         }
         return NARRATION;
     }

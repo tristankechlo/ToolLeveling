@@ -7,7 +7,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonWriter;
 import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.platform.IPlatformHelper;
-import com.tristankechlo.toolleveling.utils.Names;
+import com.tristankechlo.toolleveling.utils.ProjectLinks;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -104,7 +104,7 @@ public final class ConfigManager {
         lines.add("");
         lines.add("Before editing the config, please take a look at the wiki.");
         lines.add("You can find information about all configs, and it's options there.");
-        lines.add("The wiki is located at: " + Names.URLS.GITHUB_WIKI);
+        lines.add("The wiki is located at: " + ProjectLinks.WIKI.url);
         lines.add("");
         return lines;
     }
