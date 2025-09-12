@@ -1,0 +1,29 @@
+modLoader = "javafml"
+loaderVersion = "${forge_loader_range}"
+license = "CC BY-NC-ND 4.0"
+issueTrackerURL = "https://github.com/tristankechlo/ToolLeveling/issues"
+showAsResourcePack = false
+
+[[mods]]
+    modId = "toolleveling"
+    version = "${version}"
+    displayName = "Tool Leveling"
+    displayURL = "https://www.curseforge.com/minecraft/mc-mods/tool-leveling-plus"
+    logoFile = "tool_leveling_banner.png"
+    #credits="Thanks for this example mod goes to Java"
+    authors = "Buecher_wurm"
+    description = '''adds the possibility to upgrade your enchantments higher than the vanilla limit'''
+
+[[dependencies.toolleveling]]
+    modId = "forge"
+    mandatory = true
+    versionRange = "${forge_loader_range}"
+    ordering = "NONE"
+    side = "BOTH"
+
+[[dependencies.toolleveling]]
+    modId = "minecraft"
+    mandatory = true
+    versionRange = "${version_range}"
+    ordering = "NONE"
+    side = "BOTH"
