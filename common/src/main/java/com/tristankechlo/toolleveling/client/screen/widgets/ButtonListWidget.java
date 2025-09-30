@@ -3,6 +3,7 @@ package com.tristankechlo.toolleveling.client.screen.widgets;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.tristankechlo.toolleveling.client.screen.ToolLevelingTableScreen;
 import com.tristankechlo.toolleveling.utils.ButtonHelper;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -49,8 +50,8 @@ public class ButtonListWidget extends ObjectSelectionList<ButtonEntry> {
     }
 
     @Override
-    protected void renderBackground(PoseStack matrixStack) {
-        // background of the scroll view
-        this.fillGradient(matrixStack, x0 - 1, y0 - 1, x1, y1 + 2, -10066330, -10066330);
+    protected void renderBackground(PoseStack poseStack) {
+        GuiComponent.fill(poseStack, x0, y0 - 1, x1, y1 + 2, 0xff8B8B8B);
     }
+
 }

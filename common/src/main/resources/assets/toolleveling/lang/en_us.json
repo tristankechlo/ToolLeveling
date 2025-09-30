@@ -8,7 +8,7 @@
 	"screen.toolleveling.tool_leveling_table" : "Tool Leveling Table",
 	"screen.toolleveling.item_values" : "Item Values",
 	"screen.toolleveling.item_value_worth" : "Item-Worth: %s",
-	"screen.toolleveling.default_item_value_worth" : "All items not listed in here are worth %s",
+	"screen.toolleveling.default_item_value_worth" : "Default value: %s",
 
 	"container.toolleveling.tool_leveling_table" : "Tool Leveling Table",
 	"container.toolleveling.tool_leveling_table.current_level" : "Current Level: %s",

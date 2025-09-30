@@ -39,7 +39,7 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
     protected void init() {
         super.init();
         this.buttonList = new ButtonListWidget(this, 136, this.topPos + 23, this.topPos + 118);
-        this.buttonList.setLeftPos(this.leftPos + 105);
+        this.buttonList.setLeftPos(this.leftPos + 104);
         this.addRenderableWidget(this.buttonList);
 
     }

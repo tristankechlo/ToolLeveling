@@ -4,7 +4,9 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.tristankechlo.toolleveling.ToolLeveling;
 import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -22,9 +24,9 @@ public record ItemValueConfig(
         Map<Item, Long> itemValues // all item tags resolved to items
 ) {
 
-    private static final Codec<Item> CORRECT_ITEM = Registry.ITEM.byNameCodec().flatXmap(ItemValueConfig::validateItem, DataResult::success);
+    private static final Codec<Item> CORRECT_ITEM = Registry.ITEM.byNameCodec();
     private static final Codec<Map<Either<Item, TagKey<Item>>, Long>> ITEM_TO_LONG = Codec.unboundedMap(
-            Codec.either(CORRECT_ITEM, TagKey.hashedCodec(Registry.ITEM_REGISTRY)),
+            Codec.either(CORRECT_ITEM, TagKey.hashedCodec(Registry.ITEM_REGISTRY)).flatXmap(ItemValueConfig::validate, DataResult::success),
             CodecHelper.NON_NEGATIVE_LONG
     );
     public static final Codec<ItemValueConfig> CODEC = RecordCodecBuilder.create(
@@ -53,6 +55,13 @@ public record ItemValueConfig(
         INSTANCE = ItemValueConfig.DEFAULT;
     }
 
+    private static DataResult<Either<Item, TagKey<Item>>> validate(Either<Item, TagKey<Item>> item) {
+        if (item.left().isPresent()) {
+            return validateItem(item.left().get()).map(Either::left);
+        }
+        return DataResult.success(item);
+    }
+
     private static DataResult<Item> validateItem(Item item) {
         String id = item == null ? "unknown" : Registry.ITEM.getKey(item).toString();
         if (item == null || item == Items.AIR) {
@@ -77,20 +86,33 @@ public record ItemValueConfig(
 
     private static Map<Item, Long> resolve(Map<Either<Item, TagKey<Item>>, Long> values) {
         Map<Item, Long> itemValues = new HashMap<>();
-        for (Map.Entry<Either<Item, TagKey<Item>>, Long> entry : values.entrySet()) {
-            if (entry.getKey().left().isPresent()) {
-                itemValues.put(entry.getKey().left().get(), entry.getValue());
-            } else if (entry.getKey().right().isPresent()) {
-                long value = entry.getValue();
-                for (Item item : getAllFromTag(entry.getKey().right().get())) {
-                    itemValues.put(item, value);
-                }
-            }
-        }
+        // resolve all item tags first
+        values.entrySet().stream().filter(entry -> entry.getKey().right().isPresent()) // find all tag entries
+                .map(entry -> Map.entry(entry.getKey().right().get(), entry.getValue())) // Map<TagKey<Item>, Long>
+                .forEach(entry -> {
+                    ToolLeveling.LOGGER.info("Resolving items for tag: {}", entry.getKey().location());
+                    for (Item item : getAllFromTag(entry.getKey())) {
+                        if (itemValues.containsKey(item)) {
+                            ResourceLocation loc = Registry.ITEM.getKey(item);
+                            ToolLeveling.LOGGER.warn("Duplicate item value entry for Item[{}] in ItemTag[{}], overriding the value!", loc, entry.getKey().location());
+                        }
+                        itemValues.put(item, entry.getValue());
+                    }
+                });
+        // specifically mentioned items override the ones from item tags
+        values.entrySet().stream().filter(entry -> entry.getKey().left().isPresent()) // find all item entries
+                .map(entry -> Map.entry(entry.getKey().left().get(), entry.getValue())) // Map<Item, Long>
+                .forEach(entry -> {
+                    if (itemValues.containsKey(entry.getKey())) {
+                        ResourceLocation loc = Registry.ITEM.getKey(entry.getKey());
+                        ToolLeveling.LOGGER.warn("Duplicate item value entry for Item[{}], overriding the value!", loc);
+                    }
+                    itemValues.put(entry.getKey(), entry.getValue());
+                });
         return itemValues;
     }
 
-    private static List<Item> getAllFromTag(TagKey<Item> tagKey) {
+    public static List<Item> getAllFromTag(TagKey<Item> tagKey) {
         List<Item> tempValues = new ArrayList<>();
         Registry.ITEM.getTagOrEmpty(tagKey).forEach((holder) -> tempValues.add(holder.value()));
         return tempValues;

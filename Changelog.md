@@ -2,11 +2,14 @@
 
 ### Version 1.18.2 - 1.5.0
 
-- removed command options
+- internal handling of the config is now based on vanilla codecs
+- removed some command options
     - `/toolleveling config show`
     - `/toolleveling config info`
 - command `/toolleveling config reset` will now reset all configs
 - command `/toolleveling config reload` will now reload all configs
+- internal handling of item tags improved
+    - now rendered in the item values gui more compact (see: `/toolleveling openitemvalues`)
 
 ### Version 1.18.2 - 1.4.5
 
