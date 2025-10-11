@@ -10,6 +10,7 @@
 - command `/toolleveling config reload` will now reload all configs
 - internal handling of item tags improved
     - now rendered in the item values gui more compact (see: `/toolleveling openitemvalues`)
+- colored slots in the gui to indicate which slots are for payment and which for the item to upgrade
 
 ### Version 1.18.2 - 1.4.5
 
