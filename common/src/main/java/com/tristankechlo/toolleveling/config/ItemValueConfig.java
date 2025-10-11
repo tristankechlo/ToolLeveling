@@ -7,7 +7,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.tristankechlo.toolleveling.ToolLeveling;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -79,8 +78,89 @@ public record ItemValueConfig(
 
     public static Map<Either<Item, TagKey<Item>>, Long> getDefaultItemValues() {
         Map<Either<Item, TagKey<Item>>, Long> values = new HashMap<>();
+
+        // Ores
         values.put(Either.left(Items.COAL), 8L);
-        values.put(Either.right(ItemTags.BEDS), 12L);
+        values.put(Either.left(Items.COAL_ORE), 30L);
+        values.put(Either.left(Items.DEEPSLATE_COAL_ORE), 30L);
+        values.put(Either.left(Items.COAL_BLOCK), 73L);
+
+        values.put(Either.left(Items.COPPER_ORE), 10L);
+        values.put(Either.left(Items.DEEPSLATE_COPPER_ORE), 10L);
+        values.put(Either.left(Items.RAW_COPPER), 11L);
+        values.put(Either.left(Items.COPPER_INGOT), 14L);
+        values.put(Either.left(Items.COPPER_BLOCK), 126L);
+        values.put(Either.left(Items.RAW_COPPER_BLOCK), 99L);
+
+        values.put(Either.left(Items.RAW_IRON), 13L);
+        values.put(Either.left(Items.IRON_INGOT), 15L);
+        values.put(Either.left(Items.IRON_ORE), 12L);
+        values.put(Either.left(Items.DEEPSLATE_IRON_ORE), 12L);
+        values.put(Either.left(Items.RAW_IRON_BLOCK), 117L);
+        values.put(Either.left(Items.IRON_BLOCK), 135L);
+
+        values.put(Either.left(Items.GOLD_INGOT), 40L);
+        values.put(Either.left(Items.RAW_GOLD), 35L);
+        values.put(Either.left(Items.GOLD_ORE), 30L);
+        values.put(Either.left(Items.DEEPSLATE_GOLD_ORE), 30L);
+        values.put(Either.left(Items.RAW_GOLD_BLOCK), 315L);
+        values.put(Either.left(Items.GOLD_BLOCK), 360L);
+
+        values.put(Either.left(Items.DIAMOND), 160L);
+        values.put(Either.left(Items.DIAMOND_ORE), 160L);
+        values.put(Either.left(Items.DEEPSLATE_DIAMOND_ORE), 160L);
+        values.put(Either.left(Items.DIAMOND_BLOCK), 1450L);
+        values.put(Either.left(Items.NETHERITE_INGOT), 200L);
+        values.put(Either.left(Items.NETHERITE_SCRAP), 50L);
+        values.put(Either.left(Items.ANCIENT_DEBRIS), 50L);
+        values.put(Either.left(Items.NETHERITE_BLOCK), 1800L);
+        values.put(Either.left(Items.LAPIS_LAZULI), 8L);
+        values.put(Either.left(Items.LAPIS_ORE), 120L);
+        values.put(Either.left(Items.DEEPSLATE_LAPIS_ORE), 120L);
+        values.put(Either.left(Items.LAPIS_BLOCK), 70L);
+        values.put(Either.left(Items.EMERALD), 100L);
+        values.put(Either.left(Items.EMERALD_ORE), 800L);
+        values.put(Either.left(Items.DEEPSLATE_EMERALD_ORE), 800L);
+        values.put(Either.left(Items.EMERALD_BLOCK), 900L);
+        values.put(Either.left(Items.QUARTZ), 10L);
+        values.put(Either.left(Items.NETHER_QUARTZ_ORE), 40L);
+        values.put(Either.left(Items.QUARTZ_BLOCK), 40L);
+        values.put(Either.left(Items.REDSTONE), 4L);
+        values.put(Either.left(Items.REDSTONE_ORE), 60L);
+        values.put(Either.left(Items.DEEPSLATE_REDSTONE_ORE), 60L);
+        values.put(Either.left(Items.REDSTONE_BLOCK), 36L);
+        values.put(Either.left(Items.GLOWSTONE_DUST), 4L);
+        values.put(Either.left(Items.GLOWSTONE), 15L);
+
+        // other
+        values.put(Either.left(Items.AMETHYST_BLOCK), 11L);
+        values.put(Either.left(Items.AMETHYST_SHARD), 17L);
+
+        // Food
+        values.put(Either.left(Items.GOLDEN_APPLE), 400L);
+        values.put(Either.left(Items.GOLDEN_CARROT), 100L);
+        values.put(Either.left(Items.GLISTERING_MELON_SLICE), 100L);
+        values.put(Either.left(Items.ENCHANTED_GOLDEN_APPLE), 2500L);
+
+        // Drops
+        values.put(Either.left(Items.SLIME_BALL), 25L);
+        values.put(Either.left(Items.SLIME_BLOCK), 225L);
+        values.put(Either.left(Items.ENDER_PEARL), 20L);
+        values.put(Either.left(Items.BLAZE_ROD), 30L);
+        values.put(Either.left(Items.ENDER_EYE), 50L);
+        values.put(Either.left(Items.BLAZE_POWDER), 15L);
+        values.put(Either.left(Items.MAGMA_CREAM), 50L);
+        values.put(Either.left(Items.GHAST_TEAR), 200L);
+        values.put(Either.left(Items.NETHER_STAR), 2500L);
+        values.put(Either.left(Items.SHULKER_SHELL), 200L);
+        values.put(Either.left(Items.END_CRYSTAL), 300L);
+        values.put(Either.left(Items.EXPERIENCE_BOTTLE), 100L);
+        values.put(Either.left(Items.DRAGON_EGG), 2000L);
+        values.put(Either.left(Items.DRAGON_HEAD), 2000L);
+
+        // Decorative
+        values.put(Either.left(Items.ENDER_CHEST), 140L);
+        values.put(Either.left(Items.BEACON), 2500L);
         return values;
     }
 
