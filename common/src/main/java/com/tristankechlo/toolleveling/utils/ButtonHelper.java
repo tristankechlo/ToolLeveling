@@ -1,11 +1,12 @@
 package com.tristankechlo.toolleveling.utils;
 
-import com.tristankechlo.toolleveling.client.screen.ToolLevelingTableScreen;
 import com.tristankechlo.toolleveling.client.screen.widgets.ButtonEntry;
+import com.tristankechlo.toolleveling.client.screen.widgets.ButtonListWidget;
 import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.enchantment.Enchantment;
 
@@ -29,7 +30,7 @@ public final class ButtonHelper {
         return false;
     }
 
-    public static ButtonEntry getButtonEntry(ToolLevelingTableScreen parent, Enchantment enchantment, int level) {
+    public static ButtonEntry getButtonEntry(ButtonListWidget parent, Enchantment enchantment, int level) {
         List<Enchantment> whitelist = ToolLevelingConfig.get().enchantmentOptions().whitelist();
         List<Enchantment> blacklist = ToolLevelingConfig.get().enchantmentOptions().blacklist();
         ButtonEntry buttonEntry = new ButtonEntry(parent, enchantment, level);
@@ -76,7 +77,7 @@ public final class ButtonHelper {
         return buttonEntry;
     }
 
-    public static Component getButtonText(ButtonEntry entry) {
+    public static MutableComponent getButtonText(ButtonEntry entry) {
         return new TranslatableComponent(entry.name).withStyle(getButtonTextFormatting(entry));
     }
 

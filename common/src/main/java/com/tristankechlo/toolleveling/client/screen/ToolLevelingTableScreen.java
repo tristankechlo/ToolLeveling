@@ -3,10 +3,8 @@ package com.tristankechlo.toolleveling.client.screen;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.tristankechlo.toolleveling.ToolLeveling;
-import com.tristankechlo.toolleveling.client.screen.widgets.ButtonEntry;
 import com.tristankechlo.toolleveling.client.screen.widgets.ButtonListWidget;
 import com.tristankechlo.toolleveling.menu.ToolLevelingTableMenu;
-import com.tristankechlo.toolleveling.utils.ButtonHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -15,13 +13,11 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-import java.util.List;
-
 @SuppressWarnings("removal") // forge in 1.20.6+
 public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelingTableMenu> {
 
     private static final ResourceLocation GUI_TEXTURE = new ResourceLocation(ToolLeveling.MOD_ID, "textures/gui/tool_leveling_table.png");
-    protected ButtonListWidget buttonList;
+    public ButtonListWidget buttonList;
     private byte ticksSinceUpdate = 0;
 
     public ToolLevelingTableScreen(ToolLevelingTableMenu container, Inventory inv, Component name) {
@@ -38,10 +34,8 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
     @Override
     protected void init() {
         super.init();
-        this.buttonList = new ButtonListWidget(this, 136, this.topPos + 23, this.topPos + 118);
-        this.buttonList.setLeftPos(this.leftPos + 104);
-        this.addRenderableWidget(this.buttonList);
-
+        this.buttonList = new ButtonListWidget(this, this.leftPos + 104, this.topPos + 22, 136, 98);
+        this.addWidget(this.buttonList);
     }
 
     @Override
@@ -54,31 +48,28 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
     }
 
     @Override
-    public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrixStack); // render translucent grey background
-        this.buttonList.render(matrixStack, mouseX, mouseY, partialTicks); // render button scroll view
-        super.render(matrixStack, mouseX, mouseY, partialTicks);
-        this.renderTooltip(matrixStack, mouseX, mouseY); // render item toolltips
+    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(poseStack, 0); // render translucent grey background
+        this.buttonList.render(poseStack, mouseX, mouseY, partialTicks);
 
-        // render button tooltips
-        for (int i = 0; i < this.buttonList.children().size(); i++) {
-            ButtonEntry entry = this.buttonList.children().get(i);
-            if (entry.button.isHoveredOrFocused()) {
-                List<Component> tooltip = ButtonHelper.getButtonToolTips(entry);
-                this.renderComponentTooltip(matrixStack, tooltip, mouseX, mouseY);
-            }
-        }
+        poseStack.pushPose();
+        poseStack.translate(0.0D, 0.0D, 10.0D);
+        super.render(poseStack, mouseX, mouseY, partialTicks);
+        this.renderPointsSummary(poseStack);
+        poseStack.popPose();
 
-        this.renderPointsSummary(matrixStack);
+        this.renderTooltip(poseStack, mouseX, mouseY); // render item tooltips
     }
 
-    private void renderPointsSummary(PoseStack stack) {
+    private void renderPointsSummary(PoseStack poseStack) {
+        RenderSystem.enableDepthTest();
         String start = "container.toolleveling.tool_leveling_table.worth.";
         Component bonusPoints = new TranslatableComponent(start + "bonus_points", this.menu.getBonusPoints());
         Component invWorth = new TranslatableComponent(start + "inv", this.menu.getContainerWorth());
         float left = this.leftPos + 8;
-        this.font.draw(stack, bonusPoints, left, topPos + 45, 4210752);
-        this.font.draw(stack, invWorth, left, topPos + 56, 4210752);
+        this.font.draw(poseStack, bonusPoints, left, topPos + 45, 4210752);
+        this.font.draw(poseStack, invWorth, left, topPos + 56, 4210752);
+        RenderSystem.disableDepthTest();
     }
 
     @Override
@@ -98,7 +89,9 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, GUI_TEXTURE);
-        blit(poseStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight, imageWidth, imageHeight);
+        RenderSystem.enableDepthTest();
+        blit(poseStack, this.leftPos, this.topPos, 0, 0, imageWidth, imageHeight, imageWidth, imageHeight);
+        RenderSystem.disableDepthTest();
     }
 
     public Minecraft getMinecraft() {
