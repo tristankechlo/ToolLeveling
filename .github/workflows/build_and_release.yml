@@ -1,0 +1,146 @@
+name: Build and Publish Release
+
+on:
+  release:
+    types: [ published ]
+
+env:
+  MODID: "toolleveling"
+  CURSEFORGE_LINK: "https://www.curseforge.com/minecraft/mc-mods/tool-leveling-plus"
+  MODRINTH_ID: "I8oNjZdJ"
+  MODRINTH_LINK: "https://modrinth.com/mod/tool-leveling"
+  MODRINTH_FEATURED: true # if this version should be featured on modrinth
+  DISCORD_COLOR: 10289039
+  DISCORD_MENTION: "<@&890143376131895296>"
+  DISCORD_TITLE: "New version for Tool Leveling+ just released :exclamation:"
+  DISCORD_THUMBNAIL: "https://cdn.modrinth.com/data/I8oNjZdJ/1cce579e6f414d356b2ce79786a5db1d55f06f22_96.webp"
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      java-version: ${{ steps.properties.outputs.java_version }}
+      mc-version: ${{ steps.properties.outputs.minecraft_version }}
+      mod-version: ${{ steps.properties.outputs.mod_version }}
+      version-range: ${{ steps.properties.outputs.version_range }}
+    steps:
+      - name: Checkout Sourcecode
+        uses: actions/checkout@v4
+
+      - name: calculate versions
+        id: properties
+        uses: christian-draeger/read-properties@1.1.1
+        with:
+          path: 'gradle.properties'
+          properties: 'minecraft_version mod_version version_range java_version'
+
+      - name: Changelog
+        shell: bash
+        run: |
+          echo "# Changelog ${{ steps.properties.outputs.minecraft_version }} - ${{ steps.properties.outputs.mod_version }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "${{ github.event.release.body }}" >> $GITHUB_STEP_SUMMARY
+
+  build-and-release:
+    needs: prepare
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Sourcecode
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: ${{ needs.prepare.outputs.java-version }}
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-disabled: true
+
+      - name: Make gradle wrapper executable
+        run: chmod +x ./gradlew
+
+      - name: Execute Gradle build
+        run: ./gradlew build
+
+      - name: Add files to GitHub-Release
+        uses: shogo82148/actions-upload-release-asset@v1.7.5
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: |
+            ./forge/build/libs/${{ env.MODID }}-*.jar
+            ./fabric/build/libs/${{ env.MODID }}-*.jar
+          overwrite: true
+
+      - name: Publish Fabric
+        if: ${{ contains(github.event.release.name, '[RELEASE]') }}
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          modrinth-id: ${{ env.MODRINTH_ID }}
+          modrinth-featured: true
+          modrinth-unfeature-mode: intersection
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          modrinth-name: ${{ needs.prepare.outputs.mc-version }} - ${{ needs.prepare.outputs.mod-version }} - Fabric
+          modrinth-version: ${{ needs.prepare.outputs.mc-version }}-${{ needs.prepare.outputs.mod-version }}-Fabric
+          curseforge-id: 565322
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          curseforge-name: ""
+          curseforge-version: ""
+          version-type: "release"
+          loaders: fabric
+          files: "./fabric/build/libs/${{ env.MODID }}-*.jar"
+          changelog: "${{ github.event.release.body }}"
+          game-versions: ${{ needs.prepare.outputs.version-range }}
+          dependencies: fabric-api(required)
+          game-version-filter: releases
+
+      - name: Publish Forge
+        if: ${{ contains(github.event.release.name, '[RELEASE]') }}
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          modrinth-id: ${{ env.MODRINTH_ID }}
+          modrinth-featured: true
+          modrinth-unfeature-mode: intersection
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          modrinth-name: ${{ needs.prepare.outputs.mc-version }} - ${{ needs.prepare.outputs.mod-version }} - Forge
+          modrinth-version: ${{ needs.prepare.outputs.mc-version }}-${{ needs.prepare.outputs.mod-version }}-Forge
+          curseforge-id: 397255
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          curseforge-name: ""
+          curseforge-version: ""
+          version-type: "release"
+          loaders: forge
+          files: "./forge/build/libs/${{ env.MODID }}-*.jar"
+          changelog: "${{ github.event.release.body }}"
+          game-versions: ${{ needs.prepare.outputs.version-range }}
+          dependencies: ""
+          game-version-filter: releases
+
+  send-discord-embed:
+    needs: [ "prepare", "build-and-release" ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Make embed
+        uses: tristankechlo/create-discord-embed@v1.0.2
+        with:
+          released: ${{ contains(github.event.release.name, '[RELEASE]') }}
+          changelog: "${{ github.event.release.body }}"
+          version: "${{ needs.prepare.outputs.mc-version }} - ${{ needs.prepare.outputs.mod-version }}"
+          color: ${{ env.DISCORD_COLOR }}
+          content: "${{ contains(github.event.release.name, '[RELEASE]') && env.DISCORD_MENTION || ''}}"
+          title: ${{ env.DISCORD_TITLE }}
+          description: "${{ contains(github.event.release.name, '[RELEASE]') && 'The update is available for *Forge* and *Fabric*' || 'The update will *not* be released to CurseForge or Modrinth'}}"
+          curseforge: ${{ env.CURSEFORGE_LINK }}
+          modrinth: ${{ env.MODRINTH_LINK }}
+          github: ${{ github.event.release.html_url }}
+          thumbnail: ${{ env.DISCORD_THUMBNAIL }}
+
+      - name: Send Discord Message
+        uses: tsickert/discord-webhook@v6.0.0
+        with:
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          raw-data: ./embed.json
