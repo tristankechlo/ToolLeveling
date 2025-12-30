@@ -56,7 +56,7 @@ public class CustomItemStack {
         }
 
         // add count
-        lines.add(new TranslatableComponent("screen.toolleveling.item_value_worth", count).withStyle(ChatFormatting.DARK_GRAY));
+        lines.add(new TranslatableComponent("screen.toolleveling.item_value_worth", String.format("%,d", count)).withStyle(ChatFormatting.DARK_GRAY));
         return lines;
     }
 

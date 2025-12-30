@@ -63,7 +63,7 @@ public class ItemValueEntry extends ObjectSelectionList.Entry<ItemValueEntry> {
             return list.get(0);
         }
         // select next item after x renders
-        int rendersPerItem = 40; // adjust to change speed
+        int rendersPerItem = 60; // adjust to change speed
         return list.get((counter / rendersPerItem) % list.size());
     }
 

@@ -64,8 +64,8 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
     private void renderPointsSummary(PoseStack poseStack) {
         RenderSystem.enableDepthTest();
         String start = "container.toolleveling.tool_leveling_table.worth.";
-        Component bonusPoints = new TranslatableComponent(start + "bonus_points", this.menu.getBonusPoints());
-        Component invWorth = new TranslatableComponent(start + "inv", this.menu.getContainerWorth());
+        Component bonusPoints = new TranslatableComponent(start + "bonus_points", String.format("%,d", this.menu.getBonusPoints()));
+        Component invWorth = new TranslatableComponent(start + "inv", String.format("%,d", this.menu.getContainerWorth()));
         float left = this.leftPos + 8;
         this.font.draw(poseStack, bonusPoints, left, topPos + 45, 4210752);
         this.font.draw(poseStack, invWorth, left, topPos + 56, 4210752);

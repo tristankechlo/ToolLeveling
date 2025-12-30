@@ -3,6 +3,7 @@
 ### Version 1.18.2 - 1.5.0
 
 - internal handling of the config is now based on vanilla codecs
+    - IMPORTANT: **THIS UPDATE WILL REQUIRE YOU TO RESET YOUR CONFIG, MAKE BACKUPS BEFORE DOING SO**
 - removed some command options
     - `/toolleveling config show`
     - `/toolleveling config info`
@@ -10,11 +11,14 @@
 - command `/toolleveling config reload` will now reload all configs
 - internal handling of item tags improved
     - now rendered in the item values gui more compact (see: `/toolleveling openitemvalues`)
-- colored slots in the gui to indicate which slots are for payment and which for the item to upgrade
 - the block now has a comparator output
     - outputs a signal strength based on the number of non empty payment slots
     - signal strength 0: no payment items
     - signal strength 1-15: at least one item per slot
+- overall QoL improvements
+    - all numbers are now formatted with a thousand separator
+    - upgrade buttons now show the next level of the enchantment in the name
+    - colored slots in the gui to indicate which slots are for payment and which for the item to upgrade
 
 ### Version 1.18.2 - 1.4.5
 

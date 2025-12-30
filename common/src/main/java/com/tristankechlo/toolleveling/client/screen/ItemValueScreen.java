@@ -32,7 +32,7 @@ public class ItemValueScreen extends Screen {
         int widgetWidth = ItemValuesListWidget.width();
         int leftPos = (this.width - widgetWidth) / 2;
 
-        this.itemValues = new ItemValuesListWidget(this, leftPos, 8, this.height - 16);
+        this.itemValues = new ItemValuesListWidget(this, leftPos, 12, this.height - 16);
         this.addWidget(itemValues);
         this.defaultItemValueText = new TranslatableComponent("screen.toolleveling.default_item_value_worth", ItemValueConfig.get().defaultItemWorth());
     }
