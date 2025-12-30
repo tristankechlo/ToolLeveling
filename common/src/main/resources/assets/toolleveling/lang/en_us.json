@@ -28,7 +28,7 @@
 	"commands.superenchant.failed.incompatible" : "%s cannot support that enchantment, you can enable this in the ToolLevelingConfig (allowIncompatibleEnchantments)",
 	"commands.superenchant.failed.wrong" : "%s cannot support that enchantment, you can enable this in the ToolLevelingConfig (allowWrongEnchantments)",
 	"commands.toolleveling.config.reload": "Configs were successfully reloaded.",
-	"commands.toolleveling.config.reset": "Config %s has been set to default.",
+	"commands.toolleveling.config.reset": "Configs have been set to default.",
 
 	"enchantment.level.0" : "0",
 	"enchantment.level.11" : "11",

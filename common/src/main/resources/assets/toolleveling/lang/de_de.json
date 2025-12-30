@@ -28,5 +28,5 @@
 	"commands.superenchant.failed.incompatible" : "%s kann damit nicht verzaubert werden, du kannst dies in der ToolLevelingConfig \u00C4ndern (allowIncompatibleEnchantments)",
 	"commands.superenchant.failed.wrong" : "%s kann damit nicht verzaubert werden, du kannst dies in der ToolLevelingConfig \u00C4ndern (allowWrongEnchantments)",
 	"commands.toolleveling.config.reload": "Konfigurationen wurden erfolgreich neu geladen.",
-	"commands.toolleveling.config.reset": "Die Konfiguration %s wurde zur\u00fcck gesetzt."
+	"commands.toolleveling.config.reset": "Die Konfigurationen wurden zur\u00fcck gesetzt."
 }
