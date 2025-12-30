@@ -3,6 +3,7 @@ package com.tristankechlo.toolleveling.blocks;
 import com.tristankechlo.toolleveling.blockentity.ToolLevelingTableBlockEntity;
 import com.tristankechlo.toolleveling.platform.IPlatformHelper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -69,6 +70,20 @@ public class ToolLevelingTableBlock extends BaseEntityBlock {
             }
             super.onRemove(state, level, pos, newState, isMoving);
         }
+    }
+
+    @Override
+    public boolean isSignalSource(BlockState $$0) {
+        return true;
+    }
+
+    @Override
+    public int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+        BlockEntity blockentity = level.getBlockEntity(pos);
+        if (blockentity instanceof ToolLevelingTableBlockEntity be) {
+            return be.getSignalStrength();
+        }
+        return 0;
     }
 
     @Override

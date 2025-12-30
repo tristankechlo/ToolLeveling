@@ -11,6 +11,10 @@
 - internal handling of item tags improved
     - now rendered in the item values gui more compact (see: `/toolleveling openitemvalues`)
 - colored slots in the gui to indicate which slots are for payment and which for the item to upgrade
+- the block now has a comparator output
+    - outputs a signal strength based on the number of non empty payment slots
+    - signal strength 0: no payment items
+    - signal strength 1-15: at least one item per slot
 
 ### Version 1.18.2 - 1.4.5
 

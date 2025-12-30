@@ -225,4 +225,14 @@ public abstract class ToolLevelingTableBlockEntity extends BaseContainerBlockEnt
         return this.canPlaceItemThroughFace(index, stack, side);
     }
 
+    public int getSignalStrength() {
+        int i = 0;
+        for (int j = 1; j < NUMBER_OF_SLOTS; j++) {
+            if (!this.items.get(j).isEmpty()) {
+                i++;
+            }
+        }
+        return Math.min(15, i);
+    }
+
 }
