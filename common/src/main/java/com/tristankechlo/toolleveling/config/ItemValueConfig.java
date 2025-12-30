@@ -7,6 +7,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.tristankechlo.toolleveling.ToolLeveling;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -31,7 +32,7 @@ public record ItemValueConfig(
     public static final Codec<ItemValueConfig> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                     CodecHelper.NON_NEGATIVE_LONG.fieldOf("default_item_worth").forGetter(ItemValueConfig::defaultItemWorth),
-                    ITEM_TO_LONG.fieldOf("values").forGetter(ItemValueConfig::values)
+                    ITEM_TO_LONG.fieldOf("overrides").forGetter(ItemValueConfig::values)
             ).apply(instance, ItemValueConfig::new)
     );
 
@@ -39,7 +40,7 @@ public record ItemValueConfig(
         this(defaultItemWorth, values, resolve(values));
     }
 
-    private static final ItemValueConfig DEFAULT = new ItemValueConfig(10L, getDefaultItemValues());
+    private static final ItemValueConfig DEFAULT = new ItemValueConfig(5L, getDefaultItemValues());
     private static ItemValueConfig INSTANCE = DEFAULT;
 
     public static ItemValueConfig get() {
@@ -80,61 +81,66 @@ public record ItemValueConfig(
         Map<Either<Item, TagKey<Item>>, Long> values = new HashMap<>();
 
         // Ores
-        values.put(Either.left(Items.COAL), 8L);
-        values.put(Either.left(Items.COAL_ORE), 30L);
-        values.put(Either.left(Items.DEEPSLATE_COAL_ORE), 30L);
-        values.put(Either.left(Items.COAL_BLOCK), 73L);
+        values.put(Either.right(ItemTags.COALS), 8L);
+        values.put(Either.right(ItemTags.COAL_ORES), 30L);
+        values.put(Either.left(Items.COAL_BLOCK), 9 * 8L);
 
-        values.put(Either.left(Items.COPPER_ORE), 10L);
-        values.put(Either.left(Items.DEEPSLATE_COPPER_ORE), 10L);
         values.put(Either.left(Items.RAW_COPPER), 11L);
+        values.put(Either.left(Items.RAW_COPPER_BLOCK), 9 * 11L);
+        values.put(Either.right(ItemTags.COPPER_ORES), 10L);
         values.put(Either.left(Items.COPPER_INGOT), 14L);
-        values.put(Either.left(Items.COPPER_BLOCK), 126L);
-        values.put(Either.left(Items.RAW_COPPER_BLOCK), 99L);
+        values.put(Either.left(Items.COPPER_BLOCK), 9 * 14L);
 
         values.put(Either.left(Items.RAW_IRON), 13L);
+        values.put(Either.left(Items.RAW_IRON_BLOCK), 9 * 13L);
+        values.put(Either.right(ItemTags.IRON_ORES), 12L);
         values.put(Either.left(Items.IRON_INGOT), 15L);
-        values.put(Either.left(Items.IRON_ORE), 12L);
-        values.put(Either.left(Items.DEEPSLATE_IRON_ORE), 12L);
-        values.put(Either.left(Items.RAW_IRON_BLOCK), 117L);
-        values.put(Either.left(Items.IRON_BLOCK), 135L);
+        values.put(Either.left(Items.IRON_BLOCK), 9 * 15L);
 
-        values.put(Either.left(Items.GOLD_INGOT), 40L);
         values.put(Either.left(Items.RAW_GOLD), 35L);
-        values.put(Either.left(Items.GOLD_ORE), 30L);
-        values.put(Either.left(Items.DEEPSLATE_GOLD_ORE), 30L);
-        values.put(Either.left(Items.RAW_GOLD_BLOCK), 315L);
-        values.put(Either.left(Items.GOLD_BLOCK), 360L);
+        values.put(Either.left(Items.RAW_GOLD_BLOCK), 9 * 35L);
+        values.put(Either.right(ItemTags.GOLD_ORES), 30L);
+        values.put(Either.left(Items.GOLD_INGOT), 40L);
+        values.put(Either.left(Items.GOLD_BLOCK), 9 * 40L);
 
         values.put(Either.left(Items.DIAMOND), 160L);
-        values.put(Either.left(Items.DIAMOND_ORE), 160L);
-        values.put(Either.left(Items.DEEPSLATE_DIAMOND_ORE), 160L);
-        values.put(Either.left(Items.DIAMOND_BLOCK), 1450L);
-        values.put(Either.left(Items.NETHERITE_INGOT), 200L);
+        values.put(Either.right(ItemTags.DIAMOND_ORES), 160L);
+        values.put(Either.left(Items.DIAMOND_BLOCK), 9 * 160L);
+
         values.put(Either.left(Items.NETHERITE_SCRAP), 50L);
         values.put(Either.left(Items.ANCIENT_DEBRIS), 50L);
-        values.put(Either.left(Items.NETHERITE_BLOCK), 1800L);
+        values.put(Either.left(Items.NETHERITE_INGOT), 200L);
+        values.put(Either.left(Items.NETHERITE_BLOCK), 9 * 200L);
+
         values.put(Either.left(Items.LAPIS_LAZULI), 8L);
-        values.put(Either.left(Items.LAPIS_ORE), 120L);
-        values.put(Either.left(Items.DEEPSLATE_LAPIS_ORE), 120L);
-        values.put(Either.left(Items.LAPIS_BLOCK), 70L);
+        values.put(Either.right(ItemTags.LAPIS_ORES), 120L);
+        values.put(Either.left(Items.LAPIS_BLOCK), 9 * 8L);
+
         values.put(Either.left(Items.EMERALD), 100L);
-        values.put(Either.left(Items.EMERALD_ORE), 800L);
-        values.put(Either.left(Items.DEEPSLATE_EMERALD_ORE), 800L);
-        values.put(Either.left(Items.EMERALD_BLOCK), 900L);
+        values.put(Either.right(ItemTags.EMERALD_ORES), 800L);
+        values.put(Either.left(Items.EMERALD_BLOCK), 9 * 100L);
+
         values.put(Either.left(Items.QUARTZ), 10L);
         values.put(Either.left(Items.NETHER_QUARTZ_ORE), 40L);
-        values.put(Either.left(Items.QUARTZ_BLOCK), 40L);
-        values.put(Either.left(Items.REDSTONE), 4L);
-        values.put(Either.left(Items.REDSTONE_ORE), 60L);
-        values.put(Either.left(Items.DEEPSLATE_REDSTONE_ORE), 60L);
-        values.put(Either.left(Items.REDSTONE_BLOCK), 36L);
-        values.put(Either.left(Items.GLOWSTONE_DUST), 4L);
-        values.put(Either.left(Items.GLOWSTONE), 15L);
+        values.put(Either.left(Items.QUARTZ_BLOCK), 4 * 10L);
+
+        values.put(Either.left(Items.REDSTONE), 6L);
+        values.put(Either.right(ItemTags.REDSTONE_ORES), 60L);
+        values.put(Either.left(Items.REDSTONE_BLOCK), 9 * 6L);
+
+        values.put(Either.left(Items.GLOWSTONE_DUST), 6L);
+        values.put(Either.left(Items.GLOWSTONE), 4 * 6L);
 
         // other
         values.put(Either.left(Items.AMETHYST_BLOCK), 11L);
         values.put(Either.left(Items.AMETHYST_SHARD), 17L);
+        values.put(Either.left(Items.PRISMARINE_SHARD), 15L);
+        values.put(Either.left(Items.PRISMARINE_CRYSTALS), 15L);
+        values.put(Either.left(Items.NAUTILUS_SHELL), 30L);
+        values.put(Either.left(Items.HEART_OF_THE_SEA), 1000L);
+        values.put(Either.left(Items.SEA_LANTERN), 140L);
+        values.put(Either.left(Items.SPONGE), 150L);
+        values.put(Either.left(Items.WET_SPONGE), 140L);
 
         // Food
         values.put(Either.left(Items.GOLDEN_APPLE), 400L);
