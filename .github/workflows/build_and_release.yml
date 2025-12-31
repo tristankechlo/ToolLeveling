@@ -6,14 +6,6 @@ on:
 
 env:
   MODID: "toolleveling"
-  CURSEFORGE_LINK: "https://www.curseforge.com/minecraft/mc-mods/tool-leveling-plus"
-  MODRINTH_ID: "I8oNjZdJ"
-  MODRINTH_LINK: "https://modrinth.com/mod/tool-leveling"
-  MODRINTH_FEATURED: true # if this version should be featured on modrinth
-  DISCORD_COLOR: 10289039
-  DISCORD_MENTION: "<@&890143376131895296>"
-  DISCORD_TITLE: "New version for Tool Leveling+ just released :exclamation:"
-  DISCORD_THUMBNAIL: "https://cdn.modrinth.com/data/I8oNjZdJ/1cce579e6f414d356b2ce79786a5db1d55f06f22_96.webp"
 
 jobs:
   prepare:
@@ -80,7 +72,7 @@ jobs:
         if: ${{ contains(github.event.release.name, '[RELEASE]') }}
         uses: Kir-Antipov/mc-publish@v3.3
         with:
-          modrinth-id: ${{ env.MODRINTH_ID }}
+          modrinth-id: "I8oNjZdJ"
           modrinth-featured: true
           modrinth-unfeature-mode: intersection
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
@@ -102,7 +94,7 @@ jobs:
         if: ${{ contains(github.event.release.name, '[RELEASE]') }}
         uses: Kir-Antipov/mc-publish@v3.3
         with:
-          modrinth-id: ${{ env.MODRINTH_ID }}
+          modrinth-id: "I8oNjZdJ"
           modrinth-featured: true
           modrinth-unfeature-mode: intersection
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
@@ -125,19 +117,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Make embed
-        uses: tristankechlo/create-discord-embed@v1.0.2
+        uses: tristankechlo/create-discord-embed@v1.1.0
         with:
           released: ${{ contains(github.event.release.name, '[RELEASE]') }}
           changelog: "${{ github.event.release.body }}"
           version: "${{ needs.prepare.outputs.mc-version }} - ${{ needs.prepare.outputs.mod-version }}"
-          color: ${{ env.DISCORD_COLOR }}
-          content: "${{ contains(github.event.release.name, '[RELEASE]') && env.DISCORD_MENTION || ''}}"
-          title: ${{ env.DISCORD_TITLE }}
-          description: "${{ contains(github.event.release.name, '[RELEASE]') && 'The update is available for *Forge* and *Fabric*' || 'The update will *not* be released to CurseForge or Modrinth'}}"
-          curseforge: ${{ env.CURSEFORGE_LINK }}
-          modrinth: ${{ env.MODRINTH_LINK }}
+          color: 10289039
+          mod-name: "Tool Leveling+"
+          mention: "<@&890143376131895296>"
+          loaders: Forge,Fabric
+          curseforge: "https://www.curseforge.com/minecraft/mc-mods/tool-leveling-plus"
+          modrinth: "https://modrinth.com/mod/tool-leveling"
           github: ${{ github.event.release.html_url }}
-          thumbnail: ${{ env.DISCORD_THUMBNAIL }}
+          thumbnail: "https://cdn.modrinth.com/data/I8oNjZdJ/1cce579e6f414d356b2ce79786a5db1d55f06f22_96.webp"
 
       - name: Send Discord Message
         uses: tsickert/discord-webhook@v6.0.0
