@@ -32,7 +32,7 @@ public record ItemValueConfig(
     public static final Codec<ItemValueConfig> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                     CodecHelper.NON_NEGATIVE_LONG.fieldOf("default_item_worth").forGetter(ItemValueConfig::defaultItemWorth),
-                    ITEM_TO_LONG.fieldOf("overrides").forGetter(ItemValueConfig::values)
+                    ITEM_TO_LONG.fieldOf("item_values").forGetter(ItemValueConfig::values)
             ).apply(instance, ItemValueConfig::new)
     );
 

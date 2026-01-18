@@ -3,7 +3,12 @@
 ### Version 1.18.2 - 1.5.0
 
 - internal handling of the config is now based on vanilla codecs
-    - IMPORTANT: **THIS UPDATE WILL REQUIRE YOU TO RESET YOUR CONFIG, MAKE BACKUPS BEFORE DOING SO**
+    - **THIS UPDATE WILL REQUIRE YOU TO RESET YOUR CONFIG, MAKE BACKUPS BEFORE DOING SO**
+      - `/toolleveling config reset` or by deleting the config file manually
+    - configs will no longer reset when they contain errors
+    - the logfiles will now contain detailed information about what exactly is wrong with the config
+    - when the config contains errors, the default config will be used instead
+    - wildcards like `minecaft:*` are no longer supported
 - removed some command options
     - `/toolleveling config show`
     - `/toolleveling config info`
@@ -11,7 +16,7 @@
 - command `/toolleveling config reload` will now reload all configs
 - internal handling of item tags improved
     - now rendered in the item values gui more compact (see: `/toolleveling openitemvalues`)
-- the block now has a comparator output
+- the block itself now has a comparator output
     - outputs a signal strength based on the number of non empty payment slots
     - signal strength 0: no payment items
     - signal strength 1-15: at least one item per slot
