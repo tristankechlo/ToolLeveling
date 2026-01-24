@@ -3,8 +3,6 @@
 ### Version 1.18.2 - 1.5.0
 
 - internal handling of the config is now based on vanilla codecs
-    - **THIS UPDATE WILL REQUIRE YOU TO RESET YOUR CONFIG, MAKE BACKUPS BEFORE DOING SO**
-      - `/toolleveling config reset` or by deleting the config file manually
     - configs will no longer reset when they contain errors
     - the logfiles will now contain detailed information about what exactly is wrong with the config
     - when the config contains errors, the default config will be used instead

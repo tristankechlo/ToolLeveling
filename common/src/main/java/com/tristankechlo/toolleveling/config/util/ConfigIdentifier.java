@@ -5,6 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import com.tristankechlo.toolleveling.ToolLeveling;
+import com.tristankechlo.toolleveling.config.CommandConfig;
 import com.tristankechlo.toolleveling.config.ItemValueConfig;
 import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
 
@@ -15,6 +16,7 @@ public final class ConfigIdentifier<T> {
 
     static final ConfigIdentifier<ToolLevelingConfig> GENERAL = new ConfigIdentifier<>("tool_leveling_table.json", ToolLevelingConfig.CODEC, ToolLevelingConfig::get, ToolLevelingConfig::set, ToolLevelingConfig::setToDefault);
     static final ConfigIdentifier<ItemValueConfig> ITEM_VALUES = new ConfigIdentifier<>("item_values.json", ItemValueConfig.CODEC, ItemValueConfig::get, ItemValueConfig::set, ItemValueConfig::setToDefault);
+    static final ConfigIdentifier<CommandConfig> COMMANDS = new ConfigIdentifier<>("command_config.json", CommandConfig.CODEC, CommandConfig::get, CommandConfig::set, CommandConfig::setToDefault);
 
     private final String fileName;
     private final Codec<T> codec;

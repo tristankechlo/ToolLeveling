@@ -23,7 +23,8 @@ public final class ConfigManager {
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().serializeNulls().disableHtmlEscaping().create();
     public static final Map<String, ConfigIdentifier<?>> CONFIGS = Map.of(
             "general", ConfigIdentifier.GENERAL,
-            "item_values", ConfigIdentifier.ITEM_VALUES
+            "item_values", ConfigIdentifier.ITEM_VALUES,
+            "command_config", ConfigIdentifier.COMMANDS
     );
 
     public static void loadAndVerifyConfigs() {

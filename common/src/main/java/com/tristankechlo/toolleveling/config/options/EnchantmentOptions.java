@@ -2,7 +2,7 @@ package com.tristankechlo.toolleveling.config.options;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.tristankechlo.toolleveling.config.CodecHelper;
+import com.tristankechlo.toolleveling.config.util.CodecHelper;
 import net.minecraft.core.Registry;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -35,8 +35,8 @@ public record EnchantmentOptions(
 
     public static final Codec<EnchantmentOptions> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
-                    ENCHANTMENT_LIST.fieldOf("whitelist").forGetter(EnchantmentOptions::whitelist),
-                    ENCHANTMENT_LIST.fieldOf("blacklist").forGetter(EnchantmentOptions::blacklist),
+                    ENCHANTMENT_LIST.fieldOf("enchantment_whitelist").forGetter(EnchantmentOptions::whitelist),
+                    ENCHANTMENT_LIST.fieldOf("enchantment_blacklist").forGetter(EnchantmentOptions::blacklist),
                     CodecHelper.NON_NEGATIVE_SHORT.fieldOf("global_enchantment_cap").forGetter(EnchantmentOptions::globalEnchantmentCap),
                     ENCHANTMENT_TO_SHORT.fieldOf("enchantment_caps").forGetter(EnchantmentOptions::enchantmentCaps),
                     CodecHelper.PERCENTAGE.fieldOf("global_upgrade_cost_multiplier").forGetter(EnchantmentOptions::globalUpgradeCostMultiplier),

@@ -2,7 +2,7 @@ package com.tristankechlo.toolleveling.config.options;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.tristankechlo.toolleveling.config.CodecHelper;
+import com.tristankechlo.toolleveling.config.util.CodecHelper;
 
 public record GeneralOptions(
         long minimumUpgradeCost,

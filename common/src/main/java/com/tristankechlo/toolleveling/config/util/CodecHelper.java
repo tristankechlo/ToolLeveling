@@ -1,4 +1,4 @@
-package com.tristankechlo.toolleveling.config;
+package com.tristankechlo.toolleveling.config.util;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;

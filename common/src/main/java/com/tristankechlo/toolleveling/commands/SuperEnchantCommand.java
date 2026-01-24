@@ -5,7 +5,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import com.tristankechlo.toolleveling.config.ToolLevelingConfig;
+import com.tristankechlo.toolleveling.config.CommandConfig;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -58,8 +58,8 @@ public final class SuperEnchantCommand {
             if (entity instanceof LivingEntity livingentity) {
                 ItemStack stack = livingentity.getMainHandItem();
                 if (!stack.isEmpty()) {
-                    if (enchantment.canEnchant(stack) || ToolLevelingConfig.get().commandOptions().superEnchantOptions().allowWrongEnchantments()) {
-                        if (EnchantmentHelper.isEnchantmentCompatible(EnchantmentHelper.getEnchantments(stack).keySet(), enchantment) || ToolLevelingConfig.get().commandOptions().superEnchantOptions().allowIncompatibleEnchantments()) {
+                    if (enchantment.canEnchant(stack) || CommandConfig.get().superEnchantOptions().allowWrongEnchantments()) {
+                        if (EnchantmentHelper.isEnchantmentCompatible(EnchantmentHelper.getEnchantments(stack).keySet(), enchantment) || CommandConfig.get().superEnchantOptions().allowIncompatibleEnchantments()) {
 
                             Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
                             if (enchantments.containsKey(enchantment) && level == 0) {
