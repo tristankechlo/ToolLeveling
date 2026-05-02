@@ -2,7 +2,7 @@ package com.tristankechlo.toolleveling.client.screen.widgets;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.tristankechlo.toolleveling.ToolLeveling;
-import com.tristankechlo.toolleveling.network.IPacketHandler;
+import com.tristankechlo.toolleveling.network.ServerBoundPacketHandler;
 import com.tristankechlo.toolleveling.utils.ButtonHelper;
 import com.tristankechlo.toolleveling.utils.ButtonHelper.ButtonStatus;
 import com.tristankechlo.toolleveling.utils.Utils;
@@ -35,7 +35,7 @@ public class ButtonEntry extends ObjectSelectionList.Entry<ButtonEntry> {
 
         this.button = new Button(0, 0, 121, 20, ButtonHelper.getButtonText(this), (b) -> {
             // send new data to server
-            IPacketHandler.INSTANCE.enchantAtToolLevelingTable(this.parent.screen.getMenu().getPos(), this.enchantment, this.currentLevel + 1);
+            ServerBoundPacketHandler.INSTANCE.enchantAtToolLevelingTable(this.parent.screen.getMenu().getPos(), this.enchantment, this.currentLevel + 1);
         });
         this.updateButtonText();
     }

@@ -1,5 +1,9 @@
 # Changelog
 
+### Version 1.18.2 - 1.5.1
+
+- fix game crashing when loading the mod on servers
+
 ### Version 1.18.2 - 1.5.0
 
 - internal handling of the config is now based on vanilla codecs

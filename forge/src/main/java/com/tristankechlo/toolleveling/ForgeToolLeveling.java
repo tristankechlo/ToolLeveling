@@ -16,7 +16,7 @@ import net.minecraftforge.fml.common.Mod;
 public final class ForgeToolLeveling {
 
     public ForgeToolLeveling() {
-        ForgePacketHandler.registerPackets();
+        ForgePacketHandler.registerChannels();
         ModRegistry.load();
 
         MinecraftForge.EVENT_BUS.addListener(this::serverStartup);

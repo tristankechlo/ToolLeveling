@@ -6,7 +6,6 @@ import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.network.packets.OpenItemValueScreenPacket;
 import com.tristankechlo.toolleveling.network.packets.SetEnchantmentToolLevelingTable;
 import com.tristankechlo.toolleveling.network.packets.SyncToolLevelingConfig;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
@@ -24,15 +23,15 @@ import net.minecraftforge.network.simple.SimpleChannel;
 import java.util.function.Supplier;
 
 @SuppressWarnings("removal") // for ResourceLocation 1.20.6+
-@AutoService(IPacketHandler.class)
-public final class ForgePacketHandler implements IPacketHandler {
+@AutoService({ServerBoundPacketHandler.class, ClientBoundPacketHandler.class})
+public final class ForgePacketHandler implements ServerBoundPacketHandler, ClientBoundPacketHandler {
 
     private static final String PROTOCOL_VERSION = "1";
     public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
             new ResourceLocation(ToolLeveling.MOD_ID, "main"), () -> PROTOCOL_VERSION, PROTOCOL_VERSION::equals,
             PROTOCOL_VERSION::equals);
 
-    public static void registerPackets() {
+    public static void registerChannels() {
         INSTANCE.registerMessage(0,
                 SetEnchantmentToolLevelingTable.class,
                 SetEnchantmentToolLevelingTable::encode,
@@ -102,7 +101,7 @@ public final class ForgePacketHandler implements IPacketHandler {
 
     static void handleOpenItemValues(OpenItemValueScreenPacket msg, Supplier<NetworkEvent.Context> context) {
         context.get().enqueueWork(() -> {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> OpenItemValueScreenPacket.handle(Minecraft.getInstance()));
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientOpenItemValueScreenPacket.handle(msg, context));
         });
         context.get().setPacketHandled(true);
     }

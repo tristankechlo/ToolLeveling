@@ -7,7 +7,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.config.util.ConfigManager;
 import com.tristankechlo.toolleveling.config.util.ConfigSyncing;
-import com.tristankechlo.toolleveling.network.IPacketHandler;
+import com.tristankechlo.toolleveling.network.ClientBoundPacketHandler;
 import com.tristankechlo.toolleveling.utils.ProjectLinks;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -46,7 +46,7 @@ public final class ToolLevelingCommand {
 
     private static int showScreen(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         ServerPlayer player = context.getSource().getPlayerOrException();
-        IPacketHandler.INSTANCE.openItemValueScreen(player);
+        ClientBoundPacketHandler.INSTANCE.openItemValueScreen(player);
         return 1;
     }
 

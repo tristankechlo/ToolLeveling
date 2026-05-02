@@ -1,0 +1,20 @@
+package com.tristankechlo.toolleveling.network;
+
+import com.tristankechlo.toolleveling.client.screen.ItemValueScreen;
+import com.tristankechlo.toolleveling.network.packets.OpenItemValueScreenPacket;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.network.NetworkEvent;
+
+import java.util.function.Supplier;
+
+public final class ClientOpenItemValueScreenPacket {
+
+    public static void handle(OpenItemValueScreenPacket msg, Supplier<NetworkEvent.Context> context) {
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+            Minecraft.getInstance().setScreen(new ItemValueScreen());
+        });
+    }
+
+}
