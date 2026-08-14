@@ -53,7 +53,7 @@ public final class ForgePlatformHelper implements IPlatformHelper {
     public void openMenu(BlockState state, Level level, BlockPos pos, Player player) {
         BlockEntity blockentity = level.getBlockEntity(pos);
         if (blockentity instanceof ToolLevelingTableBlockEntity) {
-            NetworkHooks.openGui((ServerPlayer) player, (ToolLevelingTableBlockEntity) blockentity, buf -> buf.writeBlockPos(pos));
+            NetworkHooks.openScreen((ServerPlayer) player, (ToolLevelingTableBlockEntity) blockentity, buf -> buf.writeBlockPos(pos));
         }
     }
 

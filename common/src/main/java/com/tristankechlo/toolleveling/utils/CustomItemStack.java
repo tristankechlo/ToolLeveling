@@ -5,8 +5,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -39,7 +37,7 @@ public class CustomItemStack {
     public List<Component> getTooltipLines(TooltipFlag flag) {
         List<Component> lines = Lists.newArrayList();
         Component hoverName = stack.getHoverName();
-        MutableComponent title = new TextComponent("").append(hoverName).withStyle(stack.getRarity().color);
+        MutableComponent title = Component.literal("").append(hoverName).withStyle(stack.getRarity().color);
         if (stack.hasCustomHoverName()) {
             title.withStyle(ChatFormatting.ITALIC);
         }
@@ -47,16 +45,16 @@ public class CustomItemStack {
 
         // add item id
         if (flag.isAdvanced()) {
-            lines.add(new TranslatableComponent(Registry.ITEM.getKey(this.stack.getItem()).toString()).withStyle(ChatFormatting.DARK_GRAY));
+            lines.add(Component.translatable(Registry.ITEM.getKey(this.stack.getItem()).toString()).withStyle(ChatFormatting.DARK_GRAY));
         }
 
         // add tag
         if (tag != null) {
-            lines.add(new TextComponent("Item-Tag: #" + tag).withStyle(ChatFormatting.DARK_GRAY));
+            lines.add(Component.literal("Item-Tag: #" + tag).withStyle(ChatFormatting.DARK_GRAY));
         }
 
         // add count
-        lines.add(new TranslatableComponent("screen.toolleveling.item_value_worth", String.format("%,d", count)).withStyle(ChatFormatting.DARK_GRAY));
+        lines.add(Component.translatable("screen.toolleveling.item_value_worth", String.format("%,d", count)).withStyle(ChatFormatting.DARK_GRAY));
         return lines;
     }
 

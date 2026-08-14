@@ -6,8 +6,8 @@ import com.tristankechlo.toolleveling.commands.ResponseHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
 
 public enum ProjectLinks {
 
@@ -22,7 +22,7 @@ public enum ProjectLinks {
     public final String url;
 
     ProjectLinks(String message, String url) {
-        this.message = new TextComponent(message);
+        this.message = Component.literal(message);
         this.message.withStyle(ChatFormatting.WHITE);
         this.message.append(ResponseHelper.clickableLink(url, url));
         this.url = url;

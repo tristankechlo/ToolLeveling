@@ -8,11 +8,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 
 public class ItemValueScreen extends Screen {
 
-    private static final Component TITLE = new TranslatableComponent("block.toolleveling.item_values");
+    private static final Component TITLE = Component.translatable("block.toolleveling.item_values");
     private ItemValuesListWidget itemValues;
     private Component defaultItemValueText;
     private final int titleOffsetX;
@@ -34,7 +33,7 @@ public class ItemValueScreen extends Screen {
 
         this.itemValues = new ItemValuesListWidget(this, leftPos, 12, this.height - 16);
         this.addWidget(itemValues);
-        this.defaultItemValueText = new TranslatableComponent("screen.toolleveling.default_item_value_worth", ItemValueConfig.get().defaultItemWorth());
+        this.defaultItemValueText = Component.translatable("screen.toolleveling.default_item_value_worth", ItemValueConfig.get().defaultItemWorth());
     }
 
     @Override

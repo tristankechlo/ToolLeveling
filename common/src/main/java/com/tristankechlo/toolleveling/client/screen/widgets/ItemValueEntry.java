@@ -9,7 +9,6 @@ import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.TooltipFlag;
 
 import java.util.List;
@@ -53,7 +52,7 @@ public class ItemValueEntry extends ObjectSelectionList.Entry<ItemValueEntry> {
     @Override
     public Component getNarration() {
         if (NARRATION == null) {
-            NARRATION = new TranslatableComponent("screen." + ToolLeveling.MOD_ID + ".item_values");
+            NARRATION = Component.translatable("screen." + ToolLeveling.MOD_ID + ".item_values");
         }
         return NARRATION;
     }

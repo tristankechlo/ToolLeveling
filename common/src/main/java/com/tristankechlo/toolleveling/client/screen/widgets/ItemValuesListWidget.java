@@ -109,7 +109,6 @@ public class ItemValuesListWidget extends ObjectSelectionList<ItemValueEntry> {
         }
     }
 
-    @Override
     protected void renderList(PoseStack poseStack, int width, int height, int mouseX, int mouseY, float partialTicks) {
         int itemCount = this.getItemCount();
 

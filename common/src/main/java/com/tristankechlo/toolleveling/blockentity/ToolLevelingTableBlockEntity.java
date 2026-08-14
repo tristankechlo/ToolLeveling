@@ -9,7 +9,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
@@ -25,7 +24,7 @@ import java.util.stream.IntStream;
 
 public abstract class ToolLevelingTableBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer {
 
-    private final Component CUSTOMNAME = new TranslatableComponent("container." + ToolLeveling.MOD_ID + ".tool_leveling_table");
+    private final Component CUSTOMNAME = Component.translatable("container." + ToolLeveling.MOD_ID + ".tool_leveling_table");
     public static final int NUMBER_OF_SLOTS = 16;
     private NonNullList<ItemStack> items = NonNullList.withSize(NUMBER_OF_SLOTS, ItemStack.EMPTY);
     public static final int[] SLOTS = IntStream.range(1, NUMBER_OF_SLOTS).toArray();

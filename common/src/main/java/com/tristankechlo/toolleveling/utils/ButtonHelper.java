@@ -7,8 +7,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 import java.util.ArrayList;
@@ -83,26 +81,26 @@ public final class ButtonHelper {
         final int nextLvl = entry.currentLevel + 1;
         MutableComponent lvl;
         if (nextLvl <= 100 && nextLvl >= 1) {
-            lvl = new TranslatableComponent("enchantment.level." + nextLvl).withStyle(format);
+            lvl = Component.translatable("enchantment.level." + nextLvl).withStyle(format);
         } else {
-            lvl = new TextComponent(String.format("%,d", nextLvl)).withStyle(format);
+            lvl = Component.literal(String.format("%,d", nextLvl)).withStyle(format);
         }
-        return new TranslatableComponent(entry.name).withStyle(format).append(" ").append(lvl);
+        return Component.translatable(entry.name).withStyle(format).append(" ").append(lvl);
     }
 
     public static List<Component> getButtonToolTips(ButtonEntry data) {
         List<Component> tooltip = new ArrayList<>();
-        tooltip.add(new TranslatableComponent(data.name).withStyle(ChatFormatting.AQUA));
+        tooltip.add(Component.translatable(data.name).withStyle(ChatFormatting.AQUA));
         final String start = "container.toolleveling.tool_leveling_table";
         if (ButtonHelper.shouldButtonBeActive(data) || Utils.freeCreativeUpgrades(Minecraft.getInstance().player)) {
-            tooltip.add(new TranslatableComponent(start + ".current_level", String.format("%,d", data.currentLevel)).withStyle(ChatFormatting.DARK_GRAY));
-            tooltip.add(new TranslatableComponent(start + ".next_level", String.format("%,d", data.currentLevel + 1)).withStyle(ChatFormatting.DARK_GRAY));
-            tooltip.add(new TranslatableComponent(start + ".cost", String.format("%,d", data.upgradeCost)).withStyle(ChatFormatting.DARK_GRAY));
+            tooltip.add(Component.translatable(start + ".current_level", String.format("%,d", data.currentLevel)).withStyle(ChatFormatting.DARK_GRAY));
+            tooltip.add(Component.translatable(start + ".next_level", String.format("%,d", data.currentLevel + 1)).withStyle(ChatFormatting.DARK_GRAY));
+            tooltip.add(Component.translatable(start + ".cost", String.format("%,d", data.upgradeCost)).withStyle(ChatFormatting.DARK_GRAY));
         }
         if (Utils.freeCreativeUpgrades(Minecraft.getInstance().player)) {
-            tooltip.add(new TranslatableComponent(start + ".free_creative").withStyle(ChatFormatting.GREEN));
+            tooltip.add(Component.translatable(start + ".free_creative").withStyle(ChatFormatting.GREEN));
         } else if (data.getStatus() != ButtonStatus.NORMAL) {
-            tooltip.add(new TranslatableComponent(start + ".error." + data.getStatus().toString().toLowerCase()).withStyle(ButtonHelper.getButtonTextFormatting(data)));
+            tooltip.add(Component.translatable(start + ".error." + data.getStatus().toString().toLowerCase()).withStyle(ButtonHelper.getButtonTextFormatting(data)));
         }
         return tooltip;
     }

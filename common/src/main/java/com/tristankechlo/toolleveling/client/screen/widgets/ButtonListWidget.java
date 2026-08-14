@@ -68,7 +68,6 @@ public class ButtonListWidget extends ObjectSelectionList<ButtonEntry> {
         GuiComponent.fill(poseStack, x0, y0, x1, y1, 0xff8B8B8B);
     }
 
-    @Override
     protected void renderList(PoseStack poseStack, int width, int height, int mouseX, int mouseY, float partialTicks) {
         int itemCount = this.getItemCount();
 

@@ -10,7 +10,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.ItemEnchantmentArgument;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -29,11 +29,11 @@ public final class SuperEnchantCommand {
     private static final SimpleCommandExceptionType FAILED_EXCEPTION;
 
     static {
-        NONLIVING_ENTITY_EXCEPTION = new DynamicCommandExceptionType((entityName) -> new TranslatableComponent("commands.enchant.failed.entity", entityName));
-        INCOMPATIBLE_ENCHANTS_EXCEPTION = new DynamicCommandExceptionType((itemName) -> new TranslatableComponent("commands.superenchant.failed.incompatible", itemName));
-        WRONG_ENCHANTS_EXCEPTION = new DynamicCommandExceptionType((itemName) -> new TranslatableComponent("commands.superenchant.failed.wrong", itemName));
-        ITEMLESS_EXCEPTION = new DynamicCommandExceptionType((entityName) -> new TranslatableComponent("commands.enchant.failed.itemless", entityName));
-        FAILED_EXCEPTION = new SimpleCommandExceptionType(new TranslatableComponent("commands.enchant.failed"));
+        NONLIVING_ENTITY_EXCEPTION = new DynamicCommandExceptionType((entityName) -> Component.translatable("commands.enchant.failed.entity", entityName));
+        INCOMPATIBLE_ENCHANTS_EXCEPTION = new DynamicCommandExceptionType((itemName) -> Component.translatable("commands.superenchant.failed.incompatible", itemName));
+        WRONG_ENCHANTS_EXCEPTION = new DynamicCommandExceptionType((itemName) -> Component.translatable("commands.superenchant.failed.wrong", itemName));
+        ITEMLESS_EXCEPTION = new DynamicCommandExceptionType((entityName) -> Component.translatable("commands.enchant.failed.itemless", entityName));
+        FAILED_EXCEPTION = new SimpleCommandExceptionType(Component.translatable("commands.enchant.failed"));
     }
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -88,9 +88,9 @@ public final class SuperEnchantCommand {
             throw FAILED_EXCEPTION.create();
         } else {
             if (targets.size() == 1) {
-                source.sendSuccess(new TranslatableComponent("commands.enchant.success.single", enchantment.getFullname(level), targets.iterator().next().getDisplayName()), true);
+                source.sendSuccess(Component.translatable("commands.enchant.success.single", enchantment.getFullname(level), targets.iterator().next().getDisplayName()), true);
             } else {
-                source.sendSuccess(new TranslatableComponent("commands.enchant.success.multiple", enchantment.getFullname(level), targets.size()), true);
+                source.sendSuccess(Component.translatable("commands.enchant.success.multiple", enchantment.getFullname(level), targets.size()), true);
             }
 
             return i;
