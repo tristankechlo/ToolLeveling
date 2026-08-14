@@ -45,7 +45,6 @@ subprojects {
     }
 
     processResources {
-        // replace placeholders
         def expandProps = [
                 "version"                   : "${minecraft_version}-${mod_version}",
                 "version_range"             : version_range,
@@ -61,7 +60,7 @@ subprojects {
         }
         inputs.properties(expandProps)
 
-        //minify json files
+        // minify json files
         doLast {
             fileTree(dir: outputs.files.asPath, include: "**/*.json").each {
                 File file -> file.text = JsonOutput.toJson(new JsonSlurper().parse(file))

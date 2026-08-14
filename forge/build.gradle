@@ -65,8 +65,11 @@ minecraft {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     compileOnly project(":common")
-    annotationProcessor 'org.spongepowered:mixin:0.8.4-SNAPSHOT:processor'
 
+    implementation 'org.spongepowered:mixin:0.8.4:processor'
+    annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
+
+    implementation 'org.codehaus.groovy:groovy-json:3.0.16'
     compileOnly group: 'com.google.auto.service', name: 'auto-service', version: auto_service_version
     annotationProcessor group: 'com.google.auto.service', name: 'auto-service', version: auto_service_version
 }

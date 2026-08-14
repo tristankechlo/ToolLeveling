@@ -1,5 +1,9 @@
 # Changelog
 
+### Version 1.19.2 - 1.5.1
+
+- port to 1.19.2
+
 ### Version 1.18.2 - 1.5.1
 
 - fix game crashing when loading the mod on servers
