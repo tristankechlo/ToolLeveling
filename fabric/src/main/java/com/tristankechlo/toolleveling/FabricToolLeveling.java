@@ -8,7 +8,9 @@ import com.tristankechlo.toolleveling.network.FabricServerPacketHandler;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTabs;
 
 public class FabricToolLeveling implements ModInitializer {
 
@@ -24,10 +26,13 @@ public class FabricToolLeveling implements ModInitializer {
         // register items, blocks, etc.
         ModRegistry.load();
 
+        //register item to the tab for functional blocks
+        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register((entires) -> entires.accept(ModRegistry.TLT_ITEM.get()));
+
         // register commands
         CommandRegistrationCallback.EVENT.register((dispatcher, context, selection) -> {
             ToolLevelingCommand.register(dispatcher);
-            SuperEnchantCommand.register(dispatcher);
+            SuperEnchantCommand.register(dispatcher, context);
         });
 
         // server start evet

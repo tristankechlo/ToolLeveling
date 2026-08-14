@@ -161,7 +161,7 @@ public class ButtonListWidget extends ObjectSelectionList<ButtonEntry> {
 
         int maxScroll = this.getMaxScroll();
         if (maxScroll > 0) {
-            RenderSystem.disableTexture();
+            // RenderSystem.disableTexture();
             RenderSystem.setShader(GameRenderer::getPositionColorShader);
 
             int scrollerHeight = (int) ((float) ((scrollbarY1 - scrollbarY0) * (scrollbarY1 - scrollbarY0)) / (float) this.getMaxPosition());

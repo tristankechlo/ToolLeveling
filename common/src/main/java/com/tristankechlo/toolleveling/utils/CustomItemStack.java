@@ -3,6 +3,7 @@ package com.tristankechlo.toolleveling.utils;
 import com.google.common.collect.Lists;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -45,7 +46,7 @@ public class CustomItemStack {
 
         // add item id
         if (flag.isAdvanced()) {
-            lines.add(Component.translatable(Registry.ITEM.getKey(this.stack.getItem()).toString()).withStyle(ChatFormatting.DARK_GRAY));
+            lines.add(Component.translatable(BuiltInRegistries.ITEM.getKey(this.stack.getItem()).toString()).withStyle(ChatFormatting.DARK_GRAY));
         }
 
         // add tag

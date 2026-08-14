@@ -30,7 +30,7 @@ public class ItemValueEntry extends ObjectSelectionList.Entry<ItemValueEntry> {
         for (int i = 0; i < list.size(); i++) {
             int x = left + (i * 18);
             CustomItemStack customStack = getNextItemStack(list.get(i));
-            screen.getItemRenderer().renderGuiItem(customStack.stack, x + 1, top + 1);
+            screen.getItemRenderer().renderGuiItem(poseStack, customStack.stack, x + 1, top + 1);
             if (isMouseOverItem(x, top, mouseX, mouseY) && isMouseInBounds) {
                 renderSlotHighlight(poseStack, x, top, 0x33ffffff);
                 this.renderItemTooltip(poseStack, customStack, mouseX, mouseY);

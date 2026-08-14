@@ -6,10 +6,13 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.tristankechlo.toolleveling.config.CommandConfig;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.arguments.ItemEnchantmentArgument;
+import net.minecraft.commands.arguments.ResourceArgument;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -36,23 +39,24 @@ public final class SuperEnchantCommand {
         FAILED_EXCEPTION = new SimpleCommandExceptionType(Component.translatable("commands.enchant.failed"));
     }
 
-    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext buildContext) {
         dispatcher.register(Commands.literal("superenchant").requires((player) -> {
             return player.hasPermission(3);
         }).then(Commands.argument("targets", EntityArgument.entities())
-                .then(Commands.argument("enchantment", ItemEnchantmentArgument.enchantment()).executes((context) -> {
+                .then(Commands.argument("enchantment", ResourceArgument.resource(buildContext, Registries.ENCHANTMENT)).executes((context) -> {
                     return enchant(context.getSource(), EntityArgument.getEntities(context, "targets"),
-                            ItemEnchantmentArgument.getEnchantment(context, "enchantment"), 1);
+                            ResourceArgument.getEnchantment(context, "enchantment"), 1);
                 }).then(Commands.argument("level", IntegerArgumentType.integer(0, Short.MAX_VALUE))
                         .executes((context) -> {
                             return enchant(context.getSource(), EntityArgument.getEntities(context, "targets"),
-                                    ItemEnchantmentArgument.getEnchantment(context, "enchantment"),
+                                    ResourceArgument.getEnchantment(context, "enchantment"),
                                     IntegerArgumentType.getInteger(context, "level"));
                         })))));
     }
 
-    private static int enchant(CommandSourceStack source, Collection<? extends Entity> targets, Enchantment enchantment, int level) throws CommandSyntaxException {
+    private static int enchant(CommandSourceStack source, Collection<? extends Entity> targets, Holder<Enchantment> enchantmentHolder, int level) throws CommandSyntaxException {
         int i = 0;
+        Enchantment enchantment = enchantmentHolder.value();
 
         for (Entity entity : targets) {
             if (entity instanceof LivingEntity livingentity) {

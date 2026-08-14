@@ -83,7 +83,7 @@ public class ItemValuesListWidget extends ObjectSelectionList<ItemValueEntry> {
 
         int maxScroll = this.getMaxScroll();
         if (maxScroll > 0) {
-            RenderSystem.disableTexture();
+            // RenderSystem.disableTexture();
             RenderSystem.setShader(GameRenderer::getPositionColorShader);
             int $$15 = (int) ((float) ((this.y1 - this.y0) * (this.y1 - this.y0)) / (float) this.getMaxPosition());
             $$15 = Mth.clamp($$15, 32, this.y1 - this.y0 - 8);

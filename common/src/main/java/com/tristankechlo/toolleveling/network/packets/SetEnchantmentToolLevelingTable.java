@@ -4,7 +4,7 @@ import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.blockentity.ToolLevelingTableBlockEntity;
 import com.tristankechlo.toolleveling.utils.Utils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -25,7 +25,7 @@ public record SetEnchantmentToolLevelingTable(BlockPos pos, Enchantment enchantm
 
     public static void encode(SetEnchantmentToolLevelingTable msg, FriendlyByteBuf buffer) {
         buffer.writeBlockPos(msg.pos);
-        ResourceLocation loc = Registry.ENCHANTMENT.getKey(msg.enchantment);
+        ResourceLocation loc = BuiltInRegistries.ENCHANTMENT.getKey(msg.enchantment);
         buffer.writeResourceLocation(loc);
         buffer.writeInt(msg.level);
     }
@@ -33,7 +33,7 @@ public record SetEnchantmentToolLevelingTable(BlockPos pos, Enchantment enchantm
     public static SetEnchantmentToolLevelingTable decode(FriendlyByteBuf buffer) {
         BlockPos pos = buffer.readBlockPos();
         ResourceLocation loc = buffer.readResourceLocation();
-        Enchantment enchantment = Registry.ENCHANTMENT.getOptional(loc).orElseThrow();
+        Enchantment enchantment = BuiltInRegistries.ENCHANTMENT.getOptional(loc).orElseThrow();
         int level = buffer.readInt();
         return new SetEnchantmentToolLevelingTable(pos, enchantment, level);
     }

@@ -3,7 +3,7 @@ package com.tristankechlo.toolleveling.config.options;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.tristankechlo.toolleveling.config.util.CodecHelper;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 
@@ -23,13 +23,13 @@ public record EnchantmentOptions(
         Map<Enchantment, Short> minimumEnchantmentLevels
 ) {
 
-    public static final Codec<List<Enchantment>> ENCHANTMENT_LIST = Registry.ENCHANTMENT.byNameCodec().listOf();
+    public static final Codec<List<Enchantment>> ENCHANTMENT_LIST = BuiltInRegistries.ENCHANTMENT.byNameCodec().listOf();
     public static final Codec<Map<Enchantment, Short>> ENCHANTMENT_TO_SHORT = Codec.unboundedMap(
-            Registry.ENCHANTMENT.byNameCodec(),
+            BuiltInRegistries.ENCHANTMENT.byNameCodec(),
             CodecHelper.POSITIVE_SHORT
     );
     public static final Codec<Map<Enchantment, Double>> ENCHANTMENT_TO_DOUBLE = Codec.unboundedMap(
-            Registry.ENCHANTMENT.byNameCodec(),
+            BuiltInRegistries.ENCHANTMENT.byNameCodec(),
             CodecHelper.PERCENTAGE
     );
 

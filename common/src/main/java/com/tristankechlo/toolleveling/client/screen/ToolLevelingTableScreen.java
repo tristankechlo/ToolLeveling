@@ -48,7 +48,7 @@ public class ToolLevelingTableScreen extends AbstractContainerScreen<ToolLevelin
 
     @Override
     public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(poseStack, 0); // render translucent grey background
+        this.renderBackground(poseStack); // render translucent grey background
         this.buttonList.render(poseStack, mouseX, mouseY, partialTicks);
 
         poseStack.pushPose();

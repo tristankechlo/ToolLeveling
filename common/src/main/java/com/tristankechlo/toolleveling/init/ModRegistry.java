@@ -7,10 +7,9 @@ import com.tristankechlo.toolleveling.menu.ToolLevelingTableMenu;
 import com.tristankechlo.toolleveling.platform.IPlatformHelper;
 import com.tristankechlo.toolleveling.platform.RegistrationProvider;
 import com.tristankechlo.toolleveling.platform.RegistryObject;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Item.Properties;
 import net.minecraft.world.level.block.Block;
@@ -20,12 +19,12 @@ public final class ModRegistry {
 
     public static void load() {}
 
-    public static final RegistrationProvider<Block> BLOCKS = RegistrationProvider.get(Registry.BLOCK, ToolLeveling.MOD_ID);
-    public static final RegistrationProvider<Item> ITEMS = RegistrationProvider.get(Registry.ITEM, ToolLeveling.MOD_ID);
-    public static final RegistrationProvider<MenuType<?>> CONTAINER_TYPES = RegistrationProvider.get(Registry.MENU, ToolLeveling.MOD_ID);
-    public static final RegistrationProvider<BlockEntityType<?>> TILE_ENTITIES = RegistrationProvider.get(Registry.BLOCK_ENTITY_TYPE, ToolLeveling.MOD_ID);
+    public static final RegistrationProvider<Block> BLOCKS = RegistrationProvider.get(BuiltInRegistries.BLOCK, ToolLeveling.MOD_ID);
+    public static final RegistrationProvider<Item> ITEMS = RegistrationProvider.get(BuiltInRegistries.ITEM, ToolLeveling.MOD_ID);
+    public static final RegistrationProvider<MenuType<?>> CONTAINER_TYPES = RegistrationProvider.get(BuiltInRegistries.MENU, ToolLeveling.MOD_ID);
+    public static final RegistrationProvider<BlockEntityType<?>> TILE_ENTITIES = RegistrationProvider.get(BuiltInRegistries.BLOCK_ENTITY_TYPE, ToolLeveling.MOD_ID);
 
-    private static final Properties std_properties = new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS).stacksTo(64);
+    private static final Properties std_properties = new Item.Properties().stacksTo(64);
 
     public static final RegistryObject<Block> TLT_BLOCK = BLOCKS.register(ToolLeveling.TABLE, ToolLevelingTableBlock::new);
 

@@ -28,7 +28,7 @@ public class CodecHelper {
             if (value.compareTo(minInclusive) >= 0 && value.compareTo(maxInclusive) <= 0) {
                 return DataResult.success(value);
             }
-            return DataResult.error("Value " + value + " outside of range [" + minInclusive + ":" + maxInclusive + "]", value);
+            return DataResult.error(() -> "Value " + value + " outside of range [" + minInclusive + ":" + maxInclusive + "]", value);
         };
     }
 

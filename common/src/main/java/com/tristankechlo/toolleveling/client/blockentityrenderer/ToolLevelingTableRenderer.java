@@ -1,20 +1,20 @@
 package com.tristankechlo.toolleveling.client.blockentityrenderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import com.tristankechlo.toolleveling.blockentity.ToolLevelingTableBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import org.joml.Quaternionf;
 
 public class ToolLevelingTableRenderer<E extends ToolLevelingTableBlockEntity> implements BlockEntityRenderer<E> {
 
-    private final Quaternion quaternion = new Quaternion(Vector3f.XN, 1.5707F, false);
+    private final Quaternionf quaternion = Axis.XN.rotation(1.5707F);
 
     public ToolLevelingTableRenderer(BlockEntityRendererProvider.Context rendererDispatcher) {}
 
@@ -33,7 +33,7 @@ public class ToolLevelingTableRenderer<E extends ToolLevelingTableBlockEntity> i
     }
 
     private void renderItem(ItemStack stack, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
-        Minecraft.getInstance().getItemRenderer().renderStatic(stack, TransformType.FIXED, combinedLight, combinedOverlay, poseStack, buffer, OverlayTexture.NO_OVERLAY);
+        Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemDisplayContext.FIXED, combinedLight, combinedOverlay, poseStack, buffer, null, OverlayTexture.NO_OVERLAY);
     }
 
 }

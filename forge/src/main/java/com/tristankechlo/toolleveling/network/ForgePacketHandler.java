@@ -62,7 +62,7 @@ public final class ForgePacketHandler implements ServerBoundPacketHandler, Clien
 
     @Override
     public void syncOneConfigToOneClient(ServerPlayer player, String identifier, JsonElement json) {
-        Connection connection = player.connection.getConnection();
+        Connection connection = player.connection.connection;
         INSTANCE.sendTo(new SyncToolLevelingConfig(identifier, json), connection, NetworkDirection.PLAY_TO_CLIENT);
     }
 

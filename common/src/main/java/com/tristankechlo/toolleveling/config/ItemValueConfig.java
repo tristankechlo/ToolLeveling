@@ -6,7 +6,7 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.tristankechlo.toolleveling.ToolLeveling;
 import com.tristankechlo.toolleveling.config.util.CodecHelper;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -25,9 +25,9 @@ public record ItemValueConfig(
         Map<Item, Long> itemValues // all item tags resolved to items
 ) {
 
-    private static final Codec<Item> CORRECT_ITEM = Registry.ITEM.byNameCodec();
+    private static final Codec<Item> CORRECT_ITEM = BuiltInRegistries.ITEM.byNameCodec();
     private static final Codec<Map<Either<Item, TagKey<Item>>, Long>> ITEM_TO_LONG = Codec.unboundedMap(
-            Codec.either(CORRECT_ITEM, TagKey.hashedCodec(Registry.ITEM_REGISTRY)).flatXmap(ItemValueConfig::validate, DataResult::success),
+            Codec.either(CORRECT_ITEM, TagKey.hashedCodec(BuiltInRegistries.ITEM.key())).flatXmap(ItemValueConfig::validate, DataResult::success),
             CodecHelper.NON_NEGATIVE_LONG
     );
     public static final Codec<ItemValueConfig> CODEC = RecordCodecBuilder.create(
@@ -64,16 +64,16 @@ public record ItemValueConfig(
     }
 
     private static DataResult<Item> validateItem(Item item) {
-        String id = item == null ? "unknown" : Registry.ITEM.getKey(item).toString();
+        String id = item == null ? "unknown" : BuiltInRegistries.ITEM.getKey(item).toString();
         if (item == null || item == Items.AIR) {
-            return DataResult.error("Item [" + id + "] was not found in registry");
+            return DataResult.error(() -> "Item [" + id + "] was not found in registry");
         }
         ItemStack stack = new ItemStack(item);
         if (stack.isDamageableItem()) {
-            return DataResult.error("Item [" + id + "] is damageable, it is not a valid item to use in the toolleveling table");
+            return DataResult.error(() -> "Item [" + id + "] is damageable, it is not a valid item to use in the toolleveling table");
         }
         if (item.isEnchantable(stack)) {
-            return DataResult.error("Item [" + id + "] is enchantable, it is not a valid item to use in the toolleveling table");
+            return DataResult.error(() -> "Item [" + id + "] is enchantable, it is not a valid item to use in the toolleveling table");
         }
         return DataResult.success(item);
     }
@@ -180,7 +180,7 @@ public record ItemValueConfig(
                     ToolLeveling.LOGGER.info("Resolving items for tag: {}", entry.getKey().location());
                     for (Item item : getAllFromTag(entry.getKey())) {
                         if (itemValues.containsKey(item)) {
-                            ResourceLocation loc = Registry.ITEM.getKey(item);
+                            ResourceLocation loc = BuiltInRegistries.ITEM.getKey(item);
                             ToolLeveling.LOGGER.warn("Duplicate item value entry for Item[{}] in ItemTag[{}], overriding the value!", loc, entry.getKey().location());
                         }
                         itemValues.put(item, entry.getValue());
@@ -191,7 +191,7 @@ public record ItemValueConfig(
                 .map(entry -> Map.entry(entry.getKey().left().get(), entry.getValue())) // Map<Item, Long>
                 .forEach(entry -> {
                     if (itemValues.containsKey(entry.getKey())) {
-                        ResourceLocation loc = Registry.ITEM.getKey(entry.getKey());
+                        ResourceLocation loc = BuiltInRegistries.ITEM.getKey(entry.getKey());
                         ToolLeveling.LOGGER.warn("Duplicate item value entry for Item[{}], overriding the value!", loc);
                     }
                     itemValues.put(entry.getKey(), entry.getValue());
@@ -201,7 +201,7 @@ public record ItemValueConfig(
 
     public static List<Item> getAllFromTag(TagKey<Item> tagKey) {
         List<Item> tempValues = new ArrayList<>();
-        Registry.ITEM.getTagOrEmpty(tagKey).forEach((holder) -> tempValues.add(holder.value()));
+        BuiltInRegistries.ITEM.getTagOrEmpty(tagKey).forEach((holder) -> tempValues.add(holder.value()));
         return tempValues;
     }
 
